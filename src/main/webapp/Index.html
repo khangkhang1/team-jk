@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>주차관리시스템</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<link rel="stylesheet" href="css/c.css">
+</head>
+<body>
+
+	<!-- 상단 검색바 -->
+	<header id="topSearch">
+		<div id="logo">🅿️ 주차관리시스템</div>
+		<div id="searchBox">
+			<input type="text" id="searchInput" placeholder="어디 주차장을 찾으세요? (예: 나고야역 근처 전기차 충전)">
+			<button id="searchBtn">검색</button>
+		</div>
+	</header>
+
+	<div id="mainWrap">
+
+		<!-- 지도 영역 (약 70%) -->
+		<div id="mapArea">
+			<div id="map"></div>
+
+			<!-- 새로고침 버튼 -->
+			<button id="refreshBtn" title="새로고침">⟳</button>
+
+			<!-- 주차장 상세 모달 -->
+			<div id="detailModal" class="hidden">
+				<div id="detailModalInner">
+					<button id="detailCloseBtn">&times;</button>
+					<div id="detailPhoto">사진</div>
+					<h3 id="detailName">주차장 이름</h3>
+					<ul id="detailInfo">
+						<li>거리 <span id="detailDistance">-</span></li>
+						<li>잔여 대수 <span id="detailRemain">-</span> / <span id="detailTotal">-</span></li>
+						<li>이용자 수 <span id="detailUsers">-</span></li>
+					</ul>
+					<div id="detailButtons">
+						<button id="quickReserveBtn">바로 예약</button>
+						<button id="selectSeatBtn">자리 선택</button>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- 사이드바 -->
+		<aside id="sidebar">
+			<div id="authArea">
+				<button id="loginBtn">로그인</button>
+				<button id="joinBtn">회원가입</button>
+			</div>
+
+			<nav id="sideMenu">
+				<a href="#" class="menuItem" data-menu="region">📍 지역별 선택</a>
+				<a href="#" class="menuItem" id="myLocationBtn">🧭 내 위치</a>
+				<a href="#" class="menuItem" data-menu="reservation">📋 예약 내역</a>
+				<a href="#" class="menuItem" data-menu="mypage">👤 마이페이지</a>
+				<a href="#" class="menuItem" data-menu="favorite">⭐ 즐겨찾기</a>
+				<a href="#" class="menuItem" data-menu="notice">📢 공지사항</a>
+			</nav>
+
+			<div id="filterArea">
+				<div class="filterTitle">필터</div>
+				<label><input type="checkbox" id="filterDisabled"> ♿ 장애인 주차</label>
+				<label><input type="checkbox" id="filterEv"> 🔌 전기차 충전</label>
+			</div>
+
+			<div id="regionArea" class="hidden">
+				<div class="filterTitle">지역 선택</div>
+				<select id="regionSelect">
+					<option value="">전체</option>
+					<option value="nagoya-eki">나고야역</option>
+					<option value="sakae">사카에</option>
+					<option value="osu">오스</option>
+				</select>
+			</div>
+		</aside>
+	</div>
+
+	<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+	<script src="js/jquery-1.8.1.min.js"></script>
+	<script src="js/main.js"></script>
+</body>
+</html>
