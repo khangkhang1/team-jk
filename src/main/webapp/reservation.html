@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>주차맵+결제 - 인천공항 주차관리시스템</title>
+<link rel="stylesheet" href="css/c.css">
+<link rel="stylesheet" href="css/reservation.css">
+</head>
+<body class="resPage">
+
+	<!-- 상단바 -->
+	<header id="topSearch">
+		<a href="Index.html" id="backBtn" title="메인으로" data-i18n="common_back">← 메인으로</a>
+		<div id="logo" data-i18n="res_pageTitle">주차맵 + 결제</div>
+		<nav id="topNav">
+			<button id="langToggleBtn" class="langToggle">🇯🇵 日本語</button>
+		</nav>
+	</header>
+
+	<div id="resWrap">
+
+		<!-- 주차장 요약 정보 -->
+		<div id="lotSummary">
+			<div id="lotSummaryPhoto">사진</div>
+			<div id="lotSummaryText">
+				<h2 id="lotName">단기주차장 1구역</h2>
+				<p id="lotAddr">인천공항 1터미널 · 시간당 <span id="lotPrice">3,000</span>원</p>
+			</div>
+		</div>
+
+		<!-- ① 이용 방식 선택 (1안/2안) + 시간 -->
+		<details id="stepPlan" class="resStep" open>
+			<summary><span data-i18n="res_step1">① 이용 방식 선택</span> <span class="stepSummaryValue" id="planSummary" data-i18n="res_notChosen">선택 안 됨</span></summary>
+			<div class="stepBody">
+
+				<div id="planCards">
+					<label class="planCard">
+						<input type="radio" name="planType" value="1">
+						<div class="planCardTitle" data-i18n="res_plan1Name">예약형 (1안)</div>
+						<div class="planCardDesc" data-i18n="res_plan1Desc">시작·종료 시각을 미리 정합니다. 왕복 항공권 정보 입력 필수. 기본 요금.</div>
+					</label>
+					<label class="planCard">
+						<input type="radio" name="planType" value="2">
+						<div class="planCardTitle" data-i18n="res_plan2Name">자유출차형 (2안)</div>
+						<div class="planCardDesc" data-i18n="res_plan2Desc">시작 시각만 정하고 종료는 자유입니다. 장기주차구역, 페널티 요금(더 비쌈) 적용.</div>
+					</label>
+				</div>
+
+				<div class="formRow">
+					<label data-i18n="res_dateLabel">날짜</label>
+					<input type="date" id="dateInput">
+				</div>
+				<div class="formRow">
+					<label data-i18n="res_startTimeLabel">시작 시각</label>
+					<select id="startTimeInput"></select>
+				</div>
+
+				<!-- 1안 전용: 이용시간(=종료시각) -->
+				<div class="formRow plan1Only hidden" id="durationRow">
+					<label data-i18n="res_durationLabel">이용 시간</label>
+					<select id="durationInput">
+						<option value="1">1시간</option>
+						<option value="2" selected>2시간</option>
+						<option value="3">3시간</option>
+						<option value="4">4시간</option>
+						<option value="6">6시간</option>
+					</select>
+				</div>
+
+				<!-- 2안 전용: 자유출차 안내 -->
+				<div class="plan2Only hidden" id="endFreeNotice">
+					<p data-i18n="res_endFreeNotice">종료 시각은 정하지 않습니다 (자유출차, 페널티 요금 적용)</p>
+				</div>
+
+				<!-- 1안 전용: 항공권 정보 (필수) -->
+				<fieldset class="plan1Only hidden" id="flightFieldset">
+					<legend data-i18n="res_flightSectionTitle">✈️ 항공권 정보 (필수)</legend>
+					<div class="formRow">
+						<label data-i18n="res_flightNo">항공편명</label>
+						<input type="text" id="flightNoInput" placeholder="예: KE001">
+					</div>
+					<div class="formRow">
+						<label data-i18n="res_flightRoundtrip">왕복 여부</label>
+						<select id="flightRoundtripInput">
+							<option value="round">왕복</option>
+							<option value="oneway">편도 (이용 불가)</option>
+						</select>
+					</div>
+					<div class="formRow">
+						<label data-i18n="res_flightArriveTime">귀국 도착 예정</label>
+						<input type="time" id="flightArriveInput">
+					</div>
+				</fieldset>
+
+				<div id="estimatedPriceBox"><span data-i18n="res_estimated">예상 금액</span>: <strong id="estimatedPrice">-</strong></div>
+			</div>
+		</details>
+
+		<!-- ② 좌석 선택 -->
+		<details id="stepSeat" class="resStep">
+			<summary><span data-i18n="res_step3">③ 좌석 선택</span> <span class="stepSummaryValue" id="seatSummary" data-i18n="res_notChosen">선택 안 됨</span></summary>
+			<div class="stepBody">
+
+				<div id="seatToolbar">
+					<div id="floorTabs">
+						<button class="floorTab active" data-floor="1">1층</button>
+						<button class="floorTab" data-floor="2">2층</button>
+					</div>
+					<div id="floorRemain"><span data-i18n="res_floorRemain">이 층 잔여</span>: <strong id="floorRemainCount">-</strong>석</div>
+					<button id="randomAssignBtn" data-i18n="res_random">🎲 랜덤 배정</button>
+				</div>
+
+				<div id="seatLegend">
+					<span><i class="legendBox legendFree"></i> <span data-i18n="res_legendFree">선택 가능</span></span>
+					<span><i class="legendBox legendSelected"></i> <span data-i18n="res_legendSelected">선택됨</span></span>
+					<span><i class="legendBox legendTaken"></i> <span data-i18n="res_legendTaken">예약됨</span></span>
+					<span><i class="legendBox legendDisabled"></i> <span data-i18n="res_legendDisabled">♿ 장애인</span></span>
+					<span><i class="legendBox legendEv"></i> <span data-i18n="res_legendEv">🔌 전기차</span></span>
+					<span><i class="legendBox legendCancelled"></i> <span data-i18n="res_legendCancelled">✈️ 결항 재배정중</span></span>
+				</div>
+
+				<div id="seatGrid"></div>
+			</div>
+		</details>
+
+		<!-- ③ 결제 수단 -->
+		<details id="stepPay" class="resStep">
+			<summary><span data-i18n="res_step4">④ 결제 수단</span> <span class="stepSummaryValue" id="paySummary" data-i18n="res_notChosen">선택 안 됨</span></summary>
+			<div class="stepBody">
+				<label class="payOption"><input type="radio" name="payMethod" value="kakao"> 카카오페이</label>
+				<label class="payOption"><input type="radio" name="payMethod" value="naver"> 네이버페이</label>
+				<label class="payOption"><input type="radio" name="payMethod" value="card"> 카드</label>
+				<label class="payOption"><input type="radio" name="payMethod" value="account"> 계좌이체</label>
+			</div>
+		</details>
+
+	</div>
+
+	<!-- 하단 고정 결제 바 -->
+	<div id="payBar">
+		<div id="payBarPrice"><span data-i18n="res_depositLabel">예약금</span> <strong id="payBarAmount">-</strong>원</div>
+		<button id="payBtn" data-i18n="res_payBtn" disabled>결제하기</button>
+	</div>
+
+	<script src="js/jquery-1.8.1.min.js"></script>
+	<script src="js/i18n.js"></script>
+	<script src="js/reservation.js"></script>
+</body>
+</html>

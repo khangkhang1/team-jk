@@ -50,6 +50,34 @@ html, body {
 	cursor: pointer;
 }
 
+#topNav {
+	display: flex;
+	align-items: center;
+	gap: 14px;
+	margin-left: 20px;
+	white-space: nowrap;
+}
+#topNav a {
+	color: #fff;
+	text-decoration: none;
+	font-size: 13px;
+}
+#topNav a:hover {
+	text-decoration: underline;
+}
+.langToggle {
+	padding: 6px 10px;
+	border: 1px solid rgba(255,255,255,0.6);
+	background: transparent;
+	color: #fff;
+	border-radius: 4px;
+	font-size: 12px;
+	cursor: pointer;
+}
+.langToggle:hover {
+	background: rgba(255,255,255,0.15);
+}
+
 /* 본문 레이아웃: 지도 70% + 사이드바 30% */
 #mainWrap {
 	display: flex;
@@ -80,6 +108,20 @@ html, body {
 	color: #fff;
 	font-size: 18px;
 	cursor: pointer;
+}
+
+#flightNotice {
+	position: absolute;
+	bottom: 16px;
+	left: 16px;
+	right: 16px;
+	z-index: 500;
+	background: rgba(179, 38, 30, 0.92);
+	color: #fff;
+	padding: 10px 14px;
+	border-radius: 6px;
+	font-size: 12px;
+	text-align: center;
 }
 
 /* 잔여 대수 마커 */
@@ -145,12 +187,19 @@ html, body {
 	font-size: 14px;
 	line-height: 1.8;
 }
+#detailConfirmText {
+	font-size: 14px;
+	font-weight: bold;
+	text-align: center;
+	margin: 14px 0 10px;
+	color: #1e3a5f;
+}
 #detailButtons {
 	display: flex;
+	flex-direction: column;
 	gap: 8px;
 }
 #detailButtons button {
-	flex: 1;
 	padding: 10px;
 	border: none;
 	border-radius: 4px;
@@ -193,6 +242,24 @@ html, body {
 #loginBtn {
 	background: #1e3a5f;
 	color: #fff;
+}
+
+#timeArea {
+	background: #fff;
+	padding: 14px;
+	border-radius: 6px;
+	margin-bottom: 16px;
+}
+.timeRow {
+	display: flex;
+	gap: 8px;
+}
+.timeRow input, .timeRow select {
+	flex: 1;
+	padding: 8px;
+	border: 1px solid #ddd;
+	border-radius: 4px;
+	font-size: 13px;
 }
 
 #sideMenu {
