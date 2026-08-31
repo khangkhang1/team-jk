@@ -1,9 +1,10 @@
+/* 주차맵 페이지 전용 스타일. 결제 모달 관련 스타일은 css/payment.css로 분리돼 있음. */
+
 body.resPage {
 	overflow-y: auto;
 	background: #f0f1f3;
 	height: auto;
 	min-height: 100%;
-	padding-bottom: 80px; /* payBar 공간 확보 */
 }
 
 #topSearch #backBtn {
@@ -16,7 +17,7 @@ body.resPage {
 #resWrap {
 	max-width: 720px;
 	margin: 24px auto;
-	padding: 0 16px;
+	padding: 0 16px 40px;
 }
 
 /* 주차장 요약 */
@@ -50,57 +51,17 @@ body.resPage {
 	color: #666;
 }
 
-/* 아코디언(details) 공통 */
-.resStep {
+/* 이용 방식 필터 (1안/2안) - 원래 결제창 안에 있던 걸 여기로 옮김 */
+#planFilter {
 	background: #fff;
-	border-radius: 8px;
-	margin-bottom: 12px;
-	box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-	overflow: hidden;
+	padding: 14px;
+	border-radius: 6px;
+	margin-bottom: 16px;
 }
-.resStep summary {
-	list-style: none;
-	cursor: pointer;
-	padding: 16px 20px;
-	font-weight: bold;
-	font-size: 15px;
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-	color: #1e3a5f;
-}
-.resStep summary::-webkit-details-marker {
-	display: none;
-}
-.resStep summary::after {
-	content: "▾";
-	margin-left: auto;
-	padding-left: 12px;
-	color: #999;
-	transition: transform 0.15s;
-}
-.resStep[open] summary::after {
-	transform: rotate(180deg);
-}
-.stepSummaryValue {
-	font-weight: normal;
-	font-size: 13px;
-	color: #ffb400;
-	margin-left: 12px;
-}
-.resStep[open] .stepSummaryValue {
-	display: none;
-}
-.stepBody {
-	padding: 4px 20px 20px;
-	border-top: 1px solid #eee;
-}
-
-/* ① 이용 방식 선택 (1안/2안) */
 #planCards {
 	display: flex;
 	gap: 12px;
-	margin-bottom: 16px;
+	margin-top: 8px;
 }
 .planCard {
 	flex: 1;
@@ -133,61 +94,7 @@ body.resPage {
 	line-height: 1.5;
 }
 
-#endFreeNotice {
-	background: #eef4ff;
-	color: #1e3a5f;
-	padding: 10px 12px;
-	border-radius: 6px;
-	font-size: 13px;
-	margin: 12px 0;
-}
-
-fieldset {
-	border: 1px solid #ddd;
-	border-radius: 6px;
-	padding: 12px 14px;
-	margin: 14px 0;
-}
-fieldset legend {
-	font-size: 13px;
-	font-weight: bold;
-	color: #b3261e;
-	padding: 0 6px;
-}
-
-/* 시간 선택 */
-.formRow {
-	display: flex;
-	align-items: center;
-	gap: 12px;
-	margin: 12px 0;
-}
-.formRow label {
-	width: 80px;
-	font-size: 14px;
-	color: #555;
-}
-.formRow input, .formRow select {
-	flex: 1;
-	padding: 8px 10px;
-	border: 1px solid #ddd;
-	border-radius: 4px;
-	font-size: 14px;
-}
-#estimatedPriceBox {
-	margin-top: 16px;
-	padding: 12px;
-	background: #fff8e6;
-	border-radius: 6px;
-	font-size: 14px;
-	text-align: right;
-}
-#estimatedPriceBox strong {
-	font-size: 18px;
-	color: #b3261e;
-}
-
-/* 좌석 선택 */
+/* 좌석 선택 툴바 */
 #seatToolbar {
 	display: flex;
 	align-items: center;
@@ -301,58 +208,5 @@ fieldset legend {
 	background: #ffd6d6;
 	border-color: #ff8a8a;
 	color: #b3261e;
-	cursor: not-allowed;
-}
-
-/* 결제수단 */
-.payOption {
-	display: flex;
-	align-items: center;
-	gap: 10px;
-	padding: 12px;
-	border: 1px solid #ddd;
-	border-radius: 6px;
-	margin-bottom: 8px;
-	cursor: pointer;
-	font-size: 14px;
-}
-.payOption:has(input:checked) {
-	border-color: #ffb400;
-	background: #fff8e6;
-}
-
-/* 하단 고정 결제 바 */
-#payBar {
-	position: fixed;
-	bottom: 0;
-	left: 0;
-	right: 0;
-	background: #fff;
-	border-top: 1px solid #ddd;
-	padding: 14px 20px;
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-	box-shadow: 0 -2px 8px rgba(0,0,0,0.08);
-}
-#payBarPrice {
-	font-size: 15px;
-}
-#payBarPrice strong {
-	font-size: 20px;
-	color: #b3261e;
-}
-#payBtn {
-	padding: 12px 32px;
-	border: none;
-	border-radius: 6px;
-	background: #1e3a5f;
-	color: #fff;
-	font-size: 15px;
-	font-weight: bold;
-	cursor: pointer;
-}
-#payBtn:disabled {
-	background: #ccc;
 	cursor: not-allowed;
 }

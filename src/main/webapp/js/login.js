@@ -1,4 +1,4 @@
-// 회원정보 페이지 - 화면 초안, 전부 가상 데이터/클라이언트 로직만 존재. 서버 연동(로그인 세션·DB)은 이후 단계.
+// 로그인·회원가입 페이지 - 화면 초안, 전부 가상 데이터/클라이언트 로직만 존재. 서버 연동(세션·DB)은 이후 단계.
 
 function showTab(tabName) {
 	document.querySelectorAll('.memTab').forEach(function (btn) {
@@ -17,11 +17,10 @@ document.querySelectorAll('.memTab').forEach(function (btn) {
 	});
 });
 
-// URL 파라미터로 초기 탭 지정 (메인화면 로그인/회원가입/예약내역/마이페이지 버튼에서 진입)
+// URL 파라미터로 초기 탭 지정 (메인화면 로그인/회원가입 버튼에서 진입)
 var urlParams = new URLSearchParams(window.location.search);
 var initialTab = urlParams.get('tab');
-if (initialTab === 'history') initialTab = 'mypage';
-if (initialTab && ['login', 'join', 'mypage'].indexOf(initialTab) !== -1) {
+if (initialTab && ['login', 'join'].indexOf(initialTab) !== -1) {
 	showTab(initialTab);
 }
 
@@ -34,7 +33,7 @@ document.getElementById('joinRoundtripInput').addEventListener('change', functio
 
 document.getElementById('loginSubmitBtn').addEventListener('click', function () {
 	alert('로그인 처리는 다음 단계(서버 연동)에서 연결됩니다.\n지금은 화면 확인용 마이페이지로 이동합니다.');
-	showTab('mypage');
+	window.location.href = 'mypage.html';
 });
 
 document.getElementById('joinSubmitBtn').addEventListener('click', function () {

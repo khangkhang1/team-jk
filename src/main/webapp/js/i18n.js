@@ -28,12 +28,12 @@ var I18N_DICT = {
 	idx_detailRemainLabel:   { ko: "잔여 대수", ja: "残り台数" },
 	idx_detailUsersLabel:    { ko: "오늘 이용자", ja: "本日の利用者" },
 	idx_confirmText:      { ko: "이 주차장을 이용하시겠습니까?", ja: "この駐車場を利用しますか？" },
-	idx_quickReserve:     { ko: "바로 이용하기 (랜덤배정)", ja: "すぐ利用する（ランダム割当）" },
-	idx_selectSeat:       { ko: "직접 선택하기", ja: "自分で選ぶ" },
+	idx_selectSeat:       { ko: "확인 - 주차맵으로 이동", ja: "確認 - 駐車マップへ移動" },
 	idx_flightNotice:     { ko: "✈️ 편도 항공권만 있으신가요? 이 시스템은 왕복 이용자 전용입니다 (현장 이용 안내)", ja: "✈️ 片道航空券のみですか？本システムは往復利用者専用です（現地窓口をご案内）" },
 
-	// 주차맵+결제 페이지
-	res_pageTitle:        { ko: "주차맵 + 결제", ja: "駐車マップ + 決済" },
+	// 주차맵 페이지 (좌석 클릭 시 뜨는 결제 모달 포함)
+	res_pageTitle:        { ko: "주차맵", ja: "駐車マップ" },
+	res_planFilterTitle:  { ko: "이용 방식", ja: "利用方式" },
 	res_step1:            { ko: "① 이용 방식 선택", ja: "① 利用方式の選択" },
 	res_plan1Name:        { ko: "예약형 (1안)", ja: "予約型（プラン1）" },
 	res_plan1Desc:        { ko: "시작·종료 시각을 미리 정합니다. 왕복 항공권 정보 입력 필수. 기본 요금.", ja: "開始・終了時刻を事前に指定します。往復航空券情報の入力が必須。基本料金。" },
