@@ -30,13 +30,6 @@ html, body {
 	color: var(--color-text);
 }
 
-/* 지도 화면(Index)처럼 화면 꽉 채우고 스크롤이 없어야 하는 페이지에만 붙이는 클래스.
-   예전엔 html,body 전체에 overflow:hidden을 걸어놔서 다른 페이지(주차맵 등)까지
-   스크롤이 막히는 문제가 있었음 - 페이지별로 필요한 곳에만 걸도록 분리. */
-body.mapPage {
-	overflow: hidden;
-}
-
 /* 상단 유틸리티 바 - 메인 헤더 위에 얇게 하나 더 얹은 바 */
 #utilBar {
 	height: 30px;
@@ -153,31 +146,6 @@ body.mapPage {
 	font-weight: 900;
 	letter-spacing: -0.5px;
 }
-#acHeroSearch {
-	display: flex;
-	max-width: 480px;
-	box-shadow: 0 6px 20px rgba(0,0,0,0.25);
-	border-radius: var(--radius-pill);
-	overflow: hidden;
-}
-#acHeroSearch input {
-	flex: 1;
-	border: none;
-	padding: 13px 18px;
-	font-size: 14px;
-}
-#acHeroSearch button {
-	border: none;
-	padding: 13px 24px;
-	background: var(--color-primary);
-	color: #fff;
-	font-weight: 700;
-	cursor: pointer;
-}
-#acHeroSearch button:hover {
-	background: var(--color-primary-dark);
-}
-
 /* 브레드크럼 바 */
 #acBreadcrumb {
 	height: 40px;
@@ -278,249 +246,174 @@ body.mapPage {
 	color: #fff;
 }
 
-/* 본문 레이아웃: 지도 70% + 사이드바 30%
-   전체 높이에서 acHeader(60) + acHero(220) + acBreadcrumb(40) + acTermTabs(48) 뺀 나머지 */
-#mainWrap {
-	display: flex;
-	height: calc(100% - 368px);
-}
-
-#mapArea {
-	position: relative;
-	width: 70%;
-	height: 100%;
-}
-
-#map {
-	width: 100%;
-	height: 100%;
-}
-
-#refreshBtn {
-	position: absolute;
-	top: 16px;
-	right: 16px;
-	z-index: 500;
-	width: 40px;
-	height: 40px;
-	border-radius: 50%;
-	border: none;
-	background: rgba(22, 35, 63, 0.8);
-	color: #fff;
-	font-size: 18px;
-	cursor: pointer;
-}
-
-#flightNotice {
-	position: absolute;
-	bottom: 16px;
-	left: 16px;
-	right: 16px;
-	z-index: 500;
-	background: rgba(192, 57, 43, 0.94);
-	color: #fff;
-	padding: 10px 14px;
-	border-radius: var(--radius-sm);
-	font-size: 12px;
-	text-align: center;
-}
-
-/* 잔여 대수 마커 */
-.markerCount {
-	background: var(--color-primary);
-	color: #fff;
-	border-radius: 50%;
-	width: 32px;
-	height: 32px;
-	line-height: 32px;
-	text-align: center;
-	font-weight: bold;
-	font-size: 13px;
-	border: 2px solid #fff;
-	box-shadow: 0 1px 4px rgba(0,0,0,0.4);
-}
-.markerCount.full {
-	background: var(--color-danger);
-}
-
-/* 상세 모달 */
-#detailModal {
-	position: absolute;
-	top: 0; left: 0; right: 0; bottom: 0;
-	background: rgba(10, 20, 40, 0.5);
-	z-index: 1000;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-}
-#detailModal.hidden {
-	display: none;
-}
-#detailModalInner {
-	position: relative;
-	width: 320px;
-	background: #fff;
-	border-radius: var(--radius-md);
-	padding: 24px;
-}
-#detailCloseBtn {
-	position: absolute;
-	top: 10px;
-	right: 14px;
-	border: none;
-	background: none;
-	font-size: 20px;
-	cursor: pointer;
-	color: var(--color-text-sub);
-}
-#detailPhoto {
-	height: 140px;
-	background: var(--color-bg-page);
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	color: #999;
-	border-radius: var(--radius-sm);
-	margin-bottom: 12px;
-}
-#detailInfo {
-	list-style: none;
-	margin: 12px 0;
-	font-size: 14px;
-	line-height: 1.8;
-	color: var(--color-text-sub);
-}
-#detailConfirmText {
-	font-size: 14px;
-	font-weight: bold;
-	text-align: center;
-	margin: 14px 0 10px;
-	color: var(--color-navy);
-}
-#detailButtons {
-	display: flex;
-	flex-direction: column;
-	gap: 8px;
-}
-#detailButtons button {
-	padding: 12px;
-	border: none;
-	border-radius: var(--radius-pill);
-	cursor: pointer;
-	font-weight: 700;
-}
-#selectSeatBtn {
-	background: var(--color-primary);
-	color: #fff;
-}
-#selectSeatBtn:hover {
-	background: var(--color-primary-dark);
-}
-
-/* 사이드바 */
-#sidebar {
-	width: 30%;
-	height: 100%;
-	overflow-y: auto;
-	background: var(--color-bg-page);
-	border-left: 1px solid var(--color-border);
-	padding: 20px;
-}
-
-#authArea {
-	display: flex;
-	gap: 8px;
-	margin-bottom: 20px;
-}
-#authArea button {
-	flex: 1;
-	padding: 10px;
-	border: 1px solid var(--color-primary);
-	background: #fff;
-	color: var(--color-primary);
-	border-radius: var(--radius-pill);
-	cursor: pointer;
-	font-weight: 700;
-}
-#loginBtn {
-	background: var(--color-primary);
-	color: #fff;
-}
-#loginBtn:hover {
-	background: var(--color-primary-dark);
-}
-#joinBtn:hover {
-	background: #eaf3fb;
-}
-
-#timeArea {
-	background: #fff;
-	padding: 14px;
-	border-radius: var(--radius-sm);
-	margin-bottom: 16px;
-	border: 1px solid var(--color-border);
-}
-.timeRow {
-	display: flex;
-	gap: 8px;
-}
-.timeRow input, .timeRow select {
-	flex: 1;
-	padding: 8px;
-	border: 1px solid var(--color-border);
-	border-radius: 4px;
-	font-size: 13px;
-}
-
-#sideMenu {
-	display: flex;
-	flex-direction: column;
-	margin-bottom: 20px;
-	background: #fff;
-	border-radius: var(--radius-sm);
-	overflow: hidden;
-	border: 1px solid var(--color-border);
-}
-.menuItem {
-	display: block;
-	padding: 12px 14px;
-	text-decoration: none;
-	color: var(--color-text);
-	border-bottom: 1px solid var(--color-border);
-	font-size: 14px;
-	border-left: 3px solid transparent;
-}
-.menuItem:last-child {
-	border-bottom: none;
-}
-.menuItem:hover {
-	background: #eaf3fb;
-	border-left-color: var(--color-primary);
-}
-
 .filterTitle {
 	font-size: 13px;
 	font-weight: 700;
 	color: var(--color-navy);
 	margin-bottom: 8px;
 }
-#filterArea, #regionArea {
-	background: #fff;
-	padding: 14px;
-	border-radius: var(--radius-sm);
+
+/* ============================================================
+   메인 화면 본문 - airport.kr 정보 페이지 구조 그대로 (지도 없이 안내문+표 형태)
+   ============================================================ */
+.acAuthLink {
+	color: var(--color-navy);
+	text-decoration: none;
+	font-size: 13px;
+	font-weight: 700;
+}
+.acAuthLink:hover {
+	color: var(--color-primary);
+}
+
+/* 페이지 타이틀 (제1 여객터미널 + 아이콘 행) */
+#acPageTitle {
+	text-align: center;
+	padding: 28px 20px 16px;
+}
+#acPageTitle h2 {
+	font-size: 24px;
+	font-weight: 900;
+	color: var(--color-text);
+	margin-bottom: 12px;
+}
+#acTitleIcons {
+	display: flex;
+	justify-content: center;
+	gap: 18px;
+	font-size: 15px;
+	color: var(--color-text-sub);
+}
+#acTitleIcons span {
+	cursor: pointer;
+}
+
+#acContentWrap {
+	max-width: 900px;
+	margin: 0 auto;
+	padding: 0 24px 60px;
+}
+
+/* 섹션 헤더 + 버튼 (제1 여객터미널 주차장 안내 + 예약주차장/셔틀버스 버튼) */
+#acSectionHead {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	flex-wrap: wrap;
+	gap: 12px;
+	padding: 20px 0;
+	border-bottom: 2px solid var(--color-navy);
+	margin-bottom: 24px;
+}
+#acSectionHead h3 {
+	font-size: 19px;
+	font-weight: 900;
+	color: var(--color-text);
+}
+#acSectionBtns {
+	display: flex;
+	gap: 10px;
+}
+.acPillBtn {
+	padding: 10px 20px;
+	border: none;
+	border-radius: var(--radius-pill);
+	font-size: 13px;
+	font-weight: 700;
+	cursor: pointer;
+}
+.acPillBtn.primary {
+	background: var(--color-primary);
+	color: #fff;
+}
+.acPillBtn.primary:hover {
+	background: var(--color-primary-dark);
+}
+.acPillBtn.navy {
+	background: var(--color-navy);
+	color: #fff;
+}
+.acPillBtn.navy:hover {
+	opacity: 0.85;
+}
+
+/* 안내 섹션 (단기/장기주차장, 결항대응, 관련문의) */
+.acInfoSection {
+	margin-bottom: 40px;
+}
+.acInfoSection h4 {
+	font-size: 16px;
+	font-weight: 700;
+	color: var(--color-navy);
+	margin-bottom: 12px;
+	padding-left: 12px;
+	border-left: 4px solid var(--color-primary);
+}
+.acInfoList {
+	list-style: none;
 	margin-bottom: 16px;
+}
+.acInfoList li {
+	position: relative;
+	padding-left: 14px;
+	margin-bottom: 6px;
 	font-size: 14px;
-	border: 1px solid var(--color-border);
+	color: var(--color-text-sub);
+	line-height: 1.6;
 }
-#filterArea label {
-	display: block;
-	margin-bottom: 8px;
+.acInfoList li::before {
+	content: "-";
+	position: absolute;
+	left: 0;
 }
-#regionSelect {
+
+/* 구역 표 */
+.acTableWrap {
+	overflow-x: auto;
+}
+.acLotTable {
 	width: 100%;
-	padding: 8px;
-	border: 1px solid var(--color-border);
-	border-radius: 4px;
+	border-collapse: collapse;
+	font-size: 14px;
+}
+.acLotTable th, .acLotTable td {
+	padding: 12px 14px;
+	text-align: center;
+	border-bottom: 1px solid var(--color-border);
+}
+.acLotTable th {
+	background: var(--color-bg-page);
+	color: var(--color-navy);
+	font-weight: 700;
+	border-top: 2px solid var(--color-navy);
+}
+.acLotTable td.acFull {
+	color: var(--color-danger);
+	font-weight: 700;
+}
+.acLotGoBtn {
+	display: inline-block;
+	padding: 6px 16px;
+	border-radius: var(--radius-pill);
+	background: var(--color-primary);
+	color: #fff;
+	text-decoration: none;
+	font-size: 13px;
+	font-weight: 700;
+}
+.acLotGoBtn:hover {
+	background: var(--color-primary-dark);
+}
+.acLotGoBtn.disabled {
+	background: #ccc;
+	color: #888;
+	cursor: not-allowed;
+}
+
+.acContactLine {
+	font-size: 14px;
+	color: var(--color-text-sub);
+	margin-bottom: 6px;
 }
 
 .hidden {
