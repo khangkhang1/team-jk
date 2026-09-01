@@ -1,12 +1,33 @@
+/* ============================================================
+   디자인 시스템 - 인천공항 공식 홈페이지(airport.kr) 참고해서 톤 맞춤.
+   화이트 헤더 + 비비드 블루(메인) + 네이비(보조) 조합, 세그먼트형 탭, 필(pill) 버튼.
+   색상/폰트는 여기 변수로 모아뒀으니, 다른 css 파일에서도 이 변수를 가져다 쓰면 됨.
+   ============================================================ */
+:root {
+	--color-primary: #0068b7;      /* 메인 블루 - 인천공항 사이트 참고 */
+	--color-primary-dark: #00518f;
+	--color-navy: #16233f;         /* 보조 남색 - 비활성 탭, 헤더 텍스트, 마커 */
+	--color-accent: #ffb400;       /* 강조색 - 선택됨/금액 표시용 */
+	--color-danger: #c0392b;
+	--color-text: #1a1a1a;
+	--color-text-sub: #666;
+	--color-bg-page: #f4f5f7;
+	--color-border: #e2e4e8;
+	--radius-sm: 6px;
+	--radius-md: 10px;
+	--radius-pill: 999px;
+}
+
 * {
 	box-sizing: border-box;
 	margin: 0;
 	padding: 0;
-	font-family: "Malgun Gothic", sans-serif;
+	font-family: "Noto Sans KR", "Malgun Gothic", sans-serif;
 }
 
 html, body {
 	height: 100%;
+	color: var(--color-text);
 }
 
 /* 지도 화면(Index)처럼 화면 꽉 채우고 스크롤이 없어야 하는 페이지에만 붙이는 클래스.
@@ -16,78 +37,99 @@ body.mapPage {
 	overflow: hidden;
 }
 
-/* 상단 검색바 */
+/* 상단 검색바 - 화이트 헤더 + 하단 보더 (인천공항 사이트 헤더 스타일) */
 #topSearch {
-	height: 60px;
+	height: 64px;
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
-	padding: 0 20px;
-	background: #1e3a5f;
-	color: #fff;
+	padding: 0 24px;
+	background: #fff;
+	color: var(--color-navy);
+	border-bottom: 1px solid var(--color-border);
 }
 
 #logo {
-	font-size: 20px;
-	font-weight: bold;
+	font-size: 19px;
+	font-weight: 700;
+	color: var(--color-navy);
+	letter-spacing: -0.3px;
+}
+
+/* 뒤로가기 링크 - login/mypage/notice/reservation 헤더에 공통으로 씀 */
+#topSearch #backBtn {
+	color: var(--color-navy);
+	text-decoration: none;
+	font-size: 15px;
+	font-weight: 700;
+	margin-right: 16px;
 }
 
 #searchBox {
 	flex: 1;
 	max-width: 500px;
-	margin-left: 40px;
+	margin-left: 32px;
 	display: flex;
 }
 
 #searchInput {
 	flex: 1;
-	padding: 8px 12px;
-	border: none;
-	border-radius: 4px 0 0 4px;
+	padding: 9px 14px;
+	border: 1px solid var(--color-border);
+	border-right: none;
+	border-radius: var(--radius-pill) 0 0 var(--radius-pill);
 	font-size: 14px;
+	background: var(--color-bg-page);
 }
 
 #searchBtn {
-	padding: 8px 16px;
+	padding: 9px 20px;
 	border: none;
-	border-radius: 0 4px 4px 0;
-	background: #ffb400;
-	font-weight: bold;
+	border-radius: 0 var(--radius-pill) var(--radius-pill) 0;
+	background: var(--color-primary);
+	color: #fff;
+	font-weight: 700;
 	cursor: pointer;
+}
+#searchBtn:hover {
+	background: var(--color-primary-dark);
 }
 
 #topNav {
 	display: flex;
 	align-items: center;
-	gap: 14px;
-	margin-left: 20px;
+	gap: 18px;
+	margin-left: 24px;
 	white-space: nowrap;
 }
 #topNav a {
-	color: #fff;
+	color: var(--color-navy);
 	text-decoration: none;
 	font-size: 13px;
+	font-weight: 600;
 }
 #topNav a:hover {
-	text-decoration: underline;
+	color: var(--color-primary);
 }
 .langToggle {
-	padding: 6px 10px;
-	border: 1px solid rgba(255,255,255,0.6);
+	padding: 7px 14px;
+	border: 1px solid var(--color-navy);
 	background: transparent;
-	color: #fff;
-	border-radius: 4px;
+	color: var(--color-navy);
+	border-radius: var(--radius-pill);
 	font-size: 12px;
+	font-weight: 700;
 	cursor: pointer;
 }
 .langToggle:hover {
-	background: rgba(255,255,255,0.15);
+	background: var(--color-navy);
+	color: #fff;
 }
 
 /* 본문 레이아웃: 지도 70% + 사이드바 30% */
 #mainWrap {
 	display: flex;
-	height: calc(100% - 60px);
+	height: calc(100% - 64px);
 }
 
 #mapArea {
@@ -110,7 +152,7 @@ body.mapPage {
 	height: 40px;
 	border-radius: 50%;
 	border: none;
-	background: rgba(30, 58, 95, 0.75);
+	background: rgba(22, 35, 63, 0.8);
 	color: #fff;
 	font-size: 18px;
 	cursor: pointer;
@@ -122,17 +164,17 @@ body.mapPage {
 	left: 16px;
 	right: 16px;
 	z-index: 500;
-	background: rgba(179, 38, 30, 0.92);
+	background: rgba(192, 57, 43, 0.94);
 	color: #fff;
 	padding: 10px 14px;
-	border-radius: 6px;
+	border-radius: var(--radius-sm);
 	font-size: 12px;
 	text-align: center;
 }
 
 /* 잔여 대수 마커 */
 .markerCount {
-	background: #1e3a5f;
+	background: var(--color-primary);
 	color: #fff;
 	border-radius: 50%;
 	width: 32px;
@@ -145,14 +187,14 @@ body.mapPage {
 	box-shadow: 0 1px 4px rgba(0,0,0,0.4);
 }
 .markerCount.full {
-	background: #b3261e;
+	background: var(--color-danger);
 }
 
 /* 상세 모달 */
 #detailModal {
 	position: absolute;
 	top: 0; left: 0; right: 0; bottom: 0;
-	background: rgba(0,0,0,0.4);
+	background: rgba(10, 20, 40, 0.5);
 	z-index: 1000;
 	display: flex;
 	align-items: center;
@@ -165,26 +207,27 @@ body.mapPage {
 	position: relative;
 	width: 320px;
 	background: #fff;
-	border-radius: 8px;
-	padding: 20px;
+	border-radius: var(--radius-md);
+	padding: 24px;
 }
 #detailCloseBtn {
 	position: absolute;
-	top: 8px;
-	right: 12px;
+	top: 10px;
+	right: 14px;
 	border: none;
 	background: none;
 	font-size: 20px;
 	cursor: pointer;
+	color: var(--color-text-sub);
 }
 #detailPhoto {
 	height: 140px;
-	background: #ddd;
+	background: var(--color-bg-page);
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	color: #888;
-	border-radius: 4px;
+	color: #999;
+	border-radius: var(--radius-sm);
 	margin-bottom: 12px;
 }
 #detailInfo {
@@ -192,13 +235,14 @@ body.mapPage {
 	margin: 12px 0;
 	font-size: 14px;
 	line-height: 1.8;
+	color: var(--color-text-sub);
 }
 #detailConfirmText {
 	font-size: 14px;
 	font-weight: bold;
 	text-align: center;
 	margin: 14px 0 10px;
-	color: #1e3a5f;
+	color: var(--color-navy);
 }
 #detailButtons {
 	display: flex;
@@ -206,18 +250,18 @@ body.mapPage {
 	gap: 8px;
 }
 #detailButtons button {
-	padding: 10px;
+	padding: 12px;
 	border: none;
-	border-radius: 4px;
+	border-radius: var(--radius-pill);
 	cursor: pointer;
-	font-weight: bold;
-}
-#quickReserveBtn {
-	background: #1e3a5f;
-	color: #fff;
+	font-weight: 700;
 }
 #selectSeatBtn {
-	background: #ffb400;
+	background: var(--color-primary);
+	color: #fff;
+}
+#selectSeatBtn:hover {
+	background: var(--color-primary-dark);
 }
 
 /* 사이드바 */
@@ -225,8 +269,8 @@ body.mapPage {
 	width: 30%;
 	height: 100%;
 	overflow-y: auto;
-	background: #f5f6f8;
-	border-left: 1px solid #ddd;
+	background: var(--color-bg-page);
+	border-left: 1px solid var(--color-border);
 	padding: 20px;
 }
 
@@ -238,23 +282,30 @@ body.mapPage {
 #authArea button {
 	flex: 1;
 	padding: 10px;
-	border: 1px solid #1e3a5f;
+	border: 1px solid var(--color-primary);
 	background: #fff;
-	color: #1e3a5f;
-	border-radius: 4px;
+	color: var(--color-primary);
+	border-radius: var(--radius-pill);
 	cursor: pointer;
-	font-weight: bold;
+	font-weight: 700;
 }
 #loginBtn {
-	background: #1e3a5f;
+	background: var(--color-primary);
 	color: #fff;
+}
+#loginBtn:hover {
+	background: var(--color-primary-dark);
+}
+#joinBtn:hover {
+	background: #eaf3fb;
 }
 
 #timeArea {
 	background: #fff;
 	padding: 14px;
-	border-radius: 6px;
+	border-radius: var(--radius-sm);
 	margin-bottom: 16px;
+	border: 1px solid var(--color-border);
 }
 .timeRow {
 	display: flex;
@@ -263,7 +314,7 @@ body.mapPage {
 .timeRow input, .timeRow select {
 	flex: 1;
 	padding: 8px;
-	border: 1px solid #ddd;
+	border: 1px solid var(--color-border);
 	border-radius: 4px;
 	font-size: 13px;
 }
@@ -273,36 +324,40 @@ body.mapPage {
 	flex-direction: column;
 	margin-bottom: 20px;
 	background: #fff;
-	border-radius: 6px;
+	border-radius: var(--radius-sm);
 	overflow: hidden;
+	border: 1px solid var(--color-border);
 }
 .menuItem {
 	display: block;
 	padding: 12px 14px;
 	text-decoration: none;
-	color: #333;
-	border-bottom: 1px solid #eee;
+	color: var(--color-text);
+	border-bottom: 1px solid var(--color-border);
 	font-size: 14px;
+	border-left: 3px solid transparent;
 }
 .menuItem:last-child {
 	border-bottom: none;
 }
 .menuItem:hover {
-	background: #f0f2f5;
+	background: #eaf3fb;
+	border-left-color: var(--color-primary);
 }
 
 .filterTitle {
 	font-size: 13px;
-	font-weight: bold;
-	color: #666;
+	font-weight: 700;
+	color: var(--color-navy);
 	margin-bottom: 8px;
 }
 #filterArea, #regionArea {
 	background: #fff;
 	padding: 14px;
-	border-radius: 6px;
+	border-radius: var(--radius-sm);
 	margin-bottom: 16px;
 	font-size: 14px;
+	border: 1px solid var(--color-border);
 }
 #filterArea label {
 	display: block;
@@ -311,6 +366,8 @@ body.mapPage {
 #regionSelect {
 	width: 100%;
 	padding: 8px;
+	border: 1px solid var(--color-border);
+	border-radius: 4px;
 }
 
 .hidden {

@@ -1,16 +1,18 @@
-/* 주차맵 페이지 전용 스타일. 결제 모달 관련 스타일은 css/payment.css로 분리돼 있음. */
+/* 주차맵 페이지 전용 스타일. 결제 모달 관련 스타일은 css/payment.css로 분리돼 있음.
+   색상 변수는 css/c.css의 :root에서 가져옴 (인천공항 사이트 참고 디자인 시스템). */
 
 body.resPage {
 	overflow-y: auto;
-	background: #f0f1f3;
+	background: var(--color-bg-page);
 	height: auto;
 	min-height: 100%;
 }
 
 #topSearch #backBtn {
-	color: #fff;
+	color: var(--color-navy);
 	text-decoration: none;
-	font-size: 18px;
+	font-size: 15px;
+	font-weight: 700;
 	margin-right: 16px;
 }
 
@@ -25,76 +27,81 @@ body.resPage {
 	display: flex;
 	gap: 16px;
 	background: #fff;
-	border-radius: 8px;
+	border-radius: var(--radius-md);
 	padding: 16px;
 	margin-bottom: 16px;
-	box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+	border: 1px solid var(--color-border);
 }
 #lotSummaryPhoto {
 	width: 90px;
 	height: 70px;
 	flex-shrink: 0;
-	background: #ddd;
-	border-radius: 6px;
+	background: var(--color-bg-page);
+	border-radius: var(--radius-sm);
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	color: #888;
+	color: #999;
 	font-size: 13px;
 }
 #lotSummaryText h2 {
 	font-size: 18px;
 	margin-bottom: 4px;
+	color: var(--color-navy);
 }
 #lotSummaryText p {
 	font-size: 13px;
-	color: #666;
+	color: var(--color-text-sub);
 }
 
 /* 이용 방식 필터 (1안/2안) - 원래 결제창 안에 있던 걸 여기로 옮김 */
 #planFilter {
 	background: #fff;
-	padding: 14px;
-	border-radius: 6px;
+	padding: 16px;
+	border-radius: var(--radius-md);
 	margin-bottom: 16px;
+	border: 1px solid var(--color-border);
 }
 #planCards {
 	display: flex;
 	gap: 12px;
-	margin-top: 8px;
+	margin-top: 10px;
 }
 .planCard {
 	flex: 1;
 	position: relative;
 	display: block;
-	border: 2px solid #ddd;
-	border-radius: 8px;
+	border: 2px solid var(--color-border);
+	border-radius: var(--radius-sm);
 	padding: 14px;
 	cursor: pointer;
+	background: #fff;
+	transition: border-color .15s, background .15s;
 }
 .planCard input {
 	position: absolute;
 	top: 12px;
 	right: 12px;
+	accent-color: var(--color-primary);
 }
 .planCard.selected {
-	border-color: #ffb400;
-	background: #fff8e6;
+	border-color: var(--color-primary);
+	background: #eaf3fb;
 }
 .planCardTitle {
-	font-weight: bold;
+	font-weight: 700;
 	font-size: 14px;
-	color: #1e3a5f;
+	color: var(--color-navy);
 	margin-bottom: 6px;
 	padding-right: 20px;
 }
 .planCardDesc {
 	font-size: 12px;
-	color: #666;
+	color: var(--color-text-sub);
 	line-height: 1.5;
 }
 
-/* 좌석 선택 툴바 */
+/* 좌석 선택 툴바 - 인천공항 사이트의 "제1/제2 여객터미널" 세그먼트 탭 스타일 참고 */
 #seatToolbar {
 	display: flex;
 	align-items: center;
@@ -102,30 +109,36 @@ body.resPage {
 	margin: 12px 0;
 	flex-wrap: wrap;
 }
+#floorTabs {
+	display: flex;
+	border-radius: var(--radius-pill);
+	overflow: hidden;
+	border: 1px solid var(--color-navy);
+}
 #floorTabs button {
-	padding: 6px 14px;
-	border: 1px solid #1e3a5f;
-	background: #fff;
-	color: #1e3a5f;
-	border-radius: 4px;
+	padding: 8px 20px;
+	border: none;
+	background: var(--color-navy);
+	color: #fff;
 	cursor: pointer;
-	margin-right: 4px;
+	font-weight: 600;
+	margin-right: 0;
 }
 #floorTabs button.active {
-	background: #1e3a5f;
-	color: #fff;
+	background: var(--color-primary);
 }
 #floorRemain {
 	font-size: 13px;
-	color: #666;
+	color: var(--color-text-sub);
 }
 #randomAssignBtn {
 	margin-left: auto;
-	padding: 8px 14px;
+	padding: 8px 16px;
 	border: none;
-	background: #ffb400;
-	border-radius: 4px;
-	font-weight: bold;
+	background: var(--color-accent);
+	color: var(--color-navy);
+	border-radius: var(--radius-pill);
+	font-weight: 700;
 	cursor: pointer;
 }
 
@@ -134,7 +147,7 @@ body.resPage {
 	gap: 14px;
 	flex-wrap: wrap;
 	font-size: 12px;
-	color: #666;
+	color: var(--color-text-sub);
 	margin-bottom: 14px;
 }
 .legendBox {
@@ -146,7 +159,7 @@ body.resPage {
 	vertical-align: middle;
 }
 .legendFree { background: #fff; border: 1px solid #bbb; }
-.legendSelected { background: #ffb400; }
+.legendSelected { background: var(--color-primary); }
 .legendTaken { background: #333; }
 .legendDisabled { background: #cfe8ff; border: 1px solid #7ab8ff; }
 .legendEv { background: #d6f5d6; border: 1px solid #7fd47f; }
@@ -179,8 +192,8 @@ body.resPage {
 	border-color: #333;
 }
 .seatCell.selected {
-	background: #ffb400;
-	border-color: #ffb400;
+	background: var(--color-primary);
+	border-color: var(--color-primary);
 	color: #fff;
 	font-weight: bold;
 }
@@ -189,14 +202,14 @@ body.resPage {
 	border-color: #7ab8ff;
 }
 .seatCell.disabled-seat.selected {
-	background: #ffb400;
+	background: var(--color-primary);
 }
 .seatCell.ev-seat {
 	background: #d6f5d6;
 	border-color: #7fd47f;
 }
 .seatCell.ev-seat.selected {
-	background: #ffb400;
+	background: var(--color-primary);
 }
 .seatCell.gate {
 	background: #eee;
@@ -207,6 +220,6 @@ body.resPage {
 .seatCell.cancelled-seat {
 	background: #ffd6d6;
 	border-color: #ff8a8a;
-	color: #b3261e;
+	color: var(--color-danger);
 	cursor: not-allowed;
 }
