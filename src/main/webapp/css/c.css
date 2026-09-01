@@ -37,6 +37,61 @@ body.mapPage {
 	overflow: hidden;
 }
 
+/* 상단 유틸리티 바 - 메인 헤더 위에 얇게 하나 더 얹은 바 */
+#utilBar {
+	height: 30px;
+	background: var(--color-navy);
+	color: #cfd8e6;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 0 24px;
+	font-size: 12px;
+}
+#utilRight {
+	display: flex;
+	gap: 14px;
+}
+.utilIcon {
+	color: #cfd8e6;
+	text-decoration: none;
+	font-size: 13px;
+}
+.utilIcon:hover {
+	color: #fff;
+}
+
+/* 히어로 배너 - 인천공항 홈페이지 배너 참고 (사진 + 그라데이션 + 타이틀) */
+#heroBanner {
+	height: 150px;
+	background-image: linear-gradient(to right, rgba(10,20,40,0.75), rgba(10,20,40,0.25)), url("../images/hero.jpg");
+	background-size: cover;
+	background-position: center 60%;
+	display: flex;
+	align-items: center;
+}
+#heroOverlay {
+	padding: 0 32px;
+	color: #fff;
+}
+#heroCaption {
+	font-size: 12px;
+	font-weight: 700;
+	letter-spacing: 1.5px;
+	opacity: 0.85;
+	margin-bottom: 6px;
+}
+#heroTitle {
+	font-size: 26px;
+	font-weight: 900;
+	letter-spacing: -0.5px;
+	margin-bottom: 6px;
+}
+#heroCredit {
+	font-size: 10px;
+	opacity: 0.6;
+}
+
 /* 상단 검색바 - 화이트 헤더 + 하단 보더 (인천공항 사이트 헤더 스타일) */
 #topSearch {
 	height: 64px;
@@ -126,10 +181,11 @@ body.mapPage {
 	color: #fff;
 }
 
-/* 본문 레이아웃: 지도 70% + 사이드바 30% */
+/* 본문 레이아웃: 지도 70% + 사이드바 30%
+   전체 높이에서 utilBar(30) + topSearch(64) + heroBanner(150) 뺀 나머지 */
 #mainWrap {
 	display: flex;
-	height: calc(100% - 64px);
+	height: calc(100% - 244px);
 }
 
 #mapArea {
