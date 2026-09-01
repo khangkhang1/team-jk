@@ -11,36 +11,54 @@
 </head>
 <body class="mapPage">
 
-	<!-- 상단 유틸리티 바 - 인천공항 사이트처럼 메인 헤더 위에 얇은 바 하나 추가 -->
-	<div id="utilBar">
-		<span id="utilTagline">인천국제공항 1터미널 주차 예약 서비스</span>
-		<div id="utilRight">
-			<a href="#" class="utilIcon" title="즐겨찾기">⭐</a>
-			<a href="#" class="utilIcon" title="검색">🔍</a>
+	<!-- ============================================================
+	     airport.kr(인천공항 공식 홈페이지) 구조 그대로 복제한 헤더 영역.
+	     다른 화면(주차맵/로그인/마이페이지/공지)에서 쓰는 #topSearch, #utilBar와는
+	     완전히 다른 이름(ac 접두어)을 써서 다른 화면 스타일에 영향 없음.
+	     ============================================================ -->
+	<header id="acHeader">
+		<a href="Index.html" id="acLogo" data-i18n="common_siteTitle">🅿️ 인천공항 주차관리시스템</a>
+		<nav id="acMainNav">
+			<a href="#" class="acStubLink">이용안내</a>
+			<a href="#" class="acStubLink">주차요금</a>
+			<a href="mypage.html" data-i18n="common_mypage">마이페이지</a>
+			<a href="notice.html" data-i18n="common_notice">공지사항</a>
+		</nav>
+		<div id="acUtilNav">
+			<button id="langToggleBtn" class="acLangBtn">🇯🇵 日本語</button>
+			<a href="#" class="acUtilIcon acStubLink" title="즐겨찾기">⭐</a>
+			<a href="#" class="acUtilIcon" id="acSearchIconBtn" title="검색">🔍</a>
+			<a href="#" class="acUtilIcon acStubLink" title="메뉴">☰</a>
 		</div>
-	</div>
+	</header>
 
-	<!-- 상단 검색바 -->
-	<header id="topSearch">
-		<div id="logo" data-i18n="common_siteTitle">🅿️ 인천공항 주차관리시스템</div>
-		<div id="searchBox">
+	<!-- 히어로 배너 - airport.kr 서브페이지 상단 배너 그대로 (캡션 + 큰 타이틀 + 검색창) -->
+	<div id="acHero">
+		<div id="acHeroText">
+			<div id="acHeroCaption">PARKING · RESERVATION</div>
+			<h1 id="acHeroTitle">주차 예약</h1>
+		</div>
+		<div id="acHeroSearch">
 			<input type="text" id="searchInput" data-i18n-ph="idx_searchPh" placeholder="어디 주차장을 찾으세요? (예: 단기주차장 장애인석)">
 			<button id="searchBtn" data-i18n="idx_search">검색</button>
 		</div>
-		<nav id="topNav">
-			<a href="mypage.html" data-i18n="common_mypage">👤 마이페이지</a>
-			<a href="notice.html" data-i18n="common_notice">📢 공지사항</a>
-			<button id="langToggleBtn" class="langToggle">🇯🇵 日本語</button>
-		</nav>
-	</header>
+	</div>
 
-	<!-- 히어로 배너 - 인천공항 홈페이지 배너 느낌 참고 -->
-	<div id="heroBanner">
-		<div id="heroOverlay">
-			<div id="heroCaption">PARKING · TRANSPORTATION</div>
-			<h1 id="heroTitle">인천공항 주차관리시스템</h1>
-			<div id="heroCredit">사진: Arne Müseler / arne-mueseler.com (CC BY-SA 3.0)</div>
-		</div>
+	<!-- 브레드크럼 바 -->
+	<div id="acBreadcrumb">
+		<a href="Index.html" id="acCrumbHome">🏠</a>
+		<span class="acCrumbSep">&rsaquo;</span>
+		<span>인천공항</span>
+		<span class="acCrumbSep">&rsaquo;</span>
+		<span>주차 예약</span>
+		<span class="acCrumbSep">&rsaquo;</span>
+		<span id="acCrumbTerm">제1여객터미널</span>
+	</div>
+
+	<!-- 터미널 선택 탭 -->
+	<div id="acTermTabs">
+		<button class="acTermTab active" data-term="1">제1 여객터미널</button>
+		<button class="acTermTab" data-term="2">제2 여객터미널</button>
 	</div>
 
 	<div id="mainWrap">

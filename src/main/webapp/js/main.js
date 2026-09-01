@@ -143,6 +143,32 @@ document.getElementById('searchBtn').addEventListener('click', function () {
 	alert('자연어 검색(AI)은 2군 기능 - 다음 단계에서 연결됩니다.');
 });
 
+// 헤더/유틸 영역의 아직 안 만든 링크들 - 공통 안내 처리
+document.querySelectorAll('.acStubLink').forEach(function (link) {
+	link.addEventListener('click', function (e) {
+		e.preventDefault();
+		alert((link.title || link.textContent.trim()) + ' 화면은 다음 단계에서 연결됩니다.');
+	});
+});
+
+// 검색 아이콘 클릭 -> 히어로의 검색창으로 스크롤/포커스
+document.getElementById('acSearchIconBtn').addEventListener('click', function (e) {
+	e.preventDefault();
+	document.getElementById('searchInput').focus();
+});
+
+// 터미널 탭 - 지금은 1터미널만 서비스. 2터미널은 안내만.
+document.querySelectorAll('.acTermTab').forEach(function (tab) {
+	tab.addEventListener('click', function () {
+		if (tab.dataset.term === '2') {
+			alert('제2 여객터미널 서비스는 준비중입니다. 현재는 제1 여객터미널만 이용 가능합니다.');
+			return;
+		}
+		document.querySelectorAll('.acTermTab').forEach(function (t) { t.classList.remove('active'); });
+		tab.classList.add('active');
+	});
+});
+
 // ------- 사이드바 시간 선택 초기화 (좌석 상태는 시간 기준으로만 판단 - 2차 회의 결론) -------
 (function initMainTimeInputs() {
 	var today = new Date();
