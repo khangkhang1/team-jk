@@ -1,0 +1,1114 @@
+*{
+box-sizing:border-box;
+margin:0;
+padding:0
+}
+
+html{
+scroll-behavior:smooth
+}
+
+body{
+font-family:"Noto Sans KR",sans-serif;
+background:#f5f7fb;
+color:#1f2937;
+overflow-x:hidden
+}
+
+a{
+text-decoration:none;
+color:inherit
+}
+
+ul{
+list-style:none
+}
+
+
+/* =========================
+   HEADER
+========================= */
+
+.header{
+    position:absolute;
+    top:0;
+    left:0;
+    z-index:1000;
+    width:100%;
+    height:90px;
+    background:transparent;
+    border-bottom:1px solid rgba(255,255,255,.25);
+    color:#fff;
+    transition:height .3s ease,
+               background .3s ease,
+               color .3s ease,
+               box-shadow .3s ease;
+}
+
+
+/* =========================
+   HEADER HOVER
+========================= */
+
+/*
+   메뉴에 마우스를 올리면
+   드롭다운만 내려오는 것이 아니라
+   헤더 전체가 아래로 확장됨
+*/
+
+.header:hover{
+    height:330px;
+    background:#fff;
+    color:#222;
+    border-bottom:1px solid #e5e7eb;
+    box-shadow:0 8px 25px rgba(0,0,0,.08);
+}
+
+
+.header_inner{
+    width:1400px;
+    height:90px;
+    margin:0 auto;
+    position:relative;
+}
+
+
+/* =========================
+   LOGO
+========================= */
+
+.logo{
+    float:left;
+    height:90px;
+    line-height:90px;
+}
+
+.logo a{
+    font-size:25px;
+    font-weight:700;
+    color:inherit;
+    letter-spacing:-1px;
+}
+
+
+/* =========================
+   HEADER MENU
+========================= */
+
+.header_menu{
+    float:left;
+    margin-left:100px;
+    height:90px;
+}
+
+.header_menu ul{
+    height:90px;
+}
+
+.header_menu li{
+    position:relative;
+    float:left;
+    width:150px;
+    height:90px;
+    line-height:90px;
+    text-align:center;
+}
+
+.header_menu li>a{
+    display:block;
+    height:90px;
+    font-size:16px;
+    font-weight:500;
+    color:inherit;
+    transition:color .2s ease;
+}
+
+.header_menu li:hover>a{
+    color:#2563eb;
+}
+
+
+/* =========================
+   DROPDOWN
+========================= */
+
+/*
+   헤더가 330px까지 커졌기 때문에
+   하위 메뉴는 헤더 내부의
+   90px 아래부터 표시
+*/
+
+.header_dropdown{
+    position:absolute;
+    top:90px;
+    left:0;
+    width:150px;
+    padding:20px 0 25px;
+    text-align:center;
+
+    opacity:0;
+    visibility:hidden;
+
+    transform:translateY(-10px);
+
+    transition:opacity .25s ease,
+               visibility .25s ease,
+               transform .25s ease;
+}
+
+
+/*
+   헤더 전체에 hover가 들어오면
+   모든 하위 메뉴를 동시에 표시
+*/
+
+.header:hover .header_dropdown{
+    opacity:1;
+    visibility:visible;
+    transform:translateY(0);
+}
+
+
+/* =========================
+   DROPDOWN MENU
+========================= */
+
+.header_dropdown li{
+    float:none;
+    width:100%;
+    height:42px;
+    line-height:42px;
+}
+
+.header_dropdown li a{
+    display:block;
+    width:100%;
+    height:42px;
+    line-height:42px;
+    padding:0 10px;
+
+    font-size:14px;
+    font-weight:400;
+    color:#555;
+
+    transition:color .2s ease,
+               background .2s ease;
+}
+
+.header_dropdown li a:hover{
+    color:#2563eb;
+    background:#f5f7fa;
+}
+
+
+/* =========================
+   DROPDOWN DIVIDER
+========================= */
+
+/*
+   메뉴 사이에 세로 구분선
+*/
+
+.header_menu>ul>li:not(:last-child){
+    border-right:1px solid transparent;
+}
+
+.header:hover .header_menu>ul>li:not(:last-child){
+    border-right:1px solid #f0f0f0;
+}
+
+
+/* =========================
+   HEADER RIGHT
+========================= */
+
+.header_right{
+    float:right;
+    height:90px;
+    line-height:90px;
+}
+
+.header_right a{
+    font-size:14px;
+    color:inherit;
+}
+
+.header_right .bar{
+    margin:0 12px;
+    color:#aaa;
+}
+
+
+/* =========================
+   HEADER DIM
+========================= */
+
+/*
+   헤더가 펼쳐졌을 때
+   헤더 아래쪽 화면만 살짝 어둡게 함
+*/
+
+.header:after{
+    content:"";
+    position:fixed;
+    top:330px;
+    left:0;
+    width:100%;
+    height:calc(100vh - 330px);
+
+    background:rgba(0,0,0,.35);
+
+    opacity:0;
+    visibility:hidden;
+
+    pointer-events:none;
+
+    transition:opacity .3s ease,
+               visibility .3s ease;
+
+    z-index:-1;
+}
+
+.header:hover:after{
+    opacity:1;
+    visibility:visible;
+}
+
+
+/* =========================
+   HAMBURGER
+========================= */
+
+.menu_btn{
+    display:none;
+}
+
+
+/* =========================
+   CLEAR
+========================= */
+
+.header_inner:after{
+    content:"";
+    display:block;
+    clear:both;
+}
+
+
+
+/* =========================
+   HERO
+========================= */
+
+.hero{
+position:relative;
+height:650px;
+background-image:
+linear-gradient(rgba(0,0,0,.38),rgba(0,0,0,.48)),
+url("../images/airport.jpg");
+background-size:cover;
+background-position:center;
+display:flex;
+align-items:center;
+justify-content:center;
+text-align:center;
+color:#fff
+}
+
+.hero_content{
+position:relative;
+z-index:2;
+max-width:850px;
+padding:0 20px
+}
+
+.hero_eyebrow{
+font-size:15px;
+font-weight:500;
+letter-spacing:2px;
+margin-bottom:20px;
+opacity:.9
+}
+
+.hero h1{
+font-family:"Black Han Sans",sans-serif;
+font-size:58px;
+font-weight:400;
+letter-spacing:-2px;
+margin-bottom:20px
+}
+
+.hero p{
+font-size:18px;
+line-height:1.8;
+opacity:.9
+}
+
+.hero_badge{
+display:inline-block;
+margin-top:28px;
+padding:10px 22px;
+border:1px solid rgba(255,255,255,.5);
+border-radius:30px;
+font-size:14px;
+background:rgba(255,255,255,.08);
+backdrop-filter:blur(5px)
+}
+
+
+/* =========================
+   QUICK MENU
+========================= */
+
+.quick_menu{
+position:relative;
+z-index:5;
+width:1100px;
+margin:-45px auto 0;
+display:grid;
+grid-template-columns:repeat(4,1fr);
+background:#fff;
+border-radius:16px;
+box-shadow:0 15px 40px rgba(0,0,0,.12);
+overflow:hidden
+}
+
+.quick_menu a{
+height:110px;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:17px;
+font-weight:700;
+border-right:1px solid #eee;
+transition:
+background .25s ease,
+color .25s ease
+}
+
+.quick_menu a:last-child{
+border-right:0
+}
+
+.quick_menu a:hover{
+background:#eff6ff;
+color:#2563eb
+}
+
+
+/* =========================
+   MAIN
+========================= */
+
+.main{
+width:100%;
+padding:80px 0
+}
+
+.container{
+width:1280px;
+max-width:calc(100% - 40px);
+margin:0 auto
+}
+
+.section{
+margin-bottom:100px
+}
+
+.section_title{
+margin-bottom:35px
+}
+
+.section_title h2{
+font-family:"Black Han Sans",sans-serif;
+font-size:34px;
+font-weight:400;
+letter-spacing:-1px
+}
+
+.section_title p{
+margin-top:10px;
+font-size:15px;
+color:#777
+}
+
+
+/* =========================
+   RESERVATION
+========================= */
+
+.reservation_box{
+background:#fff;
+border-radius:20px;
+padding:35px;
+box-shadow:0 8px 30px rgba(0,0,0,.06)
+}
+
+.terminal_tabs{
+display:flex;
+gap:10px;
+margin-bottom:30px
+}
+
+.terminal_tabs button{
+width:160px;
+height:48px;
+border:1px solid #ddd;
+border-radius:8px;
+background:#fff;
+font-size:15px;
+font-weight:600;
+cursor:pointer;
+transition:all .2s ease
+}
+
+.terminal_tabs button.active,
+.terminal_tabs button:hover{
+background:#2563eb;
+border-color:#2563eb;
+color:#fff
+}
+
+.reservation_form{
+display:grid;
+grid-template-columns:1fr 1fr 1fr 140px;
+gap:15px
+}
+
+.form_item{
+display:flex;
+flex-direction:column;
+gap:8px
+}
+
+.form_item label{
+font-size:13px;
+font-weight:700;
+color:#555
+}
+
+.form_item select,
+.form_item input{
+height:48px;
+padding:0 14px;
+border:1px solid #ddd;
+border-radius:8px;
+font-size:14px;
+background:#fff
+}
+
+.search_btn{
+height:48px;
+border:0;
+border-radius:8px;
+background:#2563eb;
+color:#fff;
+font-size:15px;
+font-weight:700;
+cursor:pointer;
+transition:background .2s ease
+}
+
+.search_btn:hover{
+background:#1d4ed8
+}
+
+.selected_time{
+margin-top:20px;
+padding:15px 18px;
+background:#f8fafc;
+border-radius:8px;
+font-size:14px;
+color:#555
+}
+
+
+/* =========================
+   PARKING MAP
+========================= */
+
+.parking_map_box{
+margin-top:30px;
+background:#fff;
+border-radius:20px;
+overflow:hidden;
+box-shadow:0 8px 30px rgba(0,0,0,.06)
+}
+
+.map_header{
+height:65px;
+padding:0 25px;
+display:flex;
+align-items:center;
+justify-content:space-between;
+border-bottom:1px solid #eee
+}
+
+.map_header h3{
+font-size:18px
+}
+
+.legend{
+display:flex;
+gap:18px;
+font-size:13px
+}
+
+.legend span{
+display:flex;
+align-items:center;
+gap:6px
+}
+
+.legend i{
+width:12px;
+height:12px;
+display:inline-block;
+border-radius:3px
+}
+
+.legend .available{
+background:#60a5fa
+}
+
+.legend .busy{
+background:#fbbf24
+}
+
+.legend .full{
+background:#ef4444
+}
+
+
+/* =========================
+   REAL MAP
+========================= */
+
+.parking_map_real{
+position:relative;
+height:560px;
+background:#e8edf2;
+overflow:hidden
+}
+
+.map_terminal{
+position:absolute;
+left:50%;
+top:50%;
+width:420px;
+height:170px;
+transform:translate(-50%,-50%);
+background:#d8dee6;
+border-radius:20px;
+box-shadow:0 8px 20px rgba(0,0,0,.08);
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:18px;
+font-weight:700;
+color:#64748b
+}
+
+.map_road{
+position:absolute;
+background:#fff
+}
+
+.map_road.horizontal{
+left:0;
+top:47%;
+width:100%;
+height:65px
+}
+
+.map_road.vertical{
+left:47%;
+top:0;
+width:65px;
+height:100%
+}
+
+.parking_zone{
+position:absolute;
+display:flex;
+align-items:center;
+justify-content:center;
+flex-direction:column;
+border-radius:12px;
+color:#fff;
+font-weight:700;
+cursor:pointer;
+transition:
+transform .2s ease,
+box-shadow .2s ease
+}
+
+.parking_zone:hover{
+transform:scale(1.04);
+box-shadow:0 8px 20px rgba(0,0,0,.18)
+}
+
+.parking_zone .zone_name{
+font-size:18px
+}
+
+.parking_zone .zone_count{
+font-size:13px;
+margin-top:4px;
+opacity:.9
+}
+
+.zone_a{
+left:8%;
+top:15%;
+width:220px;
+height:130px;
+background:#60a5fa
+}
+
+.zone_b{
+left:8%;
+bottom:12%;
+width:220px;
+height:130px;
+background:#fbbf24
+}
+
+.zone_c{
+right:8%;
+top:15%;
+width:220px;
+height:130px;
+background:#60a5fa
+}
+
+.zone_d{
+right:8%;
+bottom:12%;
+width:220px;
+height:130px;
+background:#ef4444
+}
+
+.map_bottom{
+height:70px;
+padding:0 25px;
+display:flex;
+align-items:center;
+justify-content:space-between;
+border-top:1px solid #eee
+}
+
+.map_selected{
+font-size:14px;
+color:#555
+}
+
+.map_total{
+font-size:15px;
+font-weight:700
+}
+
+.refresh_btn{
+height:38px;
+padding:0 15px;
+border:1px solid #ddd;
+border-radius:7px;
+background:#fff;
+cursor:pointer;
+font-size:13px
+}
+
+
+/* =========================
+   CONTENT GRID
+========================= */
+
+.content_grid{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:30px
+}
+
+.content_box{
+background:#fff;
+border-radius:18px;
+padding:30px;
+box-shadow:0 8px 30px rgba(0,0,0,.05)
+}
+
+
+/* =========================
+   NOTICE
+========================= */
+
+.notice_list li{
+height:55px;
+display:flex;
+align-items:center;
+justify-content:space-between;
+border-bottom:1px solid #eee
+}
+
+.notice_list li:last-child{
+border-bottom:0
+}
+
+.notice_list a{
+font-size:14px;
+transition:color .2s ease
+}
+
+.notice_list a:hover{
+color:#2563eb
+}
+
+.notice_date{
+font-size:12px;
+color:#999
+}
+
+
+/* =========================
+   GUIDE
+========================= */
+
+.guide_list{
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:20px
+}
+
+.guide_item{
+padding:30px 20px;
+background:#fff;
+border-radius:18px;
+text-align:center;
+box-shadow:0 8px 30px rgba(0,0,0,.05)
+}
+
+.guide_num{
+width:40px;
+height:40px;
+margin:0 auto 15px;
+border-radius:50%;
+background:#eff6ff;
+color:#2563eb;
+display:flex;
+align-items:center;
+justify-content:center;
+font-weight:700
+}
+
+.guide_item h3{
+font-size:16px;
+margin-bottom:10px
+}
+
+.guide_item p{
+font-size:13px;
+line-height:1.7;
+color:#777
+}
+
+
+/* =========================
+   FOOTER
+========================= */
+
+.footer{
+padding:50px 0;
+background:#1e293b;
+color:#94a3b8
+}
+
+.footer_inner{
+width:1280px;
+max-width:calc(100% - 40px);
+margin:0 auto
+}
+
+.footer_logo{
+font-family:"Black Han Sans",sans-serif;
+font-size:22px;
+color:#fff;
+margin-bottom:15px
+}
+
+.footer p{
+font-size:13px;
+line-height:1.8
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media(max-width:900px){
+
+.header{
+height:70px
+}
+
+.header_inner{
+padding:0 20px;
+gap:0;
+align-items:center
+}
+
+.logo{
+width:auto;
+height:70px
+}
+
+.logo strong{
+font-size:21px
+}
+
+.logo span{
+display:none
+}
+
+.header_menu{
+display:none
+}
+
+.header_right{
+margin-left:auto;
+height:70px;
+margin-right:10px
+}
+
+.header_right a{
+font-size:12px
+}
+
+.menu_btn{
+display:block
+}
+
+
+/* 모바일에서는 헤더 확장 효과 제거 */
+
+.header:has(.header_menu:hover){
+height:70px
+}
+
+.header:before{
+display:none
+}
+
+
+/* hero */
+
+.hero{
+height:560px
+}
+
+.hero h1{
+font-size:42px
+}
+
+.hero p{
+font-size:15px
+}
+
+
+/* quick menu */
+
+.quick_menu{
+width:calc(100% - 30px);
+grid-template-columns:repeat(2,1fr);
+margin-top:-35px
+}
+
+.quick_menu a{
+height:80px;
+font-size:14px
+}
+
+
+/* main */
+
+.main{
+padding:60px 0
+}
+
+.container{
+max-width:calc(100% - 30px)
+}
+
+.section{
+margin-bottom:70px
+}
+
+
+/* reservation */
+
+.reservation_box{
+padding:20px
+}
+
+.reservation_form{
+grid-template-columns:1fr 1fr
+}
+
+.search_btn{
+grid-column:1 / -1
+}
+
+
+/* map */
+
+.parking_map_real{
+height:500px
+}
+
+.map_terminal{
+width:260px;
+height:130px
+}
+
+.zone_a,
+.zone_b,
+.zone_c,
+.zone_d{
+width:150px;
+height:100px
+}
+
+
+/* content */
+
+.content_grid{
+grid-template-columns:1fr
+}
+
+.guide_list{
+grid-template-columns:1fr 1fr
+}
+
+}
+
+
+@media(max-width:560px){
+
+.header_right{
+gap:8px
+}
+
+.header_right .bar{
+display:none
+}
+
+.hero{
+height:500px
+}
+
+.hero h1{
+font-size:34px;
+letter-spacing:-1px
+}
+
+.hero p{
+font-size:14px
+}
+
+.hero_badge{
+font-size:12px
+}
+
+
+/* quick */
+
+.quick_menu{
+grid-template-columns:1fr 1fr
+}
+
+.quick_menu a{
+height:70px
+}
+
+
+/* reservation */
+
+.terminal_tabs button{
+width:50%;
+height:44px
+}
+
+.reservation_form{
+grid-template-columns:1fr
+}
+
+.search_btn{
+grid-column:auto
+}
+
+
+/* map */
+
+.parking_map_real{
+height:450px
+}
+
+.map_terminal{
+width:190px;
+height:100px;
+font-size:14px
+}
+
+.zone_a,
+.zone_b,
+.zone_c,
+.zone_d{
+width:110px;
+height:80px
+}
+
+.parking_zone .zone_name{
+font-size:14px
+}
+
+.parking_zone .zone_count{
+font-size:11px
+}
+
+.zone_a{
+left:5%;
+top:10%
+}
+
+.zone_b{
+left:5%;
+bottom:10%
+}
+
+.zone_c{
+right:5%;
+top:10%
+}
+
+.zone_d{
+right:5%;
+bottom:10%
+}
+
+
+/* guide */
+
+.guide_list{
+grid-template-columns:1fr
+}
+
+.map_header{
+padding:0 15px
+}
+
+.legend{
+gap:8px;
+font-size:11px
+}
+
+}
