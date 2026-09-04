@@ -1409,7 +1409,7 @@ rgba(0,20,45,.25) 100%
    ============================================================ */
 .zone_svg_wrap{
 	height:auto;
-	min-height:420px;
+	min-height:650px;
 	padding:20px 0;
 	overflow:visible
 }
@@ -1422,7 +1422,7 @@ rgba(0,20,45,.25) 100%
 #zoneSvg{
 	display:block;
 	width:100%;
-	max-width:820px;
+	max-width:1120px;
 	height:auto;
 	margin:0 auto
 }
