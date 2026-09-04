@@ -1,904 +1,530 @@
 <!DOCTYPE html>
 <html lang="ko">
-<link rel="stylesheet" href="css/test6.css">
-
-<head>
-
-<meta charset="UTF-8">
-
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>인천공항 주차예약</title>
-
-<style>
-
-</style>
-
-</head>
-
-
-<body>
-
-<div class="wrap">
-
-
-<!-- HEADER -->
-
-<header class="header">
-
-<div class="header_inner">
-
-<a href="#" class="logo">
-인천공항 주차예약
-<small>INCHEON AIRPORT PARKING</small>
-</a>
-
-
-<nav class="header_menu">
-
-<li>
-<a href="#reserve">주차장 안내</a>
-
-<div class="header_dropdown">
-<a href="#reserve">제1여객터미널</a>
-<a href="#reserve">제2여객터미널</a>
-<a href="#reserve">주차장 위치</a>
-<a href="#reserve">주차 요금</a>
-</div>
-
-</li>
-
-
-<li>
-<a href="#reserve" class="active">주차 예약</a>
-
-<div class="header_dropdown">
-<a href="#reserve">예약하기</a>
-<a href="#reserve">실시간 주차 현황</a>
-<a href="#reserve">예약 변경</a>
-<a href="#reserve">예약 취소</a>
-</div>
-
-</li>
-
-
-<li>
-<a href="#notice">예약 조회</a>
-
-<div class="header_dropdown">
-<a href="#notice">예약 내역</a>
-<a href="#notice">예약 확인</a>
-<a href="#notice">예약 취소</a>
-<a href="#notice">이용 내역</a>
-</div>
-
-</li>
-
-
-<li>
-<a href="#guide">이용 안내</a>
-
-<div class="header_dropdown">
-<a href="#guide">이용 방법</a>
-<a href="#guide">주차 요금</a>
-<a href="#guide">유의사항</a>
-<a href="#guide">자주 묻는 질문</a>
-</div>
-
-</li>
-
-</nav>
-
-
-<div class="header_right">
-
-<a href="#">로그인</a>
-<span>|</span>
-<a href="#">회원가입</a>
-
-</div>
-
-
-<button class="menu_btn" aria-label="메뉴">☰</button>
-
-</div>
-
-</header>
-
-
-<!-- MAIN -->
-
-<main class="main">
-
-
-<!-- HERO -->
-
-<section class="hero">
-
-<div class="hero_inner">
-
-<div class="hero_eyebrow">
-INCHEON AIRPORT PARKING SERVICE
-</div>
-
-<h1>
-편리한 여행의 시작,
-<br>
-주차부터 간편하게
-</h1>
-
-<p>
-인천공항 주차장의 실시간 현황을 확인하고
-<br>
-원하는 날짜와 시간에 주차 공간을 미리 예약하세요.
-</p>
-
-<span class="hero_badge">
-실시간 주차 현황 제공 · 간편 예약 서비스
-</span>
-
-</div>
-
-</section>
-
-
-<!-- QUICK MENU -->
-
-<div class="quick_wrap">
-
-<div class="quick_menu">
-
-
-<a href="#reserve" class="quick_item">
-
-<div class="quick_icon">P</div>
-
-<div class="quick_text">
-
-<strong>주차 예약</strong>
-
-<span>원하는 날짜와 시간으로 예약</span>
-
-</div>
-
-</a>
-
-
-<a href="#notice" class="quick_item">
-
-<div class="quick_icon">✓</div>
-
-<div class="quick_text">
-
-<strong>예약 조회</strong>
-
-<span>예약 내역을 간편하게 확인</span>
-
-</div>
-
-</a>
-
-
-<a href="#parking" class="quick_item">
-
-<div class="quick_icon">⌖</div>
-
-<div class="quick_text">
-
-<strong>주차장 현황</strong>
-
-<span>실시간 주차 가능 공간 확인</span>
-
-</div>
-
-</a>
-
-
-<a href="#guide" class="quick_item">
-
-<div class="quick_icon">i</div>
-
-<div class="quick_text">
-
-<strong>이용 안내</strong>
-
-<span>주차장 이용 방법 안내</span>
-
-</div>
-
-</a>
-
-
-</div>
-
-</div>
-
-
-<div class="container">
-
-
-<!-- RESERVATION -->
-
-<section class="section" id="reserve">
-
-<div class="section_head">
-
-<div>
-
-<h2>주차 예약 · 실시간 주차맵</h2>
-
-<p>
-입차 시간을 선택하고 조회하면 해당 시간대의 주차 현황을 주차맵에 표시합니다.
-</p>
-
-</div>
-
-</div>
-
-
-<div class="parking_control_box">
-
-
-<div class="reserve_control">
-
-
-<div class="reserve_tabs">
-
-<button class="active" type="button">
-제1여객터미널
-</button>
-
-<button type="button">
-제2여객터미널
-</button>
-
-</div>
-
-
-<div class="control_grid">
-
-
-<div class="field">
-
-<label>주차장</label>
-
-<select id="parkingTerminal">
-
-<option>제1여객터미널 주차장</option>
-<option>제2여객터미널 주차장</option>
-
-</select>
-
-</div>
-
-
-<div class="field">
-
-<label>입차일</label>
-
-<input type="date" id="startDate">
-
-</div>
-
-
-<div class="field">
-
-<label>입차 시간</label>
-
-<input type="time" id="entryTime" value="09:00">
-
-</div>
-
-
-<div class="field">
-
-<label>출차일</label>
-
-<input type="date" id="endDate">
-
-</div>
-
-
-<button class="search_btn" type="button" onclick="updateParkingByTime()">
-주차 현황 조회
-</button>
-
-
-</div>
-
-
-<div class="selected_time">
-
-<span>조회 기준</span>
-
-<strong id="selectedTime">
-오늘 09:00 기준
-</strong>
-
-<small>
-선택한 시간대에 맞는 주차 현황을 조회합니다.
-</small>
-
-</div>
-
-
-</div>
-
-
-<!-- MAP HEADER -->
-
-<div class="map_header">
-
-<div>
-
-<h3>제1여객터미널 전체 주차맵</h3>
-
-<p>
-구역별 색상으로 주차 가능 상태를 확인할 수 있습니다.
-</p>
-
-</div>
-
-
-<div class="map_legend">
-
-<span>
-<i class="legend available"></i>
-여유
-</span>
-
-<span>
-<i class="legend normal"></i>
-보통
-</span>
-
-<span>
-<i class="legend busy"></i>
-혼잡
-</span>
-
-</div>
-
-</div>
-
-
-<!-- PARKING MAP - 사용자가 보내준 실제 구역도 이미지를 그대로 배경으로 쓰고,
-     그 위에 P1~P9 위치에 맞춰 투명 클릭 영역 + 상태 배지만 얹음 (이미지 자체는 100% 원본 그대로).
-     구역 클릭하면 그 구역의 주차맵 페이지(reservation.html)로 바로 이동함. -->
-
-<div class="parking_map_real zone_svg_wrap">
-
-<svg id="zoneSvg" viewBox="0 0 1647 955" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="단기주차장 구역도(P1~P9)">
-
-	<image href="images/parking_zone_map.png" x="0" y="0" width="1647" height="955"/>
-
-	<g class="zone_shape" data-lot="9" data-zone="P9">
-		<rect class="zone_hit" x="598" y="178" width="192" height="86"/>
-		<circle class="zone_dot" cx="770" cy="196" r="11"/>
-		<text class="zone_count" x="770" y="200">-</text>
-	</g>
-	<g class="zone_shape" data-lot="8" data-zone="P8">
-		<rect class="zone_hit" x="860" y="178" width="192" height="86"/>
-		<circle class="zone_dot" cx="1032" cy="196" r="11"/>
-		<text class="zone_count" x="1032" y="200">-</text>
-	</g>
-	<g class="zone_shape" data-lot="7" data-zone="P7">
-		<rect class="zone_hit" x="598" y="268" width="192" height="76"/>
-		<circle class="zone_dot" cx="770" cy="286" r="11"/>
-		<text class="zone_count" x="770" y="290">-</text>
-	</g>
-	<g class="zone_shape" data-lot="6" data-zone="P6">
-		<rect class="zone_hit" x="860" y="268" width="192" height="76"/>
-		<circle class="zone_dot" cx="1032" cy="286" r="11"/>
-		<text class="zone_count" x="1032" y="290">-</text>
-	</g>
-
-	<g class="zone_shape" data-lot="2" data-zone="P2">
-		<rect class="zone_hit" x="413" y="358" width="395" height="205"/>
-		<circle class="zone_dot" cx="788" cy="376" r="12"/>
-		<text class="zone_count" x="788" y="380">-</text>
-	</g>
-	<g class="zone_shape" data-lot="1" data-zone="P1">
-		<rect class="zone_hit" x="837" y="358" width="395" height="205"/>
-		<circle class="zone_dot" cx="1212" cy="376" r="12"/>
-		<text class="zone_count" x="1212" y="380">-</text>
-	</g>
-
-	<g class="zone_shape" data-lot="4" data-zone="P4">
-		<rect class="zone_hit" x="413" y="570" width="395" height="113"/>
-		<circle class="zone_dot" cx="788" cy="588" r="12"/>
-		<text class="zone_count" x="788" y="592">-</text>
-	</g>
-	<g class="zone_shape" data-lot="3" data-zone="P3">
-		<rect class="zone_hit" x="837" y="570" width="395" height="113"/>
-		<circle class="zone_dot" cx="1212" cy="588" r="12"/>
-		<text class="zone_count" x="1212" y="592">-</text>
-	</g>
-
-	<g class="zone_shape" data-lot="5" data-zone="P5">
-		<rect class="zone_hit" x="453" y="710" width="362" height="122"/>
-		<circle class="zone_dot" cx="795" cy="728" r="12"/>
-		<text class="zone_count" x="795" y="732">-</text>
-	</g>
-
-</svg>
-
-</div>
-
-
-<!-- MAP BOTTOM -->
-
-<div class="map_bottom">
-
-
-<div>
-
-<span class="pin_icon">⌖</span>
-
-<span id="mapSelectedText">
-주차 구역을 클릭하면 상세 현황을 확인할 수 있습니다.
-</span>
-
-</div>
-
-
-<div class="map_total">
-
-전체 가능
-
-<strong id="totalParking">1,402</strong>
-
-<b>대</b>
-
-</div>
-
-
-<button
-class="refresh_btn"
-type="button"
-onclick="refreshParking()">
-
-<span class="refresh_icon">↻</span>
-
-새로고침
-
-</button>
-
-
-</div>
-
-
-</div>
-
-</section>
-
-
-<!-- NOTICE -->
-
-<section class="section" id="notice">
-
-<div class="info_grid">
-
-
-<div class="panel">
-
-
-<div class="section_head">
-
-<div>
-
-<h2>공지사항</h2>
-
-<p>
-주차 서비스의 새로운 소식을 알려드립니다.
-</p>
-
-</div>
-
-<a href="#" class="more">
-더보기 →
-</a>
-
-</div>
-
-
-<ul class="notice_list">
-
-
-<li>
-
-<span class="notice_tag">
-공지
-</span>
-
-<strong>
-주차예약 서비스 이용 안내
-</strong>
-
-<span class="notice_date">
-2026.09.02
-</span>
-
-</li>
-
-
-<li>
-
-<span class="notice_tag">
-안내
-</span>
-
-<strong>
-실시간 주차 현황 업데이트 안내
-</strong>
-
-<span class="notice_date">
-2026.09.01
-</span>
-
-</li>
-
-
-<li>
-
-<span class="notice_tag">
-공지
-</span>
-
-<strong>
-제1여객터미널 주차장 이용 안내
-</strong>
-
-<span class="notice_date">
-2026.08.28
-</span>
-
-</li>
-
-
-<li>
-
-<span class="notice_tag">
-안내
-</span>
-
-<strong>
-주차예약 시스템 점검 안내
-</strong>
-
-<span class="notice_date">
-2026.08.25
-</span>
-
-</li>
-
-
-</ul>
-
-</div>
-
-
-<!-- GUIDE -->
-
-<div class="panel" id="guide">
-
-
-<div class="section_head">
-
-<div>
-
-<h2>이용 안내</h2>
-
-<p>
-처음 이용하셔도 쉽게 예약할 수 있습니다.
-</p>
-
-</div>
-
-</div>
-
-
-<div class="guide_list">
-
-
-<div class="guide_item">
-
-<span class="guide_num">
-01
-</span>
-
-<strong>
-주차장 선택
-</strong>
-
-<span>
-원하는 터미널과 주차구역을 선택하세요.
-</span>
-
-</div>
-
-
-<div class="guide_item">
-
-<span class="guide_num">
-02
-</span>
-
-<strong>
-예약 정보 입력
-</strong>
-
-<span>
-입·출차 날짜와 시간을 입력하세요.
-</span>
-
-</div>
-
-
-<div class="guide_item">
-
-<span class="guide_num">
-03
-</span>
-
-<strong>
-예약 확인
-</strong>
-
-<span>
-예약 가능 여부를 확인하고 신청하세요.
-</span>
-
-</div>
-
-
-<div class="guide_item">
-
-<span class="guide_num">
-04
-</span>
-
-<strong>
-주차 이용
-</strong>
-
-<span>
-예약 시간에 맞춰 편리하게 이용하세요.
-</span>
-
-</div>
-
-
-</div>
-
-</div>
-
-
-</div>
-
-</section>
-
-
-</div>
-
-</main>
-
-
-<!-- FOOTER -->
-
-<footer class="footer">
-
-
-<div class="footer_inner">
-
-
-<div class="footer_top">
-
-
-<div class="footer_logo">
-
-인천공항 주차예약
-
-<small>
-INCHEON AIRPORT PARKING
-</small>
-
-</div>
-
-
-<div class="footer_links">
-
-<a href="#">
-이용약관
-</a>
-
-<a href="#">
-개인정보처리방침
-</a>
-
-<a href="#">
-사이트맵
-</a>
-
-</div>
-
-
-</div>
-
-
-<div class="footer_info">
-
-<p>
-제1여객터미널 주차예약 서비스 · 본 사이트는 팀프로젝트 목적으로 제작되었습니다.
-</p>
-
-<p>
-문의 : 제1여객터미널 주차상황실
-</p>
-
-<p class="copyright">
-Copyright © Parking Reservation Project. All rights reserved.
-</p>
-
-</div>
-
-
-</div>
-
-</footer>
-
-
-</div>
-
-
-<script>
-
-// P1~P9 구역별 전체 대수 (인천공항 1터미널 단기주차장 실제 구역명 기준 - 대수는 가상 데이터)
-const zoneCapacity={
-p1:90, p2:90, p3:70, p4:70, p5:60, p6:40, p7:40, p8:40, p9:40
-};
-
-// 시간대별 구역별 "남은 대수" 가상 데이터
-const parkingData={
-
-"09":{ p1:70, p2:65, p3:50, p4:55, p5:40, p6:30, p7:28, p8:32, p9:25 },
-"12":{ p1:40, p2:35, p3:30, p4:28, p5:20, p6:15, p7:10, p8:18, p9:12 },
-"15":{ p1:20, p2:18, p3:15, p4:12, p5:10, p6:8,  p7:5,  p8:9,  p9:6  },
-"18":{ p1:10, p2:8,  p3:6,  p4:5,  p5:4,  p6:3,  p7:2,  p8:4,  p9:2  },
-"21":{ p1:55, p2:50, p3:40, p4:42, p5:30, p6:22, p7:20, p8:24, p9:18 }
-
-};
-
-// 남은 비율에 따라 여유/보통/혼잡 색상 등급 결정 (map_legend 색상 그대로 재사용)
-function zoneStatusClass(remain,capacity){
-const ratio=remain/capacity;
-if(ratio>0.5) return "available_zone";
-if(ratio>0.2) return "normal_zone";
-return "busy_zone";
-}
-
-function setParking(data){
-
-let total=0;
-
-Object.keys(data).forEach(function(zoneKey){
-
-const remain=data[zoneKey];
-total+=remain;
-
-const shape=document.querySelector('.zone_shape[data-lot="'+zoneKey.replace("p","")+'"]');
-if(!shape) return;
-
-const countText=shape.querySelector(".zone_count");
-countText.textContent=remain+"대";
-
-shape.classList.remove("available_zone","normal_zone","busy_zone");
-shape.classList.add(zoneStatusClass(remain,zoneCapacity[zoneKey]));
-
-});
-
-document.getElementById("totalParking").textContent=total.toLocaleString();
-
-}
-
-
-function updateParkingByTime(){
-
-const time=document.getElementById("entryTime").value||"09:00";
-
-const hour=parseInt(time.split(":")[0],10);
-
-const key=
-hour<=10
-?"09"
-:hour<=13
-?"12"
-:hour<=16
-?"15"
-:hour<=19
-?"18"
-:"21";
-
-setParking(parkingData[key]);
-
-document.getElementById("selectedTime").textContent=
-"선택 시간 "+time+" 기준";
-
-}
-
-
-function refreshParking(){
-
-const btn=document.querySelector(".refresh_btn");
-
-btn.classList.add("loading");
-
-setTimeout(()=>{
-
-updateParkingByTime();
-
-btn.classList.remove("loading");
-
-},600);
-
-}
-
-
-// 구역 클릭 -> 해당 구역의 주차맵(reservation.html)으로 바로 이동
-document.querySelectorAll(".zone_shape").forEach(function(shape){
-
-shape.addEventListener("click",function(){
-
-const lot=shape.getAttribute("data-lot");
-const zoneName=shape.getAttribute("data-zone");
-
-document.getElementById("mapSelectedText").textContent=
-zoneName+" 구역 선택됨 · 주차맵으로 이동합니다...";
-
-window.location.href="reservation.html?lot="+lot;
-
-});
-
-});
-
-
-const today=new Date();
-
-const todayStr=
-today.getFullYear()
-+"-"
-+String(today.getMonth()+1).padStart(2,"0")
-+"-"
-+String(today.getDate()).padStart(2,"0");
-
-document.getElementById("startDate").value=todayStr;
-
-
-const tomorrow=
-new Date(today.getTime()+86400000);
-
-document.getElementById("endDate").value=
-tomorrow.getFullYear()
-+"-"
-+String(tomorrow.getMonth()+1).padStart(2,"0")
-+"-"
-+String(tomorrow.getDate()).padStart(2,"0");
-
-
-window.addEventListener("scroll",()=>{
-
-document.querySelector(".header").classList.toggle(
-"scrolled",
-window.scrollY>40
-);
-
-});
-
-// 페이지 처음 열렸을 때 구역도에 초기 데이터 표시
-updateParkingByTime();
-
-</script>
-
-
-</body>
-
+	<link rel="stylesheet" href="css/test6.css">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>인천공항 주차예약</title>
+		<style>
+		</style>
+	</head>
+	<body>
+		<div class="wrap">
+			<!-- HEADER -->
+			<header class="header">
+				<div class="header_inner">
+					<a href="#" class="logo">
+						인천공항 주차예약
+						<small>INCHEON AIRPORT PARKING</small>
+					</a>
+					<nav class="header_menu">
+						<li>
+							<a href="#reserve">주차장 안내</a>
+							<div class="header_dropdown">
+								<a href="#reserve">제1여객터미널</a>
+								<a href="#reserve">제2여객터미널</a>
+								<a href="#reserve">주차장 위치</a>
+								<a href="#reserve">주차 요금</a>
+							</div>
+						</li>
+						<li>
+							<a href="#reserve" class="active">주차 예약</a>
+							<div class="header_dropdown">
+								<a href="#reserve">예약하기</a>
+								<a href="#reserve">실시간 주차 현황</a>
+								<a href="#reserve">예약 변경</a>
+								<a href="#reserve">예약 취소</a>
+							</div>
+						</li>
+						<li>
+							<a href="#notice">예약 조회</a>
+							<div class="header_dropdown">
+								<a href="#notice">예약 내역</a>
+								<a href="#notice">예약 확인</a>
+								<a href="#notice">예약 취소</a>
+								<a href="#notice">이용 내역</a>
+							</div>
+						</li>
+						<li>
+							<a href="#guide">이용 안내</a>
+							<div class="header_dropdown">
+								<a href="#guide">이용 방법</a>
+								<a href="#guide">주차 요금</a>
+								<a href="#guide">유의사항</a>
+								<a href="#guide">자주 묻는 질문</a>
+							</div>
+						</li>
+					</nav>
+					<div class="header_right">
+						<a href="#">로그인</a>
+						<span>|</span>
+						<a href="#">회원가입</a>
+					</div>
+					<button class="menu_btn" aria-label="메뉴">☰</button>
+				</div>
+			</header>
+			<!-- MAIN -->
+			<main class="main">
+				<!-- HERO -->
+				<section class="hero">
+					<div class="hero_inner">
+						<div class="hero_eyebrow">
+							INCHEON AIRPORT PARKING SERVICE
+						</div>
+						<h1>
+							편리한 여행의 시작,
+							<br>
+							주차부터 간편하게
+						</h1>
+						<p>
+							인천공항 주차장의 실시간 현황을 확인하고
+							<br>
+							원하는 날짜와 시간에 주차 공간을 미리 예약하세요.
+						</p>
+						<span class="hero_badge">
+							실시간 주차 현황 제공 · 간편 예약 서비스
+						</span>
+					</div>
+				</section>
+				<!-- QUICK MENU -->
+				<div class="quick_wrap">
+					<div class="quick_menu">
+						<a href="#reserve" class="quick_item">
+							<div class="quick_icon">P</div>
+							<div class="quick_text">
+								<strong>주차 예약</strong>
+								<span>원하는 날짜와 시간으로 예약</span>
+							</div>
+						</a>
+						<a href="#notice" class="quick_item">
+							<div class="quick_icon">✓</div>
+							<div class="quick_text">
+								<strong>예약 조회</strong>
+								<span>예약 내역을 간편하게 확인</span>
+							</div>
+						</a>
+						<a href="#parking" class="quick_item">
+							<div class="quick_icon">⌖</div>
+							<div class="quick_text">
+								<strong>주차장 현황</strong>
+								<span>실시간 주차 가능 공간 확인</span>
+							</div>
+						</a>
+						<a href="#guide" class="quick_item">
+							<div class="quick_icon">i</div>
+							<div class="quick_text">
+								<strong>이용 안내</strong>
+								<span>주차장 이용 방법 안내</span>
+							</div>
+						</a>
+					</div>
+				</div>
+				<div class="container">
+					<!-- RESERVATION -->
+					<section class="section" id="reserve">
+						<div class="section_head">
+							<div>
+								<h2>주차 예약 · 실시간 주차맵</h2>
+								<p>
+									입차 시간을 선택하고 조회하면 해당 시간대의 주차 현황을 주차맵에 표시합니다.
+								</p>
+							</div>
+						</div>
+						<div class="parking_control_box">
+							<div class="reserve_control">
+								<div class="reserve_tabs">
+									<button class="active" type="button">
+										제1여객터미널
+									</button>
+									<button type="button">
+										제2여객터미널
+									</button>
+								</div>
+								<div class="control_grid">
+									<div class="field">
+										<label>주차장</label>
+										<select id="parkingTerminal">
+											<option>제1여객터미널 주차장</option>
+											<option>제2여객터미널 주차장</option>
+										</select>
+									</div>
+									<div class="field">
+										<label>입차일</label>
+										<input type="date" id="startDate">
+									</div>
+									<div class="field">
+										<label>입차 시간</label>
+										<input type="time" id="entryTime" value="09:00">
+									</div>
+									<div class="field">
+										<label>출차일</label>
+										<input type="date" id="endDate">
+									</div>
+									<button class="search_btn" type="button" onclick="updateParkingByTime()">
+										주차 현황 조회
+									</button>
+								</div>
+								<div class="selected_time">
+									<span>조회 기준</span>
+									<strong id="selectedTime">
+										오늘 09:00 기준
+									</strong>
+									<small>
+										선택한 시간대에 맞는 주차 현황을 조회합니다.
+									</small>
+								</div>
+							</div>
+							<!-- MAP HEADER -->
+							<div class="map_header">
+								<div>
+									<h3>제1여객터미널 전체 주차맵</h3>
+									<p>
+										구역별 색상으로 주차 가능 상태를 확인할 수 있습니다.
+									</p>
+								</div>
+								<div class="map_legend">
+									<span>
+										<i class="legend available"></i>
+										여유
+									</span>
+									<span>
+										<i class="legend normal"></i>
+										보통
+									</span>
+									<span>
+										<i class="legend busy"></i>
+										혼잡
+									</span>
+								</div>
+							</div>
+							<!-- PARKING MAP - 사용자가 보내준 실제 구역도 이미지를 그대로 배경으로 쓰고,
+							그 위에 P1~P9 위치에 맞춰 투명 클릭 영역 + 상태 배지만 얹음 (이미지 자체는 100% 원본 그대로).
+							구역 클릭하면 그 구역의 주차맵 페이지(reservation.html)로 바로 이동함. -->
+							<div class="parking_map_real zone_svg_wrap">
+								<svg id="zoneSvg" viewBox="0 0 1647 955" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="단기주차장 구역도(P1~P9)">
+									<image href="images/parking_zone_map.png" x="0" y="0" width="1647" height="955"/>
+									<g class="zone_shape" data-lot="9" data-zone="P9">
+										<rect class="zone_hit" x="598" y="178" width="192" height="86"/>
+										<circle class="zone_dot" cx="770" cy="196" r="11"/>
+										<text class="zone_count" x="770" y="200">-</text>
+									</g>
+									<g class="zone_shape" data-lot="8" data-zone="P8">
+										<rect class="zone_hit" x="860" y="178" width="192" height="86"/>
+										<circle class="zone_dot" cx="1032" cy="196" r="11"/>
+										<text class="zone_count" x="1032" y="200">-</text>
+									</g>
+									<g class="zone_shape" data-lot="7" data-zone="P7">
+										<rect class="zone_hit" x="598" y="268" width="192" height="76"/>
+										<circle class="zone_dot" cx="770" cy="286" r="11"/>
+										<text class="zone_count" x="770" y="290">-</text>
+									</g>
+									<g class="zone_shape" data-lot="6" data-zone="P6">
+										<rect class="zone_hit" x="860" y="268" width="192" height="76"/>
+										<circle class="zone_dot" cx="1032" cy="286" r="11"/>
+										<text class="zone_count" x="1032" y="290">-</text>
+									</g>
+									<g class="zone_shape" data-lot="2" data-zone="P2">
+										<rect class="zone_hit" x="413" y="358" width="395" height="205"/>
+										<circle class="zone_dot" cx="788" cy="376" r="12"/>
+										<text class="zone_count" x="788" y="380">-</text>
+									</g>
+									<g class="zone_shape" data-lot="1" data-zone="P1">
+										<rect class="zone_hit" x="837" y="358" width="395" height="205"/>
+										<circle class="zone_dot" cx="1212" cy="376" r="12"/>
+										<text class="zone_count" x="1212" y="380">-</text>
+									</g>
+									<g class="zone_shape" data-lot="4" data-zone="P4">
+										<rect class="zone_hit" x="413" y="570" width="395" height="113"/>
+										<circle class="zone_dot" cx="788" cy="588" r="12"/>
+										<text class="zone_count" x="788" y="592">-</text>
+									</g>
+									<g class="zone_shape" data-lot="3" data-zone="P3">
+										<rect class="zone_hit" x="837" y="570" width="395" height="113"/>
+										<circle class="zone_dot" cx="1212" cy="588" r="12"/>
+										<text class="zone_count" x="1212" y="592">-</text>
+									</g>
+									<g class="zone_shape" data-lot="5" data-zone="P5">
+										<rect class="zone_hit" x="453" y="710" width="362" height="122"/>
+										<circle class="zone_dot" cx="795" cy="728" r="12"/>
+										<text class="zone_count" x="795" y="732">-</text>
+									</g>
+								</svg>
+							</div>
+							<!-- MAP BOTTOM -->
+							<div class="map_bottom">
+								<div>
+									<span class="pin_icon">⌖</span>
+									<span id="mapSelectedText">
+										주차 구역을 클릭하면 상세 현황을 확인할 수 있습니다.
+									</span>
+								</div>
+								<div class="map_total">
+									전체 가능
+									<strong id="totalParking">1,402</strong>
+									<b>대</b>
+								</div>
+								<button
+									class="refresh_btn"
+									type="button"
+									onclick="refreshParking()">
+									<span class="refresh_icon">↻</span>
+									새로고침
+								</button>
+							</div>
+						</div>
+					</section>
+					<!-- NOTICE -->
+					<section class="section" id="notice">
+						<div class="info_grid">
+							<div class="panel">
+								<div class="section_head">
+									<div>
+										<h2>공지사항</h2>
+										<p>
+											주차 서비스의 새로운 소식을 알려드립니다.
+										</p>
+									</div>
+									<a href="#" class="more">
+										더보기 →
+									</a>
+								</div>
+								<ul class="notice_list">
+									<li>
+										<span class="notice_tag">
+											공지
+										</span>
+										<strong>
+											주차예약 서비스 이용 안내
+										</strong>
+										<span class="notice_date">
+											2026.09.02
+										</span>
+									</li>
+									<li>
+										<span class="notice_tag">
+											안내
+										</span>
+										<strong>
+											실시간 주차 현황 업데이트 안내
+										</strong>
+										<span class="notice_date">
+											2026.09.01
+										</span>
+									</li>
+									<li>
+										<span class="notice_tag">
+											공지
+										</span>
+										<strong>
+											제1여객터미널 주차장 이용 안내
+										</strong>
+										<span class="notice_date">
+											2026.08.28
+										</span>
+									</li>
+									<li>
+										<span class="notice_tag">
+											안내
+										</span>
+										<strong>
+											주차예약 시스템 점검 안내
+										</strong>
+										<span class="notice_date">
+											2026.08.25
+										</span>
+									</li>
+								</ul>
+							</div>
+							<!-- GUIDE -->
+							<div class="panel" id="guide">
+								<div class="section_head">
+									<div>
+										<h2>이용 안내</h2>
+										<p>
+											처음 이용하셔도 쉽게 예약할 수 있습니다.
+										</p>
+									</div>
+								</div>
+								<div class="guide_list">
+									<div class="guide_item">
+										<span class="guide_num">
+											01
+										</span>
+										<strong>
+											주차장 선택
+										</strong>
+										<span>
+											원하는 터미널과 주차구역을 선택하세요.
+										</span>
+									</div>
+									<div class="guide_item">
+										<span class="guide_num">
+											02
+										</span>
+										<strong>
+											예약 정보 입력
+										</strong>
+										<span>
+											입·출차 날짜와 시간을 입력하세요.
+										</span>
+									</div>
+									<div class="guide_item">
+										<span class="guide_num">
+											03
+										</span>
+										<strong>
+											예약 확인
+										</strong>
+										<span>
+											예약 가능 여부를 확인하고 신청하세요.
+										</span>
+									</div>
+									<div class="guide_item">
+										<span class="guide_num">
+											04
+										</span>
+										<strong>
+											주차 이용
+										</strong>
+										<span>
+											예약 시간에 맞춰 편리하게 이용하세요.
+										</span>
+									</div>
+								</div>
+							</div>
+						</div>
+					</section>
+				</div>
+			</main>
+			<!-- FOOTER -->
+			<footer class="footer">
+				<div class="footer_inner">
+					<div class="footer_top">
+						<div class="footer_logo">
+							인천공항 주차예약
+							<small>
+								INCHEON AIRPORT PARKING
+							</small>
+						</div>
+						<div class="footer_links">
+							<a href="#">
+								이용약관
+							</a>
+							<a href="#">
+								개인정보처리방침
+							</a>
+							<a href="#">
+								사이트맵
+							</a>
+						</div>
+					</div>
+					<div class="footer_info">
+						<p>
+							제1여객터미널 주차예약 서비스 · 본 사이트는 팀프로젝트 목적으로 제작되었습니다.
+						</p>
+						<p>
+							문의 : 제1여객터미널 주차상황실
+						</p>
+						<p class="copyright">
+							Copyright © Parking Reservation Project. All rights reserved.
+						</p>
+					</div>
+				</div>
+			</footer>
+		</div>
+		<script>
+			// P1~P9 구역별 전체 대수 (인천공항 1터미널 단기주차장 실제 구역명 기준 - 대수는 가상 데이터)
+			const zoneCapacity={
+				p1:90, p2:90, p3:70, p4:70, p5:60, p6:40, p7:40, p8:40, p9:40
+			};
+			// 시간대별 구역별 "남은 대수" 가상 데이터
+			const parkingData={
+				"09":{ p1:70, p2:65, p3:50, p4:55, p5:40, p6:30, p7:28, p8:32, p9:25 },
+				"12":{ p1:40, p2:35, p3:30, p4:28, p5:20, p6:15, p7:10, p8:18, p9:12 },
+				"15":{ p1:20, p2:18, p3:15, p4:12, p5:10, p6:8,  p7:5,  p8:9,  p9:6  },
+				"18":{ p1:10, p2:8,  p3:6,  p4:5,  p5:4,  p6:3,  p7:2,  p8:4,  p9:2  },
+				"21":{ p1:55, p2:50, p3:40, p4:42, p5:30, p6:22, p7:20, p8:24, p9:18 }
+			};
+			// 남은 비율에 따라 여유/보통/혼잡 색상 등급 결정 (map_legend 색상 그대로 재사용)
+			function zoneStatusClass(remain,capacity){
+				const ratio=remain/capacity;
+				if(ratio>0.5) return "available_zone";
+				if(ratio>0.2) return "normal_zone";
+				return "busy_zone";
+			}
+			function setParking(data){
+				let total=0;
+				Object.keys(data).forEach(function(zoneKey){
+					const remain=data[zoneKey];
+					total+=remain;
+					const shape=document.querySelector('.zone_shape[data-lot="'+zoneKey.replace("p","")+'"]');
+					if(!shape) return;
+					const countText=shape.querySelector(".zone_count");
+					countText.textContent=remain+"대";
+					shape.classList.remove("available_zone","normal_zone","busy_zone");
+					shape.classList.add(zoneStatusClass(remain,zoneCapacity[zoneKey]));
+				});
+				document.getElementById("totalParking").textContent=total.toLocaleString();
+			}
+			function updateParkingByTime(){
+				const time=document.getElementById("entryTime").value||"09:00";
+				const hour=parseInt(time.split(":")[0],10);
+				const key=
+				hour<=10
+				?"09"
+				:hour<=13
+				?"12"
+				:hour<=16
+				?"15"
+				:hour<=19
+				?"18"
+				:"21";
+				setParking(parkingData[key]);
+				document.getElementById("selectedTime").textContent=
+				"선택 시간 "+time+" 기준";
+			}
+			function refreshParking(){
+				const btn=document.querySelector(".refresh_btn");
+				btn.classList.add("loading");
+				setTimeout(()=>{
+					updateParkingByTime();
+					btn.classList.remove("loading");
+				},600);
+			}
+			// 구역 클릭 -> 해당 구역의 주차맵(reservation.html)으로 바로 이동
+			document.querySelectorAll(".zone_shape").forEach(function(shape){
+				shape.addEventListener("click",function(){
+					const lot=shape.getAttribute("data-lot");
+					const zoneName=shape.getAttribute("data-zone");
+					document.getElementById("mapSelectedText").textContent=
+					zoneName+" 구역 선택됨 · 주차맵으로 이동합니다...";
+					window.location.href="reservation.html?lot="+lot;
+				});
+			});
+			const today=new Date();
+			const todayStr=
+			today.getFullYear()
+			+"-"
+			+String(today.getMonth()+1).padStart(2,"0")
+			+"-"
+			+String(today.getDate()).padStart(2,"0");
+			document.getElementById("startDate").value=todayStr;
+			const tomorrow=
+			new Date(today.getTime()+86400000);
+			document.getElementById("endDate").value=
+			tomorrow.getFullYear()
+			+"-"
+			+String(tomorrow.getMonth()+1).padStart(2,"0")
+			+"-"
+			+String(tomorrow.getDate()).padStart(2,"0");
+			window.addEventListener("scroll",()=>{
+				document.querySelector(".header").classList.toggle(
+				"scrolled",
+				window.scrollY>40
+				);
+			});
+			// 페이지 처음 열렸을 때 구역도에 초기 데이터 표시
+			updateParkingByTime();
+		</script>
+	</body>
 </html>
