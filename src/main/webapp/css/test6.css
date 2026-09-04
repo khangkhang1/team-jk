@@ -1403,12 +1403,13 @@ rgba(0,20,45,.25) 100%
 }
 
 /* ============================================================
-   단기주차장 P1~P9 구역도(SVG) - 인천공항 실제 구역 배치 기준.
-   색상은 기존 map_legend의 여유(available)/보통(normal)/혼잡(busy) 색을 그대로 재사용.
+   단기주차장 P1~P9 구역도 - 사용자가 준 이미지 파일을 그대로 배경으로 쓰고,
+   그 위에 클릭 가능한 투명 영역 + 작은 상태 배지(여유/보통/혼잡)만 얹음.
+   이미지 자체(images/parking_zone_map.png)는 전혀 손대지 않음 - 100% 원본 그대로.
    ============================================================ */
 .zone_svg_wrap{
 	height:auto;
-	min-height:480px;
+	min-height:420px;
 	padding:20px 0;
 	overflow:visible
 }
@@ -1426,69 +1427,55 @@ rgba(0,20,45,.25) 100%
 	margin:0 auto
 }
 
-.zone_roof{
-	fill:#e2e8ee;
-	stroke:#c7d2dc;
-	stroke-width:1.5
-}
-
 .zone_shape{
 	cursor:pointer;
 }
 
-.zone_shape rect{
-	fill:#f5fcf8;
-	stroke:#72bd94;
+/* 실제 클릭 히트 영역 - 화면엔 안 보이고 클릭만 받음 (이미지 위 투명 오버레이) */
+.zone_hit{
+	fill:transparent;
+	transition:fill .15s;
+}
+.zone_shape:hover .zone_hit{
+	fill:rgba(70,120,220,.10);
+}
+
+/* 상태 배지(작은 원) - 여유/보통/혼잡 색상, map_legend와 동일 색 재사용 */
+.zone_dot{
+	fill:#72bd94;
+	stroke:#fff;
 	stroke-width:2;
-	transition:transform .15s, filter .15s;
+	filter:drop-shadow(0 2px 4px rgba(0,0,0,.25));
+	transition:transform .15s;
+}
+.zone_shape:hover .zone_dot{
+	transform:scale(1.15);
 	transform-origin:center;
 }
 
-.zone_shape text{
+.zone_count{
 	font-family:inherit;
 	font-weight:700;
-	font-size:20px;
-	fill:#20784a;
+	font-size:11px;
+	fill:#fff;
 	text-anchor:middle;
+	dominant-baseline:middle;
 	pointer-events:none;
 }
 
-.zone_shape .zone_count{
-	font-size:12px;
-	font-weight:600;
-	opacity:.8
+.zone_shape.normal_zone .zone_dot{
+	fill:#e9a83f;
 }
-
-.zone_shape:hover rect{
-	transform:scale(1.03);
-	filter:drop-shadow(0 6px 12px rgba(40,70,100,.18));
-}
-
-.zone_shape.normal_zone rect{
-	fill:#fffaf0;
-	stroke:#e9c26e;
-}
-.zone_shape.normal_zone text{
-	fill:#aa7417;
-}
-
-.zone_shape.busy_zone rect{
-	fill:#fff6f6;
-	stroke:#e59696;
-}
-.zone_shape.busy_zone text{
-	fill:#b94e4e;
+.zone_shape.busy_zone .zone_dot{
+	fill:#d9605f;
 }
 
 @media (max-width:640px){
 	.zone_svg_wrap{
-		min-height:360px;
+		min-height:320px;
 		padding:12px 0
 	}
-	.zone_shape text{
-		font-size:16px
-	}
-	.zone_shape .zone_count{
-		font-size:10px
+	.zone_count{
+		font-size:9px
 	}
 }
