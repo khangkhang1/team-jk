@@ -1,12 +1,17 @@
-/* 주차맵 페이지 전용 스타일. 결제 모달 관련 스타일은 css/payment.css로 분리돼 있음. */
+/* =========================================================
+   주차맵 + 결제 페이지 전용 전체 스타일 (reservation.css)
+   ========================================================= */
 
+/* 1. 기본 레이아웃 설정 */
 body.resPage {
 	overflow-y: auto;
 	background: #f0f1f3;
 	height: auto;
 	min-height: 100%;
+	padding-bottom: 80px; /* 하단 고정 결제바 공간 확보 */
 }
 
+/* 상단 뒤로가기 버튼 */
 #topSearch #backBtn {
 	color: #fff;
 	text-decoration: none;
@@ -20,7 +25,7 @@ body.resPage {
 	padding: 0 16px 40px;
 }
 
-/* 주차장 요약 */
+/* 2. 주차장 요약 카드 */
 #lotSummary {
 	display: flex;
 	gap: 16px;
@@ -45,23 +50,45 @@ body.resPage {
 #lotSummaryText h2 {
 	font-size: 18px;
 	margin-bottom: 4px;
+	color: #1e3a5f;
 }
 #lotSummaryText p {
 	font-size: 13px;
 	color: #666;
 }
 
-/* 이용 방식 필터 (1안/2안) - 원래 결제창 안에 있던 걸 여기로 옮김 */
-#planFilter {
+/* 3. 단계별 아코디언 (resStep / details) */
+.resStep {
 	background: #fff;
-	padding: 14px;
-	border-radius: 6px;
+	border-radius: 8px;
+	padding: 16px;
 	margin-bottom: 16px;
+	box-shadow: 0 1px 3px rgba(0,0,0,0.1);
 }
+.resStep summary {
+	font-weight: bold;
+	font-size: 15px;
+	color: #1e3a5f;
+	cursor: pointer;
+	padding-bottom: 8px;
+	margin-bottom: 12px;
+	border-bottom: 1px solid #eee;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	user-select: none;
+}
+.stepSummaryValue {
+	font-size: 13px;
+	font-weight: normal;
+	color: #888;
+}
+
+/* 4. ① 이용 방식 선택 (플랜 카드 & 폼) */
 #planCards {
 	display: flex;
 	gap: 12px;
-	margin-top: 8px;
+	margin-bottom: 16px;
 }
 .planCard {
 	flex: 1;
@@ -71,13 +98,15 @@ body.resPage {
 	border-radius: 8px;
 	padding: 14px;
 	cursor: pointer;
+	background: #fff;
+	transition: all 0.2s;
 }
 .planCard input {
 	position: absolute;
 	top: 12px;
 	right: 12px;
 }
-.planCard.selected {
+.planCard.selected, .planCard:has(input:checked) {
 	border-color: #ffb400;
 	background: #fff8e6;
 }
@@ -94,7 +123,51 @@ body.resPage {
 	line-height: 1.5;
 }
 
-/* 좌석 선택 툴바 */
+/* 폼 열 레이아웃 */
+.formRow {
+	display: flex;
+	align-items: center;
+	margin-bottom: 12px;
+}
+.formRow label {
+	width: 130px;
+	font-size: 13px;
+	font-weight: bold;
+	color: #444;
+}
+.formRow input, .formRow select {
+	flex: 1;
+	padding: 8px 10px;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	font-size: 13px;
+}
+#flightFieldset {
+	border: 1px solid #e0e0e0;
+	border-radius: 6px;
+	padding: 12px 14px;
+	margin: 16px 0;
+}
+#flightFieldset legend {
+	font-size: 13px;
+	font-weight: bold;
+	color: #1e3a5f;
+	padding: 0 6px;
+}
+#estimatedPriceBox {
+	margin-top: 16px;
+	padding: 12px;
+	background: #f8f9fa;
+	border-radius: 6px;
+	text-align: right;
+	font-size: 14px;
+}
+#estimatedPrice {
+	font-size: 18px;
+	color: #b3261e;
+}
+
+/* 5. ② 좌석 선택 (툴바 & 2D 그리드) */
 #seatToolbar {
 	display: flex;
 	align-items: center;
@@ -129,6 +202,7 @@ body.resPage {
 	cursor: pointer;
 }
 
+/* 좌석 범례 (Legend) */
 #seatLegend {
 	display: flex;
 	gap: 14px;
@@ -152,12 +226,17 @@ body.resPage {
 .legendEv { background: #d6f5d6; border: 1px solid #7fd47f; }
 .legendCancelled { background: #ffd6d6; border: 1px solid #ff8a8a; }
 
+/* 2D 좌석 그리드 셀 */
 #seatGrid {
 	display: grid;
 	grid-template-columns: repeat(8, 1fr);
 	gap: 6px;
 	max-width: 460px;
 	margin: 0 auto;
+	padding: 12px;
+	background: #fafafa;
+	border: 1px solid #eee;
+	border-radius: 6px;
 }
 .seatCell {
 	aspect-ratio: 1;
@@ -208,5 +287,60 @@ body.resPage {
 	background: #ffd6d6;
 	border-color: #ff8a8a;
 	color: #b3261e;
+	cursor: not-allowed;
+}
+
+/* 6. ③ 결제 수단 선택 */
+.payOption {
+	display: block;
+	padding: 10px;
+	border: 1px solid #e0e0e0;
+	border-radius: 6px;
+	margin-bottom: 8px;
+	cursor: pointer;
+	font-size: 14px;
+}
+.payOption input {
+	margin-right: 8px;
+}
+
+/* 7. ④ 하단 고정 결제바 */
+#payBar {
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	height: 65px;
+	background: #1e3a5f;
+	color: #fff;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 0 24px;
+	z-index: 1000;
+	box-shadow: 0 -2px 10px rgba(0,0,0,0.15);
+}
+#payBarPrice {
+	font-size: 15px;
+}
+#payBarPrice strong {
+	font-size: 22px;
+	color: #ffb400;
+	margin: 0 4px;
+}
+#payBtn {
+	padding: 10px 28px;
+	background: #ffb400;
+	color: #1e3a5f;
+	border: none;
+	border-radius: 6px;
+	font-size: 16px;
+	font-weight: bold;
+	cursor: pointer;
+	transition: background 0.2s;
+}
+#payBtn:disabled {
+	background: #64748b;
+	color: #ccc;
 	cursor: not-allowed;
 }

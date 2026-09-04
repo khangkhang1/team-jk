@@ -40,8 +40,10 @@ public class Reservation extends HttpServlet {
 		String viewPage ="";
 		
 		if(gubun.equals("ReservationMap")) {
-			CommonExecute mem = new ReservationMap();
-			mem.execute(request);
+			CommonExecute memMap = new ReservationMap();
+			CommonExecute memPay = new stepPay();
+			memMap.execute(request);
+			memPay.execute(request);
 			viewPage ="reservation/reservation.jsp";
 			
 		}else if(gubun.equals("stepPay")) {

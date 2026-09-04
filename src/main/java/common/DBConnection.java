@@ -8,7 +8,7 @@ import java.sql.SQLException;
 
 public class DBConnection {
 //<<<<<<<HEAD
-	
+	  
 //오라클에 접속 하기 위해 만드는 클래스 Connection 이것이 들어가야한다
 	public static Connection getConnenction(){
 		Connection con =null;

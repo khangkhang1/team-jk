@@ -5,7 +5,16 @@
 	font-family: "Malgun Gothic", sans-serif;
 }
 
+html, body {
+	height: 100%;
+}
 
+/* 지도 화면(Index)처럼 화면 꽉 채우고 스크롤이 없어야 하는 페이지에만 붙이는 클래스.
+   예전엔 html,body 전체에 overflow:hidden을 걸어놔서 다른 페이지(주차맵 등)까지
+   스크롤이 막히는 문제가 있었음 - 페이지별로 필요한 곳에만 걸도록 분리. */
+body.mapPage {
+	overflow: hidden;
+}
 
 /* 상단 검색바 */
 #topSearch {
