@@ -1,16 +1,13 @@
-// 주차맵+결제 통합 페이지 - 화면 초안, 전부 가상 데이터/클라이언트 로직만 존재. 서버 연동은 이후 단계.
-// 3차 회의(2026-08-28) 반영: ① 이용방식(1안 예약형 / 2안 자유출차형) 선택이 첫 단계로 들어옴.
-
-var HOURLY_PRICE = 3000;      // 1안 시간당 요금 (원)
-var PLAN2_HOURLY_PRICE = 4500; // 2안 페널티 요금 (원, 더 비쌈)
-var DEPOSIT_PRICE = 5000;      // 예약금(고정) - 실제 총 이용료는 출차 시 정산
+// 주차맵 페이지 - 화면 초안, 전부 가상 데이터/클라이언트 로직만 존재. 서버 연동은 이후 단계.
+// 결제 관련 로직은 js/payment.js로 분리돼 있음. 이 파일은 좌석 클릭 시
+// window.openPaymentModal(seatLabelText) 하나만 호출한다 - 그 외 결제 내부 사정은 몰라도 됨.
 
 // 메인 화면 PARKING_LOTS 최소 정보(이름/요금) - id로 매칭. 실제로는 서버에서 조회.
 var LOT_INFO = {
-	1: { name: "단기주차장 1구역", addr: "인천공항 1터미널 · 단기", price: HOURLY_PRICE },
-	2: { name: "단기주차장 2구역", addr: "인천공항 1터미널 · 단기", price: HOURLY_PRICE },
-	3: { name: "장기주차장 P1",   addr: "인천공항 1터미널 · 장기", price: PLAN2_HOURLY_PRICE },
-	4: { name: "장기주차장 P2",   addr: "인천공항 1터미널 · 장기", price: PLAN2_HOURLY_PRICE }
+	1: { name: "단기주차장 1구역", addr: "인천공항 1터미널 · 단기", price: 3000 },
+	2: { name: "단기주차장 2구역", addr: "인천공항 1터미널 · 단기", price: 3000 },
+	3: { name: "장기주차장 P1",   addr: "인천공항 1터미널 · 장기", price: 4500 },
+	4: { name: "장기주차장 P2",   addr: "인천공항 1터미널 · 장기", price: 4500 }
 };
 
 // 층별 좌석 데이터 (5행 x 8열). type: normal / disabled / ev / gate / cancelled(결항 재배정중)
@@ -41,15 +38,22 @@ var FLOOR_DATA = {
 	2: buildFloorSeats(2)
 };
 
-var state = {
-	plan: null,          // '1' or '2'
+var resState = {
 	floor: 1,
-	selectedSeat: null,
-	timeChosen: false,
-	payMethod: null
+	plan: '1' // 이용 방식 필터 - 기본값은 예약형(1안). 결제창을 열기 전에 여기서 미리 정해둔다.
 };
 
-// ------- URL 파라미터로 주차구역/시간/모드 전달받기 (메인 화면 확인팝업 → 이 페이지) -------
+// ------- 이용 방식 필터 (1안/2안) - 예전엔 결제창 안에 있었는데 좌석 고르기 전으로 옮김 -------
+document.querySelectorAll('input[name="planType"]').forEach(function (radio) {
+	radio.addEventListener('change', function () {
+		resState.plan = radio.value;
+		document.querySelectorAll('.planCard').forEach(function (card) {
+			card.classList.toggle('selected', card.querySelector('input').checked);
+		});
+	});
+});
+
+// ------- URL 파라미터로 주차구역 정보 표시 (메인 화면 확인팝업 → 이 페이지) -------
 var urlParams = new URLSearchParams(window.location.search);
 (function applyLotFromUrl() {
 	var lotId = urlParams.get('lot');
@@ -57,74 +61,6 @@ var urlParams = new URLSearchParams(window.location.search);
 	document.getElementById('lotName').textContent = info.name;
 	document.getElementById('lotAddr').innerHTML = info.addr + ' · 시간당 <span id="lotPrice">' + info.price.toLocaleString() + '</span>원';
 })();
-
-// ------- ① 이용 방식 선택 (1안/2안) -------
-document.querySelectorAll('input[name="planType"]').forEach(function (radio) {
-	radio.addEventListener('change', function () {
-		state.plan = radio.value;
-		document.querySelectorAll('.planCard').forEach(function (card) {
-			card.classList.toggle('selected', card.querySelector('input').checked);
-		});
-
-		var isPlan1 = state.plan === '1';
-		document.querySelectorAll('.plan1Only').forEach(function (el) { el.classList.toggle('hidden', !isPlan1); });
-		document.querySelectorAll('.plan2Only').forEach(function (el) { el.classList.toggle('hidden', isPlan1); });
-
-		document.getElementById('planSummary').textContent =
-			isPlan1 ? '1안 (예약형)' : '2안 (자유출차형)';
-
-		updateEstimatedPrice();
-	});
-});
-
-// ------- 시간 선택 -------
-function initTimeInputs() {
-	var today = new Date();
-	var yyyy = today.getFullYear();
-	var mm = String(today.getMonth() + 1).padStart(2, '0');
-	var dd = String(today.getDate()).padStart(2, '0');
-	var dateFromUrl = urlParams.get('date');
-	document.getElementById('dateInput').value = dateFromUrl || (yyyy + '-' + mm + '-' + dd);
-
-	var select = document.getElementById('startTimeInput');
-	for (var h = 0; h < 24; h++) {
-		['00', '30'].forEach(function (m) {
-			var label = String(h).padStart(2, '0') + ':' + m;
-			var opt = document.createElement('option');
-			opt.value = label;
-			opt.textContent = label;
-			select.appendChild(opt);
-		});
-	}
-	var startFromUrl = urlParams.get('start');
-	if (startFromUrl) {
-		select.value = startFromUrl;
-	} else {
-		var roundedHour = today.getHours();
-		var roundedMin = today.getMinutes() < 30 ? '30' : '00';
-		if (roundedMin === '00') roundedHour = (roundedHour + 1) % 24;
-		select.value = String(roundedHour).padStart(2, '0') + ':' + roundedMin;
-	}
-}
-
-function updateEstimatedPrice() {
-	var date = document.getElementById('dateInput').value;
-	var start = document.getElementById('startTimeInput').value;
-	var lotId = urlParams.get('lot') || 1;
-	var info = LOT_INFO[lotId] || LOT_INFO[1];
-
-	if (state.plan === '2') {
-		document.getElementById('estimatedPrice').textContent =
-			'출차 시 정산 (시간당 ' + PLAN2_HOURLY_PRICE.toLocaleString() + '원, 페널티 요금)';
-	} else {
-		var duration = parseInt(document.getElementById('durationInput').value, 10);
-		var total = duration * info.price;
-		document.getElementById('estimatedPrice').textContent = total.toLocaleString() + '원';
-	}
-
-	state.timeChosen = !!(date && start);
-	refreshPayBar();
-}
 
 // ------- 좌석 선택 -------
 function seatLabel(seat) {
@@ -135,10 +71,14 @@ function seatLabel(seat) {
 	return (seat.row + 1) + '-' + (seat.col + 1);
 }
 
+function seatDisplayText(seat) {
+	return resState.floor + '층 ' + (seat.row + 1) + '-' + (seat.col + 1) + '번';
+}
+
 function renderSeats() {
 	var grid = document.getElementById('seatGrid');
 	grid.innerHTML = '';
-	var seats = FLOOR_DATA[state.floor];
+	var seats = FLOOR_DATA[resState.floor];
 	var remain = 0;
 
 	seats.forEach(function (seat) {
@@ -156,9 +96,6 @@ function renderSeats() {
 			} else if (seat.type !== 'cancelled') {
 				remain++;
 			}
-			if (state.selectedSeat && state.selectedSeat.id === seat.id) {
-				cell.classList.add('selected');
-			}
 			cell.textContent = seatLabel(seat);
 			cell.addEventListener('click', function () {
 				onSeatClick(seat);
@@ -170,6 +107,7 @@ function renderSeats() {
 	document.getElementById('floorRemainCount').textContent = remain;
 }
 
+// 좌석 클릭 - 결제창(모달)을 여는 게 유일한 역할. 시간/방식/결제는 payment.js가 처리.
 function onSeatClick(seat) {
 	if (seat.type === 'cancelled') {
 		alert('항공편 결항으로 재배정 처리 중인 자리입니다. 잠시 후 다시 확인해주세요.');
@@ -179,17 +117,11 @@ function onSeatClick(seat) {
 		alert('이미 예약된 자리입니다.');
 		return;
 	}
-	if (!confirm((seat.row + 1) + '층 ' + (seat.col + 1) + '번 자리를 선택하시겠습니까?')) return;
-
-	state.selectedSeat = { id: seat.id, floor: state.floor, row: seat.row, col: seat.col, type: seat.type };
-	document.getElementById('seatSummary').textContent =
-		state.floor + '층 ' + (seat.row + 1) + '-' + (seat.col + 1) + '번';
-	renderSeats();
-	refreshPayBar();
+	window.openPaymentModal(seatDisplayText(seat), resState.plan);
 }
 
 function randomAssign() {
-	var seats = FLOOR_DATA[state.floor].filter(function (s) {
+	var seats = FLOOR_DATA[resState.floor].filter(function (s) {
 		return s.type !== 'gate' && s.type !== 'cancelled' && !s.taken;
 	});
 	if (seats.length === 0) {
@@ -197,74 +129,18 @@ function randomAssign() {
 		return;
 	}
 	var picked = seats[Math.floor(Math.random() * seats.length)];
-	state.selectedSeat = { id: picked.id, floor: state.floor, row: picked.row, col: picked.col, type: picked.type };
-	document.getElementById('seatSummary').textContent =
-		'랜덤 배정 · ' + state.floor + '층 ' + (picked.row + 1) + '-' + (picked.col + 1) + '번';
-	renderSeats();
-	refreshPayBar();
+	window.openPaymentModal('랜덤 배정 · ' + seatDisplayText(picked), resState.plan);
 }
 
 document.querySelectorAll('.floorTab').forEach(function (btn) {
 	btn.addEventListener('click', function () {
 		document.querySelectorAll('.floorTab').forEach(function (b) { b.classList.remove('active'); });
 		btn.classList.add('active');
-		state.floor = parseInt(btn.dataset.floor, 10);
+		resState.floor = parseInt(btn.dataset.floor, 10);
 		renderSeats();
 	});
 });
 document.getElementById('randomAssignBtn').addEventListener('click', randomAssign);
 
-// ------- 결제 수단 -------
-document.querySelectorAll('input[name="payMethod"]').forEach(function (radio) {
-	radio.addEventListener('change', function () {
-		state.payMethod = radio.value;
-		var labelMap = { kakao: '카카오페이', naver: '네이버페이', card: '카드', account: '계좌이체' };
-		document.getElementById('paySummary').textContent = labelMap[radio.value];
-		refreshPayBar();
-	});
-});
-
-// ------- 하단 결제 바 -------
-function refreshPayBar() {
-	document.getElementById('payBarAmount').textContent = DEPOSIT_PRICE.toLocaleString();
-	var flightOk = true;
-	if (state.plan === '1') {
-		flightOk = document.getElementById('flightNoInput').value.trim() !== ''
-			&& document.getElementById('flightRoundtripInput').value === 'round';
-	}
-	var ready = state.plan && state.timeChosen && state.selectedSeat && state.payMethod && flightOk;
-	document.getElementById('payBtn').disabled = !ready;
-}
-
-document.getElementById('flightRoundtripInput').addEventListener('change', function () {
-	if (this.value === 'oneway') {
-		alert('편도 항공권은 이 시스템을 이용하실 수 없습니다 (현장 이용을 안내해드립니다).');
-	}
-	refreshPayBar();
-});
-document.getElementById('flightNoInput').addEventListener('input', refreshPayBar);
-
-document.getElementById('payBtn').addEventListener('click', function () {
-	alert(
-		'예약이 완료되었습니다.\n\n' +
-		'이용방식: ' + (state.plan === '1' ? '1안 (예약형)' : '2안 (자유출차형)') + '\n' +
-		'좌석: ' + document.getElementById('seatSummary').textContent + '\n' +
-		'예약금: ' + DEPOSIT_PRICE.toLocaleString() + '원 결제\n\n' +
-		'(실제 결제/서버 저장 및 항공편 결항 감지 API 연동은 다음 단계에서 연결됩니다)'
-	);
-});
-
 // ------- 초기화 -------
-document.getElementById('durationInput').addEventListener('change', updateEstimatedPrice);
-document.getElementById('dateInput').addEventListener('change', updateEstimatedPrice);
-document.getElementById('startTimeInput').addEventListener('change', updateEstimatedPrice);
-
-initTimeInputs();
 renderSeats();
-refreshPayBar();
-
-// URL 파라미터로 바로예약(랜덤) 진입한 경우, 좌석 아코디언 열고 자동 랜덤 배정
-if (urlParams.get('mode') === 'random') {
-	document.getElementById('stepSeat').setAttribute('open', '');
-	randomAssign();
-}

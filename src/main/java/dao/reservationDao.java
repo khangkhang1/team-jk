@@ -1,4 +1,4 @@
-package team_jkDao;
+package dao;
 
 public class reservationDao {
 

@@ -1,4 +1,4 @@
-package team_jkDto;
+package dto;
 
 import java.util.List;
 

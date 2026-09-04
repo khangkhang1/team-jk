@@ -65,20 +65,17 @@ document.getElementById('detailCloseBtn').addEventListener('click', function () 
 	detailModal.classList.add('hidden');
 });
 
-// 확인 팝업에서 [바로 이용/직접 선택] 클릭 시, 사이드바에서 고른 시간대를 같이 넘겨서
-// 주차맵+결제 페이지에서 그 시간 기준으로 좌석 상태를 보여준다.
-function goToReservation(mode) {
+// 확인 팝업에서 [확인] 클릭 시, 사이드바에서 고른 시간대를 같이 넘겨서
+// 주차맵 페이지에서 그 시간 기준으로 좌석 상태를 보여준다.
+// 랜덤배정 진입은 없앰 - 항상 주차맵에서 직접 좌석을 골라 결제창을 여는 흐름 하나로 통일.
+function goToReservation() {
 	var date = document.getElementById('mainDateInput').value;
 	var start = document.getElementById('mainStartTimeInput').value;
 	var qs = 'lot=' + selectedLot.id + '&date=' + encodeURIComponent(date) + '&start=' + encodeURIComponent(start);
-	if (mode === 'random') qs += '&mode=random';
 	window.location.href = 'reservation.html?' + qs;
 }
-document.getElementById('quickReserveBtn').addEventListener('click', function () {
-	goToReservation('random');
-});
 document.getElementById('selectSeatBtn').addEventListener('click', function () {
-	goToReservation('manual');
+	goToReservation();
 });
 
 // 새로고침 버튼 (실제 재조회는 서버/API 연동 후)
@@ -137,10 +134,10 @@ document.getElementById('myLocationBtn').addEventListener('click', function (e) 
 });
 
 document.getElementById('loginBtn').addEventListener('click', function () {
-	window.location.href = 'member.html?tab=login';
+	window.location.href = 'login.html?tab=login';
 });
 document.getElementById('joinBtn').addEventListener('click', function () {
-	window.location.href = 'member.html?tab=join';
+	window.location.href = 'login.html?tab=join';
 });
 document.getElementById('searchBtn').addEventListener('click', function () {
 	alert('자연어 검색(AI)은 2군 기능 - 다음 단계에서 연결됩니다.');
