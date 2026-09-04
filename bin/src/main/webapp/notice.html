@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>공지사항·FAQ - 인천공항 주차관리시스템</title>
+<link rel="stylesheet" href="css/c.css">
+<link rel="stylesheet" href="css/notice.css">
+</head>
+<body class="resPage">
+
+	<header id="topSearch">
+		<a href="Index.html" id="backBtn" title="메인으로" data-i18n="common_back">← 메인으로</a>
+		<div id="logo" data-i18n="ntc_pageTitle">공지사항 · FAQ</div>
+		<nav id="topNav">
+			<button id="langToggleBtn" class="langToggle">🇯🇵 日本語</button>
+		</nav>
+	</header>
+
+	<div id="ntcWrap">
+
+		<div id="ntcTabs">
+			<button class="ntcTab active" data-tab="notice" data-i18n="ntc_tabNotice">공지사항</button>
+			<button class="ntcTab" data-tab="faq" data-i18n="ntc_tabFaq">자주 묻는 질문</button>
+		</div>
+
+		<!-- 공지사항 -->
+		<section id="panelNotice" class="ntcPanel">
+			<details class="noticeItem" open>
+				<summary><span class="noticeTitle">🚧 시스템 화면 초안 안내</span><span class="noticeDate">2026-08-28</span></summary>
+				<div class="noticeBody">현재 화면은 개발 초기 단계 시안입니다. 실제 결제·로그인·항공편 연동은 아직 동작하지 않습니다.</div>
+			</details>
+			<details class="noticeItem">
+				<summary><span class="noticeTitle">✈️ 편도 항공권 이용자 안내</span><span class="noticeDate">2026-08-28</span></summary>
+				<div class="noticeBody">본 시스템은 왕복 항공권 소지자 전용입니다. 편도 이용객은 공항 현장 주차장 창구를 이용해 주세요.</div>
+			</details>
+			<details class="noticeItem">
+				<summary><span class="noticeTitle">🅿️ 1터미널 장기주차장(P1·P2) 이용 안내</span><span class="noticeDate">2026-08-25</span></summary>
+				<div class="noticeBody">장기주차장은 종료 시각을 정하지 않는 2안(자유출차형) 전용 구역입니다. 기본 요금보다 페널티 요금이 적용됩니다.</div>
+			</details>
+		</section>
+
+		<!-- FAQ -->
+		<section id="panelFaq" class="ntcPanel hidden">
+			<details class="noticeItem">
+				<summary><span class="noticeTitle">Q. 1안(예약형)과 2안(자유출차형)의 차이가 뭔가요?</span></summary>
+				<div class="noticeBody">1안은 시작·종료 시각을 모두 정하고 왕복 항공권 정보를 입력해야 합니다. 2안은 시작 시각만 정하고 종료는 자유지만, 페널티 요금이 적용되고 장기주차구역만 이용 가능합니다.</div>
+			</details>
+			<details class="noticeItem">
+				<summary><span class="noticeTitle">Q. 비행기가 결항되면 예약은 어떻게 되나요?</span></summary>
+				<div class="noticeBody">결항이 확인되면 예약이 자동으로 연장되거나, 직접 연장하실 수 있도록 알림을 보내드립니다. 만약 연장된 시간에 이미 다른 이용자의 예약이 있다면, 그 이용자에게는 다른 자리로 안내하는 알림이 발송됩니다.</div>
+			</details>
+			<details class="noticeItem">
+				<summary><span class="noticeTitle">Q. 예약한 시간이 지나도 차를 빼지 않으면 어떻게 되나요?</span></summary>
+				<div class="noticeBody">별도의 신고·관리자 연결 기능은 제공하지 않습니다. 이용 종료 처리는 이용자 본인이 [이용종료하기] 버튼을 눌러 직접 진행해 주세요.</div>
+			</details>
+			<details class="noticeItem">
+				<summary><span class="noticeTitle">Q. 결제수단을 예약금과 다르게 낼 수 있나요?</span></summary>
+				<div class="noticeBody">네, 가능합니다. 출차 시 최종 결제 단계에서 예약금 결제와 무관하게 결제수단을 새로 선택하실 수 있습니다.</div>
+			</details>
+		</section>
+
+	</div>
+
+	<script src="js/jquery-1.8.1.min.js"></script>
+	<script src="js/i18n.js"></script>
+	<script src="js/notice.js"></script>
+</body>
+</html>
