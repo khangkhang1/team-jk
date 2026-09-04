@@ -6,8 +6,8 @@
 }
 
 html, body {
-	height: 100%;
-	overflow: hidden;
+	height: auto;
+	overflow: auto;
 }
 
 /* 상단 검색바 */
