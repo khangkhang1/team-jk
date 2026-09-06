@@ -1,992 +1,1428 @@
-*{
-box-sizing:border-box;
-margin:0;
-padding:0
-}
+*{margin:0;padding:0;box-sizing:border-box}
 
-html{
-scroll-behavior:smooth
-}
+html{scroll-behavior:smooth}
 
 body{
-font-family:"Noto Sans KR",sans-serif;
-background:#f5f7fb;
-color:#1f2937;
-overflow-x:hidden
+font-family:"Noto Sans KR","Malgun Gothic",sans-serif;
+color:#222;
+background:#f5f7fa
 }
 
-a{
-text-decoration:none;
-color:inherit
-}
-
-ul{
-list-style:none
-}
+a{color:inherit;text-decoration:none}
+button,input,select{font:inherit}
+button{cursor:pointer}
+ul{list-style:none}
+.wrap{min-width:320px}
 
 
-/* =========================
-   HEADER
-========================= */
+
+/* HEADER */
 
 .header{
-    position:absolute;
+    position:fixed;
     top:0;
     left:0;
-    z-index:1000;
     width:100%;
-    height:90px;
+    height:86px;
+    z-index:100;
     background:transparent;
-    border-bottom:1px solid rgba(255,255,255,.25);
+    border-bottom:1px solid rgba(255,255,255,.18);
     color:#fff;
-    transition:height .3s ease,
-               background .3s ease,
-               color .3s ease,
-               box-shadow .3s ease;
+    transition:height .28s ease,background .28s ease,box-shadow .28s ease,border-color .28s ease;
 }
 
 
-/* =========================
-   HEADER HOVER
-========================= */
+/* 전체 드롭다운이 펼쳐졌을 때 페이지를 어둡게 하는 영역 */
 
-/*
-   메뉴에 마우스를 올리면
-   드롭다운만 내려오는 것이 아니라
-   헤더 전체가 아래로 확장됨
-*/
+.header:before{
+    content:"";
+    position:fixed;
+    top:86px;
+    left:0;
+    width:100%;
+    height:calc(100vh - 86px);
+    background:rgba(0,0,0,.38);
+    opacity:0;
+    visibility:hidden;
+    transition:opacity .25s ease,visibility .25s ease,top .28s ease;
+    z-index:-1;
+    pointer-events:none;
+}
 
-.header:hover{
-    height:330px;
+
+/* 메뉴 전체에 마우스를 올리면 페이지 어둡게 */
+
+.header:has(.header_menu:hover):before,
+.header:has(.header_menu:focus-within):before{
+    opacity:1;
+    visibility:visible;
+}
+
+
+/* ================================================= */
+/* 메뉴 hover 시 헤더 전체 확장 */
+/* ================================================= */
+
+.header:has(.header_menu:hover),
+.header:has(.header_menu:focus-within){
+    height:276px;
     background:#fff;
     color:#222;
-    border-bottom:1px solid #e5e7eb;
-    box-shadow:0 8px 25px rgba(0,0,0,.08);
+    border-bottom:1px solid #e7ebf0;
+    box-shadow:0 5px 20px rgba(20,40,70,.08);
 }
 
+
+/* 헤더가 확장되었을 때 어두운 영역은 헤더 아래부터 시작 */
+
+.header:has(.header_menu:hover):before,
+.header:has(.header_menu:focus-within):before{
+    top:276px;
+    height:calc(100vh - 276px);
+}
+
+
+/* ================================================= */
+/* SCROLLED HEADER */
+/* ================================================= */
+
+.header.scrolled{
+    height:66px;
+    background:rgba(255,255,255,.97);
+    border-bottom:1px solid #e7ebf0;
+    box-shadow:0 5px 20px rgba(20,40,70,.08);
+    color:#222;
+    backdrop-filter:blur(10px);
+}
+
+
+/* 스크롤 상태의 어두운 영역 */
+
+.header.scrolled:before{
+    top:66px;
+    height:calc(100vh - 66px);
+}
+
+
+/* 스크롤된 상태에서 메뉴 hover */
+
+.header.scrolled:has(.header_menu:hover),
+.header.scrolled:has(.header_menu:focus-within){
+    height:256px;
+    background:#fff;
+    color:#222;
+}
+
+
+/* 스크롤 + 메뉴 hover */
+
+.header.scrolled:has(.header_menu:hover):before,
+.header.scrolled:has(.header_menu:focus-within):before{
+    top:256px;
+    height:calc(100vh - 256px);
+}
+
+
+/* ================================================= */
+/* HEADER INNER */
+/* ================================================= */
 
 .header_inner{
-    width:1400px;
-    height:90px;
-    margin:0 auto;
+    max-width:1280px;
+    height:100%;
+    margin:auto;
+    display:flex;
+    align-items:flex-start;
+    gap:50px;
+    padding:0 20px;
     position:relative;
+    z-index:2;
 }
 
 
-/* =========================
-   LOGO
-========================= */
+/* ================================================= */
+/* LOGO */
+/* ================================================= */
 
 .logo{
-    float:left;
-    height:90px;
-    line-height:90px;
+    font-size:24px;
+    font-weight:800;
+    color:#fff;
+    white-space:nowrap;
+    transition:.28s;
+    margin-top:0;
 }
 
-.logo a{
-    font-size:25px;
-    font-weight:700;
-    color:inherit;
-    letter-spacing:-1px;
+.logo small{
+    display:block;
+    font-size:10px;
+    letter-spacing:1.8px;
+    color:rgba(255,255,255,.75);
+    font-weight:600;
+    margin-top:2px;
 }
 
 
-/* =========================
-   HEADER MENU
-========================= */
+/* 스크롤된 기본 상태 */
+
+.header.scrolled .logo{
+    font-size:20px;
+    color:#1769d2;
+}
+
+.header.scrolled .logo small{
+    color:#8994a3;
+}
+
+
+/* 메뉴를 펼쳤을 때 로고 */
+
+.header:has(.header_menu:hover) .logo,
+.header:has(.header_menu:focus-within) .logo{
+    color:#1769d2;
+}
+
+.header:has(.header_menu:hover) .logo small,
+.header:has(.header_menu:focus-within) .logo small{
+    color:#8994a3;
+}
+
+
+/* 스크롤 상태에서 메뉴를 펼쳐도
+   기본 상태와 같은 로고 크기 유지 */
+
+.header.scrolled:has(.header_menu:hover) .logo,
+.header.scrolled:has(.header_menu:focus-within) .logo{
+    font-size:20px;
+    color:#1769d2;
+}
+
+.header.scrolled:has(.header_menu:hover) .logo small,
+.header.scrolled:has(.header_menu:focus-within) .logo small{
+    color:#8994a3;
+}
+
+/* ================================================= */
+/* HEADER MENU */
+/* ================================================= */
 
 .header_menu{
-    float:left;
-    margin-left:100px;
-    height:90px;
+    display:flex;
+    gap:0;
+    height:86px;
+    align-items:flex-start;
+    position:static;
+    padding:0;
+    margin:0;
 }
 
-.header_menu ul{
-    height:90px;
+
+/* 스크롤 상태 */
+
+.header.scrolled .header_menu{
+    height:66px;
 }
+
+
+/* 대메뉴 */
 
 .header_menu li{
     position:relative;
-    float:left;
-    width:150px;
-    height:90px;
-    line-height:90px;
-    text-align:center;
+    width:180px;
+    height:86px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    margin:0;
+    padding:0;
 }
 
-.header_menu li>a{
-    display:block;
-    height:90px;
+
+/* 스크롤 상태의 대메뉴 */
+
+.header.scrolled .header_menu li{
+    height:66px;
+}
+
+
+/* ================================================= */
+/* 대메뉴 링크 */
+/* ================================================= */
+
+.header_menu>li>a{
     font-size:16px;
-    font-weight:500;
+    font-weight:600;
     color:inherit;
-    transition:color .2s ease;
+    position:relative;
+    padding:0;
+    width:100%;
+    height:86px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    z-index:5;
 }
 
-.header_menu li:hover>a{
-    color:#2563eb;
+
+/* 스크롤 상태 */
+
+.header.scrolled .header_menu>li>a{
+    height:66px;
 }
 
 
-/* =========================
-   DROPDOWN
-========================= */
+/* 대메뉴 hover */
+
+.header_menu>li>a:hover{
+    color:#1769d2;
+}
+
+
+/* ================================================= */
+/* DROPDOWN */
+/* ================================================= */
 
 /*
-   헤더가 330px까지 커졌기 때문에
-   하위 메뉴는 헤더 내부의
-   90px 아래부터 표시
+    하위 메뉴 자체에는 흰색 박스를 만들지 않는다.
+    흰색 배경은 .header 전체가 담당한다.
 */
 
 .header_dropdown{
     position:absolute;
-    top:90px;
+    top:86px;
     left:0;
-    width:150px;
-    padding:20px 0 25px;
-    text-align:center;
+    width:100%;
+    height:190px;
+    padding:25px 0 20px;
+
+    background:transparent;
+    border:0;
+    box-shadow:none;
 
     opacity:0;
     visibility:hidden;
 
-    transform:translateY(-10px);
+    transform:translateY(-8px);
 
-    transition:opacity .25s ease,
-               visibility .25s ease,
-               transform .25s ease;
+    transition:opacity .2s ease,visibility .2s ease,transform .2s ease;
+
+    text-align:center;
+    z-index:4;
 }
 
 
-/*
-   헤더 전체에 hover가 들어오면
-   모든 하위 메뉴를 동시에 표시
-*/
+/* 스크롤 상태 */
 
-.header:hover .header_dropdown{
+.header.scrolled .header_dropdown{
+    top:66px;
+}
+
+
+/* 메뉴 전체에 마우스를 올리면 모든 하위 메뉴 표시 */
+
+.header_menu:hover .header_dropdown,
+.header_menu:focus-within .header_dropdown{
     opacity:1;
     visibility:visible;
     transform:translateY(0);
 }
 
 
-/* =========================
-   DROPDOWN MENU
-========================= */
+/* ================================================= */
+/* 하위 메뉴 */
+/* ================================================= */
 
-.header_dropdown li{
-    float:none;
-    width:100%;
-    height:42px;
-    line-height:42px;
-}
-
-.header_dropdown li a{
-    display:block;
-    width:100%;
-    height:42px;
-    line-height:42px;
-    padding:0 10px;
-
-    font-size:14px;
-    font-weight:400;
-    color:#555;
-
-    transition:color .2s ease,
-               background .2s ease;
-}
-
-.header_dropdown li a:hover{
-    color:#2563eb;
-    background:#f5f7fa;
+.header_dropdown a{
+    display:block!important;
+    padding:7px 3px!important;
+    font-size:14px!important;
+    font-weight:500;
+    line-height:1.5;
+    color:#626d7a!important;
+    transition:.2s ease;
 }
 
 
-/* =========================
-   DROPDOWN DIVIDER
-========================= */
+/* 하위 메뉴 hover */
 
-/*
-   메뉴 사이에 세로 구분선
-*/
-
-.header_menu>ul>li:not(:last-child){
-    border-right:1px solid transparent;
-}
-
-.header:hover .header_menu>ul>li:not(:last-child){
-    border-right:1px solid #f0f0f0;
+.header_dropdown a:hover{
+    color:#1769d2!important;
+    font-weight:700;
 }
 
 
-/* =========================
-   HEADER RIGHT
-========================= */
+/* ================================================= */
+/* HEADER RIGHT */
+/* ================================================= */
 
 .header_right{
-    float:right;
-    height:90px;
-    line-height:90px;
-}
-
-.header_right a{
-    font-size:14px;
+    margin-left:auto;
+    display:flex;
+    align-items:center;
+    gap:13px;
+    font-size:13px;
     color:inherit;
-}
-
-.header_right .bar{
-    margin:0 12px;
-    color:#aaa;
-}
-
-
-/* =========================
-   HEADER DIM
-========================= */
-
-/*
-   헤더가 펼쳐졌을 때
-   헤더 아래쪽 화면만 살짝 어둡게 함
-*/
-
-.header:after{
-    content:"";
-    position:fixed;
-    top:330px;
-    left:0;
-    width:100%;
-    height:calc(100vh - 330px);
-
-    background:rgba(0,0,0,.35);
-
-    opacity:0;
-    visibility:hidden;
-
-    pointer-events:none;
-
-    transition:opacity .3s ease,
-               visibility .3s ease;
-
-    z-index:-1;
-}
-
-.header:hover:after{
-    opacity:1;
-    visibility:visible;
+    position:relative;
+    z-index:6;
+    height:86px;
 }
 
 
-/* =========================
-   HAMBURGER
-========================= */
+/* 스크롤 상태 */
+
+.header.scrolled .header_right{
+    height:66px;
+}
+
+
+/* 로그인 / 회원가입 hover */
+
+.header_right a:hover{
+    color:#1769d2;
+}
+
+
+/* ================================================= */
+/* MOBILE MENU */
+/* ================================================= */
 
 .menu_btn{
     display:none;
-}
-
-
-/* =========================
-   CLEAR
-========================= */
-
-.header_inner:after{
-    content:"";
-    display:block;
-    clear:both;
+    background:none;
+    border:0;
+    font-size:25px;
+    color:inherit;
 }
 
 
 
-/* =========================
-   HERO
-========================= */
+/* HERO */
 
 .hero{
 position:relative;
-height:650px;
-background-image:
-linear-gradient(rgba(0,0,0,.38),rgba(0,0,0,.48)),
-url("../images/airport.jpg");
+overflow:hidden;
+background-image:url("../images/airport.jpg");
 background-size:cover;
-background-position:center;
-display:flex;
-align-items:center;
-justify-content:center;
-text-align:center;
+background-position:center center;
+background-repeat:no-repeat;
 color:#fff
 }
 
-.hero_content{
+.hero:before{
+content:"";
+position:absolute;
+inset:0;
+background:linear-gradient(
+90deg,
+rgba(0,25,55,.68) 0%,
+rgba(0,35,70,.42) 45%,
+rgba(0,20,45,.18) 100%
+);
+z-index:0
+}
+
+.hero:after{
+display:none
+}
+
+.hero_inner{
+max-width:1280px;
+margin:auto;
+padding:155px 20px 105px;
 position:relative;
-z-index:2;
-max-width:850px;
-padding:0 20px
+z-index:1
 }
 
 .hero_eyebrow{
-font-size:15px;
-font-weight:500;
+font-size:13px;
 letter-spacing:2px;
-margin-bottom:20px;
-opacity:.9
+opacity:.85;
+margin-bottom:14px
 }
 
 .hero h1{
-font-family:"Black Han Sans",sans-serif;
-font-size:58px;
-font-weight:400;
+font-size:46px;
+line-height:1.2;
 letter-spacing:-2px;
-margin-bottom:20px
+margin-bottom:16px;
+text-shadow:0 2px 8px rgba(0,0,0,.18)
 }
 
 .hero p{
-font-size:18px;
-line-height:1.8;
-opacity:.9
+font-size:17px;
+line-height:1.7;
+opacity:.95;
+text-shadow:0 1px 5px rgba(0,0,0,.18)
 }
 
 .hero_badge{
-display:inline-block;
-margin-top:28px;
-padding:10px 22px;
-border:1px solid rgba(255,255,255,.5);
+display:inline-flex;
+margin-top:27px;
+padding:9px 15px;
+border:1px solid rgba(255,255,255,.4);
 border-radius:30px;
-font-size:14px;
-background:rgba(255,255,255,.08);
-backdrop-filter:blur(5px)
+background:rgba(0,0,0,.15);
+font-size:13px;
+backdrop-filter:blur(3px)
 }
 
 
-/* =========================
-   QUICK MENU
-========================= */
+/* QUICK MENU */
+
+.quick_wrap{
+max-width:1180px;
+margin:-40px auto 0;
+position:relative;
+z-index:3;
+padding:0 20px
+}
 
 .quick_menu{
-position:relative;
-z-index:5;
-width:1100px;
-margin:-45px auto 0;
+background:#fff;
+border-radius:12px;
+box-shadow:0 12px 35px rgba(20,50,90,.13);
 display:grid;
 grid-template-columns:repeat(4,1fr);
-background:#fff;
-border-radius:16px;
-box-shadow:0 15px 40px rgba(0,0,0,.12);
 overflow:hidden
 }
 
-.quick_menu a{
-height:110px;
+.quick_item{
+min-height:112px;
+padding:22px 24px;
 display:flex;
 align-items:center;
-justify-content:center;
-font-size:17px;
-font-weight:700;
-border-right:1px solid #eee;
-transition:
-background .25s ease,
-color .25s ease
+gap:17px;
+border-right:1px solid #edf0f4;
+transition:.2s
 }
 
-.quick_menu a:last-child{
+.quick_item:last-child{
 border-right:0
 }
 
-.quick_menu a:hover{
-background:#eff6ff;
-color:#2563eb
+.quick_item:hover{
+background:#f7fbff
+}
+
+.quick_icon{
+width:48px;
+height:48px;
+border-radius:50%;
+display:grid;
+place-items:center;
+background:#eaf3ff;
+color:#1769d2;
+font-size:21px;
+flex:none
+}
+
+.quick_text strong{
+display:block;
+font-size:16px;
+margin-bottom:5px
+}
+
+.quick_text span{
+font-size:12px;
+color:#8a929e
 }
 
 
-/* =========================
-   MAIN
-========================= */
+/* MAIN */
 
 .main{
-width:100%;
-padding:80px 0
+padding-bottom:100px
 }
 
 .container{
-width:1280px;
-max-width:calc(100% - 40px);
-margin:0 auto
+max-width:1180px;
+margin:auto;
+padding:0 20px
 }
 
 .section{
-margin-bottom:100px
+padding-top:72px
 }
 
-.section_title{
-margin-bottom:35px
+.section_head{
+display:flex;
+align-items:end;
+justify-content:space-between;
+margin-bottom:24px
 }
 
-.section_title h2{
-font-family:"Black Han Sans",sans-serif;
-font-size:34px;
-font-weight:400;
+.section_head h2{
+font-size:28px;
 letter-spacing:-1px
 }
 
-.section_title p{
-margin-top:10px;
-font-size:15px;
-color:#777
+.section_head p{
+font-size:13px;
+color:#8993a0;
+margin-top:7px
+}
+
+.more{
+font-size:13px;
+color:#687585
+}
+
+.more:hover{
+color:#1769d2
 }
 
 
-/* =========================
-   RESERVATION
-========================= */
+/* RESERVATION */
 
-.reservation_box{
+.reserve_box{
 background:#fff;
-border-radius:20px;
-padding:35px;
-box-shadow:0 8px 30px rgba(0,0,0,.06)
+border:1px solid #e1e7ef;
+border-radius:12px;
+padding:28px;
+box-shadow:0 5px 18px rgba(30,50,80,.04)
 }
 
-.terminal_tabs{
+.reserve_tabs{
 display:flex;
-gap:10px;
-margin-bottom:30px
+border-bottom:1px solid #e5e9ef;
+margin-bottom:25px
 }
 
-.terminal_tabs button{
-width:160px;
-height:48px;
-border:1px solid #ddd;
-border-radius:8px;
-background:#fff;
+.reserve_tabs button{
+border:0;
+background:none;
+padding:0 24px 16px;
 font-size:15px;
 font-weight:600;
-cursor:pointer;
-transition:all .2s ease
+color:#8a929e;
+position:relative
 }
 
-.terminal_tabs button.active,
-.terminal_tabs button:hover{
-background:#2563eb;
-border-color:#2563eb;
-color:#fff
+.reserve_tabs button.active{
+color:#1769d2
 }
 
-.reservation_form{
+.reserve_tabs button.active:after{
+content:"";
+position:absolute;
+left:0;
+right:0;
+bottom:-1px;
+height:3px;
+background:#1769d2
+}
+
+.form_grid{
 display:grid;
-grid-template-columns:1fr 1fr 1fr 140px;
-gap:15px
+grid-template-columns:1.2fr 1fr 1fr 1fr auto;
+gap:12px;
+align-items:end
 }
 
-.form_item{
-display:flex;
-flex-direction:column;
-gap:8px
+.field label{
+display:block;
+font-size:12px;
+color:#77818e;
+margin-bottom:8px
 }
 
-.form_item label{
-font-size:13px;
-font-weight:700;
-color:#555
-}
-
-.form_item select,
-.form_item input{
+.field input,
+.field select{
+width:100%;
 height:48px;
-padding:0 14px;
-border:1px solid #ddd;
-border-radius:8px;
-font-size:14px;
-background:#fff
+border:1px solid #dce2e9;
+border-radius:6px;
+padding:0 13px;
+background:#fff;
+color:#333;
+outline:none
+}
+
+.field input:focus,
+.field select:focus{
+border-color:#1769d2
 }
 
 .search_btn{
 height:48px;
 border:0;
-border-radius:8px;
-background:#2563eb;
+border-radius:6px;
+padding:0 27px;
+background:#1769d2;
 color:#fff;
-font-size:15px;
 font-weight:700;
-cursor:pointer;
-transition:background .2s ease
+white-space:nowrap
 }
 
 .search_btn:hover{
-background:#1d4ed8
-}
-
-.selected_time{
-margin-top:20px;
-padding:15px 18px;
-background:#f8fafc;
-border-radius:8px;
-font-size:14px;
-color:#555
+background:#0d57b3
 }
 
 
-/* =========================
-   PARKING MAP
-========================= */
+/* STATUS */
 
-.parking_map_box{
-margin-top:30px;
-background:#fff;
-border-radius:20px;
-overflow:hidden;
-box-shadow:0 8px 30px rgba(0,0,0,.06)
-}
-
-.map_header{
-height:65px;
-padding:0 25px;
+.status_top{
 display:flex;
 align-items:center;
 justify-content:space-between;
-border-bottom:1px solid #eee
+margin-bottom:20px
 }
 
-.map_header h3{
-font-size:18px
-}
-
-.legend{
+.total{
 display:flex;
-gap:18px;
-font-size:13px
-}
-
-.legend span{
-display:flex;
-align-items:center;
+align-items:baseline;
 gap:6px
 }
 
-.legend i{
-width:12px;
-height:12px;
-display:inline-block;
-border-radius:3px
-}
-
-.legend .available{
-background:#60a5fa
-}
-
-.legend .busy{
-background:#fbbf24
-}
-
-.legend .full{
-background:#ef4444
-}
-
-
-/* =========================
-   REAL MAP
-========================= */
-
-.parking_map_real{
-position:relative;
-height:560px;
-background:#e8edf2;
-overflow:hidden
-}
-
-.map_terminal{
-position:absolute;
-left:50%;
-top:50%;
-width:420px;
-height:170px;
-transform:translate(-50%,-50%);
-background:#d8dee6;
-border-radius:20px;
-box-shadow:0 8px 20px rgba(0,0,0,.08);
-display:flex;
-align-items:center;
-justify-content:center;
-font-size:18px;
-font-weight:700;
-color:#64748b
-}
-
-.map_road{
-position:absolute;
-background:#fff
-}
-
-.map_road.horizontal{
-left:0;
-top:47%;
-width:100%;
-height:65px
-}
-
-.map_road.vertical{
-left:47%;
-top:0;
-width:65px;
-height:100%
-}
-
-.parking_zone{
-position:absolute;
-display:flex;
-align-items:center;
-justify-content:center;
-flex-direction:column;
-border-radius:12px;
-color:#fff;
-font-weight:700;
-cursor:pointer;
-transition:
-transform .2s ease,
-box-shadow .2s ease
-}
-
-.parking_zone:hover{
-transform:scale(1.04);
-box-shadow:0 8px 20px rgba(0,0,0,.18)
-}
-
-.parking_zone .zone_name{
-font-size:18px
-}
-
-.parking_zone .zone_count{
+.total span{
 font-size:13px;
-margin-top:4px;
-opacity:.9
+color:#87919d
 }
 
-.zone_a{
-left:8%;
-top:15%;
-width:220px;
-height:130px;
-background:#60a5fa
+.total strong{
+font-size:31px;
+color:#1769d2
 }
 
-.zone_b{
-left:8%;
-bottom:12%;
-width:220px;
-height:130px;
-background:#fbbf24
-}
-
-.zone_c{
-right:8%;
-top:15%;
-width:220px;
-height:130px;
-background:#60a5fa
-}
-
-.zone_d{
-right:8%;
-bottom:12%;
-width:220px;
-height:130px;
-background:#ef4444
-}
-
-.map_bottom{
-height:70px;
-padding:0 25px;
-display:flex;
-align-items:center;
-justify-content:space-between;
-border-top:1px solid #eee
-}
-
-.map_selected{
-font-size:14px;
-color:#555
-}
-
-.map_total{
-font-size:15px;
-font-weight:700
+.total em{
+font-size:13px;
+font-style:normal
 }
 
 .refresh_btn{
 height:38px;
-padding:0 15px;
-border:1px solid #ddd;
-border-radius:7px;
+border:1px solid #d7dee7;
+border-radius:5px;
 background:#fff;
-cursor:pointer;
+padding:0 14px;
+color:#555
+}
+
+.refresh_btn:hover{
+border-color:#1769d2;
+color:#1769d2
+}
+
+.refresh_btn.loading .refresh_icon{
+display:inline-block;
+animation:rotate .7s linear infinite
+}
+
+@keyframes rotate{
+to{
+transform:rotate(360deg)
+}
+}
+
+.status_grid{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:15px
+}
+
+.status_card{
+background:#fff;
+border:1px solid #e1e7ef;
+border-radius:10px;
+padding:25px;
+transition:.2s
+}
+
+.status_card:hover{
+transform:translateY(-3px);
+box-shadow:0 10px 25px rgba(20,50,90,.08)
+}
+
+.status_card_head{
+display:flex;
+justify-content:space-between;
+align-items:start;
+margin-bottom:24px
+}
+
+.level_badge{
+font-size:11px;
+letter-spacing:1px;
+color:#8c96a3
+}
+
+.level_name{
+font-size:17px;
+font-weight:700;
+margin-top:5px
+}
+
+.state{
+font-size:11px;
+padding:6px 9px;
+border-radius:20px;
+background:#eaf7ef;
+color:#21824b
+}
+
+.state.busy{
+background:#fff4e5;
+color:#c87912
+}
+
+.count strong{
+font-size:42px;
+color:#1769d2;
+letter-spacing:-2px
+}
+
+.count span{
+font-size:14px;
+margin-left:4px;
+color:#555
+}
+
+.bar{
+height:8px;
+background:#edf0f4;
+border-radius:8px;
+overflow:hidden;
+margin:18px 0 10px
+}
+
+.fill{
+height:100%;
+background:#1769d2;
+border-radius:8px;
+transition:width .5s
+}
+
+.status_card p{
+font-size:12px;
+color:#8993a0
+}
+
+
+/* UNIFIED RESERVATION + PARKING MAP */
+
+.parking_control_box{
+background:#fff;
+border:1px solid #e1e7ef;
+border-radius:12px;
+overflow:hidden;
+box-shadow:0 6px 22px rgba(30,50,80,.05)
+}
+
+.reserve_control{
+padding:27px 28px 22px;
+border-bottom:1px solid #e8edf2
+}
+
+.reserve_tabs{
+display:flex;
+border-bottom:1px solid #e5e9ef;
+margin-bottom:23px
+}
+
+.reserve_tabs button{
+border:0;
+background:none;
+padding:0 22px 14px;
+font-size:14px;
+font-weight:600;
+color:#8a929e;
+position:relative
+}
+
+.reserve_tabs button.active{
+color:#1769d2
+}
+
+.reserve_tabs button.active:after{
+content:"";
+position:absolute;
+left:0;
+right:0;
+bottom:-1px;
+height:3px;
+background:#1769d2
+}
+
+.control_grid{
+display:grid;
+grid-template-columns:1.25fr 1fr 1fr 1fr auto;
+gap:10px;
+align-items:end
+}
+
+.field label{
+display:block;
+font-size:12px;
+color:#77818e;
+margin-bottom:7px
+}
+
+.field input,
+.field select{
+width:100%;
+height:46px;
+border:1px solid #dce2e9;
+border-radius:5px;
+padding:0 12px;
+background:#fff;
+color:#333;
+outline:none
+}
+
+.field input:focus,
+.field select:focus{
+border-color:#1769d2
+}
+
+.search_btn{
+height:46px;
+border:0;
+border-radius:5px;
+padding:0 22px;
+background:#1769d2;
+color:#fff;
+font-size:13px;
+font-weight:700;
+white-space:nowrap
+}
+
+.search_btn:hover{
+background:#0d57b3
+}
+
+.selected_time{
+margin-top:17px;
+display:flex;
+align-items:center;
+gap:10px;
+font-size:12px;
+color:#8a929e
+}
+
+.selected_time strong{
+color:#1769d2;
 font-size:13px
 }
 
-
-/* =========================
-   CONTENT GRID
-========================= */
-
-.content_grid{
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:30px
-}
-
-.content_box{
-background:#fff;
-border-radius:18px;
-padding:30px;
-box-shadow:0 8px 30px rgba(0,0,0,.05)
+.selected_time small{
+margin-left:auto;
+color:#a0a8b2
 }
 
 
-/* =========================
-   NOTICE
-========================= */
+/* MAP HEADER */
 
-.notice_list li{
-height:55px;
+.map_header{
+display:flex;
+justify-content:space-between;
+align-items:end;
+padding:25px 28px 18px
+}
+
+.map_header h3{
+font-size:20px;
+letter-spacing:-.5px
+}
+
+.map_header p{
+font-size:12px;
+color:#8c96a3;
+margin-top:6px
+}
+
+.map_legend{
+display:flex;
+gap:13px;
+font-size:11px;
+color:#687585
+}
+
+.map_legend span{
 display:flex;
 align-items:center;
-justify-content:space-between;
-border-bottom:1px solid #eee
+gap:5px
+}
+
+.legend{
+width:9px;
+height:9px;
+border-radius:50%;
+display:inline-block
+}
+
+.legend.available{
+background:#3aa76d
+}
+
+.legend.normal{
+background:#e5a52d
+}
+
+.legend.busy{
+background:#df6868
+}
+
+
+/* PARKING MAP */
+
+.parking_map_real{
+height:400px;
+margin:0 28px;
+background:#eef4f9;
+border:1px solid #dce5ee;
+border-radius:9px;
+position:relative;
+overflow:hidden
+}
+
+.parking_map_real:before{
+content:"";
+position:absolute;
+inset:35px 80px;
+border:1px dashed #bfd0df;
+border-radius:45%;
+transform:rotate(-7deg)
+}
+
+.parking_map_real:after{
+content:"";
+position:absolute;
+left:50%;
+top:0;
+bottom:0;
+border-left:1px dashed #c5d4e1;
+transform:rotate(12deg)
+}
+
+.terminal_building{
+position:absolute;
+z-index:3;
+left:50%;
+top:50%;
+transform:translate(-50%,-50%);
+width:270px;
+height:105px;
+background:#fff;
+border:2px solid #cdd9e5;
+border-radius:8px;
+text-align:center;
+padding:18px;
+box-shadow:0 8px 20px rgba(50,80,110,.08)
+}
+
+.terminal_label{
+font-size:10px;
+letter-spacing:2px;
+color:#8b97a5
+}
+
+.terminal_building strong{
+display:block;
+font-size:18px;
+margin:5px 0
+}
+
+.terminal_building span{
+font-size:11px;
+color:#8b97a5
+}
+
+.road{
+position:absolute;
+background:#dce6ee;
+z-index:1
+}
+
+.road_top,
+.road_bottom{
+left:0;
+right:0;
+height:28px
+}
+
+.road_top{
+top:75px
+}
+
+.road_bottom{
+bottom:65px
+}
+
+.road_left,
+.road_right{
+top:0;
+bottom:0;
+width:28px
+}
+
+.road_left{
+left:95px
+}
+
+.road_right{
+right:95px
+}
+
+.map_zone{
+position:absolute;
+z-index:4;
+width:145px;
+height:105px;
+border:2px solid;
+border-radius:9px;
+background:#fff;
+box-shadow:0 7px 16px rgba(40,70,100,.08);
+transition:.2s
+}
+
+.map_zone:hover{
+transform:translateY(-3px);
+box-shadow:0 12px 23px rgba(40,70,100,.14)
+}
+
+.map_zone span{
+display:block;
+font-size:10px;
+letter-spacing:1px;
+opacity:.65
+}
+
+.map_zone strong{
+display:block;
+font-size:15px;
+margin:5px 0
+}
+
+.map_zone em{
+font-style:normal;
+font-size:12px;
+font-weight:700
+}
+
+.available_zone{
+border-color:#72bd94;
+background:#f5fcf8;
+color:#20784a
+}
+
+.normal_zone{
+border-color:#e9c26e;
+background:#fffaf0;
+color:#aa7417
+}
+
+.busy_zone{
+border-color:#e59696;
+background:#fff6f6;
+color:#b94e4e
+}
+
+.zone_a{
+left:18%;
+top:32%
+}
+
+.zone_b{
+left:8%;
+bottom:17%
+}
+
+.zone_c{
+right:8%;
+top:29%
+}
+
+.zone_d{
+right:18%;
+bottom:15%
+}
+
+.map_bottom{
+display:flex;
+align-items:center;
+gap:20px;
+padding:18px 28px 23px;
+font-size:12px;
+color:#7d8794
+}
+
+.map_bottom>div:first-child{
+display:flex;
+align-items:center;
+gap:7px
+}
+
+.pin_icon{
+color:#1769d2;
+font-size:18px
+}
+
+.map_total{
+margin-left:auto
+}
+
+.map_total strong{
+font-size:23px;
+color:#1769d2;
+margin-left:5px
+}
+
+.map_total b{
+font-weight:400;
+margin-left:3px;
+color:#555
+}
+
+
+/* CONTENT GRID */
+
+.info_grid{
+display:grid;
+grid-template-columns:1.15fr .85fr;
+gap:18px
+}
+
+.panel{
+background:#fff;
+border:1px solid #e1e7ef;
+border-radius:10px;
+padding:26px
+}
+
+.notice_list li{
+display:flex;
+align-items:center;
+gap:13px;
+padding:15px 0;
+border-bottom:1px solid #eef1f4
 }
 
 .notice_list li:last-child{
 border-bottom:0
 }
 
-.notice_list a{
-font-size:14px;
-transition:color .2s ease
-}
-
-.notice_list a:hover{
-color:#2563eb
-}
-
 .notice_date{
-font-size:12px;
-color:#999
+margin-left:auto;
+font-size:11px;
+color:#a0a8b2
 }
 
-
-/* =========================
-   GUIDE
-========================= */
+.notice_tag{
+font-size:10px;
+padding:4px 7px;
+background:#edf5ff;
+color:#1769d2;
+border-radius:3px
+}
 
 .guide_list{
 display:grid;
-grid-template-columns:repeat(4,1fr);
-gap:20px
+grid-template-columns:repeat(2,1fr);
+gap:10px
 }
 
 .guide_item{
-padding:30px 20px;
-background:#fff;
-border-radius:18px;
-text-align:center;
-box-shadow:0 8px 30px rgba(0,0,0,.05)
+padding:17px;
+background:#f7f9fc;
+border-radius:7px
 }
 
 .guide_num{
-width:40px;
-height:40px;
-margin:0 auto 15px;
-border-radius:50%;
-background:#eff6ff;
-color:#2563eb;
-display:flex;
-align-items:center;
-justify-content:center;
-font-weight:700
+font-size:11px;
+color:#1769d2;
+font-weight:800
 }
 
-.guide_item h3{
-font-size:16px;
-margin-bottom:10px
+.guide_item strong{
+display:block;
+margin:7px 0 4px;
+font-size:14px
 }
 
-.guide_item p{
-font-size:13px;
-line-height:1.7;
-color:#777
+.guide_item span{
+font-size:11px;
+color:#8c96a3;
+line-height:1.5
 }
 
 
-/* =========================
-   FOOTER
-========================= */
+/* FOOTER */
 
 .footer{
-padding:50px 0;
-background:#1e293b;
-color:#94a3b8
+background:#252a31;
+color:#fff
 }
 
 .footer_inner{
-width:1280px;
-max-width:calc(100% - 40px);
-margin:0 auto
+max-width:1180px;
+margin:auto;
+padding:42px 20px 48px
+}
+
+.footer_top{
+display:flex;
+justify-content:space-between;
+gap:30px;
+padding-bottom:25px;
+border-bottom:1px solid #3b4149
 }
 
 .footer_logo{
-font-family:"Black Han Sans",sans-serif;
-font-size:22px;
-color:#fff;
-margin-bottom:15px
+font-size:19px;
+font-weight:800
 }
 
-.footer p{
-font-size:13px;
-line-height:1.8
+.footer_logo small{
+display:block;
+font-size:10px;
+letter-spacing:1px;
+color:#89919c;
+margin-top:5px
+}
+
+.footer_links{
+display:flex;
+gap:20px;
+font-size:12px;
+color:#c5cad0
+}
+
+.footer_info{
+padding-top:22px;
+font-size:11px;
+line-height:1.8;
+color:#8e969f
+}
+
+.copyright{
+margin-top:8px;
+color:#69727d
 }
 
 
-/* =========================
-   MOBILE
-========================= */
+/* MOBILE */
 
 @media(max-width:900px){
 
 .header{
-height:70px
+height:68px
 }
 
 .header_inner{
-padding:0 20px;
 gap:0;
-align-items:center
+padding:0 18px
 }
 
 .logo{
-width:auto;
-height:70px
+font-size:20px
 }
 
-.logo strong{
-font-size:21px
-}
-
-.logo span{
+.logo small{
 display:none
 }
 
-.header_menu{
-display:none
-}
-
+.header_menu,
 .header_right{
-margin-left:auto;
-height:70px;
-margin-right:10px
-}
-
-.header_right a{
-font-size:12px
+display:none
 }
 
 .menu_btn{
-display:block
-}
-
-
-/* 모바일에서는 헤더 확장 효과 제거 */
-
-.header:has(.header_menu:hover){
-height:70px
+display:block;
+margin-left:auto
 }
 
 .header:before{
 display:none
 }
 
-
-/* hero */
-
-.hero{
-height:560px
+.hero_inner{
+padding:125px 20px 70px
 }
 
 .hero h1{
-font-size:42px
+font-size:35px
 }
 
-.hero p{
-font-size:15px
+.quick_wrap{
+margin-top:-28px
 }
-
-
-/* quick menu */
 
 .quick_menu{
-width:calc(100% - 30px);
-grid-template-columns:repeat(2,1fr);
-margin-top:-35px
+grid-template-columns:repeat(2,1fr)
 }
 
-.quick_menu a{
-height:80px;
-font-size:14px
+.quick_item:nth-child(2){
+border-right:0
 }
 
-
-/* main */
-
-.main{
-padding:60px 0
+.quick_item:nth-child(-n+2){
+border-bottom:1px solid #edf0f4
 }
 
-.container{
-max-width:calc(100% - 30px)
-}
-
-.section{
-margin-bottom:70px
-}
-
-
-/* reservation */
-
-.reservation_box{
-padding:20px
-}
-
-.reservation_form{
+.control_grid{
 grid-template-columns:1fr 1fr
 }
 
 .search_btn{
-grid-column:1 / -1
+grid-column:1/-1
 }
 
-
-/* map */
-
-.parking_map_real{
-height:500px
-}
-
-.map_terminal{
-width:260px;
-height:130px
-}
-
-.zone_a,
-.zone_b,
-.zone_c,
-.zone_d{
-width:150px;
-height:100px
-}
-
-
-/* content */
-
-.content_grid{
+.status_grid,
+.info_grid{
 grid-template-columns:1fr
 }
 
-.guide_list{
-grid-template-columns:1fr 1fr
+.header.scrolled{
+height:60px
+}
+
+.selected_time{
+display:block;
+line-height:1.8
+}
+
+.selected_time small{
+display:block;
+margin-left:0
+}
+
+.map_header{
+display:block
+}
+
+.map_legend{
+margin-top:12px
+}
+
+.parking_map_real{
+height:350px;
+margin:0 18px
+}
+
+.zone_a{
+left:8%;
+top:27%
+}
+
+.zone_b{
+left:5%;
+bottom:10%
+}
+
+.zone_c{
+right:5%;
+top:25%
+}
+
+.zone_d{
+right:8%;
+bottom:9%
+}
+
+.map_bottom{
+padding:15px 18px 20px;
+flex-wrap:wrap
 }
 
 }
@@ -994,51 +1430,45 @@ grid-template-columns:1fr 1fr
 
 @media(max-width:560px){
 
-.header_right{
-gap:8px
+.quick_item{
+min-height:95px;
+padding:17px
 }
 
-.header_right .bar{
-display:none
+.quick_icon{
+width:40px;
+height:40px;
+font-size:17px
 }
 
-.hero{
-height:500px
-}
-
-.hero h1{
-font-size:34px;
-letter-spacing:-1px
-}
-
-.hero p{
+.quick_text strong{
 font-size:14px
 }
 
-.hero_badge{
-font-size:12px
+.quick_text span{
+display:none
 }
 
-
-/* quick */
-
-.quick_menu{
-grid-template-columns:1fr 1fr
+.section{
+padding-top:52px
 }
 
-.quick_menu a{
-height:70px
+.section_head h2{
+font-size:23px
 }
 
-
-/* reservation */
-
-.terminal_tabs button{
-width:50%;
-height:44px
+.reserve_box,
+.panel,
+.map_box{
+padding:18px
 }
 
-.reservation_form{
+.reserve_tabs button{
+padding:0 14px 13px;
+font-size:13px
+}
+
+.form_grid{
 grid-template-columns:1fr
 }
 
@@ -1046,69 +1476,126 @@ grid-template-columns:1fr
 grid-column:auto
 }
 
-
-/* map */
-
-.parking_map_real{
-height:450px
+.status_top{
+align-items:end
 }
 
-.map_terminal{
-width:190px;
-height:100px;
-font-size:14px
+.status_card{
+padding:20px
 }
 
-.zone_a,
-.zone_b,
-.zone_c,
-.zone_d{
-width:110px;
-height:80px
+.count strong{
+font-size:36px
 }
 
-.parking_zone .zone_name{
-font-size:14px
+.footer_top{
+display:block
 }
 
-.parking_zone .zone_count{
-font-size:11px
+.footer_links{
+margin-top:20px;
+flex-wrap:wrap
 }
 
-.zone_a{
-left:5%;
-top:10%
+.reserve_control{
+padding:20px 18px
 }
 
-.zone_b{
-left:5%;
-bottom:10%
-}
-
-.zone_c{
-right:5%;
-top:10%
-}
-
-.zone_d{
-right:5%;
-bottom:10%
-}
-
-
-/* guide */
-
-.guide_list{
+.control_grid{
 grid-template-columns:1fr
 }
 
-.map_header{
-padding:0 15px
+.search_btn{
+grid-column:auto
 }
 
-.legend{
-gap:8px;
-font-size:11px
+.map_header{
+padding:20px 18px 15px
+}
+
+.parking_map_real{
+height:430px;
+margin:0 12px
+}
+
+.terminal_building{
+width:190px;
+height:92px;
+padding:14px
+}
+
+.terminal_building strong{
+font-size:15px
+}
+
+.map_zone{
+width:105px;
+height:86px
+}
+
+.map_zone strong{
+font-size:13px
+}
+
+.map_zone em{
+font-size:10px
+}
+
+.zone_a{
+left:4%;
+top:23%
+}
+
+.zone_b{
+left:4%;
+bottom:8%
+}
+
+.zone_c{
+right:4%;
+top:21%
+}
+
+.zone_d{
+right:4%;
+bottom:8%
+}
+
+.map_bottom{
+display:grid;
+grid-template-columns:1fr auto;
+gap:12px;
+padding:15px
+}
+
+.map_bottom .refresh_btn{
+grid-column:1/-1;
+width:100%
+}
+
+.map_total{
+margin-left:0;
+text-align:right
+}
+
+}
+
+
+/* HERO IMAGE MOBILE */
+
+@media(max-width:900px){
+
+.hero{
+background-position:center center
+}
+
+.hero:before{
+background:linear-gradient(
+90deg,
+rgba(0,25,55,.72) 0%,
+rgba(0,35,70,.48) 60%,
+rgba(0,20,45,.25) 100%
+)
 }
 
 }
