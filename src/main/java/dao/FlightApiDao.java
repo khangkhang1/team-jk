@@ -35,7 +35,7 @@ public class FlightApiDao {
 
 	// 공공데이터포털(data.go.kr)에서 활용신청 후 발급받은 서비스키(Encoding 버전).
 	// 주의: 이미 URL 인코딩된 값이라 그대로 붙여야 함. 한 번 더 인코딩하면 이중 인코딩 오류남.
-	private static final String SERVICE_KEY = "발급받은_서비스키_그대로_붙여넣기";
+	private static final String SERVICE_KEY = "8A6C6Mp2ylWbir47yE6IJtBplIUUhhvbxRr3CbDEGe4URfJZBRmcEoT5SdFTxhrK%2Bdk8bO1MQY%2BOV7guUPsrDw%3D%3D";
 
 	// 귀국 도착편 운항현황 조회 - 결항 여부 확인용.
 	// searchday: 조회일자(YYYYMMDD). null이면 API 기본값(오늘)으로 조회됨 - 예약자의 도착 예정일을 넘기는 걸 권장.
