@@ -4,7 +4,7 @@ public class PaymentDto {
 	
 /*
 	* payment_id	: 결제 id(pk)
-	* reservation_id: 예약 id(예약 fk)
+	* reservation_id: 예약 id(reservation fk)
 	* payment_amount: 결제 금액
 	* payment_method: 결제 수단(카카오페이, 네이버페이 등)
 	* payment_date	: 결제 일자(시간 포함)
