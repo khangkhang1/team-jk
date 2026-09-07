@@ -10,8 +10,8 @@ public class PaymentDto {
 	* payment_date	: 결제 일자(시간 포함)
 	* payment_type	: 결제 유형(초기 예약(+), 취소(-))
 */
-	int payment_id, reservation_id, payment_amount;
-	String payment_method, payment_date, payment_type;
+	private int payment_id, reservation_id, payment_amount;
+	private String payment_method, payment_date, payment_type;
 	
 	//결제 시 생성자
 	public PaymentDto(int payment_id, int reservation_id, int payment_amount, String payment_method,
