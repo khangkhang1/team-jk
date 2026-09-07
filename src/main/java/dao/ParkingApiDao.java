@@ -16,7 +16,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
-import dto.ParkingSeatDto;
+import dto.*;
 
 // 인천공항공사 OpenAPI(ParkLocationData) 호출 담당 DAO.
 // DB가 아니라 외부 공공데이터 API를 조회한다는 점만 다르고,
