@@ -1,3 +1,5 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -28,7 +30,7 @@
 				<p id="lotAddr">인천공항 1터미널 · 시간당 <span id="lotPrice">3,000</span>원</p>
 			</div>
 		</div>
-
+<form name="rec">
 		<!-- 이용 방식 필터 - 예전엔 결제창 안에 있었는데, 좌석 고르기 전에 먼저 정하는 게 자연스러워서 여기로 옮김 -->
 		<div id="planFilter">
 			<div class="filterTitle" data-i18n="res_planFilterTitle">이용 방식</div>
@@ -66,7 +68,7 @@
 		</div>
 
 		<div id="seatGrid"></div>
-
+</form>
 	</div>
 
 	<!-- ============================================================ -->
