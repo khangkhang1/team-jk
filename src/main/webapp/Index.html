@@ -80,30 +80,65 @@
 			</div>
 		</div>
 
-		<!-- 예약형(1안) 안내 + 단기주차장 표 -->
+		<!-- 예약형(1안) 안내 + 단기주차장 구역도(SVG, 구역별 클릭) -->
 		<section class="acInfoSection">
 			<h4>단기주차장(예약형) 이용 안내</h4>
 			<ul class="acInfoList">
 				<li>시작·종료 시각을 미리 정하는 <strong>예약형(1안)</strong>입니다.</li>
 				<li>왕복 항공권 정보 입력이 필수입니다 (편도 이용객은 이용 불가 - 현장 창구 안내).</li>
 				<li>기본 요금이 적용됩니다.</li>
+				<li>아래 구역도에서 <strong>원하는 구역을 클릭</strong>하면 그 구역의 주차맵으로 이동합니다.</li>
 			</ul>
-			<div class="acTableWrap">
-				<table class="acLotTable">
-					<thead>
-						<tr><th>구역</th><th>시간당 요금</th><th>잔여 대수</th><th></th></tr>
-					</thead>
-					<tbody>
-						<tr>
-							<td>단기주차장 1구역</td><td>3,000원</td><td>12 / 40</td>
-							<td><a class="acLotGoBtn" href="reservation.html?lot=1">선택</a></td>
-						</tr>
-						<tr>
-							<td>단기주차장 2구역</td><td>3,000원</td><td class="acFull">0 / 25 (만차)</td>
-							<td><span class="acLotGoBtn disabled">마감</span></td>
-						</tr>
-					</tbody>
-				</table>
+
+			<div id="acZoneMapWrap">
+				<svg id="acZoneMap" viewBox="0 0 900 650" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="단기주차장 구역도">
+					<!-- 터미널 지붕 (장식용, 클릭 불가) -->
+					<path d="M120,108 Q450,20 780,108 L760,130 Q450,55 140,130 Z" fill="#e2e4e8" stroke="#bbb" stroke-width="1.5"/>
+
+					<!-- P9 / P8 / P7 / P6 - 출국장 앞 구역 -->
+					<g class="acZone" data-lot="9" data-name="P9 구역">
+						<rect x="185" y="140" width="150" height="55" rx="10"/>
+						<text x="260" y="172">P9</text>
+					</g>
+					<g class="acZone" data-lot="8" data-name="P8 구역">
+						<rect x="565" y="140" width="150" height="55" rx="10"/>
+						<text x="640" y="172">P8</text>
+					</g>
+					<g class="acZone" data-lot="7" data-name="P7 구역">
+						<rect x="185" y="203" width="150" height="55" rx="10"/>
+						<text x="260" y="235">P7</text>
+					</g>
+					<g class="acZone" data-lot="6" data-name="P6 구역">
+						<rect x="565" y="203" width="150" height="55" rx="10"/>
+						<text x="640" y="235">P6</text>
+					</g>
+
+					<!-- P2 / P1 - 중앙 대형 구역 -->
+					<g class="acZone" data-lot="2" data-name="P2 구역">
+						<rect x="100" y="285" width="330" height="130" rx="10"/>
+						<text x="265" y="358">P2</text>
+					</g>
+					<g class="acZone" data-lot="1" data-name="P1 구역">
+						<rect x="470" y="285" width="330" height="130" rx="10"/>
+						<text x="635" y="358">P1</text>
+					</g>
+
+					<!-- P4 / P3 -->
+					<g class="acZone" data-lot="4" data-name="P4 구역">
+						<rect x="100" y="435" width="330" height="90" rx="10"/>
+						<text x="265" y="488">P4</text>
+					</g>
+					<g class="acZone" data-lot="3" data-name="P3 구역">
+						<rect x="470" y="435" width="360" height="90" rx="10"/>
+						<text x="650" y="488">P3</text>
+					</g>
+
+					<!-- P5 - 별도 하단 구역 -->
+					<g class="acZone" data-lot="5" data-name="P5 구역">
+						<rect x="100" y="545" width="330" height="80" rx="10"/>
+						<text x="265" y="593">P5</text>
+					</g>
+				</svg>
 			</div>
 		</section>
 
@@ -122,12 +157,12 @@
 					</thead>
 					<tbody>
 						<tr>
-							<td>장기주차장 P1</td><td>4,500원</td><td>25 / 60</td>
-							<td><a class="acLotGoBtn" href="reservation.html?lot=3">선택</a></td>
+							<td>장기주차장 A구역</td><td>4,500원</td><td>25 / 60</td>
+							<td><a class="acLotGoBtn" href="reservation.html?lot=11">선택</a></td>
 						</tr>
 						<tr>
-							<td>장기주차장 P2</td><td>4,500원</td><td>40 / 60</td>
-							<td><a class="acLotGoBtn" href="reservation.html?lot=4">선택</a></td>
+							<td>장기주차장 B구역</td><td>4,500원</td><td>40 / 60</td>
+							<td><a class="acLotGoBtn" href="reservation.html?lot=12">선택</a></td>
 						</tr>
 					</tbody>
 				</table>
