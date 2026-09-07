@@ -9,6 +9,8 @@ public class PaymentDto {
 	* payment_method: 결제 수단(카카오페이, 네이버페이 등)
 	* payment_date	: 결제 일자(시간 포함)
 	* payment_type	: 결제 유형(초기 예약(+), 취소(-))
+	
+	--------------모두 not null--------------
 */
 	private int payment_id, reservation_id, payment_amount;
 	private String payment_method, payment_date, payment_type;
