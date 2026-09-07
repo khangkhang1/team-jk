@@ -18,34 +18,44 @@ import org.xml.sax.InputSource;
 
 import dto.FlightStatusDto;
 
-// 인천공항공사 OpenAPI(StatusOfPassengerFlightsOdp) 호출 담당 DAO.
+// 인천공항공사 OpenAPI(StatusOfPassengerFlightsDeOdp - "여객기 운항 현황 상세 조회 서비스") 호출 담당 DAO.
 // 결항 대응 기능(예약 자동연장/알림 + 자리변경 알림)의 데이터 출처.
 // ParkingApiDao와 같은 패턴 - "외부 API 조회해서 DTO 리스트로 돌려준다".
 //
-// TODO(강선구): 이 서비스는 ParkLocationData(주차면 정보)와 제공기관(B551177)은 같지만
-// data.go.kr에서 활용신청은 "서비스 단위"로 따로 해야 할 가능성이 높음.
-// 주차장 API 신청할 때 같이 승인 안 됐으면 이 서비스도 별도로 활용신청부터 할 것.
+// 2026-09-07 강선구: data.go.kr에서 서비스명·필드명 직접 확인 완료.
+// - 서비스명이 처음 추정했던 "StatusOfPassengerFlightsOdp"가 아니라
+//   "StatusOfPassengerFlightsDeOdp"("De"가 붙음)이 맞음 - 확인 전 URL은 404 났을 것.
+// - ParkLocationData(주차면 정보)와 제공기관(B551177)은 같지만 "서비스 단위"가 달라서
+//   활용신청도 따로 해야 함 - data.go.kr에서 "인천국제공항공사_여객기 운항 현황 상세 조회 서비스"로
+//   검색해서 별도로 활용신청할 것(개발계정은 자동승인, 무료).
+// - pageNo/numOfRows는 API 명세상 필수 파라미터라 반드시 넘겨야 함(빠지면 오류 응답).
 public class FlightApiDao {
 
-	private static final String BASE_URL = "https://apis.data.go.kr/B551177/StatusOfPassengerFlightsOdp/getPassengerArrivalsOdp";
+	private static final String BASE_URL = "https://apis.data.go.kr/B551177/StatusOfPassengerFlightsDeOdp/getPassengerArrivalsDeOdp";
 
 	// 공공데이터포털(data.go.kr)에서 활용신청 후 발급받은 서비스키(Encoding 버전).
 	// 주의: 이미 URL 인코딩된 값이라 그대로 붙여야 함. 한 번 더 인코딩하면 이중 인코딩 오류남.
 	private static final String SERVICE_KEY = "발급받은_서비스키_그대로_붙여넣기";
 
 	// 귀국 도착편 운항현황 조회 - 결항 여부 확인용.
-	// airport: 상대(출발) 공항 3자리 코드, 예: "NRT"(나리타). null/빈 문자열이면 전체 조회.
-	// fromTime/toTime: 조회 시간 범위 (HHMM 형식, 예: "0900"). 필요 없으면 null로 넘기면 됨(그날 전체 조회로 동작할 것으로 추정).
+	// searchday: 조회일자(YYYYMMDD). null이면 API 기본값(오늘)으로 조회됨 - 예약자의 도착 예정일을 넘기는 걸 권장.
+	// airport: 상대(출발지) 공항 IATA 코드, 예: "NRT"(나리타). null/빈 문자열이면 전체 조회.
+	// fromTime/toTime: 조회 시간 범위 (HHMM 형식, 예: "0900"). 필요 없으면 null로 넘기면 됨.
 	// lang: "K"(국문) 기본.
-	public List<FlightStatusDto> getArrivalFlights(String airport, String fromTime, String toTime, String lang) {
+	public List<FlightStatusDto> getArrivalFlights(String searchday, String airport, String fromTime, String toTime, String lang) {
 		List<FlightStatusDto> list = new ArrayList<>();
 
 		StringBuilder urlBuilder = new StringBuilder(BASE_URL);
 		urlBuilder.append("?serviceKey=").append(SERVICE_KEY);
+		urlBuilder.append("&pageNo=1");        // 필수 파라미터
+		urlBuilder.append("&numOfRows=100");   // 필수 파라미터 - 한 페이지에 몇 건 받을지
 		urlBuilder.append("&type=xml");
 		urlBuilder.append("&lang=").append(lang == null ? "K" : lang);
+		if (searchday != null && !searchday.isEmpty()) {
+			urlBuilder.append("&searchday=").append(searchday);
+		}
 		if (airport != null && !airport.isEmpty()) {
-			urlBuilder.append("&airport=").append(airport);
+			urlBuilder.append("&airport_code=").append(airport);
 		}
 		if (fromTime != null && !fromTime.isEmpty()) {
 			urlBuilder.append("&from_time=").append(fromTime);
@@ -73,8 +83,9 @@ public class FlightApiDao {
 
 	// 특정 편명 하나만 결항인지 바로 확인하고 싶을 때 쓰는 편의 메서드.
 	// 예약자 본인 항공편의 결항 여부를 좌석 예약 화면 등에서 바로 체크할 때 사용.
-	public boolean isFlightCancelled(String flightId) {
-		List<FlightStatusDto> flights = getArrivalFlights(null, null, null, "K");
+	// searchday: 예약자가 입력한 도착 예정일(YYYYMMDD). 같은 편명이 매일 뜨므로 날짜를 넘겨야 정확히 매칭됨.
+	public boolean isFlightCancelled(String flightId, String searchday) {
+		List<FlightStatusDto> flights = getArrivalFlights(searchday, null, null, null, "K");
 		for (FlightStatusDto f : flights) {
 			if (flightId != null && flightId.equalsIgnoreCase(f.getFlightId())) {
 				return f.isCancelled();

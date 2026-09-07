@@ -1,11 +1,12 @@
 package dto;
 
-// 인천공항공사 OpenAPI(StatusOfPassengerFlightsOdp) 응답 1건을 담는 DTO.
+// 인천공항공사 OpenAPI(StatusOfPassengerFlightsDeOdp - "여객기 운항 현황 상세 조회 서비스") 응답 1건을 담는 DTO.
 // 결항 대응 기능(예약 자동연장/알림 + 자리변경 알림)의 핵심 판단 근거가 되는 DTO.
 //
-// 주의: 태그명(airline/flightId/remark 등)은 data.go.kr 문서에 "현황"이라는
-// 한글 라벨로만 나와있고, 실제 XML 태그명은 인천공항 계열 API 관례를 따라 추정한 것.
-// 서비스키 발급받으면 실제로 한번 호출해서 태그명이 맞는지 꼭 확인할 것 (강선구 담당).
+// 2026-09-07 강선구: data.go.kr 서비스 명세(Swagger)에서 태그명 직접 확인 완료.
+// airline/flightId/airport/scheduleDateTime/estimatedDateTime/gatenumber/remark/terminalid
+// 전부 명세 그대로이며, remark(현황) 값은 도착/결항/지연/회항/착륙 중 하나로 내려옴.
+// 서비스키 발급 후 실제 응답으로 최종 1회 검증만 남음(값 포맷 등).
 public class FlightStatusDto {
     private String airline;          // 항공사
     private String flightId;         // 편명 (예: KE001)
