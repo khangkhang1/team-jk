@@ -84,14 +84,31 @@ public class FlightApiDao {
 	// 특정 편명 하나만 결항인지 바로 확인하고 싶을 때 쓰는 편의 메서드.
 	// 예약자 본인 항공편의 결항 여부를 좌석 예약 화면 등에서 바로 체크할 때 사용.
 	// searchday: 예약자가 입력한 도착 예정일(YYYYMMDD). 같은 편명이 매일 뜨므로 날짜를 넘겨야 정확히 매칭됨.
-	public boolean isFlightCancelled(String flightId, String searchday) {
+	public boolean isFlightCancelled(String flightNo, String searchday) {
 		List<FlightStatusDto> flights = getArrivalFlights(searchday, null, null, null, "K");
 		for (FlightStatusDto f : flights) {
-			if (flightId != null && flightId.equalsIgnoreCase(f.getFlightId())) {
+			if (flightNo != null && flightNo.equalsIgnoreCase(f.getFlightNo())) {
 				return f.isCancelled();
 			}
 		}
 		return false; // 조회 결과에 없으면 결항 아님으로 처리(운항정보 없음과 결항은 구분 필요 - 추후 보완)
+	}
+
+	// 편명 목록 중 검색어로 시작하는 것만 골라내는 자동완성용 메서드.
+	// 예약 페이지의 "항공편 검색" 입력창(주소 검색 UX와 동일한 방식)에서 사용 - 4차 회의에서 강선구가 제안한 방식.
+	public List<FlightStatusDto> searchByFlightNoPrefix(String prefix, String searchday) {
+		List<FlightStatusDto> result = new ArrayList<>();
+		if (prefix == null || prefix.isEmpty()) {
+			return result;
+		}
+		List<FlightStatusDto> flights = getArrivalFlights(searchday, null, null, null, "K");
+		String upperPrefix = prefix.toUpperCase();
+		for (FlightStatusDto f : flights) {
+			if (f.getFlightNo() != null && f.getFlightNo().toUpperCase().startsWith(upperPrefix)) {
+				result.add(f);
+			}
+		}
+		return result;
 	}
 
 	// 응답 XML의 <item> 목록을 FlightStatusDto 리스트로 변환 (JDK 내장 DOM 파서만 사용 - 별도 jar 불필요)
@@ -107,7 +124,7 @@ public class FlightApiDao {
 			Element item = (Element) items.item(i);
 			FlightStatusDto dto = new FlightStatusDto();
 			dto.setAirline(getTagValue(item, "airline"));
-			dto.setFlightId(getTagValue(item, "flightId"));
+			dto.setFlightNo(getTagValue(item, "flightId")); // API 태그명은 flightId지만 실제 값은 편명 -> 우리 쪽 필드는 flightNo
 			dto.setAirport(getTagValue(item, "airport"));
 			dto.setScheduleDateTime(getTagValue(item, "scheduleDateTime"));
 			dto.setEstimatedDateTime(getTagValue(item, "estimatedDateTime"));
