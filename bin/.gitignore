@@ -1,4 +1,4 @@
 build/
 .settings/
 *.class
-/bin/
+.classpath
