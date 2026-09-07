@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>로그인·회원가입 - 인천공항 주차관리시스템</title>
+<link rel="stylesheet" href="css/c.css">
+<link rel="stylesheet" href="css/login.css">
+</head>
+<body class="resPage">
+
+	<header id="topSearch">
+		<a href="Index.html" id="backBtn" title="메인으로" data-i18n="common_back">← 메인으로</a>
+		<div id="logo" data-i18n="mem_tabLogin">로그인</div>
+		<nav id="topNav">
+			<button id="langToggleBtn" class="langToggle">🇯🇵 日本語</button>
+		</nav>
+	</header>
+
+	<div id="memWrap">
+
+		<div id="memTabs">
+			<button class="memTab active" data-tab="login" data-i18n="mem_tabLogin">로그인</button>
+			<button class="memTab" data-tab="join" data-i18n="mem_tabJoin">회원가입</button>
+		</div>
+
+		<!-- 로그인 -->
+		<section id="panelLogin" class="memPanel">
+			<div class="formCard">
+				<div class="formRow">
+					<label data-i18n="mem_id">아이디</label>
+					<input type="text" id="loginIdInput">
+				</div>
+				<div class="formRow">
+					<label data-i18n="mem_pw">비밀번호</label>
+					<input type="password" id="loginPwInput">
+				</div>
+				<button class="primaryBtn" id="loginSubmitBtn" data-i18n="mem_loginBtn">로그인</button>
+			</div>
+		</section>
+
+		<!-- 회원가입 -->
+		<section id="panelJoin" class="memPanel hidden">
+			<div class="formCard">
+				<div class="formRow">
+					<label data-i18n="mem_id">아이디</label>
+					<input type="text" id="joinIdInput">
+				</div>
+				<div class="formRow">
+					<label data-i18n="mem_pw">비밀번호</label>
+					<input type="password" id="joinPwInput">
+				</div>
+				<div class="formRow">
+					<label data-i18n="mem_pwCheck">비밀번호 확인</label>
+					<input type="password" id="joinPwCheckInput">
+				</div>
+				<div class="formRow">
+					<label data-i18n="mem_name">이름</label>
+					<input type="text" id="joinNameInput">
+				</div>
+				<div class="formRow">
+					<label data-i18n="mem_phone">전화번호</label>
+					<input type="text" id="joinPhoneInput" placeholder="010-0000-0000">
+				</div>
+
+				<fieldset>
+					<legend data-i18n="mem_flightSection">✈️ 탑승권(항공편) 정보</legend>
+					<div class="formRow">
+						<label data-i18n="mem_flightNo">항공편명</label>
+						<input type="text" id="joinFlightNoInput" placeholder="예: KE001">
+					</div>
+					<div class="formRow">
+						<label data-i18n="mem_roundtrip">왕복 여부</label>
+						<select id="joinRoundtripInput">
+							<option value="round" data-i18n="mem_roundtripYes">왕복</option>
+							<option value="oneway" data-i18n="mem_roundtripNo">편도 (이용 불가 안내)</option>
+						</select>
+					</div>
+				</fieldset>
+
+				<button class="primaryBtn" id="joinSubmitBtn" data-i18n="mem_joinBtn">가입하기</button>
+			</div>
+		</section>
+
+	</div>
+
+	<script src="js/jquery-1.8.1.min.js"></script>
+	<script src="js/i18n.js"></script>
+	<script src="js/login.js"></script>
+</body>
+</html>

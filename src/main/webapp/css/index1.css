@@ -1,4 +1,3 @@
-
 *{margin:0;padding:0;box-sizing:border-box}
 
 html{scroll-behavior:smooth}
@@ -10,195 +9,392 @@ background:#f5f7fa
 }
 
 a{color:inherit;text-decoration:none}
-
 button,input,select{font:inherit}
-
 button{cursor:pointer}
-
 ul{list-style:none}
-
 .wrap{min-width:320px}
+
 
 
 /* HEADER */
 
 .header{
-position:fixed;
-top:0;
-left:0;
-width:100%;
-height:86px;
-z-index:100;
-background:transparent;
-border-bottom:1px solid rgba(255,255,255,.18);
-color:#fff;
-transition:height .28s ease,background .28s ease,box-shadow .28s ease,border-color .28s ease
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:86px;
+    z-index:100;
+    background:transparent;
+    border-bottom:1px solid rgba(255,255,255,.18);
+    color:#fff;
+    transition:height .28s ease,background .28s ease,box-shadow .28s ease,border-color .28s ease;
 }
+
+
+/* 전체 드롭다운이 펼쳐졌을 때 페이지를 어둡게 하는 영역 */
+
+.header:before{
+    content:"";
+    position:fixed;
+    top:86px;
+    left:0;
+    width:100%;
+    height:calc(100vh - 86px);
+    background:rgba(0,0,0,.38);
+    opacity:0;
+    visibility:hidden;
+    transition:opacity .25s ease,visibility .25s ease,top .28s ease;
+    z-index:-1;
+    pointer-events:none;
+}
+
+
+/* 메뉴 전체에 마우스를 올리면 페이지 어둡게 */
+
+.header:has(.header_menu:hover):before,
+.header:has(.header_menu:focus-within):before{
+    opacity:1;
+    visibility:visible;
+}
+
+
+/* ================================================= */
+/* 메뉴 hover 시 헤더 전체 확장 */
+/* ================================================= */
+
+.header:has(.header_menu:hover),
+.header:has(.header_menu:focus-within){
+    height:276px;
+    background:#fff;
+    color:#222;
+    border-bottom:1px solid #e7ebf0;
+    box-shadow:0 5px 20px rgba(20,40,70,.08);
+}
+
+
+/* 헤더가 확장되었을 때 어두운 영역은 헤더 아래부터 시작 */
+
+.header:has(.header_menu:hover):before,
+.header:has(.header_menu:focus-within):before{
+    top:276px;
+    height:calc(100vh - 276px);
+}
+
+
+/* ================================================= */
+/* SCROLLED HEADER */
+/* ================================================= */
 
 .header.scrolled{
-height:66px;
-background:rgba(255,255,255,.97);
-border-bottom:1px solid #e7ebf0;
-box-shadow:0 5px 20px rgba(20,40,70,.08);
-color:#222;
-backdrop-filter:blur(10px)
+    height:66px;
+    background:rgba(255,255,255,.97);
+    border-bottom:1px solid #e7ebf0;
+    box-shadow:0 5px 20px rgba(20,40,70,.08);
+    color:#222;
+    backdrop-filter:blur(10px);
 }
+
+
+/* 스크롤 상태의 어두운 영역 */
+
+.header.scrolled:before{
+    top:66px;
+    height:calc(100vh - 66px);
+}
+
+
+/* 스크롤된 상태에서 메뉴 hover */
+
+.header.scrolled:has(.header_menu:hover),
+.header.scrolled:has(.header_menu:focus-within){
+    height:256px;
+    background:#fff;
+    color:#222;
+}
+
+
+/* 스크롤 + 메뉴 hover */
+
+.header.scrolled:has(.header_menu:hover):before,
+.header.scrolled:has(.header_menu:focus-within):before{
+    top:256px;
+    height:calc(100vh - 256px);
+}
+
+
+/* ================================================= */
+/* HEADER INNER */
+/* ================================================= */
 
 .header_inner{
-max-width:1280px;
-height:100%;
-margin:auto;
-display:flex;
-align-items:center;
-gap:50px;
-padding:0 20px
+    max-width:1280px;
+    height:100%;
+    margin:auto;
+    display:flex;
+    align-items:flex-start;
+    gap:50px;
+    padding:0 20px;
+    position:relative;
+    z-index:2;
 }
 
+
+/* ================================================= */
+/* LOGO */
+/* ================================================= */
+
 .logo{
-font-size:24px;
-font-weight:800;
-color:#fff;
-white-space:nowrap;
-transition:.28s
+    font-size:24px;
+    font-weight:800;
+    color:#fff;
+    white-space:nowrap;
+    transition:.28s;
+    margin-top:14px;
 }
 
 .logo small{
-display:block;
-font-size:10px;
-letter-spacing:1.8px;
-color:rgba(255,255,255,.75);
-font-weight:600;
-margin-top:2px
+    display:block;
+    font-size:10px;
+    letter-spacing:1.8px;
+    color:rgba(255,255,255,.75);
+    font-weight:600;
+    margin-top:2px;
 }
 
+
+/* 스크롤된 기본 상태 */
+
 .header.scrolled .logo{
-font-size:20px;
-color:#1769d2
+    font-size:20px;
+    color:#1769d2;
 }
 
 .header.scrolled .logo small{
-color:#8994a3
+    color:#8994a3;
 }
+
+
+/* 메뉴를 펼쳤을 때 로고 */
+
+.header:has(.header_menu:hover) .logo,
+.header:has(.header_menu:focus-within) .logo{
+    color:#1769d2;
+}
+
+.header:has(.header_menu:hover) .logo small,
+.header:has(.header_menu:focus-within) .logo small{
+    color:#8994a3;
+}
+
+
+/* 스크롤 상태에서 메뉴를 펼쳐도
+   기본 상태와 같은 로고 크기 유지 */
+
+.header.scrolled:has(.header_menu:hover) .logo,
+.header.scrolled:has(.header_menu:focus-within) .logo{
+    font-size:20px;
+    color:#1769d2;
+}
+
+.header.scrolled:has(.header_menu:hover) .logo small,
+.header.scrolled:has(.header_menu:focus-within) .logo small{
+    color:#8994a3;
+}
+
+/* ================================================= */
+/* HEADER MENU */
+/* ================================================= */
 
 .header_menu{
-display:flex;
-gap:0;
-height:100%;
-align-items:center
+    display:flex;
+    gap:0;
+    height:86px;
+    align-items:flex-start;
+    position:static;
+    padding:0;
+    margin:0;
 }
+
+
+/* 스크롤 상태 */
+
+.header.scrolled .header_menu{
+    height:66px;
+}
+
+
+/* 대메뉴 */
 
 .header_menu li{
-position:relative;
-width:145px;
-height:100%;
-display:flex;
-align-items:center;
-justify-content:center
+    position:relative;
+    width:180px;
+    height:86px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    margin:0;
+    padding:0;
 }
+
+
+/* 스크롤 상태의 대메뉴 */
+
+.header.scrolled .header_menu li{
+    height:66px;
+}
+
+
+/* ================================================= */
+/* 대메뉴 링크 */
+/* ================================================= */
 
 .header_menu>li>a{
-font-size:16px;
-font-weight:600;
-color:inherit;
-position:relative;
-padding:32px 0;
-width:100%;
-text-align:center
+    font-size:16px;
+    font-weight:600;
+    color:inherit;
+    position:relative;
+    padding:0;
+    width:100%;
+    height:86px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    z-index:5;
 }
+
+
+/* 스크롤 상태 */
 
 .header.scrolled .header_menu>li>a{
-padding:23px 0
+    height:66px;
 }
 
-.header_menu a:hover,
-.header_menu a.active{
-color:#fff
+
+/* 대메뉴 hover */
+
+.header_menu>li>a:hover{
+    color:#1769d2;
 }
 
-.header.scrolled .header_menu a:hover,
-.header.scrolled .header_menu a.active{
-color:#1769d2
-}
 
-.header_menu>li>a.active:after{
-content:"";
-position:absolute;
-left:25%;
-right:25%;
-bottom:19px;
-height:3px;
-background:currentColor
-}
+/* ================================================= */
+/* DROPDOWN */
+/* ================================================= */
 
-.header.scrolled .header_menu>li>a.active:after{
-bottom:0
-}
-
-.header_right{
-margin-left:auto;
-display:flex;
-align-items:center;
-gap:13px;
-font-size:13px;
-color:inherit
-}
-
-.header_right a:hover{
-color:#fff
-}
-
-.header.scrolled .header_right a:hover{
-color:#1769d2
-}
-
-.menu_btn{
-display:none;
-background:none;
-border:0;
-font-size:25px;
-color:inherit
-}
+/*
+    하위 메뉴 자체에는 흰색 박스를 만들지 않는다.
+    흰색 배경은 .header 전체가 담당한다.
+*/
 
 .header_dropdown{
-position:absolute;
-top:86px;
-left:50%;
-transform:translateX(-50%) translateY(-8px);
-width:100%;
-min-height:160px;
-padding:18px 10px;
-background:rgba(255,255,255,.98);
-border:1px solid #e7ebf0;
-border-top:0;
-box-shadow:0 14px 25px rgba(20,40,70,.10);
-opacity:0;
-visibility:hidden;
-transition:.2s ease;
-text-align:center
+    position:absolute;
+    top:86px;
+    left:0;
+    width:100%;
+    height:190px;
+    padding:25px 0 20px;
+
+    background:transparent;
+    border:0;
+    box-shadow:none;
+
+    opacity:0;
+    visibility:hidden;
+
+    transform:translateY(-8px);
+
+    transition:opacity .2s ease,visibility .2s ease,transform .2s ease;
+
+    text-align:center;
+    z-index:4;
 }
+
+
+/* 스크롤 상태 */
 
 .header.scrolled .header_dropdown{
-top:66px
+    top:66px;
 }
 
-.header_menu>li:hover .header_dropdown,
-.header_menu>li:focus-within .header_dropdown{
-opacity:1;
-visibility:visible;
-transform:translateX(-50%) translateY(0)
+
+/* 메뉴 전체에 마우스를 올리면 모든 하위 메뉴 표시 */
+
+.header_menu:hover .header_dropdown,
+.header_menu:focus-within .header_dropdown{
+    opacity:1;
+    visibility:visible;
+    transform:translateY(0);
 }
+
+
+/* ================================================= */
+/* 하위 메뉴 */
+/* ================================================= */
 
 .header_dropdown a{
-display:block!important;
-padding:8px 3px!important;
-font-size:13px!important;
-color:#626d7a!important
+    display:block!important;
+    padding:7px 3px!important;
+    font-size:14px!important;
+    font-weight:500;
+    line-height:1.5;
+    color:#626d7a!important;
+    transition:.2s ease;
 }
 
+
+/* 하위 메뉴 hover */
+
 .header_dropdown a:hover{
-color:#1769d2!important;
-font-weight:700
+    color:#1769d2!important;
+    font-weight:700;
 }
+
+
+/* ================================================= */
+/* HEADER RIGHT */
+/* ================================================= */
+
+.header_right{
+    margin-left:auto;
+    display:flex;
+    align-items:center;
+    gap:13px;
+    font-size:13px;
+    color:inherit;
+    position:relative;
+    z-index:6;
+    height:86px;
+}
+
+
+/* 스크롤 상태 */
+
+.header.scrolled .header_right{
+    height:66px;
+}
+
+
+/* 로그인 / 회원가입 hover */
+
+.header_right a:hover{
+    color:#1769d2;
+}
+
+
+/* ================================================= */
+/* MOBILE MENU */
+/* ================================================= */
+
+.menu_btn{
+    display:none;
+    background:none;
+    border:0;
+    font-size:25px;
+    color:inherit;
+}
+
 
 
 /* HERO */
@@ -213,7 +409,6 @@ background-repeat:no-repeat;
 color:#fff
 }
 
-/* 사진 위 어두운 오버레이 */
 .hero:before{
 content:"";
 position:absolute;
@@ -227,7 +422,6 @@ rgba(0,20,45,.18) 100%
 z-index:0
 }
 
-/* 기존 장식용 원형 제거 */
 .hero:after{
 display:none
 }
@@ -476,24 +670,26 @@ margin-bottom:20px
 }
 
 .total{
-display:flex;
-align-items:baseline;
-gap:6px
+    display:flex;
+    align-items:baseline;
+    gap:6px;
 }
 
 .total span{
-font-size:13px;
-color:#87919d
+    font-size:13px;
+    color:#87919d;
 }
 
 .total strong{
-font-size:31px;
-color:#1769d2
+    font-size:31px;
+    color:#1769d2;
+    line-height:1;
 }
 
 .total em{
-font-size:13px;
-font-style:normal
+    font-size:13px;
+    font-style:normal;
+    color:#555;
 }
 
 .refresh_btn{
@@ -773,7 +969,6 @@ background:#df6868
 /* PARKING MAP */
 
 .parking_map_real{
-height:400px;
 margin:0 28px;
 background:#eef4f9;
 border:1px solid #dce5ee;
@@ -782,24 +977,6 @@ position:relative;
 overflow:hidden
 }
 
-.parking_map_real:before{
-content:"";
-position:absolute;
-inset:35px 80px;
-border:1px dashed #bfd0df;
-border-radius:45%;
-transform:rotate(-7deg)
-}
-
-.parking_map_real:after{
-content:"";
-position:absolute;
-left:50%;
-top:0;
-bottom:0;
-border-left:1px dashed #c5d4e1;
-transform:rotate(12deg)
-}
 
 .terminal_building{
 position:absolute;
@@ -1138,6 +1315,10 @@ display:block;
 margin-left:auto
 }
 
+.header:before{
+display:none
+}
+
 .hero_inner{
 padding:125px 20px 70px
 }
@@ -1198,7 +1379,6 @@ margin-top:12px
 }
 
 .parking_map_real{
-height:350px;
 margin:0 18px
 }
 
@@ -1316,7 +1496,6 @@ padding:20px 18px 15px
 }
 
 .parking_map_real{
-height:430px;
 margin:0 12px
 }
 
@@ -1399,5 +1578,211 @@ rgba(0,35,70,.48) 60%,
 rgba(0,20,45,.25) 100%
 )
 }
+
+}
+
+/* =========================================================
+   주차맵 SVG
+========================================================= */
+
+.parking_map_real{
+    position:relative;
+    width:100%;
+    aspect-ratio:1647 / 955;
+    height:auto;
+    overflow:hidden;
+    background:#fff;
+    border:1px solid #dce5ee;
+    border-radius:9px;
+}
+
+.parking_map_image{
+    display:block;
+    width:100%;
+    height:100%;
+    object-fit:fill;
+}
+
+.parking_svg{
+    position:absolute;
+    left:0;
+    top:0;
+    width:100%;
+    height:100%;
+    z-index:5;
+}
+
+
+/* =========================================================
+   주차구역
+========================================================= */
+
+.parking_area{
+    fill:rgba(255,255,255,0);
+    stroke:transparent;
+    stroke-width:0;
+    cursor:pointer;
+    transition:fill .2s ease,stroke .2s ease;
+}
+
+.parking_area:hover{
+    fill:rgba(59,130,246,.08);
+}
+
+.parking_area.active{
+    fill:rgba(59,130,246,.55);
+    stroke:#2563eb;
+    stroke-width:5;
+}
+
+
+/* =========================================================
+   주차구역 번호
+========================================================= */
+
+.parking_area_text{
+    fill:#222;
+    font-size:28px;
+    font-weight:700;
+    text-anchor:middle;
+    dominant-baseline:middle;
+    pointer-events:none;
+}
+
+.parking_area.active + .parking_area_text{
+    fill:#fff;
+}
+
+
+/* =========================================================
+   상태 표시 원
+========================================================= */
+
+.parking_status_dot{
+    stroke:#fff;
+    stroke-width:2;
+    pointer-events:none;
+}
+
+
+/* =========================================================
+   선택 정보 레이어
+========================================================= */
+
+.parking_info_layer{
+    pointer-events:none;
+}
+
+.parking_info_line{
+    fill:none;
+    stroke:#64748b;
+    stroke-width:3;
+    stroke-dasharray:8 8;
+    stroke-linecap:round;
+    stroke-linejoin:round;
+}
+
+
+/* =========================================================
+   정보 박스
+========================================================= */
+
+.parking_info_box_bg{
+    fill:#fff;
+    stroke:#d8dee8;
+    stroke-width:2;
+    filter:drop-shadow(0 8px 18px rgba(0,0,0,.15));
+}
+
+.parking_info_name{
+    fill:#111827;
+    font-size:27px;
+    font-weight:800;
+}
+
+.parking_info_type{
+    fill:#64748b;
+    font-size:16px;
+    font-weight:500;
+}
+
+.parking_info_status_circle{
+    fill:#22c55e;
+}
+
+.parking_info_status{
+    fill:#334155;
+    font-size:17px;
+    font-weight:700;
+}
+
+.parking_info_count_label{
+    fill:#64748b;
+    font-size:14px;
+}
+
+.parking_info_count{
+    fill:#111827;
+    font-size:24px;
+    font-weight:800;
+}
+
+
+/* =========================================================
+   예약하기 버튼
+========================================================= */
+
+.parking_reserve_button{
+    pointer-events:all;
+    cursor:pointer;
+}
+
+.parking_reserve_button rect{
+    fill:#2563eb;
+    transition:fill .2s ease;
+}
+
+.parking_reserve_button:hover rect{
+    fill:#1d4ed8;
+}
+
+.parking_reserve_button text{
+    fill:#fff;
+    font-size:15px;
+    font-weight:700;
+    pointer-events:none;
+}
+
+
+/* =========================================================
+   기존 지도 아래 상세정보 숨김
+========================================================= */
+
+.parking_selected_info{
+    display:none !important;
+}
+
+
+/* =========================================================
+   반응형
+========================================================= */
+
+@media(max-width:900px){
+
+    .parking_map_real{
+        aspect-ratio:1647 / 955;
+        height:auto;
+        margin:0 18px;
+    }
+
+}
+
+@media(max-width:560px){
+
+    .parking_map_real{
+        aspect-ratio:1647 / 955;
+        height:auto;
+        margin:0 12px;
+    }
 
 }

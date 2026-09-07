@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>마이페이지 - 인천공항 주차관리시스템</title>
+<link rel="stylesheet" href="css/c.css">
+<link rel="stylesheet" href="css/mypage.css">
+</head>
+<body class="resPage">
+
+	<header id="topSearch">
+		<a href="Index.html" id="backBtn" title="메인으로" data-i18n="common_back">← 메인으로</a>
+		<div id="logo" data-i18n="common_mypage">👤 마이페이지</div>
+		<nav id="topNav">
+			<button id="langToggleBtn" class="langToggle">🇯🇵 日本語</button>
+		</nav>
+	</header>
+
+	<div id="myWrap">
+
+		<div class="formCard" id="myInfoCard">
+			<h3 data-i18n="mem_myInfo">내 정보</h3>
+			<p>강선구 (test_user) · 010-1234-5678</p>
+			<p>✈️ KE001 · 왕복</p>
+		</div>
+
+		<h3 class="sectionTitle" data-i18n="mem_myReservations">예약 내역</h3>
+		<div class="resCard">
+			<div class="resCardHead">
+				<span class="resStatus statusInUse" data-i18n="mem_statusInUse">이용중</span>
+				<span class="resCardLot">단기주차장 1구역 · 1층 3-2번</span>
+			</div>
+			<div class="resCardBody">2026-08-30 14:00 ~ 16:00 · 1안(예약형)</div>
+			<button class="secondaryBtn" data-i18n="mem_btnExtend">예약 연장</button>
+		</div>
+		<div class="resCard">
+			<div class="resCardHead">
+				<span class="resStatus statusBefore" data-i18n="mem_statusBeforeUse">입차 전</span>
+				<span class="resCardLot">장기주차장 P1 · 2층 1-4번</span>
+			</div>
+			<div class="resCardBody">2026-09-02 09:00 ~ (자유출차) · 2안</div>
+			<button class="secondaryBtn" data-i18n="mem_btnChange">예약 변경</button>
+		</div>
+		<div class="resCard done">
+			<div class="resCardHead">
+				<span class="resStatus statusDone" data-i18n="mem_statusDone">이용 종료</span>
+				<span class="resCardLot">단기주차장 2구역 · 1층 4-5번</span>
+			</div>
+			<div class="resCardBody">2026-08-20 10:00 ~ 12:30 · 최종결제 완료</div>
+		</div>
+
+	</div>
+
+	<script src="js/jquery-1.8.1.min.js"></script>
+	<script src="js/i18n.js"></script>
+	<script src="js/mypage.js"></script>
+</body>
+</html>

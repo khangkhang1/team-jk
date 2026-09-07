@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>인천공항 주차관리시스템</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<link rel="stylesheet" href="css/c.css">
+</head>
+<body class="mapPage">
+
+	<!-- 상단 검색바 -->
+	<header id="topSearch">
+		<div id="logo" data-i18n="common_siteTitle">🅿️ 인천공항 주차관리시스템</div>
+		<div id="searchBox">
+			<input type="text" id="searchInput" data-i18n-ph="idx_searchPh" placeholder="어디 주차장을 찾으세요? (예: 단기주차장 장애인석)">
+			<button id="searchBtn" data-i18n="idx_search">검색</button>
+		</div>
+		<nav id="topNav">
+			<a href="mypage.html" data-i18n="common_mypage">👤 마이페이지</a>
+			<a href="notice.html" data-i18n="common_notice">📢 공지사항</a>
+			<button id="langToggleBtn" class="langToggle">🇯🇵 日本語</button>
+		</nav>
+	</header>
+
+	<div id="mainWrap">
+
+		<!-- 지도 영역 (약 70%) - 인천공항 1터미널 -->
+		<div id="mapArea">
+			<div id="map"></div>
+
+			<!-- 새로고침 버튼 -->
+			<button id="refreshBtn" title="새로고침">⟳</button>
+
+			<!-- 편도 항공권 이용 불가 안내 배지 -->
+			<div id="flightNotice" data-i18n="idx_flightNotice">✈️ 편도 항공권만 있으신가요? 이 시스템은 왕복 이용자 전용입니다 (현장 이용 안내)</div>
+
+			<!-- 주차장 확인 팝업 (클릭 시 뜨는 확인창 + 상세정보) -->
+			<div id="detailModal" class="hidden">
+				<div id="detailModalInner">
+					<button id="detailCloseBtn">&times;</button>
+					<div id="detailPhoto">사진</div>
+					<h3 id="detailName">주차구역 이름</h3>
+					<ul id="detailInfo">
+						<li><span data-i18n="idx_detailDistanceLabel">터미널 도보</span> <span id="detailDistance">-</span></li>
+						<li><span data-i18n="idx_detailRemainLabel">잔여 대수</span> <span id="detailRemain">-</span> / <span id="detailTotal">-</span></li>
+						<li><span data-i18n="idx_detailUsersLabel">오늘 이용자</span> <span id="detailUsers">-</span>명</li>
+					</ul>
+					<p id="detailConfirmText" data-i18n="idx_confirmText">이 주차장을 이용하시겠습니까?</p>
+					<div id="detailButtons">
+						<button id="selectSeatBtn" data-i18n="idx_selectSeat">확인 - 주차맵으로 이동</button>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- 사이드바 -->
+		<aside id="sidebar">
+			<div id="authArea">
+				<button id="loginBtn" data-i18n="common_login">로그인</button>
+				<button id="joinBtn" data-i18n="common_join">회원가입</button>
+			</div>
+
+			<!-- 시간 선택 - 화면설계서 반영: 좌석 빈/찬 판단은 시간 기준이므로 먼저 정한다 -->
+			<div id="timeArea">
+				<div class="filterTitle" data-i18n="idx_timeTitle">🕐 이용 시간</div>
+				<div class="timeRow">
+					<input type="date" id="mainDateInput">
+					<select id="mainStartTimeInput"></select>
+				</div>
+			</div>
+
+			<nav id="sideMenu">
+				<a href="#" class="menuItem" data-menu="zone" data-i18n="idx_zoneTitle">🗺️ 구역 선택</a>
+				<a href="#" class="menuItem" id="myLocationBtn" data-i18n="common_myLocation">🧭 내 위치</a>
+				<a href="mypage.html" class="menuItem" data-i18n="common_reservation">📋 예약 내역</a>
+				<a href="mypage.html" class="menuItem" data-i18n="common_mypage">👤 마이페이지</a>
+				<a href="#" class="menuItem" data-menu="favorite" data-i18n="common_favorite">⭐ 즐겨찾기</a>
+				<a href="notice.html" class="menuItem" data-i18n="common_notice">📢 공지사항</a>
+			</nav>
+
+			<div id="filterArea">
+				<div class="filterTitle" data-i18n="idx_filterTitle">필터</div>
+				<label><input type="checkbox" id="filterDisabled"> <span data-i18n="idx_filterDisabled">♿ 장애인 주차</span></label>
+				<label><input type="checkbox" id="filterEv"> <span data-i18n="idx_filterEv">🔌 전기차 충전</span></label>
+			</div>
+
+			<div id="regionArea" class="hidden">
+				<div class="filterTitle" data-i18n="idx_zoneTitle">🗺️ 구역 선택</div>
+				<select id="regionSelect">
+					<option value="" data-i18n="idx_zoneAll">전체</option>
+					<option value="short1">단기주차장 1구역</option>
+					<option value="short2">단기주차장 2구역</option>
+					<option value="long1">장기주차장 P1</option>
+					<option value="long2">장기주차장 P2</option>
+				</select>
+			</div>
+		</aside>
+	</div>
+
+	<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+	<script src="js/jquery-1.8.1.min.js"></script>
+	<script src="js/i18n.js"></script>
+	<script src="js/main.js"></script>
+</body>
+</html>

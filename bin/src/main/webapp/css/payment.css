@@ -1,0 +1,170 @@
+/* ============================================================
+   결제 모듈 전용 스타일 (담당: 오윤섭 예정) - 주차맵 페이지(css/reservation.css)와 분리돼 있음.
+   이 파일 + js/payment.js + reservation.html 안의 "결제 모듈" 블록만 옮기면 독립적으로 교체 가능.
+   ============================================================ */
+
+/* 모달 오버레이 - Index 화면의 상세팝업(#detailModal)과 같은 느낌으로 통일 */
+#paymentModal {
+	position: fixed;
+	top: 0; left: 0; right: 0; bottom: 0;
+	background: rgba(0,0,0,0.45);
+	z-index: 2000;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 20px;
+}
+#paymentModal.hidden {
+	display: none;
+}
+
+#paymentModalInner {
+	position: relative;
+	width: 100%;
+	max-width: 480px;
+	max-height: 88vh;
+	overflow-y: auto;
+	background: #fff;
+	border-radius: 10px;
+	padding: 24px;
+}
+#paymentCloseBtn {
+	position: absolute;
+	top: 12px;
+	right: 16px;
+	border: none;
+	background: none;
+	font-size: 22px;
+	line-height: 1;
+	cursor: pointer;
+	color: #999;
+}
+
+#paymentSeatTitle {
+	font-size: 18px;
+	color: #1e3a5f;
+	padding-right: 24px;
+	margin-bottom: 2px;
+}
+#paymentLotInfo {
+	font-size: 13px;
+	color: #666;
+	margin-bottom: 18px;
+}
+
+/* 이용방식(1안/2안) 카드 스타일은 css/reservation.css로 옮김 - 이제 결제창이 아니라
+   주차맵 페이지의 필터에서 고르기 때문. #paymentPlanInfo로 선택된 값만 표시. */
+#paymentPlanInfo {
+	font-size: 13px;
+	color: #1e3a5f;
+	font-weight: bold;
+	margin-bottom: 16px;
+}
+
+#endFreeNotice {
+	background: #eef4ff;
+	color: #1e3a5f;
+	padding: 10px 12px;
+	border-radius: 6px;
+	font-size: 13px;
+	margin: 12px 0;
+}
+
+#paymentModalInner fieldset {
+	border: 1px solid #ddd;
+	border-radius: 6px;
+	padding: 12px 14px;
+	margin: 14px 0;
+}
+#paymentModalInner fieldset legend {
+	font-size: 13px;
+	font-weight: bold;
+	color: #b3261e;
+	padding: 0 6px;
+}
+
+/* 폼 행 (날짜/시간/항공권 등) */
+#paymentModalInner .formRow {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	margin: 12px 0;
+}
+#paymentModalInner .formRow label {
+	width: 90px;
+	flex-shrink: 0;
+	font-size: 14px;
+	color: #555;
+}
+#paymentModalInner .formRow input,
+#paymentModalInner .formRow select {
+	flex: 1;
+	padding: 8px 10px;
+	border: 1px solid #ddd;
+	border-radius: 4px;
+	font-size: 14px;
+}
+
+#estimatedPriceBox {
+	margin-top: 16px;
+	padding: 12px;
+	background: #fff8e6;
+	border-radius: 6px;
+	font-size: 14px;
+	text-align: right;
+}
+#estimatedPriceBox strong {
+	font-size: 18px;
+	color: #b3261e;
+}
+
+/* 결제수단 */
+#payMethodArea {
+	margin-top: 16px;
+}
+.payOption {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	padding: 12px;
+	border: 1px solid #ddd;
+	border-radius: 6px;
+	margin-bottom: 8px;
+	cursor: pointer;
+	font-size: 14px;
+}
+.payOption:has(input:checked) {
+	border-color: #ffb400;
+	background: #fff8e6;
+}
+
+/* 모달 하단 결제 바 */
+#paymentFooter {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	margin-top: 18px;
+	padding-top: 16px;
+	border-top: 1px solid #eee;
+}
+#payBarPrice {
+	font-size: 15px;
+}
+#payBarPrice strong {
+	font-size: 20px;
+	color: #b3261e;
+}
+#payBtn {
+	padding: 12px 32px;
+	border: none;
+	border-radius: 6px;
+	background: #1e3a5f;
+	color: #fff;
+	font-size: 15px;
+	font-weight: bold;
+	cursor: pointer;
+}
+#payBtn:disabled {
+	background: #ccc;
+	cursor: not-allowed;
+}

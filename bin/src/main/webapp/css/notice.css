@@ -1,0 +1,74 @@
+body.resPage {
+	overflow-y: auto;
+	background: #f0f1f3;
+	height: auto;
+	min-height: 100%;
+}
+
+#ntcWrap {
+	max-width: 640px;
+	margin: 24px auto;
+	padding: 0 16px 40px;
+}
+
+#ntcTabs {
+	display: flex;
+	gap: 6px;
+	margin-bottom: 16px;
+}
+.ntcTab {
+	flex: 1;
+	padding: 12px;
+	border: none;
+	border-radius: 8px 8px 0 0;
+	background: #ddd;
+	color: #555;
+	font-weight: bold;
+	cursor: pointer;
+}
+.ntcTab.active {
+	background: #fff;
+	color: #1e3a5f;
+	box-shadow: 0 -2px 4px rgba(0,0,0,0.05);
+}
+.ntcPanel.hidden {
+	display: none;
+}
+
+.noticeItem {
+	background: #fff;
+	border-radius: 8px;
+	margin-bottom: 10px;
+	box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+	overflow: hidden;
+}
+.noticeItem summary {
+	list-style: none;
+	cursor: pointer;
+	padding: 14px 18px;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 12px;
+}
+.noticeItem summary::-webkit-details-marker {
+	display: none;
+}
+.noticeTitle {
+	font-weight: bold;
+	font-size: 14px;
+	color: #1e3a5f;
+}
+.noticeDate {
+	font-size: 12px;
+	color: #999;
+	flex-shrink: 0;
+}
+.noticeBody {
+	padding: 0 18px 16px;
+	font-size: 13px;
+	color: #555;
+	line-height: 1.6;
+	border-top: 1px solid #eee;
+	padding-top: 12px;
+}
