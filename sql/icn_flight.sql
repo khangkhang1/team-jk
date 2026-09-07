@@ -23,3 +23,44 @@ CREATE TABLE icn_flight (
 --   reservation.flight_id NUMBER  -- 처음엔 FK 제약 없이 컬럼만, 예약 테이블 완성되면 나중에 ALTER TABLE로 추가
 -- ALTER TABLE icn_reservation ADD CONSTRAINT fk_reservation_flight
 --     FOREIGN KEY (flight_id) REFERENCES icn_flight(flight_id);
+
+
+-- ============================================================
+-- 아래는 FlightDao.java가 실제로 실행하는 쿼리 그대로 (참고/공유용).
+-- ============================================================
+
+-- 1) 편명으로 이미 저장돼 있는지 조회 (FlightDao.findByFlightNo)
+--    같은 편명이 날짜 바뀌어 여러 번 저장될 수 있어서, 가장 최근 것(flight_id가 가장 큰 것) 하나만 씀.
+SELECT *
+FROM icn_flight
+WHERE flight_no = ?          -- 예: 'OZ704'
+ORDER BY flight_id DESC;
+
+-- 2) 신규 항공편 저장 (FlightDao.insertFlight) - 시퀀스 값을 먼저 뽑아서 그 값으로 insert
+SELECT icn_flight_seq.NEXTVAL AS newid FROM dual;
+
+INSERT INTO icn_flight (flight_id, flight_no, airport, schedule_datetime, estimated_datetime, remark)
+VALUES (?, ?, ?, ?, ?, ?);
+-- 바인딩 순서: flight_id(방금 뽑은 시퀀스값), flight_no, airport, schedule_datetime, estimated_datetime, remark
+
+-- 3) flight_id로 단건 조회 (FlightDao.findById) - 결항 재확인할 때 먼저 현재 저장값을 읽어옴
+SELECT *
+FROM icn_flight
+WHERE flight_id = ?;
+
+-- 4) 결항 확정 시 갱신 (FlightDao.updateRemark)
+UPDATE icn_flight
+SET remark = ?, updated_at = SYSDATE      -- remark에 '결항' 바인딩
+WHERE flight_id = ?;
+
+
+-- ============================================================
+-- 참고용: 예약 테이블과 조인하는 예시 (오윤섭 파트에서 쓸 쿼리 - icn_reservation 컬럼명은 가정)
+-- "내 예약 목록 + 그 예약에 걸린 항공편의 결항여부"를 한 번에 보고 싶을 때
+-- ============================================================
+SELECT r.reservation_id, r.seat_id, r.start_time, r.end_time, r.reservation_status,
+       f.flight_no, f.remark AS flight_status
+FROM icn_reservation r
+LEFT JOIN icn_flight f ON r.flight_id = f.flight_id
+WHERE r.member_id = ?
+ORDER BY r.start_time DESC;
