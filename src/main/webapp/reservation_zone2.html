@@ -298,25 +298,25 @@
 }
 
 /* 주차 칸 (SVG rect) */
-.bay {
-	fill: #fff;
-	stroke: #9fb0c2;
-	stroke-width: 0.6; /* 0.8 -> 0.6으로 살짝 얇게 조정하여 겹침 방지 */
-	vector-effect: non-scaling-stroke;
-	cursor: pointer;
-	transition: fill .12s;
+.bay{
+	fill:#fff;
+	stroke:#9fb0c2;
+	stroke-width:0.6; /* 안병찬 수정: 0.8 -> 0.6 겹침 방지 */
+	vector-effect:non-scaling-stroke;
+	cursor:pointer;
+	transition:fill .12s;
 }
 .bay:hover{
 	fill:#d9e8ff;
 }
-.bay_label {
-	font-size: 3.5px; /* 4.2px -> 3.5px로 수정하여 소형 구역에서도 칸 넘침 방지 */
-	font-weight: 700;
-	fill: #5b6672;
-	text-anchor: middle;
-	dominant-baseline: central;
-	pointer-events: none;
-	user-select: none;
+.bay_label{
+	font-size:3.5px; /* 안병찬 수정: 4.2 -> 3.5 소형 구역 넘침 방지 */
+	font-weight:700;
+	fill:#5b6672;
+	text-anchor:middle;
+	dominant-baseline:central;
+	pointer-events:none;
+	user-select:none;
 }
 .bay_g.selected .bay{
 	fill:#1769d2;
@@ -353,12 +353,12 @@
 	fill:#ffdede;
 }
 /* 주행로 표시 */
-.lot_lane {
-	fill: none;
-	stroke: #b9c6d3;
-	stroke-width: 0.6;
-	stroke-dasharray: 3 3;
-	vector-effect: non-scaling-stroke;
+.lot_lane{
+	fill:none;
+	stroke:#b9c6d3;
+	stroke-width:0.6; /* 안병찬 수정 */
+	stroke-dasharray:3 3;
+	vector-effect:non-scaling-stroke;
 }
 
 /* 하단 선택 상태 바 */
@@ -852,21 +852,21 @@ var ZONES = [
 	  box:{x:440,y:690,w:315,h:90},
 	  path:"M440 690 Q460 690 475 690 L735 690 Q755 690 755 690 L755 765 Q755 780 755 780 L475 780 Q440 780 440 780 Z" },
 
-	{ id:"P6", type:"단기주차장", price:3000, total:32, rows:2,
-	  box:{x:845,y:265,w:135,h:47},
-	  path:"M850 285 L980 265 L970 312 L845 312 Z" },
+	{ id:"P6", type:"단기주차장", price:3000, total:25, rows:2, bayW:4.3,
+	  box:{x:849,y:268,w:124,h:38},
+	  path:"M973 268 L963 303 L855 306 L849 285 Z" },
 
-	{ id:"P7", type:"단기주차장", price:3000, total:32, rows:2,
-	  box:{x:608,y:262,w:127,h:48},
-	  path:"M608 262 L733 285 L735 310 L625 310 Z" },
+	{ id:"P7", type:"단기주차장", price:3000, total:25, rows:2, bayW:4.3,
+	  box:{x:611,y:268,w:124,h:38},
+	  path:"M611 268 L735 285 L729 306 L621 303 Z" },
 
-	{ id:"P8", type:"단기주차장", price:3000, total:30, rows:2,
-	  box:{x:860,y:195,w:130,h:45},
-	  path:"M890 195 L990 240 L860 240 Z" },
+	{ id:"P8", type:"단기주차장", price:3000, total:25, rows:4, bayW:6.1,
+	  box:{x:866,y:197,w:116,h:43},
+	  path:"M889 197 L982 237 L866 240 Z" },
 
-	{ id:"P9", type:"단기주차장", price:3000, total:30, rows:2,
-	  box:{x:600,y:195,w:125,h:50},
-	  path:"M600 235 L700 195 L725 240 L620 245 Z" }
+	{ id:"P9", type:"단기주차장", price:3000, total:25, rows:4, bayW:6.1,
+	  box:{x:601,y:197,w:118,h:43},
+	  path:"M697 197 L719 237 L601 240 Z" }
 ];
 
 var currentZone = getZoneFromUrl() || "P1";
@@ -941,50 +941,72 @@ function layoutBays(zone, outlineEl, svgEl){
 		return { x1:start + inset, x2:end - inset };
 	}
 
-	/* 칸 크기는 실제 주차칸 비율(폭:깊이 = 1:2)로 고정하고, 블록을 그 칸으로 꽉 채운다.
-	   칸 수를 억지로 30~40에 맞추면 칸이 뚱뚱해지고 블록이 텅 비어 보여서,
-	   "블록을 실제 주차장처럼 채우는 쪽"을 택했다.
-	   -> BAY_UNIT 하나만 키우면 칸이 커지고 수가 줄어든다(조절 지점). */
-	var BAY_UNIT  = 0.115;                        // 블록 높이 대비 칸 폭 비율
-	var rows      = zone.rows;
-	var laneCount = Math.max(1, Math.floor(rows / 2));
-	var laneH     = zone.box.h * (rows > 2 ? 0.10 : 0.16);
-	var bayH      = (zone.box.h - laneH*laneCount - zone.box.h*0.06) / rows;
-	var bayW      = Math.max(zone.box.h * BAY_UNIT, bayH * 0.42);
+	/* 한 가지 배치(열 수, 칸 폭)로 실제 배치를 만들어보는 함수.
+	   블록이 사선/쐐기 모양이라 열 수에 따라 들어가는 칸 수가 크게 달라진다. */
+	function build(rows, bayW){
+		var laneCount = Math.max(1, Math.floor(rows / 2));
+		var laneH     = zone.box.h * (rows > 2 ? 0.10 : 0.16);
+		var bayH      = (zone.box.h - laneH*laneCount - zone.box.h*0.06) / rows;
+		if (bayH <= 0.5) return null;
 
-	var out = { bays:[], lanes:[] };
-	var y = zone.box.y + zone.box.h*0.03;
+		var res = { bays:[], lanes:[], bayW:bayW, bayH:bayH, rows:rows };
+		var y = zone.box.y + zone.box.h*0.03;
 
-	// 모든 줄이 같은 격자 위에 놓이도록 기준선을 하나 잡는다(줄마다 따로 가운데정렬하면 칸이 어긋나 보임)
-	var baseSpan = null;
-	for (var pr=0; pr<rows; pr++){
-		var probeY = zone.box.y + zone.box.h*0.03 + pr*(bayH) + (pr>0 ? laneH*Math.floor(pr/2) : 0);
-		var sp = spanAt(probeY + 0.8, probeY + bayH - 0.8);
-		if (sp && (!baseSpan || (sp.x2-sp.x1) > (baseSpan.x2-baseSpan.x1))) baseSpan = sp;
-	}
-	var gridX0 = baseSpan ? baseSpan.x1 : zone.box.x;
+		// 모든 줄이 같은 격자 위에 놓이도록 기준선을 하나 잡는다
+		// (줄마다 따로 가운데정렬하면 세로 열이 어긋나 보임)
+		var baseSpan = null;
+		for (var pr=0; pr<rows; pr++){
+			var probeY = zone.box.y + zone.box.h*0.03 + pr*bayH + (pr>0 ? laneH*Math.floor(pr/2) : 0);
+			var sp = spanAt(probeY + 0.8, probeY + bayH - 0.8);
+			if (sp && (!baseSpan || (sp.x2-sp.x1) > (baseSpan.x2-baseSpan.x1))) baseSpan = sp;
+		}
+		var gridX0 = baseSpan ? baseSpan.x1 : zone.box.x;
 
-	for (var r=0; r<rows; r++){
-		var span = spanAt(y + 0.8, y + bayH - 0.8);
-		if (span){
-			// 공통 기준선(gridX0)에 맞춰 칸을 놓되, 그 줄의 실제 구간 안에 들어가는 것만 남긴다
-			// -> 줄마다 길이는 달라도 세로 열은 정확히 맞물린다
-			var startIdx = Math.ceil((span.x1 - gridX0) / bayW);
-			for (var c=startIdx; ; c++){
-				var bx = gridX0 + c*bayW;
-				if (bx + bayW > span.x2) break;
-				if (bx < span.x1) continue;
-				out.bays.push({ x:bx + 0.3, y:y + 0.3, w:bayW - 0.6, h:bayH - 0.6 });
+		for (var r=0; r<rows; r++){
+			var span = spanAt(y + 0.8, y + bayH - 0.8);
+			if (span){
+				var startIdx = Math.ceil((span.x1 - gridX0) / bayW);
+				for (var c=startIdx; ; c++){
+					var bx = gridX0 + c*bayW;
+					if (bx + bayW > span.x2) break;
+					if (bx < span.x1) continue;
+					var b = { x:bx + 0.3, y:y + 0.3, w:bayW - 0.6, h:bayH - 0.6 };
+					// 네 모서리가 전부 블록 안에 있는 칸만 채택 (사선 구간에서 삐져나오는 것 방지)
+					if (inside(b.x, b.y) && inside(b.x+b.w, b.y) &&
+					    inside(b.x, b.y+b.h) && inside(b.x+b.w, b.y+b.h)){
+						res.bays.push(b);
+					}
+				}
+			}
+			y += bayH;
+			if (r % 2 === 1 && r < rows-1){
+				var laneSpan = spanAt(y + laneH*0.35, y + laneH*0.65);
+				if (laneSpan) res.lanes.push({ x1:laneSpan.x1, x2:laneSpan.x2, y:y + laneH/2 });
+				y += laneH;
 			}
 		}
-		y += bayH;
-		if (r % 2 === 1 && r < rows-1){
-			var laneSpan = spanAt(y + laneH*0.35, y + laneH*0.65);
-			if (laneSpan) out.lanes.push({ x1:laneSpan.x1, x2:laneSpan.x2, y:y + laneH/2 });
-			y += laneH;
+		return res;
+	}
+
+	/* 열 수와 칸 폭 조합을 훑어서
+	   ① 칸 수가 목표(zone.total)에 가깝고
+	   ② 칸 비율이 실제 주차칸(폭:깊이 = 1:2, 즉 0.5)에 가까운
+	   배치를 자동으로 고른다. 손으로 값 맞추지 않아도 구역 모양에 맞게 결정됨. */
+	var TARGET_RATIO = 0.5;
+	var best = null, bestScore = Infinity;
+	for (var rows = 2; rows <= 6; rows++){
+		for (var step = 0; step <= 40; step++){
+			var bw = zone.box.h * (0.06 + step*0.012);
+			var cand = build(rows, bw);
+			if (!cand || !cand.bays.length) continue;
+			var ratio = cand.bayW / cand.bayH;
+			if (ratio < 0.3 || ratio > 0.75) continue;          // 너무 얇거나 뚱뚱한 칸은 후보 제외
+			var score = Math.abs(cand.bays.length - zone.total)
+			          + Math.abs(ratio - TARGET_RATIO) * 22;    // 비율 어긋남에 가중치
+			if (score < bestScore){ bestScore = score; best = cand; }
 		}
 	}
-	return out;
+	return best || { bays:[], lanes:[] };
 }
 
 function renderZoneTabs(){

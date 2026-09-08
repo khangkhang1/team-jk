@@ -9,7 +9,540 @@
 <link rel="stylesheet" href="css/index1.css">
 
 <style>
+/* ============================================================
+   세부 주차맵 전용 스타일 (인덱스 디자인 톤에 맞춤)
+   - 색상/모서리/그림자 값은 index1.css의 것과 같은 계열로 맞췄음
+   ============================================================ */
 
+/* 헤더가 fixed라서 본문이 가려지지 않게 여백 */
+.detail_body_top{
+	padding-top:86px;
+}
+
+/* 페이지 상단 타이틀 밴드 - 인덱스 히어로의 축소판 느낌 */
+.zone_hero{
+	background:linear-gradient(90deg,#123a6b 0%,#1769d2 100%);
+	color:#fff;
+	padding:34px 0 30px;
+}
+.zone_hero_inner{
+	max-width:1180px;
+	margin:auto;
+	padding:0 20px;
+	display:flex;
+	align-items:flex-end;
+	justify-content:space-between;
+	gap:20px;
+	flex-wrap:wrap;
+}
+.zone_hero_eyebrow{
+	font-size:12px;
+	letter-spacing:2px;
+	opacity:.8;
+	margin-bottom:8px;
+}
+.zone_hero h1{
+	font-size:32px;
+	letter-spacing:-1px;
+}
+.zone_hero h1 small{
+	display:inline-block;
+	margin-left:10px;
+	font-size:14px;
+	font-weight:500;
+	opacity:.9;
+	letter-spacing:0;
+}
+.zone_hero_right{
+	display:flex;
+	gap:26px;
+	font-size:13px;
+}
+.zone_hero_right div span{
+	display:block;
+	opacity:.75;
+	margin-bottom:4px;
+}
+.zone_hero_right div strong{
+	font-size:20px;
+}
+.zone_back{
+	display:inline-block;
+	margin-bottom:12px;
+	font-size:13px;
+	color:rgba(255,255,255,.85);
+}
+.zone_back:hover{
+	color:#fff;
+	text-decoration:underline;
+}
+
+/* 구역 탭 - 회의에서 층 개념은 안 쓰기로 했으므로 1층/2층 탭 대신 P1~P9 구역 탭 */
+.zone_tabs_wrap{
+	background:#fff;
+	border-bottom:1px solid #e5e9ef;
+	position:sticky;
+	top:66px;
+	z-index:50;
+}
+.zone_tabs{
+	max-width:1180px;
+	margin:auto;
+	padding:0 20px;
+	display:flex;
+	gap:4px;
+	overflow-x:auto;
+}
+.zone_tab{
+	flex:none;
+	border:0;
+	background:none;
+	padding:16px 18px 13px;
+	font-size:14px;
+	font-weight:600;
+	color:#8a929e;
+	position:relative;
+	white-space:nowrap;
+}
+.zone_tab .zone_tab_sub{
+	display:block;
+	font-size:11px;
+	font-weight:400;
+	color:#a8b0ba;
+	margin-top:3px;
+}
+.zone_tab:hover{
+	color:#1769d2;
+}
+.zone_tab.active{
+	color:#1769d2;
+}
+.zone_tab.active:after{
+	content:"";
+	position:absolute;
+	left:12px;
+	right:12px;
+	bottom:-1px;
+	height:3px;
+	background:#1769d2;
+	border-radius:3px 3px 0 0;
+}
+
+/* 본문 카드 */
+.detail_section{
+	padding-top:34px;
+}
+.detail_box{
+	background:#fff;
+	border:1px solid #e1e7ef;
+	border-radius:12px;
+	overflow:hidden;
+	box-shadow:0 6px 22px rgba(30,50,80,.05);
+	margin-bottom:22px;
+}
+.detail_box_head{
+	display:flex;
+	justify-content:space-between;
+	align-items:end;
+	padding:22px 26px 16px;
+	border-bottom:1px solid #eef1f5;
+	flex-wrap:wrap;
+	gap:12px;
+}
+.detail_box_head h3{
+	font-size:18px;
+	letter-spacing:-.5px;
+}
+.detail_box_head p{
+	font-size:12px;
+	color:#8c96a3;
+	margin-top:6px;
+}
+.detail_box_body{
+	padding:22px 26px 26px;
+}
+
+/* 이용 방식(1안/2안) 카드 - 4차 회의에서 결제창에서 주차맵으로 옮기기로 한 필터 */
+.plan_cards{
+	display:grid;
+	grid-template-columns:repeat(2,1fr);
+	gap:12px;
+}
+.plan_card{
+	border:1px solid #dce2e9;
+	border-radius:9px;
+	padding:16px 18px;
+	cursor:pointer;
+	transition:.15s;
+	background:#fff;
+}
+.plan_card:hover{
+	border-color:#9dbde6;
+	background:#f8fbff;
+}
+.plan_card.selected{
+	border-color:#1769d2;
+	background:#f2f8ff;
+	box-shadow:0 0 0 1px #1769d2 inset;
+}
+.plan_card input{
+	margin-right:7px;
+}
+.plan_card_title{
+	display:block;
+	font-size:15px;
+	font-weight:700;
+	margin-bottom:6px;
+}
+.plan_card_desc{
+	display:block;
+	font-size:12px;
+	color:#7d8794;
+	line-height:1.6;
+}
+
+/* 좌석 툴바 */
+.seat_toolbar{
+	display:flex;
+	align-items:center;
+	gap:14px;
+	flex-wrap:wrap;
+	margin-bottom:14px;
+}
+.seat_remain{
+	font-size:13px;
+	color:#687585;
+}
+.seat_remain strong{
+	font-size:20px;
+	color:#1769d2;
+	margin:0 3px;
+}
+
+/* 범례 */
+.seat_legend{
+	display:flex;
+	gap:16px;
+	flex-wrap:wrap;
+	font-size:12px;
+	color:#687585;
+	padding:12px 14px;
+	background:#f7f9fc;
+	border-radius:8px;
+	margin-bottom:18px;
+}
+.seat_legend span{
+	display:flex;
+	align-items:center;
+	gap:6px;
+}
+.legend_box{
+	width:14px;
+	height:14px;
+	border-radius:4px;
+	display:inline-block;
+	border:1px solid transparent;
+}
+.legend_free     { background:#fff; border-color:#c9d4e0 }
+.legend_selected { background:#1769d2 }
+.legend_taken    { background:#c8cfd8 }
+.legend_disabled { background:#eaf1ff; border-color:#7aa5e8 }
+.legend_ev       { background:#eafaf1; border-color:#5cbd8b }
+.legend_cancelled{ background:#ffeaea; border-color:#e08585 }
+
+/* ============================================================
+   주차 상세맵 - 인덱스 맵에서 그 구역을 확대해 들어온 느낌.
+   실제 주차장처럼 "주차 베이 열 + 가운데 주행로(차선)" 구조로 그림.
+   ============================================================ */
+.lot_map{
+	background:#eef4f9;
+	border:1px solid #dce5ee;
+	border-radius:10px;
+	padding:22px 20px;
+	overflow-x:auto;
+}
+
+/* 입구/출구 표시 */
+.lot_gate{
+	display:flex;
+	justify-content:space-between;
+	align-items:center;
+	font-size:11px;
+	color:#7a8794;
+	letter-spacing:1px;
+	margin-bottom:12px;
+}
+.lot_gate .gate_in{
+	color:#20784a;
+	font-weight:700;
+}
+.lot_gate .gate_out{
+	color:#b94e4e;
+	font-weight:700;
+}
+
+/* 실제 도면을 구역 단위로 확대해서 보여주는 SVG */
+#lotSvg{
+	display:block;
+	width:100%;
+	height:auto;
+	background:#fff;
+	border-radius:8px;
+}
+/* 이 구역 블록 외곽선 - 인덱스에서 클릭한 그 도형 그대로 */
+.lot_zone_outline{
+	fill:rgba(23,105,210,.05);
+	stroke:#1769d2;
+	stroke-width:2;
+	vector-effect:non-scaling-stroke;
+}
+
+/* 주차 칸 (SVG rect) */
+.bay{
+	fill:#fff;
+	stroke:#9fb0c2;
+	stroke-width:0.6; /* 안병찬 수정: 0.8 -> 0.6 겹침 방지 */
+	vector-effect:non-scaling-stroke;
+	cursor:pointer;
+	transition:fill .12s;
+}
+.bay:hover{
+	fill:#d9e8ff;
+}
+.bay_label{
+	font-size:3.5px; /* 안병찬 수정: 4.2 -> 3.5 소형 구역 넘침 방지 */
+	font-weight:700;
+	fill:#5b6672;
+	text-anchor:middle;
+	dominant-baseline:central;
+	pointer-events:none;
+	user-select:none;
+}
+.bay_g.selected .bay{
+	fill:#1769d2;
+	stroke:#0d57b3;
+}
+.bay_g.selected .bay_label{
+	fill:#fff;
+}
+.bay_g.taken .bay{
+	fill:#c2cad4;
+	stroke:#aab4c0;
+	cursor:not-allowed;
+}
+.bay_g.taken .bay_label{
+	fill:#7d8794;
+}
+.bay_g.taken:hover .bay{
+	fill:#c2cad4;
+}
+.bay_g.disabled_seat .bay{
+	fill:#dbe8ff;
+	stroke:#6f9ce0;
+}
+.bay_g.ev_seat .bay{
+	fill:#dcf6e8;
+	stroke:#4fb684;
+}
+.bay_g.cancelled .bay{
+	fill:#ffdede;
+	stroke:#dd7b7b;
+	cursor:not-allowed;
+}
+.bay_g.cancelled:hover .bay{
+	fill:#ffdede;
+}
+/* 주행로 표시 */
+.lot_lane{
+	fill:none;
+	stroke:#b9c6d3;
+	stroke-width:0.6; /* 안병찬 수정 */
+	stroke-dasharray:3 3;
+	vector-effect:non-scaling-stroke;
+}
+
+/* 하단 선택 상태 바 */
+.seat_bottom{
+	display:flex;
+	align-items:center;
+	gap:16px;
+	padding:16px 26px;
+	border-top:1px solid #eef1f5;
+	background:#fbfcfe;
+	font-size:13px;
+	color:#7d8794;
+	flex-wrap:wrap;
+}
+.seat_bottom strong{
+	color:#1769d2;
+}
+.go_pay_btn{
+	margin-left:auto;
+	height:44px;
+	border:0;
+	border-radius:6px;
+	padding:0 26px;
+	background:#1769d2;
+	color:#fff;
+	font-size:14px;
+	font-weight:700;
+}
+.go_pay_btn:disabled{
+	background:#c2ccd8;
+	cursor:not-allowed;
+}
+.go_pay_btn:not(:disabled):hover{
+	background:#0d57b3;
+}
+
+/* 결제 모달(오윤섭 파트) - 인덱스 톤에 맞춘 최소한의 껍데기만 */
+.pay_modal{
+	position:fixed;
+	inset:0;
+	background:rgba(15,28,45,.55);
+	display:flex;
+	align-items:center;
+	justify-content:center;
+	z-index:200;
+	padding:20px;
+}
+.pay_modal.hidden{
+	display:none;
+}
+.pay_modal_inner{
+	background:#fff;
+	border-radius:12px;
+	width:100%;
+	max-width:460px;
+	max-height:88vh;
+	overflow-y:auto;
+	padding:26px;
+	position:relative;
+}
+.pay_close{
+	position:absolute;
+	top:14px;
+	right:16px;
+	border:0;
+	background:none;
+	font-size:24px;
+	color:#98a2ae;
+}
+.pay_modal_inner h3{
+	font-size:20px;
+	margin-bottom:6px;
+}
+.pay_modal_inner .pay_sub{
+	font-size:12px;
+	color:#8c96a3;
+	margin-bottom:3px;
+}
+.form_row{
+	display:flex;
+	align-items:center;
+	gap:10px;
+	margin-top:12px;
+}
+.form_row label{
+	width:96px;
+	flex:none;
+	font-size:12px;
+	color:#77818e;
+}
+.form_row input,
+.form_row select{
+	flex:1;
+	height:42px;
+	border:1px solid #dce2e9;
+	border-radius:6px;
+	padding:0 12px;
+	outline:none;
+}
+.form_row input:focus,
+.form_row select:focus{
+	border-color:#1769d2;
+}
+.pay_fieldset{
+	margin-top:18px;
+	border:1px solid #e1e7ef;
+	border-radius:9px;
+	padding:14px 16px 18px;
+}
+.pay_fieldset legend{
+	font-size:13px;
+	font-weight:700;
+	padding:0 6px;
+	color:#1769d2;
+}
+.price_box{
+	margin-top:18px;
+	padding:14px 16px;
+	background:#f2f8ff;
+	border-radius:8px;
+	font-size:13px;
+	color:#48525e;
+}
+.price_box strong{
+	font-size:19px;
+	color:#1769d2;
+	margin-left:6px;
+}
+.pay_methods{
+	display:grid;
+	grid-template-columns:repeat(2,1fr);
+	gap:8px;
+	margin-top:16px;
+}
+.pay_option{
+	border:1px solid #dce2e9;
+	border-radius:7px;
+	padding:11px 12px;
+	font-size:13px;
+	cursor:pointer;
+}
+.pay_option input{
+	margin-right:7px;
+}
+.pay_footer{
+	display:flex;
+	align-items:center;
+	gap:12px;
+	margin-top:20px;
+	padding-top:16px;
+	border-top:1px solid #eef1f5;
+}
+.pay_footer .pay_amount{
+	font-size:13px;
+	color:#7d8794;
+}
+.pay_footer .pay_amount strong{
+	font-size:20px;
+	color:#1769d2;
+	margin:0 3px;
+}
+.pay_submit{
+	margin-left:auto;
+	height:44px;
+	border:0;
+	border-radius:6px;
+	padding:0 26px;
+	background:#1769d2;
+	color:#fff;
+	font-weight:700;
+}
+.pay_submit:disabled{
+	background:#c2ccd8;
+	cursor:not-allowed;
+}
+.hidden{
+	display:none;
+}
+
+@media(max-width:900px){
+	.zone_hero h1{ font-size:25px }
+	.plan_cards{ grid-template-columns:1fr }
+	.zone_tabs_wrap{ top:60px }
+}
 </style>
 </head>
 
@@ -319,21 +852,21 @@ var ZONES = [
 	  box:{x:440,y:690,w:315,h:90},
 	  path:"M440 690 Q460 690 475 690 L735 690 Q755 690 755 690 L755 765 Q755 780 755 780 L475 780 Q440 780 440 780 Z" },
 
-	{ id:"P6", type:"단기주차장", price:3000, total:32, rows:2,
-	  box:{x:845,y:265,w:135,h:47},
-	  path:"M850 285 L980 265 L970 312 L845 312 Z" },
+	{ id:"P6", type:"단기주차장", price:3000, total:25, rows:2, bayW:4.3,
+	  box:{x:849,y:268,w:124,h:38},
+	  path:"M973 268 L963 303 L855 306 L849 285 Z" },
 
-	{ id:"P7", type:"단기주차장", price:3000, total:32, rows:2,
-	  box:{x:608,y:262,w:127,h:48},
-	  path:"M608 262 L733 285 L735 310 L625 310 Z" },
+	{ id:"P7", type:"단기주차장", price:3000, total:25, rows:2, bayW:4.3,
+	  box:{x:611,y:268,w:124,h:38},
+	  path:"M611 268 L735 285 L729 306 L621 303 Z" },
 
-	{ id:"P8", type:"단기주차장", price:3000, total:30, rows:2,
-	  box:{x:860,y:195,w:130,h:45},
-	  path:"M890 195 L990 240 L860 240 Z" },
+	{ id:"P8", type:"단기주차장", price:3000, total:25, rows:4, bayW:6.1,
+	  box:{x:866,y:197,w:116,h:43},
+	  path:"M889 197 L982 237 L866 240 Z" },
 
-	{ id:"P9", type:"단기주차장", price:3000, total:30, rows:2,
-	  box:{x:600,y:195,w:125,h:50},
-	  path:"M600 235 L700 195 L725 240 L620 245 Z" }
+	{ id:"P9", type:"단기주차장", price:3000, total:25, rows:4, bayW:6.1,
+	  box:{x:601,y:197,w:118,h:43},
+	  path:"M697 197 L719 237 L601 240 Z" }
 ];
 
 var currentZone = getZoneFromUrl() || "P1";
@@ -408,50 +941,72 @@ function layoutBays(zone, outlineEl, svgEl){
 		return { x1:start + inset, x2:end - inset };
 	}
 
-	/* 칸 크기는 실제 주차칸 비율(폭:깊이 = 1:2)로 고정하고, 블록을 그 칸으로 꽉 채운다.
-	   칸 수를 억지로 30~40에 맞추면 칸이 뚱뚱해지고 블록이 텅 비어 보여서,
-	   "블록을 실제 주차장처럼 채우는 쪽"을 택했다.
-	   -> BAY_UNIT 하나만 키우면 칸이 커지고 수가 줄어든다(조절 지점). */
-	var BAY_UNIT  = 0.115;                        // 블록 높이 대비 칸 폭 비율
-	var rows      = zone.rows;
-	var laneCount = Math.max(1, Math.floor(rows / 2));
-	var laneH     = zone.box.h * (rows > 2 ? 0.10 : 0.16);
-	var bayH      = (zone.box.h - laneH*laneCount - zone.box.h*0.06) / rows;
-	var bayW      = Math.max(zone.box.h * BAY_UNIT, bayH * 0.42);
+	/* 한 가지 배치(열 수, 칸 폭)로 실제 배치를 만들어보는 함수.
+	   블록이 사선/쐐기 모양이라 열 수에 따라 들어가는 칸 수가 크게 달라진다. */
+	function build(rows, bayW){
+		var laneCount = Math.max(1, Math.floor(rows / 2));
+		var laneH     = zone.box.h * (rows > 2 ? 0.10 : 0.16);
+		var bayH      = (zone.box.h - laneH*laneCount - zone.box.h*0.06) / rows;
+		if (bayH <= 0.5) return null;
 
-	var out = { bays:[], lanes:[] };
-	var y = zone.box.y + zone.box.h*0.03;
+		var res = { bays:[], lanes:[], bayW:bayW, bayH:bayH, rows:rows };
+		var y = zone.box.y + zone.box.h*0.03;
 
-	// 모든 줄이 같은 격자 위에 놓이도록 기준선을 하나 잡는다(줄마다 따로 가운데정렬하면 칸이 어긋나 보임)
-	var baseSpan = null;
-	for (var pr=0; pr<rows; pr++){
-		var probeY = zone.box.y + zone.box.h*0.03 + pr*(bayH) + (pr>0 ? laneH*Math.floor(pr/2) : 0);
-		var sp = spanAt(probeY + 0.8, probeY + bayH - 0.8);
-		if (sp && (!baseSpan || (sp.x2-sp.x1) > (baseSpan.x2-baseSpan.x1))) baseSpan = sp;
-	}
-	var gridX0 = baseSpan ? baseSpan.x1 : zone.box.x;
+		// 모든 줄이 같은 격자 위에 놓이도록 기준선을 하나 잡는다
+		// (줄마다 따로 가운데정렬하면 세로 열이 어긋나 보임)
+		var baseSpan = null;
+		for (var pr=0; pr<rows; pr++){
+			var probeY = zone.box.y + zone.box.h*0.03 + pr*bayH + (pr>0 ? laneH*Math.floor(pr/2) : 0);
+			var sp = spanAt(probeY + 0.8, probeY + bayH - 0.8);
+			if (sp && (!baseSpan || (sp.x2-sp.x1) > (baseSpan.x2-baseSpan.x1))) baseSpan = sp;
+		}
+		var gridX0 = baseSpan ? baseSpan.x1 : zone.box.x;
 
-	for (var r=0; r<rows; r++){
-		var span = spanAt(y + 0.8, y + bayH - 0.8);
-		if (span){
-			// 공통 기준선(gridX0)에 맞춰 칸을 놓되, 그 줄의 실제 구간 안에 들어가는 것만 남긴다
-			// -> 줄마다 길이는 달라도 세로 열은 정확히 맞물린다
-			var startIdx = Math.ceil((span.x1 - gridX0) / bayW);
-			for (var c=startIdx; ; c++){
-				var bx = gridX0 + c*bayW;
-				if (bx + bayW > span.x2) break;
-				if (bx < span.x1) continue;
-				out.bays.push({ x:bx + 0.3, y:y + 0.3, w:bayW - 0.6, h:bayH - 0.6 });
+		for (var r=0; r<rows; r++){
+			var span = spanAt(y + 0.8, y + bayH - 0.8);
+			if (span){
+				var startIdx = Math.ceil((span.x1 - gridX0) / bayW);
+				for (var c=startIdx; ; c++){
+					var bx = gridX0 + c*bayW;
+					if (bx + bayW > span.x2) break;
+					if (bx < span.x1) continue;
+					var b = { x:bx + 0.3, y:y + 0.3, w:bayW - 0.6, h:bayH - 0.6 };
+					// 네 모서리가 전부 블록 안에 있는 칸만 채택 (사선 구간에서 삐져나오는 것 방지)
+					if (inside(b.x, b.y) && inside(b.x+b.w, b.y) &&
+					    inside(b.x, b.y+b.h) && inside(b.x+b.w, b.y+b.h)){
+						res.bays.push(b);
+					}
+				}
+			}
+			y += bayH;
+			if (r % 2 === 1 && r < rows-1){
+				var laneSpan = spanAt(y + laneH*0.35, y + laneH*0.65);
+				if (laneSpan) res.lanes.push({ x1:laneSpan.x1, x2:laneSpan.x2, y:y + laneH/2 });
+				y += laneH;
 			}
 		}
-		y += bayH;
-		if (r % 2 === 1 && r < rows-1){
-			var laneSpan = spanAt(y + laneH*0.35, y + laneH*0.65);
-			if (laneSpan) out.lanes.push({ x1:laneSpan.x1, x2:laneSpan.x2, y:y + laneH/2 });
-			y += laneH;
+		return res;
+	}
+
+	/* 열 수와 칸 폭 조합을 훑어서
+	   ① 칸 수가 목표(zone.total)에 가깝고
+	   ② 칸 비율이 실제 주차칸(폭:깊이 = 1:2, 즉 0.5)에 가까운
+	   배치를 자동으로 고른다. 손으로 값 맞추지 않아도 구역 모양에 맞게 결정됨. */
+	var TARGET_RATIO = 0.5;
+	var best = null, bestScore = Infinity;
+	for (var rows = 2; rows <= 6; rows++){
+		for (var step = 0; step <= 40; step++){
+			var bw = zone.box.h * (0.06 + step*0.012);
+			var cand = build(rows, bw);
+			if (!cand || !cand.bays.length) continue;
+			var ratio = cand.bayW / cand.bayH;
+			if (ratio < 0.3 || ratio > 0.75) continue;          // 너무 얇거나 뚱뚱한 칸은 후보 제외
+			var score = Math.abs(cand.bays.length - zone.total)
+			          + Math.abs(ratio - TARGET_RATIO) * 22;    // 비율 어긋남에 가중치
+			if (score < bestScore){ bestScore = score; best = cand; }
 		}
 	}
-	return out;
+	return best || { bays:[], lanes:[] };
 }
 
 function renderZoneTabs(){
