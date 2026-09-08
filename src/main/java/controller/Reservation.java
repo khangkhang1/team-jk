@@ -44,7 +44,7 @@ public class Reservation extends HttpServlet {
 			CommonExecute memPay = new stepPay();
 			memMap.execute(request);
 			memPay.execute(request);
-			viewPage ="reservation/reservation.jsp";
+			viewPage ="reservation/reservation2.jsp";
 			
 		}else if(gubun.equals("stepPay")) {
 			CommonExecute mem = new stepPay();
