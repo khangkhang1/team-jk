@@ -57,6 +57,86 @@ public class ParkingApiDao {
 		return list;
 	}
 
+	// ============================================================
+	// 구역 단위 실시간 주차 현황 (StatusOfParking - "주차 현황 조회 서비스", 가이드 V7.4)
+	//
+	// 위 getParkingStatus()가 쓰는 ParkLocationData는 "개별 주차면" 단위라 T1만 4,614면이 내려온다.
+	// 그걸 전부 DB에 적재하는 건 감당이 안 돼서, 개별 칸은 우리 임의 데이터로 두고
+	// 구역별 잔여 대수만 이 API로 실시간 연동하기로 함 (2026-09-08 결정).
+	//
+	// 별첨 기준 T1 구역명(그대로 내려옴):
+	//   T1 단기주차장지상층 / 지하1층 / 지하2층 / 지하3층
+	//   T1 장기 P1 주차장 / P2 주차장 / P3 주차장 / P1 주차타워 / P2 주차타워
+	//   T1 P5 예약주차장
+	//   (P4는 2026-07 폐지, P6~P9는 애초에 존재하지 않음 - 가이드 개정이력 v7.3 참고)
+	// ============================================================
+	private static final String STATUS_URL = "http://apis.data.go.kr/B551177/StatusOfParking/getTrackingParking";
+
+	public List<ParkingStatusDto> getZoneStatusList() {
+		List<ParkingStatusDto> list = new ArrayList<>();
+
+		// 전체가 19건(T1+T2)이라 넉넉히 한 번에 받는다. 페이징 필요 없음.
+		String url = STATUS_URL
+				+ "?serviceKey=" + SERVICE_KEY
+				+ "&type=xml"
+				+ "&numOfRows=50"
+				+ "&pageNo=1";
+
+		try {
+			HttpClient client = HttpClient.newHttpClient();
+			HttpRequest request = HttpRequest.newBuilder()
+					.uri(URI.create(url))
+					.GET()
+					.build();
+
+			HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+			list = parseStatusXml(response.body());
+		} catch (Exception e) {
+			System.out.println("getZoneStatusList() 오류 : " + url);
+			e.printStackTrace();
+		}
+		return list;
+	}
+
+	// 구역명(floor)으로 한 건만 찾기 - 예: "T1 장기 P1 주차장"
+	public ParkingStatusDto getZoneStatus(String floorName) {
+		List<ParkingStatusDto> list = getZoneStatusList();
+		for (ParkingStatusDto d : list) {
+			if (floorName != null && floorName.equals(d.getFloor())) {
+				return d;
+			}
+		}
+		return null;
+	}
+
+	private List<ParkingStatusDto> parseStatusXml(String xml) throws Exception {
+		List<ParkingStatusDto> list = new ArrayList<>();
+
+		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+		DocumentBuilder builder = factory.newDocumentBuilder();
+		Document doc = builder.parse(new InputSource(new StringReader(xml)));
+
+		NodeList items = doc.getElementsByTagName("item");
+		for (int i = 0; i < items.getLength(); i++) {
+			Element item = (Element) items.item(i);
+			ParkingStatusDto dto = new ParkingStatusDto();
+			dto.setFloor(getTagValue(item, "floor"));
+			dto.setParking(toInt(getTagValue(item, "parking")));
+			dto.setParkingArea(toInt(getTagValue(item, "parkingarea")));
+			dto.setDateTm(getTagValue(item, "datetm"));
+			list.add(dto);
+		}
+		return list;
+	}
+
+	private int toInt(String s) {
+		try {
+			return Integer.parseInt(s.trim());
+		} catch (Exception e) {
+			return 0;
+		}
+	}
+
 	// 응답 XML의 <item> 목록을 ParkingSeatDto 리스트로 변환 (JDK 내장 DOM 파서만 사용 - 별도 jar 불필요)
 	private List<ParkingSeatDto> parseXml(String xml) throws Exception {
 		List<ParkingSeatDto> list = new ArrayList<>();
@@ -68,13 +148,19 @@ public class ParkingApiDao {
 		NodeList items = doc.getElementsByTagName("item");
 		for (int i = 0; i < items.getLength(); i++) {
 			Element item = (Element) items.item(i);
+			// ParkingSeatDto가 DB 좌석 엔티티(seatNo/isOccupied/...)로 바뀌면서
+			// 예전 필드명(parkLaneCode/carStatus/...)이 없어져 컴파일이 깨져 있었음 -> 새 필드로 매핑.
+			// API 응답 -> DB 좌석 엔티티 대응:
+			//   parklanecode(주차면번호) -> seatNo
+			//   carstatus(Y/N)          -> isOccupied
+			//   parklotno(주차장구분)     -> lotId
+			//   parkzoneno(주차구역구분)  -> floorId
 			ParkingSeatDto dto = new ParkingSeatDto();
-			dto.setParkLaneCode(getTagValue(item, "parklanecode"));
-			dto.setCarStatus(getTagValue(item, "carstatus"));
+			dto.setSeatNo(getTagValue(item, "parklanecode"));
+			dto.setIsOccupied(getTagValue(item, "carstatus"));
 			dto.setCarInDate(getTagValue(item, "carindate"));
-			dto.setParkLotNo(getTagValue(item, "parklotno"));
-			dto.setParkZoneNo(getTagValue(item, "parkzoneno"));
-			dto.setTerminalNo(getTagValue(item, "terno"));
+			dto.setLotId(toInt(getTagValue(item, "parklotno")));
+			dto.setFloorId(toInt(getTagValue(item, "parkzoneno")));
 			list.add(dto);
 		}
 		return list;
