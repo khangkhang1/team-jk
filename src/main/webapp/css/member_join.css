@@ -1,0 +1,1077 @@
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+    font-family:"Noto Sans KR","Malgun Gothic",sans-serif;
+
+    color:#222;
+
+    background:#f5f7fa;
+}
+
+a{
+    color:inherit;
+    text-decoration:none;
+}
+
+button,
+input,
+select{
+    font:inherit;
+}
+
+button{
+    cursor:pointer;
+}
+
+ul{
+    list-style:none;
+}
+
+.wrap{
+    min-width:320px;
+}
+
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.header{
+    position:relative;
+
+    width:100%;
+    height:86px;
+
+    background:#fff;
+
+    border-bottom:1px solid #e7ebf0;
+
+    color:#222;
+
+    box-shadow:0 3px 15px rgba(20,40,70,.05);
+
+    z-index:100;
+}
+
+
+.header_inner{
+    max-width:1280px;
+    height:100%;
+
+    margin:auto;
+
+    display:flex;
+    align-items:flex-start;
+
+    gap:50px;
+
+    padding:0 20px;
+
+    position:relative;
+}
+
+
+/* =========================================================
+   LOGO
+========================================================= */
+
+.logo{
+    margin-top:14px;
+
+    font-size:24px;
+    font-weight:800;
+
+    color:#1769d2;
+
+    white-space:nowrap;
+}
+
+
+.logo small{
+    display:block;
+
+    margin-top:2px;
+
+    font-size:10px;
+
+    letter-spacing:1.8px;
+
+    color:#8994a3;
+
+    font-weight:600;
+}
+
+
+/* =========================================================
+   HEADER MENU
+========================================================= */
+
+.header_menu{
+    display:flex;
+
+    height:86px;
+
+    margin:0;
+    padding:0;
+
+    list-style:none;
+}
+
+
+.header_menu li{
+    position:relative;
+
+    width:180px;
+    height:86px;
+
+    display:flex;
+
+    align-items:center;
+    justify-content:center;
+}
+
+
+.header_menu>li>a{
+    width:100%;
+    height:86px;
+
+    display:flex;
+
+    align-items:center;
+    justify-content:center;
+
+    font-size:16px;
+
+    font-weight:600;
+
+    transition:.2s;
+}
+
+
+.header_menu>li>a:hover{
+    color:#1769d2;
+}
+
+
+/* =========================================================
+   DROPDOWN
+========================================================= */
+
+.header_dropdown{
+    position:absolute;
+
+    top:86px;
+    left:0;
+
+    width:100%;
+
+    padding:25px 0 20px;
+
+    background:#fff;
+
+    border:1px solid #e7ebf0;
+    border-top:0;
+
+    box-shadow:0 10px 20px rgba(20,40,70,.08);
+
+    opacity:0;
+
+    visibility:hidden;
+
+    transform:translateY(-8px);
+
+    transition:.2s;
+
+    text-align:center;
+}
+
+
+.header_menu li:hover .header_dropdown{
+    opacity:1;
+
+    visibility:visible;
+
+    transform:translateY(0);
+}
+
+
+.header_dropdown a{
+    display:block;
+
+    padding:7px 3px;
+
+    font-size:14px;
+
+    font-weight:500;
+
+    color:#626d7a;
+
+    transition:.2s;
+}
+
+
+.header_dropdown a:hover{
+    color:#1769d2;
+
+    font-weight:700;
+}
+
+
+/* =========================================================
+   HEADER RIGHT
+========================================================= */
+
+.header_right{
+    margin-left:auto;
+
+    height:86px;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:13px;
+
+    font-size:13px;
+}
+
+
+.header_right a:hover{
+    color:#1769d2;
+}
+
+
+.header_right .join_link{
+    color:#1769d2;
+
+    font-weight:700;
+}
+
+
+/* =========================================================
+   MAIN
+========================================================= */
+
+.main{
+    min-height:720px;
+}
+
+
+/* =========================================================
+   JOIN SECTION
+========================================================= */
+
+.join_section{
+    padding:70px 20px 90px;
+}
+
+
+.join_container{
+    width:100%;
+
+    max-width:760px;
+
+    margin:0 auto;
+}
+
+
+/* =========================================================
+   PAGE TITLE
+========================================================= */
+
+.page_title{
+    text-align:center;
+
+    margin-bottom:35px;
+}
+
+
+.page_eyebrow{
+    display:block;
+
+    margin-bottom:10px;
+
+    font-size:11px;
+
+    font-weight:700;
+
+    letter-spacing:2px;
+
+    color:#1769d2;
+}
+
+
+.page_title h1{
+    font-size:32px;
+
+    font-weight:800;
+
+    letter-spacing:-1.5px;
+}
+
+
+.page_title p{
+    margin-top:12px;
+
+    font-size:13px;
+
+    line-height:1.7;
+
+    color:#8993a0;
+}
+
+
+/* =========================================================
+   JOIN CARD
+========================================================= */
+
+.join_card{
+    background:#fff;
+
+    border:1px solid #e1e7ef;
+
+    border-radius:12px;
+
+    box-shadow:0 8px 25px rgba(30,50,80,.06);
+
+    overflow:hidden;
+}
+
+
+/* =========================================================
+   CARD HEADER
+========================================================= */
+
+.join_card_head{
+    height:70px;
+
+    padding:0 30px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    border-bottom:1px solid #e8edf2;
+}
+
+
+.join_card_head h2{
+    font-size:18px;
+
+    font-weight:700;
+}
+
+
+.join_card_head span{
+    font-size:11px;
+
+    color:#8993a0;
+}
+
+
+.join_card_head em{
+    color:#1769d2;
+
+    font-style:normal;
+}
+
+
+/* =========================================================
+   FORM
+========================================================= */
+
+.join_form{
+    padding:10px 30px 32px;
+}
+
+
+/* =========================================================
+   FORM ROW
+========================================================= */
+
+.form_row{
+    display:grid;
+
+    grid-template-columns:130px 1fr;
+
+    min-height:82px;
+
+    align-items:center;
+
+    border-bottom:1px solid #eef1f4;
+}
+
+
+.form_row label{
+    font-size:13px;
+
+    font-weight:600;
+
+    color:#454e59;
+}
+
+
+.form_row label em{
+    margin-left:3px;
+
+    color:#1769d2;
+
+    font-style:normal;
+}
+
+
+.input_area{
+    padding:15px 0;
+}
+
+
+/* =========================================================
+   INPUT / SELECT
+========================================================= */
+
+.input_area > input,
+.input_area > select{
+    width:100%;
+
+    height:44px;
+
+    padding:0 13px;
+
+    border:1px solid #dce2e9;
+
+    border-radius:5px;
+
+    outline:none;
+
+    background:#fff;
+
+    color:#333;
+
+    font-size:13px;
+
+    transition:.2s;
+}
+
+
+.input_area > input:focus,
+.input_area > select:focus{
+    border-color:#1769d2;
+
+    box-shadow:0 0 0 3px rgba(23,105,210,.08);
+}
+
+
+.input_area > input::placeholder{
+    color:#b0b7c0;
+}
+
+
+.input_area > select{
+    color:#333;
+
+    cursor:pointer;
+}
+
+
+/* =========================================================
+   ID + DUPLICATE CHECK
+========================================================= */
+
+.input_button{
+    display:flex;
+
+    gap:8px;
+}
+
+
+.input_button input{
+    flex:1;
+
+    min-width:0;
+
+    height:44px;
+
+    padding:0 13px;
+
+    border:1px solid #dce2e9;
+
+    border-radius:5px;
+
+    outline:none;
+
+    font-size:13px;
+}
+
+
+.input_button input:focus{
+    border-color:#1769d2;
+
+    box-shadow:0 0 0 3px rgba(23,105,210,.08);
+}
+
+
+.input_button input::placeholder{
+    color:#b0b7c0;
+}
+
+
+.input_button button{
+    width:92px;
+
+    height:44px;
+
+    border:1px solid #1769d2;
+
+    border-radius:5px;
+
+    background:#fff;
+
+    color:#1769d2;
+
+    font-size:12px;
+
+    font-weight:700;
+
+    white-space:nowrap;
+
+    transition:.2s;
+}
+
+
+.input_button button:hover{
+    background:#1769d2;
+
+    color:#fff;
+}
+
+
+/* =========================================================
+   HINT
+========================================================= */
+
+.form_hint{
+    display:block;
+
+    margin-top:6px;
+
+    font-size:11px;
+
+    color:#9aa3ae;
+}
+
+
+/* =========================================================
+   AGREEMENT
+========================================================= */
+
+.agree_area{
+    margin-top:25px;
+
+    border:1px solid #e1e7ef;
+
+    border-radius:7px;
+
+    overflow:hidden;
+}
+
+
+/* 전체 동의 */
+
+.agree_all{
+    padding:16px 18px;
+
+    background:#f7f9fc;
+
+    border-bottom:1px solid #e5e9ef;
+}
+
+
+.agree_all label{
+    display:flex;
+
+    align-items:center;
+
+    gap:9px;
+
+    cursor:pointer;
+
+    font-size:13px;
+}
+
+
+.agree_all strong{
+    font-weight:700;
+}
+
+
+/* 약관 목록 */
+
+.agree_list{
+    padding:8px 18px;
+}
+
+
+.agree_list label{
+    min-height:42px;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:9px;
+
+    font-size:12px;
+
+    color:#626d7a;
+
+    cursor:pointer;
+}
+
+
+.agree_list label em{
+    color:#1769d2;
+
+    font-style:normal;
+}
+
+
+.agree_list label small{
+    color:#a0a8b2;
+}
+
+
+.agree_list a{
+    margin-left:auto;
+
+    color:#8a929e;
+
+    text-decoration:underline;
+}
+
+
+.agree_list a:hover{
+    color:#1769d2;
+}
+
+
+/* =========================================================
+   CUSTOM CHECKBOX
+========================================================= */
+
+.agree_all input,
+.agree_list input{
+    display:none;
+}
+
+
+.check_box{
+    width:18px;
+    height:18px;
+
+    flex:none;
+
+    border:1px solid #d3dae3;
+
+    border-radius:4px;
+
+    background:#fff;
+
+    position:relative;
+
+    transition:.2s;
+}
+
+
+.agree_all input:checked + .check_box,
+.agree_list input:checked + .check_box{
+    background:#1769d2;
+
+    border-color:#1769d2;
+}
+
+
+.agree_all input:checked + .check_box:after,
+.agree_list input:checked + .check_box:after{
+    content:"";
+
+    position:absolute;
+
+    left:5px;
+    top:2px;
+
+    width:5px;
+    height:9px;
+
+    border:solid #fff;
+
+    border-width:0 2px 2px 0;
+
+    transform:rotate(45deg);
+}
+
+
+/* =========================================================
+   BUTTON
+========================================================= */
+
+.form_buttons{
+    display:flex;
+
+    justify-content:center;
+
+    gap:10px;
+
+    margin-top:30px;
+}
+
+
+.form_buttons button{
+    height:48px;
+
+    border-radius:5px;
+
+    font-size:13px;
+
+    font-weight:700;
+}
+
+
+.cancel_btn{
+    width:140px;
+
+    border:1px solid #d7dee7;
+
+    background:#fff;
+
+    color:#687585;
+}
+
+
+.cancel_btn:hover{
+    border-color:#aeb8c5;
+
+    background:#f7f9fc;
+}
+
+
+.join_btn{
+    width:200px;
+
+    border:0;
+
+    background:#1769d2;
+
+    color:#fff;
+
+    box-shadow:0 5px 12px rgba(23,105,210,.18);
+}
+
+
+.join_btn:hover{
+    background:#0d57b3;
+}
+
+
+/* =========================================================
+   LOGIN LINK
+========================================================= */
+
+.login_link{
+    margin-top:20px;
+
+    text-align:center;
+
+    font-size:12px;
+
+    color:#8993a0;
+}
+
+
+.login_link a{
+    margin-left:5px;
+
+    color:#1769d2;
+
+    font-weight:700;
+}
+
+
+.login_link a:hover{
+    text-decoration:underline;
+}
+
+
+/* =========================================================
+   FOOTER
+========================================================= */
+
+.footer{
+    background:#252a31;
+
+    color:#fff;
+}
+
+
+.footer_inner{
+    max-width:1180px;
+
+    margin:auto;
+
+    padding:42px 20px 48px;
+}
+
+
+.footer_top{
+    display:flex;
+
+    justify-content:space-between;
+
+    gap:30px;
+
+    padding-bottom:25px;
+
+    border-bottom:1px solid #3b4149;
+}
+
+
+.footer_logo{
+    font-size:19px;
+
+    font-weight:800;
+}
+
+
+.footer_logo small{
+    display:block;
+
+    margin-top:5px;
+
+    font-size:10px;
+
+    letter-spacing:1px;
+
+    color:#89919c;
+}
+
+
+.footer_links{
+    display:flex;
+
+    align-items:center;
+
+    gap:20px;
+
+    font-size:12px;
+
+    color:#c1c7ce;
+}
+
+
+.footer_links a:hover{
+    color:#fff;
+}
+
+
+.footer_info{
+    padding-top:20px;
+
+    font-size:11px;
+
+    line-height:1.8;
+
+    color:#8f98a3;
+}
+
+
+.copyright{
+    margin-top:5px;
+
+    color:#69727d;
+}
+
+
+/* =========================================================
+   MOBILE MENU
+========================================================= */
+
+.menu_btn{
+    display:none;
+
+    border:0;
+
+    background:none;
+
+    color:#222;
+
+    font-size:25px;
+}
+
+
+/* =========================================================
+   TABLET
+========================================================= */
+
+@media(max-width:900px){
+
+    .header_inner{
+        gap:20px;
+    }
+
+
+    .header_menu{
+        display:none;
+    }
+
+
+    .header_right{
+        margin-left:auto;
+    }
+
+
+    .menu_btn{
+        display:block;
+
+        margin-left:5px;
+    }
+
+
+    .join_container{
+        max-width:680px;
+    }
+
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media(max-width:600px){
+
+    .header{
+        height:70px;
+    }
+
+
+    .header_inner{
+        padding:0 18px;
+    }
+
+
+    .logo{
+        margin-top:11px;
+
+        font-size:19px;
+    }
+
+
+    .logo small{
+        font-size:8px;
+    }
+
+
+    .header_right{
+        display:none;
+    }
+
+
+    .join_section{
+        padding:45px 14px 60px;
+    }
+
+
+    .page_title{
+        margin-bottom:25px;
+    }
+
+
+    .page_title h1{
+        font-size:27px;
+    }
+
+
+    .page_title p{
+        font-size:12px;
+    }
+
+
+    .join_card_head{
+        padding:0 20px;
+
+        height:62px;
+    }
+
+
+    .join_card_head h2{
+        font-size:16px;
+    }
+
+
+    .join_form{
+        padding:5px 20px 25px;
+    }
+
+
+    .form_row{
+        display:block;
+
+        padding:15px 0;
+
+        min-height:auto;
+    }
+
+
+    .form_row label{
+        display:block;
+
+        margin-bottom:8px;
+    }
+
+
+    .input_area{
+        padding:0;
+    }
+
+
+    .input_button button{
+        width:82px;
+    }
+
+
+    .form_buttons{
+        margin-top:25px;
+    }
+
+
+    .cancel_btn{
+        width:35%;
+    }
+
+
+    .join_btn{
+        width:65%;
+    }
+
+
+    .footer_top{
+        display:block;
+    }
+
+
+    .footer_links{
+        margin-top:20px;
+
+        flex-wrap:wrap;
+    }
+
+}
