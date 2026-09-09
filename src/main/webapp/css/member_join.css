@@ -1074,4 +1074,67 @@ ul{
         flex-wrap:wrap;
     }
 
+	/* =========================================
+   차량 종류 - RADIO
+========================================= */
+
+.vehicle_type {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+    min-height: 46px;
+}
+
+.radio_label {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+
+    cursor: pointer;
+
+    font-size: 14px;
+    color: #444;
+}
+
+.radio_label input[type="radio"] {
+    appearance: none;
+
+    width: 18px;
+    height: 18px;
+
+    margin: 0;
+
+    border: 1px solid #cbd2da;
+    border-radius: 50%;
+
+    background: #fff;
+
+    cursor: pointer;
+
+    position: relative;
+}
+
+.radio_label input[type="radio"]:checked {
+    border-color: #1769d2;
+}
+
+.radio_label input[type="radio"]:checked::after {
+    content: "";
+
+    position: absolute;
+
+    width: 8px;
+    height: 8px;
+
+    top: 4px;
+    left: 4px;
+
+    border-radius: 50%;
+
+    background: #1769d2;
+}
+
+.radio_label:hover {
+    color: #1769d2;
+}
 }
