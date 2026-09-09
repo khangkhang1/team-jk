@@ -41,21 +41,21 @@ public class Reservation extends HttpServlet {
 		
 		if(gubun.equals("ReservationMap")) {
 			CommonExecute memMap = new ReservationMap();
-			CommonExecute memPay = new stepPay();
 			memMap.execute(request);
-			memPay.execute(request);
-			viewPage ="reservation/reservation.jsp";
+			viewPage ="/reservation/reservation2.jsp";
 			
 		}else if(gubun.equals("stepPay")) {
 			CommonExecute mem = new stepPay();
 			mem.execute(request);
 			
 			
-			viewPage ="reservation/reservation.jsp";
+			viewPage ="/reservation/reservation2.jsp";
 			
 			
+		}else if(gubun.equals("payment")){
+			
+			viewPage = "common_alert_view.jsp";
 		}
-		
 		
 		RequestDispatcher rd = request.getRequestDispatcher(viewPage);
 		rd.forward(request, response);

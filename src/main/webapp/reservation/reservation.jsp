@@ -127,7 +127,6 @@
 			</fieldset>
 
 			<div id="estimatedPriceBox"><span data-i18n="res_estimated">예상 금액</span>: <strong id="estimatedPrice">-</strong></div>
-
 			<div id="payMethodArea">
 				<label class="payOption"><input type="radio" name="payMethod" value="kakao"> 카카오페이</label>
 				<label class="payOption"><input type="radio" name="payMethod" value="naver"> 네이버페이</label>

@@ -82,6 +82,8 @@ function updatePaymentPrice() {
 	} else if (payState.plan === '1') {
 		var duration = parseInt(document.getElementById('durationInput').value, 10);
 		document.getElementById('estimatedPrice').textContent = (duration * info.price).toLocaleString() + '원';
+//예상 금액 input에 담기 위한 로직 추가
+		document.getElementById('estimatedPriceInput').value = duration * info.price;
 	} else {
 		document.getElementById('estimatedPrice').textContent = '-';
 	}
@@ -159,7 +161,7 @@ document.getElementById('flightRoundtripInput').addEventListener('change', funct
 document.getElementById('flightNoInput').addEventListener('input', refreshPaymentFooter);
 
 // ------- 결제 수단 -------
-document.querySelectorAll('input[name="payMethod"]').forEach(function (radio) {
+document.querySelectorAll('input[name="t_reservation_pay_method"]').forEach(function (radio) {
 	radio.addEventListener('change', function () {
 		payState.payMethod = radio.value;
 		refreshPaymentFooter();
