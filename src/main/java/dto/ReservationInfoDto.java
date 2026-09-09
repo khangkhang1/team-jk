@@ -1,6 +1,6 @@
 package dto;
 
-public class ReservationDto {
+public class ReservationInfoDto {
 /*
 	* reservation_id		: 예약 번호(pk)
 	* flight_id				: 항공기 번호(pk)
@@ -18,7 +18,7 @@ public class ReservationDto {
 	
 	
 	//예약 생성자(왕복 고려X / 2유형 장기주차)
-	public ReservationDto(int reservation_id, String reservation_status, String reservation_start_time,
+	public ReservationInfoDto(int reservation_id, String reservation_status, String reservation_start_time,
 			String reservation_out_time, String reservation_type, String member_id, String seat_no) {
 		this.reservation_id = reservation_id;
 		this.reservation_status = reservation_status;
@@ -30,7 +30,7 @@ public class ReservationDto {
 	}
 	
 	//예약 생성자(왕복 고려O / 1유형 단기주차)
-	public ReservationDto(int reservation_id, int flight_id, String reservation_status, String reservation_start_time,
+	public ReservationInfoDto(int reservation_id, int flight_id, String reservation_status, String reservation_start_time,
 			String reservation_end_time, String reservation_type, String member_id, String seat_no) {
 		this.reservation_id = reservation_id;
 		this.flight_id = flight_id;
