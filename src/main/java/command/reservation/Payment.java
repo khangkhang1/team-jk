@@ -3,13 +3,13 @@ package command.reservation;
 import javax.servlet.http.HttpServletRequest;
 
 import common.CommonExecute;
-import dao.ReservationDao;
+import dao.reservationDao;
 
 public class Payment implements CommonExecute {
 
 	@Override
 	public void execute(HttpServletRequest request) {
-		ReservationDao dao = ReservationDao.getDao();
+		reservationDao dao = reservationDao.getDao();
 		
 
 	}

@@ -4,17 +4,17 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
-public class ReservationDao {
+public class reservationDao {
 	//DB연결 관련 변수
 	Connection con 			= null;
 	PreparedStatement ps 	= null;
 	ResultSet rs 			= null;
 		
 	//Dao 싱글톤
-	private ReservationDao() {};
-	private static ReservationDao dao = new ReservationDao();
+	private reservationDao() {};
+	private static reservationDao dao = new reservationDao();
 
-	public static ReservationDao getDao() {
+	public static reservationDao getDao() {
 		return dao;
 	}
 }
