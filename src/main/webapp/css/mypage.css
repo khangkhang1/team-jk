@@ -1,6 +1,6 @@
 body.resPage {
 	overflow-y: auto;
-	background: #f0f1f3;
+	background: var(--color-bg-page);
 	height: auto;
 	min-height: 100%;
 }
@@ -13,31 +13,32 @@ body.resPage {
 
 .formCard {
 	background: #fff;
-	border-radius: 8px;
+	border-radius: var(--radius-md);
 	padding: 20px;
-	box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+	border: 1px solid var(--color-border);
 }
 #myInfoCard h3 {
 	margin-bottom: 8px;
-	color: #1e3a5f;
+	color: var(--color-navy);
 }
 #myInfoCard p {
 	font-size: 14px;
-	color: #555;
+	color: var(--color-text-sub);
 	margin: 4px 0;
 }
 
 .sectionTitle {
 	margin: 20px 0 10px;
-	color: #1e3a5f;
+	color: var(--color-navy);
 	font-size: 16px;
+	font-weight: 700;
 }
 .resCard {
 	background: #fff;
-	border-radius: 8px;
+	border-radius: var(--radius-md);
 	padding: 14px 16px;
 	margin-bottom: 10px;
-	box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+	border: 1px solid var(--color-border);
 }
 .resCard.done {
 	opacity: 0.7;
@@ -54,27 +55,30 @@ body.resPage {
 }
 .resCardBody {
 	font-size: 13px;
-	color: #666;
+	color: var(--color-text-sub);
 	margin-bottom: 8px;
 }
 .resStatus {
 	font-size: 12px;
 	font-weight: bold;
-	padding: 3px 8px;
-	border-radius: 4px;
+	padding: 3px 10px;
+	border-radius: var(--radius-pill);
 	color: #fff;
 }
-.statusInUse { background: #ffb400; }
-.statusBefore { background: #1e3a5f; }
+.statusInUse { background: var(--color-accent); color: var(--color-navy); }
+.statusBefore { background: var(--color-primary); }
 .statusDone { background: #999; }
 
 .secondaryBtn {
-	padding: 8px 14px;
-	border: 1px solid #1e3a5f;
+	padding: 8px 16px;
+	border: 1px solid var(--color-primary);
 	background: #fff;
-	color: #1e3a5f;
-	border-radius: 4px;
+	color: var(--color-primary);
+	border-radius: var(--radius-pill);
 	font-size: 13px;
 	font-weight: bold;
 	cursor: pointer;
+}
+.secondaryBtn:hover {
+	background: #eaf3fb;
 }

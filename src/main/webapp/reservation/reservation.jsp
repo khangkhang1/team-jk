@@ -1,25 +1,15 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
 <title>주차맵 - 인천공항 주차관리시스템</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/c.css">
 <link rel="stylesheet" href="css/reservation.css">
 <link rel="stylesheet" href="css/payment.css">
 </head>
 <body class="resPage">
-
-	<!-- 상단 유틸리티 바 -->
-	<div id="utilBar">
-		<span id="utilTagline">인천국제공항 1터미널 주차 예약 서비스</span>
-		<div id="utilRight">
-			<a href="#" class="utilIcon" title="즐겨찾기">⭐</a>
-			<a href="#" class="utilIcon" title="검색">🔍</a>
-		</div>
-	</div>
 
 	<!-- 상단바 -->
 	<header id="topSearch">
@@ -40,7 +30,7 @@
 				<p id="lotAddr">인천공항 1터미널 · 시간당 <span id="lotPrice">3,000</span>원</p>
 			</div>
 		</div>
-
+<form name="rec">
 		<!-- 이용 방식 필터 - 예전엔 결제창 안에 있었는데, 좌석 고르기 전에 먼저 정하는 게 자연스러워서 여기로 옮김 -->
 		<div id="planFilter">
 			<div class="filterTitle" data-i18n="res_planFilterTitle">이용 방식</div>
@@ -78,7 +68,7 @@
 		</div>
 
 		<div id="seatGrid"></div>
-
+</form>
 	</div>
 
 	<!-- ============================================================ -->

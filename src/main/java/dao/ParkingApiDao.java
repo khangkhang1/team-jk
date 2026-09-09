@@ -16,7 +16,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
-import dto.ParkingSeatDto;
+import dto.*;
 
 // 인천공항공사 OpenAPI(ParkLocationData) 호출 담당 DAO.
 // DB가 아니라 외부 공공데이터 API를 조회한다는 점만 다르고,
@@ -69,15 +69,31 @@ public class ParkingApiDao {
 		for (int i = 0; i < items.getLength(); i++) {
 			Element item = (Element) items.item(i);
 			ParkingSeatDto dto = new ParkingSeatDto();
-			dto.setParkLaneCode(getTagValue(item, "parklanecode"));
-			dto.setCarStatus(getTagValue(item, "carstatus"));
+			// [2026-09-09] ParkingSeatDto가 DB 좌석 엔티티로 재작성되면서(ba9d037)
+			// 예전 setter(setParkLaneCode 등)가 사라져 main 빌드가 깨져 있었다.
+			// API 필드를 새 DTO 필드에 맞춰 다시 매핑한다.
+			//   parklanecode(주차면 코드) -> seatNo
+			//   carstatus(Y/N)           -> isOccupied
+			//   parklotno(주차장 구분)    -> lotId
+			//   parkzoneno(구역 구분)     -> floorId
+			// terno(터미널)는 새 DTO에 대응 필드가 없어 버린다 - 현재 T1만 제공되므로 무방.
+			dto.setSeatNo(getTagValue(item, "parklanecode"));
+			dto.setIsOccupied(getTagValue(item, "carstatus"));
 			dto.setCarInDate(getTagValue(item, "carindate"));
-			dto.setParkLotNo(getTagValue(item, "parklotno"));
-			dto.setParkZoneNo(getTagValue(item, "parkzoneno"));
-			dto.setTerminalNo(getTagValue(item, "terno"));
+			dto.setLotId(toInt(getTagValue(item, "parklotno")));
+			dto.setFloorId(toInt(getTagValue(item, "parkzoneno")));
 			list.add(dto);
 		}
 		return list;
+	}
+
+	// "01" 같은 문자열을 숫자로. 값이 없거나 숫자가 아니면 0으로 처리한다.
+	private int toInt(String s) {
+		try {
+			return Integer.parseInt(s.trim());
+		} catch (Exception e) {
+			return 0;
+		}
 	}
 
 	private String getTagValue(Element item, String tag) {
