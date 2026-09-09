@@ -21,7 +21,7 @@ public class DBConnection {
 		}
 		
 		String db_url ="jdbc:oracle:thin:@1.245.91.227:1523/xe";
-		String db_user ="track27_11g";
+		String db_user ="icn_parking";
 		String db_password ="1234";
 		//일단 오라클의 데이터 베이스의 uid 아이디 비번 사용
 		//그다음 커넥션 클래스를 만들어야한다
@@ -79,7 +79,7 @@ public class DBConnection {
 			e.printStackTrace();
 		}
 		String db_url = "jdbc:oracle:thin:@jsl-704:1523/xe";
-		String db_user = "team27_jk";      // TODO: 팀 DB 계정 확정되면 교체
+		String db_user = "icn_parking";      // TODO: 팀 DB 계정 확정되면 교체
 		String db_passward = "1234";       // TODO: 팀 DB 비밀번호 확정되면 교체
 
 		try {

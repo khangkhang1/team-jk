@@ -291,10 +291,10 @@
 }
 /* 이 구역 블록 외곽선 - 인덱스에서 클릭한 그 도형 그대로 */
 .lot_zone_outline{
-	fill:rgba(23,105,210,.05);
+	fill: rgba(23, 105, 210, 0.05);
 	stroke:#1769d2;
-	stroke-width:2;
-	vector-effect:non-scaling-stroke;
+	stroke-width:3;
+	vector-effect: non-scaling-stroke;
 }
 
 /* 주차 칸 (SVG rect) */
@@ -832,42 +832,47 @@
    - rows : 블록의 실제 가로세로 비율에 맞춘 주차 열 수
             (P1·P2는 두툼해서 4열, P3~P5는 납작해서 2열, 터미널 앞 P6~P9는 작아서 2열) */
 var ZONES = [
-	{ id:"P1", type:"장기주차장", price:2000, total:40, rows:4,
-	  box:{x:810,y:350,w:368,h:165},
-	  path:"M810 375 Q810 350 835 350 L1010 360 Q1040 370 1065 390 L1075 420 Q1090 430 1115 445 L1150 450 Q1170 460 1178 490 L1175 510 Q1165 515 1140 515 L845 515 Q810 515 810 515 Z" },
+	
+	
+		{ id:"P1", type:"장기주차장", price:2000, total:50, rows:4,
+		  box:{x:810,y:350,w:368,h:165},
+		  path:"M810 375 Q810 350 835 350 L1010 360 Q1040 370 1065 390 L1075 420 Q1090 430 1115 445 L1150 450 Q1170 460 1178 490 L1175 510 Q1165 515 1140 515 L845 515 Q810 515 810 515 Z" },
 
-	{ id:"P2", type:"장기주차장", price:2000, total:38, rows:4,
-	  box:{x:390,y:355,w:375,h:160},
-	  path:"M430 445 Q490 445 500 430 L510 420 Q520 390 535 375 L545 370 Q565 360 590 355 L760 355 Q765 355 765 355 L765 455 Q765 515 765 515 L420 515 Q390 515 395 505 Z" },
+		{ id:"P2", type:"장기주차장", price:2000, total:50, rows:4,
+		  box:{x:390,y:355,w:375,h:160},
+		  path:"M430 445 Q490 445 500 430 L510 420 Q520 390 535 375 L545 370 Q565 360 590 355 L760 355 Q765 355 765 355 L765 455 Q765 515 765 515 L420 515 Q390 515 395 505 Z" },
 
-	{ id:"P3", type:"단기주차장", price:3000, total:36, rows:2,
-	  box:{x:820,y:545,w:355,h:95},
-	  path:"M820 545 L1140 545 Q1175 560 1175 580 L1170 620 Q1140 640 1130 640 L820 640 Z" },
+		{ id:"P3", type:"단기주차장", price:3000, total:50, rows:2,
+		  box:{x:820,y:545,w:355,h:95},
+		  path:"M820 545 L1140 545 Q1175 560 1175 580 L1170 620 Q1140 640 1130 640 L820 640 Z" },
 
-	{ id:"P4", type:"단기주차장", price:3000, total:36, rows:2,
-	  box:{x:400,y:550,w:370,h:85},
-	  path:"M400 575 Q435 550 435 550 L755 550 Q770 550 770 575 L770 635 Q760 635 755 635 L435 635 Q410 630 410 630 Z" },
+		{ id:"P4", type:"단기주차장", price:3000, total:50, rows:2,
+		  box:{x:400,y:550,w:370,h:85},
+		  path:"M400 575 Q435 550 435 550 L755 550 Q770 550 770 575 L770 635 Q760 635 755 635 L435 635 Q410 630 410 630 Z" },
 
-	{ id:"P5", type:"단기주차장", price:3000, total:34, rows:2,
-	  box:{x:440,y:690,w:315,h:90},
-	  path:"M440 690 Q460 690 475 690 L735 690 Q755 690 755 690 L755 765 Q755 780 755 780 L475 780 Q440 780 440 780 Z" },
+		{ id:"P5", type:"단기주차장", price:3000, total:50, rows:2,
+		  box:{x:440,y:690,w:315,h:90},
+		  path:"M440 690 Q460 690 475 690 L735 690 Q755 690 755 690 L755 765 Q755 780 755 780 L475 780 Q440 780 440 780 Z" },
 
-	{ id:"P6", type:"단기주차장", price:3000, total:25, rows:2, bayW:4.3,
-	  box:{x:849,y:268,w:124,h:38},
-	  path:"M973 268 L963 303 L855 306 L849 285 Z" },
+		/* P6: 상단을 대칭 각도로 비스듬히 깎은 외곽선 적용 */
+		{ id:"P6", type:"단기주차장", price:3000, total:50, rows:3, bayW:6.2,
+		  box:{x:840, y:255, w:140, h:65},
+ 		 path:"M850 282 L980 258 L968 318 L840 318 Z" },
 
-	{ id:"P7", type:"단기주차장", price:3000, total:25, rows:2, bayW:4.3,
-	  box:{x:611,y:268,w:124,h:38},
-	  path:"M611 268 L735 285 L729 306 L621 303 Z" },
+		/* P7: 대칭 구조로 3개 레이어 정렬되도록 box 및 path 확장 */
+		{ id:"P7", type:"단기주차장", price:3000, total:50, rows:3, bayW:6.2,
+  		box:{x:600, y:255, w:140, h:65},
+  		path:"M600 258 L730 282 L740 318 L612 318 Z" },
+  		{ id:"P8", type:"단기주차장", price:3000, total:50, rows:2,
+  		  box:{x:860, y:195, w:125, h:45},
+  		  path:"M860 195 L985 195 L985 240 L860 240 Z" },
 
-	{ id:"P8", type:"단기주차장", price:3000, total:25, rows:4, bayW:6.1,
-	  box:{x:866,y:197,w:116,h:43},
-	  path:"M889 197 L982 237 L866 240 Z" },
+  		/* P9: P8과 동일한 직사각형 구조로 통일 */
+  		{ id:"P9", type:"단기주차장", price:3000, total:50, rows:2,
+  		  box:{x:600, y:195, w:125, h:45},
+  		  path:"M600 195 L725 195 L725 240 L600 240 Z" }
+	];
 
-	{ id:"P9", type:"단기주차장", price:3000, total:25, rows:4, bayW:6.1,
-	  box:{x:601,y:197,w:118,h:43},
-	  path:"M697 197 L719 237 L601 240 Z" }
-];
 
 var currentZone = getZoneFromUrl() || "P1";
 var selectedSeat = null;
@@ -1064,14 +1069,14 @@ function renderAll(){
 	// 그 블록의 실제 모양 안에 주차 칸을 배치한다.
 	document.getElementById("lotMapZoneLabel").textContent = zone.id + " 구역 · 지상";
 
-	var pad = Math.max(zone.box.w, zone.box.h) * 0.06;  // 블록 주변 도면이 조금 보이게 여백
+	var pad = Math.max(zone.box.w, zone.box.h) * 0.15;
 	document.getElementById("lotSvg").setAttribute("viewBox",
 		(zone.box.x - pad) + " " + (zone.box.y - pad) + " " +
 		(zone.box.w + pad*2) + " " + (zone.box.h + pad*2));
 
 	var outlineEl = document.getElementById("lotZoneOutline");
 	outlineEl.setAttribute("d", zone.path);
-
+	
 	// 블록 실제 모양 안에 들어가는 칸만 배치 -> 배치된 칸 수에 맞춰 좌석 데이터를 다시 맞춘다
 	var layout = layoutBays(zone, outlineEl, document.getElementById("lotSvg"));
 	seats = makeSeats(zone, layout.bays.length);
