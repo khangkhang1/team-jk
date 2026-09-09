@@ -2,7 +2,7 @@ package dto;
 
 import java.util.List;
 
-public class reservationDto {
+public class ReservationDto {
 	
 	
 	    private Integer parkingLotId;      // 주차장ID
