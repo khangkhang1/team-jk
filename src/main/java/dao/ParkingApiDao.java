@@ -68,13 +68,19 @@ public class ParkingApiDao {
 		NodeList items = doc.getElementsByTagName("item");
 		for (int i = 0; i < items.getLength(); i++) {
 			Element item = (Element) items.item(i);
+			// ParkingSeatDto가 DB 좌석 엔티티(seatNo/isOccupied/...)로 바뀌면서
+			// 예전 필드명(parkLaneCode/carStatus/...)이 없어져 컴파일이 깨져 있었음 -> 새 필드로 매핑.
+			// API 응답 -> DB 좌석 엔티티 대응:
+			//   parklanecode(주차면번호) -> seatNo
+			//   carstatus(Y/N)          -> isOccupied
+			//   parklotno(주차장구분)     -> lotId
+			//   parkzoneno(주차구역구분)  -> floorId
 			ParkingSeatDto dto = new ParkingSeatDto();
-			dto.setParkLaneCode(getTagValue(item, "parklanecode"));
-			dto.setCarStatus(getTagValue(item, "carstatus"));
+			dto.setSeatNo(getTagValue(item, "parklanecode"));
+			dto.setIsOccupied(getTagValue(item, "carstatus"));
 			dto.setCarInDate(getTagValue(item, "carindate"));
-			dto.setParkLotNo(getTagValue(item, "parklotno"));
-			dto.setParkZoneNo(getTagValue(item, "parkzoneno"));
-			dto.setTerminalNo(getTagValue(item, "terno"));
+			dto.setLotId(toInt(getTagValue(item, "parklotno")));
+			dto.setFloorId(toInt(getTagValue(item, "parkzoneno")));
 			list.add(dto);
 		}
 		return list;
@@ -86,5 +92,13 @@ public class ParkingApiDao {
 			return null;
 		}
 		return nodes.item(0).getFirstChild().getNodeValue();
+	}
+
+	private int toInt(String s) {
+		try {
+			return Integer.parseInt(s.trim());
+		} catch (Exception e) {
+			return 0;
+		}
 	}
 }
