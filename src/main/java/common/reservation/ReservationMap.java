@@ -11,5 +11,11 @@ import common.DBConnection;
 
 public class ReservationMap implements CommonExecute {
 
+	@Override
+	public void execute(HttpServletRequest request) {
+		// TODO Auto-generated method stub
+		
+	}
+
 	
 	}
