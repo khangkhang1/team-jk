@@ -20,8 +20,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
-import dto.ParkingSeatDto;
-import dto.ParkingStatusDto;
+import dto.*;
 
 // 인천공항공사 OpenAPI(ParkLocationData) 호출 담당 DAO.
 // DB가 아니라 외부 공공데이터 API를 조회한다는 점만 다르고,
@@ -174,17 +173,18 @@ public class ParkingApiDao {
 		// TreeMap을 쓰는 이유: 01,02,03,04 순서를 보장하려고. API 응답 순서에 의존하지 않는다.
 		Map<String, int[]> agg = new TreeMap<>();   // 구역번호 -> [총면수, 점유수]
 		for (ParkingSeatDto s : seats) {
-			String zone = s.getParkZoneNo();
-			if (zone == null || zone.trim().isEmpty()) continue;
-			zone = zone.trim();
+			// parseXml에서 parkzoneno를 floorId(int)에 넣어두므로 여기서 되꺼낸다.
+			// "01" 형태 문자열로 되돌려야 화면 라벨 매핑(P6->"01")과 맞는다.
+			if (s.getFloorId() <= 0) continue;
+			String zone = String.format("%02d", s.getFloorId());
 
 			int[] c = agg.get(zone);
 			if (c == null) {
 				c = new int[2];
 				agg.put(zone, c);
 			}
-			c[0]++;                          // 총 면수
-			if (s.isOccupied()) c[1]++;      // 점유(carstatus = Y)
+			c[0]++;                      // 총 면수
+			if (s.isTaken()) c[1]++;     // 점유(carstatus = "Y")
 		}
 
 		// ParkLocationData에는 "집계 시각" 필드가 없다. 그래서 우리가 조회한 시각을 넣는다.
@@ -254,17 +254,25 @@ public class ParkingApiDao {
 		for (int i = 0; i < items.getLength(); i++) {
 			Element item = (Element) items.item(i);
 			ParkingSeatDto dto = new ParkingSeatDto();
-			dto.setParkLaneCode(getTagValue(item, "parklanecode"));
-			dto.setCarStatus(getTagValue(item, "carstatus"));
+			// [2026-09-09] ParkingSeatDto가 DB 좌석 엔티티로 재작성되면서(ba9d037)
+			// 예전 setter(setParkLaneCode 등)가 사라져 main 빌드가 깨져 있었다.
+			// API 필드를 새 DTO 필드에 맞춰 다시 매핑한다.
+			//   parklanecode(주차면 코드) -> seatNo
+			//   carstatus(Y/N)           -> isOccupied
+			//   parklotno(주차장 구분)    -> lotId
+			//   parkzoneno(구역 구분)     -> floorId
+			// terno(터미널)는 새 DTO에 대응 필드가 없어 버린다 - 현재 T1만 제공되므로 무방.
+			dto.setSeatNo(getTagValue(item, "parklanecode"));
+			dto.setIsOccupied(getTagValue(item, "carstatus"));
 			dto.setCarInDate(getTagValue(item, "carindate"));
-			dto.setParkLotNo(getTagValue(item, "parklotno"));
-			dto.setParkZoneNo(getTagValue(item, "parkzoneno"));
-			dto.setTerminalNo(getTagValue(item, "terno"));
+			dto.setLotId(toInt(getTagValue(item, "parklotno")));
+			dto.setFloorId(toInt(getTagValue(item, "parkzoneno")));
 			list.add(dto);
 		}
 		return list;
 	}
 
+	// "01" 같은 문자열을 숫자로. 값이 없거나 숫자가 아니면 0으로 처리한다.
 	private String getTagValue(Element item, String tag) {
 		NodeList nodes = item.getElementsByTagName(tag);
 		if (nodes.getLength() == 0 || nodes.item(0).getFirstChild() == null) {
