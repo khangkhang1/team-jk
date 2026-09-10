@@ -76,16 +76,20 @@ function updatePaymentPrice() {
 	var start = document.getElementById('startTimeInput').value;
 	var info = getCurrentLotInfo();
 
+	var estInput = document.getElementById('estimatedPriceInput');
+
 	if (payState.plan === '2') {
 		document.getElementById('estimatedPrice').textContent =
 			'출차 시 정산 (시간당 ' + PLAN2_HOURLY_PRICE.toLocaleString() + '원, 페널티 요금)';
+		if (estInput) estInput.value = 0; // 또는 '출차 시 정산'
 	} else if (payState.plan === '1') {
 		var duration = parseInt(document.getElementById('durationInput').value, 10);
-		document.getElementById('estimatedPrice').textContent = (duration * info.price).toLocaleString() + '원';
-//예상 금액 input에 담기 위한 로직 추가
-		document.getElementById('estimatedPriceInput').value = duration * info.price;
+		var totalPrice = duration * info.price;
+		document.getElementById('estimatedPrice').textContent = totalPrice.toLocaleString() + '원';
+		if (estInput) estInput.value = totalPrice;
 	} else {
 		document.getElementById('estimatedPrice').textContent = '-';
+		if (estInput) estInput.value = '';
 	}
 
 	payState.timeChosen = !!(date && start);
@@ -110,7 +114,7 @@ function resetPaymentState(plan) {
 	payState.plan = plan;
 	payState.payMethod = null;
 
-	document.querySelectorAll('input[name="payMethod"]').forEach(function (r) { r.checked = false; });
+	document.querySelectorAll('input[name="t_reservation_pay_method"]').forEach(function (r) { r.checked = false; });
 
 	var isPlan1 = plan === '1';
 	document.querySelectorAll('.plan1Only').forEach(function (el) { el.classList.toggle('hidden', !isPlan1); });
@@ -121,7 +125,6 @@ function resetPaymentState(plan) {
 	initPaymentTimeInputs();
 	updatePaymentPrice();
 }
-
 // ------- 외부(reservation.js)에서 호출하는 진입점 -------
 // plan: 주차맵 페이지의 "이용 방식" 필터에서 이미 선택된 값('1' 또는 '2')을 그대로 넘겨받음.
 window.openPaymentModal = function (seatLabelText, plan) {

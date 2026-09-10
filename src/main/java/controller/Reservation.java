@@ -44,16 +44,16 @@ public class Reservation extends HttpServlet {
 			CommonExecute memPay = new StepPay();
 			memMap.execute(request);
 			memPay.execute(request);
-			viewPage ="/reservation/reservation_oys.jsp";
+			viewPage ="/reservation/reservationOys.jsp";
 
 		}else if(gubun.equals("stepPay")) {
 			CommonExecute mem = new StepPay();
 			mem.execute(request);
-			viewPage ="/reservation/reservation_oys.jsp";
+			viewPage ="/reservation/reservationOys.jsp";
 
 			
 		}else if(gubun.equals("payment")){
-			viewPage = "common_alert_view.jsp";
+			viewPage = "/reservation/reservationOys.jsp";
 		}
 
 		RequestDispatcher rd = request.getRequestDispatcher(viewPage);

@@ -43,9 +43,6 @@ var resState = {
 	plan: '1' // 이용 방식 필터 - 기본값은 예약형(1안). 결제창을 열기 전에 여기서 미리 정해둔다.
 };
 
-//reservation.jsp의 결제창 input(t_reservation_plan)에 유형 정보 대입
-document.getElementById('reservationPlan').value = resState.plan;
-
 // ------- 이용 방식 필터 (1안/2안) - 예전엔 결제창 안에 있었는데 좌석 고르기 전으로 옮김 -------
 document.querySelectorAll('input[name="planType"]').forEach(function (radio) {
 	radio.addEventListener('change', function () {
@@ -57,6 +54,9 @@ document.querySelectorAll('input[name="planType"]').forEach(function (radio) {
 		});
 	});
 });
+
+//reservation.jsp의 결제창 input(t_reservation_plan)에 유형 정보 대입
+document.getElementById('reservationPlan').value = resState.plan;
 
 // ------- URL 파라미터로 주차구역 정보 표시 (메인 화면 확인팝업 → 이 페이지) -------
 var urlParams = new URLSearchParams(window.location.search);
