@@ -31,7 +31,7 @@ public class FlightDao {
 	// 편명으로 이미 저장된 항공편이 있는지 조회 (오늘 조회 범위 안에서 가장 최근 것 하나)
 	public FlightStatusDto findByFlightNo(String flightNo) {
 		FlightStatusDto dto = null;
-		String sql = "select * from icn_flight where flight_no = ? order by flight_id desc";
+		String sql = "select flight_id, flight_no, airport, to_char(schedule_datetime,'YYYYMMDDHH24MI') as schedule_datetime, to_char(estimated_datetime,'YYYYMMDDHH24MI') as estimated_datetime, remark, updated_at from icn_flight where flight_no = ? order by flight_id desc";
 		try {
 			con = DBConnection.getConnection();
 			ps = con.prepareStatement(sql);
@@ -91,13 +91,13 @@ public class FlightDao {
 			ps.close();
 
 			String sql = "insert into icn_flight (flight_id, flight_no, airport, schedule_datetime, estimated_datetime, remark) "
-					+ "values (?, ?, ?, ?, ?, ?)";
+					+ "values (?, ?, ?, to_date(?, 'YYYYMMDDHH24MI'), to_date(?, 'YYYYMMDDHH24MI'), ?)";
 			ps = con.prepareStatement(sql);
 			ps.setInt(1, newId);
 			ps.setString(2, dto.getFlightNo());
 			ps.setString(3, dto.getAirport());
-			ps.setString(4, dto.getScheduleDateTime());
-			ps.setString(5, dto.getEstimatedDateTime());
+			setApiDate(ps, 4, dto.getScheduleDateTime());
+			setApiDate(ps, 5, dto.getEstimatedDateTime());
 			ps.setString(6, dto.getRemark());
 			ps.executeUpdate();
 		} catch (Exception e) {
@@ -132,7 +132,7 @@ public class FlightDao {
 
 	private FlightStatusDto findById(int flightId) {
 		FlightStatusDto dto = null;
-		String sql = "select * from icn_flight where flight_id = ?";
+		String sql = "select flight_id, flight_no, airport, to_char(schedule_datetime,'YYYYMMDDHH24MI') as schedule_datetime, to_char(estimated_datetime,'YYYYMMDDHH24MI') as estimated_datetime, remark, updated_at from icn_flight where flight_id = ?";
 		try {
 			con = DBConnection.getConnection();
 			ps = con.prepareStatement(sql);
@@ -166,4 +166,16 @@ public class FlightDao {
 		}
 	}
 
+
+	// API가 주는 날짜는 "202609062355" 같은 12자리 문자열이다.
+	// DB 컬럼은 DATE라 to_date로 변환해서 넣는데, 값이 비었거나 형식이 깨져 있으면
+	// to_date가 ORA-01861로 터진다. 그래서 12자리 숫자일 때만 넘기고 아니면 NULL을 넣는다.
+	// (API는 미확정 항공편의 estimatedDateTime을 빈 값으로 주는 경우가 있음)
+	private void setApiDate(java.sql.PreparedStatement ps, int idx, String v) throws java.sql.SQLException {
+		if (v != null && v.trim().matches("[0-9]{12}")) {
+			ps.setString(idx, v.trim());
+		} else {
+			ps.setNull(idx, java.sql.Types.VARCHAR);
+		}
+	}
 }
