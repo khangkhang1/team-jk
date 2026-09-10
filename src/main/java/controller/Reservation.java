@@ -9,9 +9,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import command.reservationMap.ReservationMap;
+import command.stepPay.StepPay;
 import common.CommonExecute;
-import common.reservation.ReservationMap;
-import common.stepPay.stepPay;
 
 
 /**
@@ -40,21 +40,15 @@ public class Reservation extends HttpServlet {
 		String viewPage ="";
 		
 		if(gubun.equals("ReservationMap")) {
-			CommonExecute memMap = new ReservationMap();
-			CommonExecute memPay = new stepPay();
-			memMap.execute(request);
-			memPay.execute(request);
-			viewPage ="reservation/reservation.jsp";
+		//	CommonExecute memMap = new ReservationMap();
+//			CommonExecute memPay = new StepPay();
+//		//	memMap.execute(request);
+//			memPay.execute(request);
 			
-		}else if(gubun.equals("stepPay")) {
-			CommonExecute mem = new stepPay();
-			mem.execute(request);
-			
-			
-			viewPage ="reservation/reservation.jsp";
-			
+			viewPage ="reservation/reservation2.jsp";
 			
 		}
+		
 		
 		
 		RequestDispatcher rd = request.getRequestDispatcher(viewPage);
