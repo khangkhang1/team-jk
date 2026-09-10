@@ -113,7 +113,7 @@
 
 									<div class="input_button">
 
-										<input type="text" id="member_id" name="t_id" maxlength="20"
+										<input type="text" id="member_id" oninput="setEmpty()" name="t_id" maxlength="20"
 											placeholder="아이디를 입력해주세요"> <input type="button"
 											onclick="checkId()" value="중복확인" id="idCheckBtn"> <input
 											type="text" name="t_id_check">
