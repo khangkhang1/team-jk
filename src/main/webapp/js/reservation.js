@@ -48,10 +48,15 @@ document.querySelectorAll('input[name="planType"]').forEach(function (radio) {
 	radio.addEventListener('change', function () {
 		resState.plan = radio.value;
 		document.querySelectorAll('.planCard').forEach(function (card) {
-			card.classList.toggle('selected', card.querySelector('input').checked);
+		card.classList.toggle('selected', card.querySelector('input').checked);
+//유형 변화 시 reservation.jsp의 결제창 input(t_reservation_plan)의 값 변환 1 <-> 2
+		document.getElementById('reservationPlan').value = resState.plan;
 		});
 	});
 });
+
+//reservation.jsp의 결제창 input(t_reservation_plan)에 유형 정보 대입
+document.getElementById('reservationPlan').value = resState.plan;
 
 // ------- URL 파라미터로 주차구역 정보 표시 (메인 화면 확인팝업 → 이 페이지) -------
 var urlParams = new URLSearchParams(window.location.search);
