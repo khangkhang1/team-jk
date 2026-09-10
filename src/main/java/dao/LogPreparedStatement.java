@@ -25,6 +25,11 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.StringTokenizer;
 
+/**
+ * @Auth: K. J. S.
+ * @Date: 2023. 07. 28.
+ *
+ */
 public class LogPreparedStatement implements java.sql.PreparedStatement {
 	private ArrayList parameterValues;
 	private String sqlTemplate;
@@ -153,19 +158,12 @@ public class LogPreparedStatement implements java.sql.PreparedStatement {
 		wrappedStatement.setTimestamp(parameterIndex, x);
 		saveQueryParamValue(parameterIndex, x);
 	}
-	
+
 	@Override
 	public void setTimestamp(int parameterIndex, Timestamp x, Calendar cal) throws SQLException {
 		wrappedStatement.setTimestamp(parameterIndex, x, cal);
 		saveQueryParamValue(parameterIndex, x);
 	}
-
-/*	@Override
-	public void setTimestamp(int parameterIndex, Timestamp x, Calendar cal) throws SQLException {
-		wrappedStatement.setTimestamp(parameterIndex, x, cal);
-		saveQueryParamValue(parameterIndex, x);
-	}
-*/
 	
 	@Override
 	public void setObject(int parameterIndex, Object x) throws SQLException {
