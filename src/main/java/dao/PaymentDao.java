@@ -62,8 +62,25 @@ public class PaymentDao {
 		
 //예약 저장
 	public int saveReservation(ReservationInfoDto r_dto, PaymentDto p_dto) {
-		// TODO Auto-generated method stub
-		return 0;
+		int result = 0;
+		String start_datetime = r_dto.getReservation_start_date() + " " + r_dto.getReservation_start_time();
+		String end_date = null;
+		if(r_dto.getReservation_type().equals("1")) {
+			end_date = r_dto.getReservation_end_date() + " " + r_dto.getReservation_end_time();
+		}
+		String sql = "";
+		try {
+			con = DBConnection.getConnection(); 
+			LogPreparedStatement ps = new LogPreparedStatement(con, sql);
+			
+			result = ps.executeUpdate();
+		}catch(Exception e) {
+			System.out.println("saveReservation() 오류:" + ps.toString());
+			e.printStackTrace();
+		}finally {
+			DBConnection.closeDB(con, ps, rs);
+		}	
+		return result;
 	}
 		
 //=================================이후로 결제 method=================================

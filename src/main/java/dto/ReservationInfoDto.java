@@ -12,7 +12,8 @@ public class ReservationInfoDto {
 	* reservation_out_time	: 실제 출차 시각
 	* reservation_type		: 예약 주차 유형(not null / 1: 예약형 or 2: 자유출차형)
 */
-	private String reservation_id, flight_no, reservation_status, reservation_start_date, reservation_start_time,
+	private int flight_id;
+	private String reservation_id, reservation_status, reservation_start_date, reservation_start_time,
 					reservation_end_date, reservation_end_time,
 					reservation_out_time, reservation_type, member_id, seat_no;
 	
@@ -31,11 +32,11 @@ public class ReservationInfoDto {
 	}
 	
 	//예약 생성자(왕복 고려O / 1유형 단기주차)
-	public ReservationInfoDto(String reservation_id, String flight_no, String reservation_status, String reservation_start_date,
+	public ReservationInfoDto(String reservation_id, int flight_id, String reservation_status, String reservation_start_date,
 			String reservation_start_time, String reservation_end_date, String reservation_end_time,
 			String reservation_type, String member_id, String seat_no) {
 		this.reservation_id = reservation_id;
-		this.flight_no = flight_no;
+		this.flight_id = flight_id;
 		this.reservation_status = reservation_status;
 		this.reservation_start_date = reservation_start_date;
 		this.reservation_start_time = reservation_start_time;
@@ -49,8 +50,8 @@ public class ReservationInfoDto {
 	public String getReservation_id() {
 		return reservation_id;
 	}
-	public String getFlight_no() {
-		return flight_no;
+	public int getFlight_id() {
+		return flight_id;
 	}
 	public String getReservation_status() {
 		return reservation_status;
