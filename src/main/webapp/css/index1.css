@@ -1820,3 +1820,199 @@ rgba(0,20,45,.25) 100%
     }
 
 }
+
+/* =========================================================
+   PARKING CONGESTION
+========================================================= */
+
+.parking_congestion{
+    padding:28px;
+    border-top:1px solid #eef1f4;
+    background:#fff;
+}
+
+.parking_congestion_head{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin-bottom:20px;
+}
+
+.parking_congestion_head h3{
+    margin:0;
+    font-size:18px;
+    color:#222;
+}
+
+.parking_congestion_head p{
+    margin:6px 0 0;
+    font-size:12px;
+    color:#8993a0;
+}
+
+.parking_congestion_grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:14px;
+}
+
+.parking_congestion_card{
+    padding:20px;
+    border:1px solid #e1e7ef;
+    border-radius:10px;
+    background:#fff;
+    transition:.2s;
+}
+
+.parking_congestion_card:hover{
+    transform:translateY(-2px);
+    box-shadow:0 8px 20px rgba(30,50,80,.08);
+}
+
+.congestion_card_top{
+    display:flex;
+    align-items:flex-start;
+    justify-content:space-between;
+    margin-bottom:18px;
+}
+
+.congestion_zone{
+    display:block;
+    font-size:11px;
+    font-weight:800;
+    letter-spacing:1px;
+    color:#1769d2;
+}
+
+.congestion_type{
+    display:block;
+    margin-top:4px;
+    font-size:14px;
+    color:#333;
+}
+
+.congestion_status{
+    padding:5px 9px;
+    border-radius:20px;
+    background:#edf0f4;
+    color:#7d8794;
+    font-size:11px;
+    font-weight:700;
+}
+
+.congestion_status.available{
+    background:#eaf7ef;
+    color:#21824b;
+}
+
+.congestion_status.normal{
+    background:#fff7df;
+    color:#aa7417;
+}
+
+.congestion_status.busy{
+    background:#fff0f0;
+    color:#b94e4e;
+}
+
+.congestion_status.very_busy{
+    background:#ffe5e5;
+    color:#b91c1c;
+}
+
+.congestion_status.no_data{
+    background:#f1f3f5;
+    color:#9aa2ab;
+}
+
+.congestion_count{
+    display:flex;
+    align-items:baseline;
+    gap:5px;
+}
+
+.congestion_count strong{
+    font-size:30px;
+    line-height:1;
+    color:#1769d2;
+    letter-spacing:-1px;
+}
+
+.congestion_count span{
+    font-size:12px;
+    color:#666;
+}
+
+.congestion_bar{
+    width:100%;
+    height:7px;
+    margin:17px 0 10px;
+    overflow:hidden;
+    border-radius:7px;
+    background:#edf0f4;
+}
+
+.congestion_fill{
+    width:0;
+    height:100%;
+    border-radius:7px;
+    background:#1769d2;
+    transition:width .5s;
+}
+
+.congestion_fill.available{
+    background:#22c55e;
+}
+
+.congestion_fill.normal{
+    background:#facc15;
+}
+
+.congestion_fill.busy{
+    background:#ef4444;
+}
+
+.congestion_fill.very_busy{
+    background:#b91c1c;
+}
+
+.congestion_fill.no_data{
+    background:#cbd5e1;
+}
+
+.congestion_percent{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    font-size:11px;
+    color:#8993a0;
+}
+
+.congestion_percent strong{
+    font-size:11px;
+    color:#555;
+}
+
+
+/* MOBILE */
+
+@media(max-width:900px){
+
+    .parking_congestion_grid{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+}
+
+@media(max-width:560px){
+
+    .parking_congestion{
+        padding:20px 18px;
+    }
+
+    .parking_congestion_grid{
+        grid-template-columns:1fr;
+    }
+
+}
+

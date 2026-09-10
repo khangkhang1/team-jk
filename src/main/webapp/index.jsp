@@ -803,7 +803,6 @@ INCHEON AIRPORT PARKING SERVICE
 
 </div>
 
-
 <!-- MAP BOTTOM -->
 
 <div class="map_bottom">
@@ -840,6 +839,282 @@ onclick="refreshParking()">
 
 
 </div>
+
+
+
+<!-- PARKING CONGESTION -->
+<div class="parking_congestion">
+
+    <div class="parking_congestion_head">
+        <div>
+            <h3>주차장별 실시간 혼잡도</h3>
+            <p id="parkingCongestionTime">
+                현재 실시간 기준
+            </p>
+        </div>
+    </div>
+
+    <div class="parking_congestion_grid">
+
+        <!-- P1 -->
+        <div class="parking_congestion_card" id="congestionCardP1">
+            <div class="congestion_card_top">
+                <div>
+                    <span class="congestion_zone">P1</span>
+                    <strong class="congestion_type">장기주차장</strong>
+                </div>
+                <span class="congestion_status" id="congestionStatusP1">
+                    -
+                </span>
+            </div>
+
+            <div class="congestion_count">
+                <strong id="congestionCountP1">-</strong>
+                <span>대 가능</span>
+            </div>
+
+            <div class="congestion_bar">
+                <div class="congestion_fill" id="congestionFillP1"></div>
+            </div>
+
+            <div class="congestion_percent">
+                <span>주차면</span>
+                <strong id="congestionPercentP1">-</strong>
+            </div>
+        </div>
+
+
+        <!-- P2 -->
+        <div class="parking_congestion_card" id="congestionCardP2">
+            <div class="congestion_card_top">
+                <div>
+                    <span class="congestion_zone">P2</span>
+                    <strong class="congestion_type">장기주차장</strong>
+                </div>
+                <span class="congestion_status" id="congestionStatusP2">
+                    -
+                </span>
+            </div>
+
+            <div class="congestion_count">
+                <strong id="congestionCountP2">-</strong>
+                <span>대 가능</span>
+            </div>
+
+            <div class="congestion_bar">
+                <div class="congestion_fill" id="congestionFillP2"></div>
+            </div>
+
+            <div class="congestion_percent">
+                <span>주차면</span>
+                <strong id="congestionPercentP2">-</strong>
+            </div>
+        </div>
+
+
+        <!-- P3 -->
+        <div class="parking_congestion_card" id="congestionCardP3">
+            <div class="congestion_card_top">
+                <div>
+                    <span class="congestion_zone">P3</span>
+                    <strong class="congestion_type">장기주차장</strong>
+                </div>
+                <span class="congestion_status" id="congestionStatusP3">
+                    -
+                </span>
+            </div>
+
+            <div class="congestion_count">
+                <strong id="congestionCountP3">-</strong>
+                <span>대 가능</span>
+            </div>
+
+            <div class="congestion_bar">
+                <div class="congestion_fill" id="congestionFillP3"></div>
+            </div>
+
+            <div class="congestion_percent">
+                <span>주차면</span>
+                <strong id="congestionPercentP3">-</strong>
+            </div>
+        </div>
+
+
+        <!-- P4 -->
+        <div class="parking_congestion_card" id="congestionCardP4">
+            <div class="congestion_card_top">
+                <div>
+                    <span class="congestion_zone">P4</span>
+                    <strong class="congestion_type">장기주차장</strong>
+                </div>
+                <span class="congestion_status" id="congestionStatusP4">
+                    -
+                </span>
+            </div>
+
+            <div class="congestion_count">
+                <strong id="congestionCountP4">-</strong>
+                <span>대 가능</span>
+            </div>
+
+            <div class="congestion_bar">
+                <div class="congestion_fill" id="congestionFillP4"></div>
+            </div>
+
+            <div class="congestion_percent">
+                <span>주차면</span>
+                <strong id="congestionPercentP4">-</strong>
+            </div>
+        </div>
+
+
+        <!-- P5 -->
+        <div class="parking_congestion_card" id="congestionCardP5">
+            <div class="congestion_card_top">
+                <div>
+                    <span class="congestion_zone">P5</span>
+                    <strong class="congestion_type">장기주차장</strong>
+                </div>
+                <span class="congestion_status" id="congestionStatusP5">
+                    -
+                </span>
+            </div>
+
+            <div class="congestion_count">
+                <strong id="congestionCountP5">-</strong>
+                <span>대 가능</span>
+            </div>
+
+            <div class="congestion_bar">
+                <div class="congestion_fill" id="congestionFillP5"></div>
+            </div>
+
+            <div class="congestion_percent">
+                <span>주차면</span>
+                <strong id="congestionPercentP5">-</strong>
+            </div>
+        </div>
+
+
+        <!-- P6 -->
+        <div class="parking_congestion_card" id="congestionCardP6">
+            <div class="congestion_card_top">
+                <div>
+                    <span class="congestion_zone">P6</span>
+                    <strong class="congestion_type">단기주차장</strong>
+                </div>
+                <span class="congestion_status" id="congestionStatusP6">
+                    -
+                </span>
+            </div>
+
+            <div class="congestion_count">
+                <strong id="congestionCountP6">-</strong>
+                <span>대 가능</span>
+            </div>
+
+            <div class="congestion_bar">
+                <div class="congestion_fill" id="congestionFillP6"></div>
+            </div>
+
+            <div class="congestion_percent">
+                <span>주차면</span>
+                <strong id="congestionPercentP6">-</strong>
+            </div>
+        </div>
+
+
+        <!-- P7 -->
+        <div class="parking_congestion_card" id="congestionCardP7">
+            <div class="congestion_card_top">
+                <div>
+                    <span class="congestion_zone">P7</span>
+                    <strong class="congestion_type">단기주차장</strong>
+                </div>
+                <span class="congestion_status" id="congestionStatusP7">
+                    -
+                </span>
+            </div>
+
+            <div class="congestion_count">
+                <strong id="congestionCountP7">-</strong>
+                <span>대 가능</span>
+            </div>
+
+            <div class="congestion_bar">
+                <div class="congestion_fill" id="congestionFillP7"></div>
+            </div>
+
+            <div class="congestion_percent">
+                <span>주차면</span>
+                <strong id="congestionPercentP7">-</strong>
+            </div>
+        </div>
+
+
+        <!-- P8 -->
+        <div class="parking_congestion_card" id="congestionCardP8">
+            <div class="congestion_card_top">
+                <div>
+                    <span class="congestion_zone">P8</span>
+                    <strong class="congestion_type">단기주차장</strong>
+                </div>
+                <span class="congestion_status" id="congestionStatusP8">
+                    -
+                </span>
+            </div>
+
+            <div class="congestion_count">
+                <strong id="congestionCountP8">-</strong>
+                <span>대 가능</span>
+            </div>
+
+            <div class="congestion_bar">
+                <div class="congestion_fill" id="congestionFillP8"></div>
+            </div>
+
+            <div class="congestion_percent">
+                <span>주차면</span>
+                <strong id="congestionPercentP8">-</strong>
+            </div>
+        </div>
+
+
+        <!-- P9 -->
+        <div class="parking_congestion_card" id="congestionCardP9">
+            <div class="congestion_card_top">
+                <div>
+                    <span class="congestion_zone">P9</span>
+                    <strong class="congestion_type">단기주차장</strong>
+                </div>
+                <span class="congestion_status" id="congestionStatusP9">
+                    -
+                </span>
+            </div>
+
+            <div class="congestion_count">
+                <strong id="congestionCountP9">-</strong>
+                <span>대 가능</span>
+            </div>
+
+            <div class="congestion_bar">
+                <div class="congestion_fill" id="congestionFillP9"></div>
+            </div>
+
+            <div class="congestion_percent">
+                <span>주차면</span>
+                <strong id="congestionPercentP9">-</strong>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+
+
+
+
 
 
 </div>
@@ -1280,6 +1555,9 @@ const parkingData={
 	    /*
 	     * 최신 API 데이터 다시 조회
 	     */
+	     
+	    updateParkingCongestion();
+	     
 	    refreshParking();
 	}
 	
@@ -1547,6 +1825,8 @@ let realtimeMode=true;
 	        "totalParking"
 	    ).textContent=
 	        total.toLocaleString();
+	    
+	    updateParkingCongestion();
 	}
 
 
@@ -1741,6 +2021,318 @@ let realtimeMode=true;
 	    return parkingData[key];
 
 	}
+	
+	
+	/* =========================================================
+	   주차장별 혼잡도 카드 갱신
+	========================================================= */
+
+	function updateParkingCongestion(){
+
+	    const zones=[
+	        "P1",
+	        "P2",
+	        "P3",
+	        "P4",
+	        "P5",
+	        "P6",
+	        "P7",
+	        "P8",
+	        "P9"
+	    ];
+
+	    zones.forEach(function(zone){
+
+	        const data=parkingZoneData[zone];
+
+	        const countElement=
+	            document.getElementById(
+	                "congestionCount"+zone
+	            );
+
+	        const statusElement=
+	            document.getElementById(
+	                "congestionStatus"+zone
+	            );
+
+	        const fillElement=
+	            document.getElementById(
+	                "congestionFill"+zone
+	            );
+
+	        const percentElement=
+	            document.getElementById(
+	                "congestionPercent"+zone
+	            );
+
+	        const cardElement=
+	            document.getElementById(
+	                "congestionCard"+zone
+	            );
+
+	        if(
+	            !countElement||
+	            !statusElement||
+	            !fillElement||
+	            !percentElement||
+	            !cardElement
+	        ){
+	            return;
+	        }
+
+
+	        /* =================================================
+	           실시간
+	        ================================================= */
+
+	        if(realtimeMode){
+
+	            if(!data){
+
+	                countElement.textContent="-";
+	                statusElement.textContent="정보 없음";
+	                percentElement.textContent="-";
+
+	                statusElement.className=
+	                    "congestion_status no_data";
+
+	                fillElement.className=
+	                    "congestion_fill no_data";
+
+	                fillElement.style.width="0%";
+
+	                cardElement.classList.add("no_data");
+
+	                return;
+	            }
+
+
+	            const available=
+	                Number(data.availableCount)||0;
+
+	            const total=
+	                Number(data.totalCount)||0;
+
+	            const occupancy=
+	                total>0
+	                    ?Math.min(
+	                        100,
+	                        Math.max(
+	                            0,
+	                            Number(data.occupancyRate)||0
+	                        )
+	                    )
+	                    :0;
+
+	            const status=
+	                data.status||"정보 없음";
+
+
+	            countElement.textContent=
+	                available.toLocaleString();
+
+
+	            statusElement.textContent=
+	                status;
+
+
+	            percentElement.textContent=
+	                occupancy.toFixed(1)+"%";
+
+
+	            const statusClass=
+	                getCongestionClass(status);
+
+
+	            statusElement.className=
+	                "congestion_status "+
+	                statusClass;
+
+
+	            fillElement.className=
+	                "congestion_fill "+
+	                statusClass;
+
+
+	            fillElement.style.width=
+	                occupancy+"%";
+
+
+	            cardElement.classList.remove("no_data");
+
+	            return;
+	        }
+
+
+	        /* =================================================
+	           미래 시간 더미 데이터
+	        ================================================= */
+
+	        const currentData=
+	            getCurrentParkingData();
+
+	        if(!currentData||currentData[zone]===undefined){
+
+	            countElement.textContent="-";
+	            statusElement.textContent="정보 없음";
+	            percentElement.textContent="-";
+
+	            statusElement.className=
+	                "congestion_status no_data";
+
+	            fillElement.className=
+	                "congestion_fill no_data";
+
+	            fillElement.style.width="0%";
+
+	            return;
+	        }
+
+
+	        const available=
+	            Number(currentData[zone])||0;
+
+
+	        /*
+	         * 미래 데이터는 현재 API의 전체 주차면을 기준으로
+	         * 예상 점유율을 계산
+	         */
+	        const total=
+	            data&&Number(data.totalCount)
+	                ?Number(data.totalCount)
+	                :0;
+
+
+	        let occupancy=0;
+
+	        if(total>0){
+
+	            occupancy=
+	                Math.min(
+	                    100,
+	                    Math.max(
+	                        0,
+	                        ((total-available)/total)*100
+	                    )
+	                );
+
+	        }
+
+
+	        const status=
+	            getCongestionStatus(
+	                available,
+	                total
+	            );
+
+
+	        countElement.textContent=
+	            available.toLocaleString();
+
+
+	        statusElement.textContent=
+	            status;
+
+
+	        percentElement.textContent=
+	            occupancy.toFixed(1)+"%";
+
+
+	        const statusClass=
+	            getCongestionClass(status);
+
+
+	        statusElement.className=
+	            "congestion_status "+
+	            statusClass;
+
+
+	        fillElement.className=
+	            "congestion_fill "+
+	            statusClass;
+
+
+	        fillElement.style.width=
+	            occupancy+"%";
+
+	    });
+
+
+	    /*
+	     * 조회 기준 시간 표시
+	     */
+
+	    const timeElement=
+	        document.getElementById("entryTime");
+
+	    const time=
+	        timeElement&&timeElement.value
+	            ?timeElement.value
+	            :"09:00";
+
+	    document.getElementById(
+	        "parkingCongestionTime"
+	    ).textContent=
+	        realtimeMode
+	            ?"현재 실시간 기준"
+	            :"선택 시간 "+time+" 기준";
+	}
+
+
+	/* =========================================================
+	   혼잡도 상태 클래스
+	========================================================= */
+
+	function getCongestionClass(status){
+
+	    if(status==="여유"){
+	        return "available";
+	    }
+
+	    if(status==="보통"){
+	        return "normal";
+	    }
+
+	    if(status==="혼잡"){
+	        return "busy";
+	    }
+
+	    if(status==="매우 혼잡"){
+	        return "very_busy";
+	    }
+
+	    return "no_data";
+	}
+
+
+	/* =========================================================
+	   미래 시간 혼잡도 계산
+	========================================================= */
+
+	function getCongestionStatus(available,total){
+
+	    if(total<=0){
+	        return "정보 없음";
+	    }
+
+	    const rate=
+	        available/total;
+
+	    if(rate>=0.40){
+	        return "여유";
+	    }
+
+	    if(rate>=0.20){
+	        return "보통";
+	    }
+
+	    if(rate>=0.05){
+	        return "혼잡";
+	    }
+
+	    return "매우 혼잡";
+	}
+	
 
 
 	/* =========================================================
@@ -1947,6 +2539,7 @@ let realtimeMode=true;
 	        renderParkingZoneInfo(zone);
 
 	    }
+	    updateParkingCongestion();
 
 	}
 
