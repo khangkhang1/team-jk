@@ -92,6 +92,10 @@
 			<p id="paymentLotInfo">-</p>
 			<p id="paymentPlanInfo">-</p>
 
+<!-- Servlet으로 예약 유형 및 좌석 정보 넘기기 위한 input / 결제 시 DB에 저장 위함-->
+<input type="text" id="reservationPlan" name="t_reservation_plan">
+<input type="text" id="reservationSeat" name="t_reservation_seat">
+
 			<div class="formRow">
 				<label data-i18n="res_dateLabel">날짜</label>
 				<input type="date" id="dateInput" name="t_reservation_date">

@@ -43,12 +43,17 @@ var resState = {
 	plan: '1' // 이용 방식 필터 - 기본값은 예약형(1안). 결제창을 열기 전에 여기서 미리 정해둔다.
 };
 
+//reservation.jsp의 결제창 input(t_reservation_plan)에 유형 정보 대입
+document.getElementById('reservationPlan').value = resState.plan;
+
 // ------- 이용 방식 필터 (1안/2안) - 예전엔 결제창 안에 있었는데 좌석 고르기 전으로 옮김 -------
 document.querySelectorAll('input[name="planType"]').forEach(function (radio) {
 	radio.addEventListener('change', function () {
 		resState.plan = radio.value;
 		document.querySelectorAll('.planCard').forEach(function (card) {
-			card.classList.toggle('selected', card.querySelector('input').checked);
+		card.classList.toggle('selected', card.querySelector('input').checked);
+//유형 변화 시 reservation.jsp의 결제창 input(t_reservation_plan)의 값 변환 1 <-> 2
+		document.getElementById('reservationPlan').value = resState.plan;
 		});
 	});
 });
