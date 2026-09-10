@@ -13,6 +13,14 @@
 <link rel="stylesheet" href="css/c.css">
 <link rel="stylesheet" href="css/reservation.css">
 <link rel="stylesheet" href="css/payment.css">
+
+<script>
+	function goPayment(){
+		pay.method = "post";
+		pay.action = "Reservation";
+		pay.submit();
+	}
+</script>
 </head>
 
 <body>
@@ -230,8 +238,8 @@
 			<p id="paymentPlanInfo">-</p>
 
 <!-- Servlet으로 예약 유형 및 좌석 정보 넘기기 위한 input / 결제 시 DB에 저장 위함-->
-<input type="text" id="reservationPlan" name="t_reservation_plan">
-<input type="text" id="reservationSeat" name="t_reservation_seat">
+<input type="hidden" id="reservationPlan" name="t_reservation_plan">
+<input type="hidden" id="reservationSeat" name="t_reservation_seat">
 
 			<div class="formRow">
 				<label data-i18n="res_dateLabel">주차 날짜</label>
@@ -277,7 +285,7 @@
 
 			<div id="estimatedPriceBox"><span data-i18n="res_estimated">예상 금액</span>: <strong id="estimatedPrice">-</strong></div>
 <!-- Servlet으로 예상 금액 넘기기 위한 input(payment.js수정) / 예약 목록 확인 시 예상 금액 노출-->
-			<input type="text" name="t_reservation_estimate_amount" id="estimatedPriceInput">
+			<input type="hidden" name="t_reservation_estimate_amount" id="estimatedPriceInput">
 			<div id="payMethodArea">
 				<label class="payOption"><input type="radio" name="t_reservation_pay_method" value="kakaoPay"> 카카오페이</label>
 				<label class="payOption"><input type="radio" name="t_reservation_pay_method" value="naverPay"> 네이버페이</label>
@@ -289,7 +297,7 @@
 				<div id="payBarPrice"><span data-i18n="res_depositLabel">예약금</span> <strong id="payBarAmount">-</strong>원</div>
 <!-- Servlet으로 예약금 넘기기 위한 input / 예약 목록 확인 시 예약금 노출 / 필요 없는 경우 삭제 예정 -->
 				<input type="hidden" name="t_reservation_deposit_amount">
-				<button id="payBtn" data-i18n="res_payBtn" disabled>결제하기</button>
+				<button id="payBtn" data-i18n="res_payBtn" onclick="goPayment()" disabled>결제하기</button>
 			</div>
 		</div>
 	</div>
