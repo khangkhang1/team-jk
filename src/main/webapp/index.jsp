@@ -2865,8 +2865,7 @@ let realtimeMode=true;
 	        " 주차구역 예약 페이지로 이동합니다."
 	    );
 	    //location.href = "index1.html"; 파일 넘기기
-	    //ㅎㅎ ㅎㅇ 
-	    //ㅎㅎ ㅎㅇㅎㅇ
+	    
 	}
 
 
