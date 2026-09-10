@@ -8,8 +8,8 @@ public class ReservationMapDto {
 	
 	    private Integer parkingLotId;      // 주차장ID
 	    private String parkingLotName;      // 주차장 이름  
-	    private Integer floorId;       // 층ID
-	    private Integer floorNumber;   // 층번호
+
+
 	    private String zoneType;       // 구역구분
 	    private Integer seatId;       // 좌석ID
 	    private String seatNumber;    // 좌석번호
@@ -46,18 +46,7 @@ public class ReservationMapDto {
 			this.parkingLotName = parkingLotName;
 		}
 		
-		public Integer getFloorId() {
-			return floorId;
-		}
-		public void setFloorId(Integer floorId) {
-			this.floorId = floorId;
-		}
-		public Integer getFloorNumber() {
-			return floorNumber;
-		}
-		public void setFloorNumber(Integer floorNumber) {
-			this.floorNumber = floorNumber;
-		}
+	
 		public String getZoneType() {
 			return zoneType;
 		}
