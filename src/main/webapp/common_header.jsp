@@ -1,20 +1,28 @@
-<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
 <%--
- 공통 헤더. WEB-INF 안이라 브라우저로 직접 못 연다(404). 정상이다.
+ 공통 헤더 (강선구). 개인프로젝트 common_menu.jsp 와 같은 방식.
 
- [쓰는 법] 페이지의 <body> 안에
-     <jsp:include page="/WEB-INF/inc/common_header.jsp">
-         <jsp:param name="solid" value="true" />
-     </jsp:include>
+ [쓰는 법] 페이지의 <body> 안에서
+     같은 폴더 : <%@ include file="common_header.jsp" %>
+     하위 폴더 : <%@ include file="../common_header.jsp" %>
 
-   solid=true : 배너 없는 페이지용(흰 배경+검은 글씨). 안 주면 흰 글씨라 안 보임.
+ [배너 없는 페이지는 앞에 이 줄을 추가]
+     <% request.setAttribute("headerSolid", "Y"); %>
+   안 주면 헤더가 투명 + 흰 글씨라 흰 배경 페이지에서 안 보인다.
 
- [페이지 <head>에 이게 없으면 CSS 안 걸려서 맨 화면 나옴]
-     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/index1.css">
+ [페이지 <head>에 CSS 필수. 없으면 불릿 달린 맨 화면이 나온다]
+     <link href="${pageContext.request.contextPath}/css/index1.css" rel="stylesheet">
 --%>
+<%
+    // 정적 include 는 파라미터를 못 넘기므로 request 속성으로 받는다.
+    // 안 넘어오면 "N"(투명 헤더)이 기본 - web_jsl common_header.jsp 의 null 처리와 같은 방식.
+    String headerSolid = (String)request.getAttribute("headerSolid");
+    if (headerSolid == null) headerSolid = "N";
+%>
 
-<header class="header${param.solid == 'true' ? ' scrolled' : ''}"
-        data-solid="${param.solid == 'true'}">
+<header class="header<%= "Y".equals(headerSolid) ? " scrolled" : "" %>"
+        data-solid="<%= headerSolid %>">
 
 	<div class="header_inner">
 
@@ -81,7 +89,7 @@
 	if (!header) return;
 
 	// solid 페이지는 맨 위로 올려도 불투명 유지
-	var solid = header.dataset.solid === "true";
+	var solid = header.dataset.solid === "Y";
 
 	function updateHeader(){
 		header.classList.toggle("scrolled", solid || window.scrollY > 40);
