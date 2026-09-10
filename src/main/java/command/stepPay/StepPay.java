@@ -4,7 +4,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import common.CommonExecute;
 
-public class stepPay implements CommonExecute {
+public class StepPay implements CommonExecute {
 
 	@Override
 	public void execute(HttpServletRequest request) {
