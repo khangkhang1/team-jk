@@ -1593,7 +1593,7 @@ const parkingData={
 	            if(selected){
 
 	                const zone=
-	                    selected.i d.replace(
+	                    selected.id.replace(
 	                        "parking",
 	                        ""
 	                    );
