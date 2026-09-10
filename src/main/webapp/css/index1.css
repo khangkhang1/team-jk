@@ -214,6 +214,7 @@ ul{list-style:none}
     position:static;
     padding:0;
     margin:0;
+    list-style:none;   /* 2026-09-10 추가: common_header.jsp에서 <ul>로 바꿔서 불릿 제거 필요 */
 }
 
 
