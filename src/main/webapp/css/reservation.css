@@ -1,10 +1,18 @@
+<<<<<<< HEAD
 /* 주차맵 페이지 전용 스타일. 결제 모달 관련 스타일은 css/payment.css로 분리돼 있음.
    색상 변수는 css/c.css의 :root에서 가져옴 (인천공항 사이트 참고 디자인 시스템). */
 
 /* =========================================================
    주차맵 + 결제 페이지 전용 전체 스타일 (reservation.css)
    ========================================================= */
+=======
+/* ============================================================
+   세부 주차맵 전용 스타일 (인덱스 디자인 톤에 맞춤)
+   - 색상/모서리/그림자 값은 index1.css의 것과 같은 계열로 맞췄음
+   ============================================================ */
+>>>>>>> refs/heads/abc
 
+<<<<<<< HEAD
 /* 1. 기본 레이아웃 설정 */
 body.resPage {
 	overflow-y: auto;
@@ -12,8 +20,14 @@ body.resPage {
 	height: auto;
 	min-height: 100%;
 	padding-bottom: 80px; /* 하단 고정 결제바 공간 확보 */
+=======
+/* 헤더가 fixed라서 본문이 가려지지 않게 여백 */
+.detail_body_top{
+	padding-top:86px;
+>>>>>>> refs/heads/abc
 }
 
+<<<<<<< HEAD
 /* 상단 뒤로가기 버튼 */
 #topSearch #backBtn {
 	color: var(--color-navy);
@@ -21,14 +35,118 @@ body.resPage {
 	font-size: 15px;
 	font-weight: 700;
 	margin-right: 16px;
+=======
+/* 페이지 상단 타이틀 밴드 - 인덱스 히어로의 축소판 느낌 */
+.zone_hero{
+	background:linear-gradient(90deg,#123a6b 0%,#1769d2 100%);
+	color:#fff;
+	padding:34px 0 30px;
+}
+.zone_hero_inner{
+	max-width:1180px;
+	margin:auto;
+	padding:0 20px;
+	display:flex;
+	align-items:flex-end;
+	justify-content:space-between;
+	gap:20px;
+	flex-wrap:wrap;
+}
+.zone_hero_eyebrow{
+	font-size:12px;
+	letter-spacing:2px;
+	opacity:.8;
+	margin-bottom:8px;
+}
+.zone_hero h1{
+	font-size:32px;
+	letter-spacing:-1px;
+}
+.zone_hero h1 small{
+	display:inline-block;
+	margin-left:10px;
+	font-size:14px;
+	font-weight:500;
+	opacity:.9;
+	letter-spacing:0;
+}
+.zone_hero_right{
+	display:flex;
+	gap:26px;
+	font-size:13px;
+}
+.zone_hero_right div span{
+	display:block;
+	opacity:.75;
+	margin-bottom:4px;
+}
+.zone_hero_right div strong{
+	font-size:20px;
+}
+.zone_back{
+	display:inline-block;
+	margin-bottom:12px;
+	font-size:13px;
+	color:rgba(255,255,255,.85);
+}
+.zone_back:hover{
+	color:#fff;
+	text-decoration:underline;
+>>>>>>> refs/heads/abc
 }
 
-#resWrap {
-	max-width: 720px;
-	margin: 24px auto;
-	padding: 0 16px 40px;
+/* 구역 탭 - 회의에서 층 개념은 안 쓰기로 했으므로 1층/2층 탭 대신 P1~P9 구역 탭 */
+.zone_tabs_wrap{
+	background:#fff;
+	border-bottom:1px solid #e5e9ef;
+	position:sticky;
+	top:66px;
+	z-index:50;
+}
+.zone_tabs{
+	max-width:1180px;
+	margin:auto;
+	padding:0 20px;
+	display:flex;
+	gap:4px;
+	overflow-x:auto;
+}
+.zone_tab{
+	flex:none;
+	border:0;
+	background:none;
+	padding:16px 18px 13px;
+	font-size:14px;
+	font-weight:600;
+	color:#8a929e;
+	position:relative;
+	white-space:nowrap;
+}
+.zone_tab .zone_tab_sub{
+	display:block;
+	font-size:11px;
+	font-weight:400;
+	color:#a8b0ba;
+	margin-top:3px;
+}
+.zone_tab:hover{
+	color:#1769d2;
+}
+.zone_tab.active{
+	color:#1769d2;
+}
+.zone_tab.active:after{
+	content:"";
+	position:absolute;
+	left:12px;
+	right:12px;
+	bottom:-1px;
+	height:3px;
+	background:#1769d2;
+	border-radius:3px 3px 0 0;
 }
 
+<<<<<<< HEAD
 /* 2. 주차장 요약 카드 */
 #lotSummary {
 	display: flex;
@@ -38,7 +156,13 @@ body.resPage {
 	padding: 16px;
 	margin-bottom: 16px;
 	border: 1px solid var(--color-border);
+=======
+/* 본문 카드 */
+.detail_section{
+	padding-top:34px;
+>>>>>>> refs/heads/abc
 }
+<<<<<<< HEAD
 
 #lotSummaryPhoto {
 	width: 90px;
@@ -51,19 +175,54 @@ body.resPage {
 	justify-content: center;
 	color: #999;
 	font-size: 13px;
+=======
+.detail_box{
+	background:#fff;
+	border:1px solid #e1e7ef;
+	border-radius:12px;
+	overflow:hidden;
+	box-shadow:0 6px 22px rgba(30,50,80,.05);
+	margin-bottom:22px;
+>>>>>>> refs/heads/abc
 }
+<<<<<<< HEAD
 
 #lotSummaryText h2 {
 	font-size: 18px;
 	margin-bottom: 4px;
 	color: #1e3a5f;
+=======
+.detail_box_head{
+	display:flex;
+	justify-content:space-between;
+	align-items:end;
+	padding:22px 26px 16px;
+	border-bottom:1px solid #eef1f5;
+	flex-wrap:wrap;
+	gap:12px;
+>>>>>>> refs/heads/abc
 }
+<<<<<<< HEAD
 
 #lotSummaryText p {
 	font-size: 13px;
 	color: var(--color-text-sub);
+=======
+.detail_box_head h3{
+	font-size:18px;
+	letter-spacing:-.5px;
+}
+.detail_box_head p{
+	font-size:12px;
+	color:#8c96a3;
+	margin-top:6px;
+}
+.detail_box_body{
+	padding:22px 26px 26px;
+>>>>>>> refs/heads/abc
 }
 
+<<<<<<< HEAD
 /* 3. 단계별 아코디언 (resStep / details) */
 .resStep {
 	background: #fff;
@@ -72,35 +231,245 @@ body.resPage {
 	margin-bottom: 16px;
 	border: 1px solid var(--color-border);
 	box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+=======
+/* 이용 방식(1안/2안) 카드 - 4차 회의에서 결제창에서 주차맵으로 옮기기로 한 필터 */
+.plan_cards{
+	display:grid;
+	grid-template-columns:repeat(2,1fr);
+	gap:12px;
+>>>>>>> refs/heads/abc
 }
+<<<<<<< HEAD
 
 .resStep summary {
 	font-weight: bold;
 	font-size: 15px;
 	color: #1e3a5f;
+=======
+.plan_card{
+	border:1px solid #dce2e9;
+	border-radius:9px;
+	padding:16px 18px;
+	cursor:pointer;
+	transition:.15s;
+	background:#fff;
+}
+.plan_card:hover{
+	border-color:#9dbde6;
+	background:#f8fbff;
+}
+.plan_card.selected{
+	border-color:#1769d2;
+	background:#f2f8ff;
+	box-shadow:0 0 0 1px #1769d2 inset;
+}
+.plan_card input{
+	margin-right:7px;
+}
+.plan_card_title{
+	display:block;
+	font-size:15px;
+	font-weight:700;
+	margin-bottom:6px;
+}
+.plan_card_desc{
+	display:block;
+	font-size:12px;
+	color:#7d8794;
+	line-height:1.6;
+}
+
+/* 좌석 툴바 */
+.seat_toolbar{
+	display:flex;
+	align-items:center;
+	gap:14px;
+	flex-wrap:wrap;
+	margin-bottom:14px;
+}
+.seat_remain{
+	font-size:13px;
+	color:#687585;
+}
+.seat_remain strong{
+	font-size:20px;
+	color:#1769d2;
+	margin:0 3px;
+}
+
+/* 범례 */
+.seat_legend{
+	display:flex;
+	gap:16px;
+	flex-wrap:wrap;
+	font-size:12px;
+	color:#687585;
+	padding:12px 14px;
+	background:#f7f9fc;
+	border-radius:8px;
+	margin-bottom:18px;
+}
+.seat_legend span{
+	display:flex;
+	align-items:center;
+	gap:6px;
+}
+.legend_box{
+	width:14px;
+	height:14px;
+	border-radius:4px;
+	display:inline-block;
+	border:1px solid transparent;
+}
+.legend_free     { background:#fff; border-color:#c9d4e0 }
+.legend_selected { background:#1769d2 }
+.legend_taken    { background:#c8cfd8 }
+.legend_disabled { background:#eaf1ff; border-color:#7aa5e8 }
+.legend_ev       { background:#eafaf1; border-color:#5cbd8b }
+.legend_cancelled{ background:#ffeaea; border-color:#e08585 }
+
+/* ============================================================
+   주차 상세맵 - 인덱스 맵에서 그 구역을 확대해 들어온 느낌.
+   실제 주차장처럼 "주차 베이 열 + 가운데 주행로(차선)" 구조로 그림.
+   ============================================================ */
+.lot_map{
+	background:#eef4f9;
+	border:1px solid #dce5ee;
+	border-radius:10px;
+	padding:22px 20px;
+	overflow-x:auto;
+}
+
+/* 입구/출구 표시 */
+.lot_gate{
+	display:flex;
+	justify-content:space-between;
+	align-items:center;
+	font-size:11px;
+	color:#7a8794;
+	letter-spacing:1px;
+	margin-bottom:12px;
+}
+.lot_gate .gate_in{
+	color:#20784a;
+	font-weight:700;
+}
+.lot_gate .gate_out{
+	color:#b94e4e;
+	font-weight:700;
+}
+
+/* 실제 도면을 구역 단위로 확대해서 보여주는 SVG */
+#lotSvg{
+	display:block;
+	width:100%;
+	height:auto;
+	background:#fff;
+	border-radius:8px;
+}
+/* 이 구역 블록 외곽선 - 인덱스에서 클릭한 그 도형 그대로 */
+.lot_zone_outline{
+	fill:rgba(23,105,210,.05);
+	stroke:#1769d2;
+	stroke-width:2;
+	vector-effect:non-scaling-stroke;
+}
+
+/* 주차 칸 (SVG rect) */
+.bay {
+	fill: #fff;
+	stroke: #9fb0c2;
+	stroke-width: 0.6; /* 0.8 -> 0.6으로 살짝 얇게 조정하여 겹침 방지 */
+	vector-effect: non-scaling-stroke;
+>>>>>>> refs/heads/abc
 	cursor: pointer;
-	padding-bottom: 8px;
-	margin-bottom: 12px;
-	border-bottom: 1px solid #eee;
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
+	transition: fill .12s;
+}
+.bay:hover{
+	fill:#d9e8ff;
+}
+.bay_label {
+	font-size: 3.5px; /* 4.2px -> 3.5px로 수정하여 소형 구역에서도 칸 넘침 방지 */
+	font-weight: 700;
+	fill: #5b6672;
+	text-anchor: middle;
+	dominant-baseline: central;
+	pointer-events: none;
 	user-select: none;
 }
+<<<<<<< HEAD
 
 .stepSummaryValue {
 	font-size: 13px;
 	font-weight: normal;
 	color: #888;
+=======
+.bay_g.selected .bay{
+	fill:#1769d2;
+	stroke:#0d57b3;
+}
+.bay_g.selected .bay_label{
+	fill:#fff;
+}
+.bay_g.taken .bay{
+	fill:#c2cad4;
+	stroke:#aab4c0;
+	cursor:not-allowed;
+}
+.bay_g.taken .bay_label{
+	fill:#7d8794;
+}
+.bay_g.taken:hover .bay{
+	fill:#c2cad4;
+}
+.bay_g.disabled_seat .bay{
+	fill:#dbe8ff;
+	stroke:#6f9ce0;
+}
+.bay_g.ev_seat .bay{
+	fill:#dcf6e8;
+	stroke:#4fb684;
+}
+.bay_g.cancelled .bay{
+	fill:#ffdede;
+	stroke:#dd7b7b;
+	cursor:not-allowed;
+}
+.bay_g.cancelled:hover .bay{
+	fill:#ffdede;
+}
+/* 주행로 표시 */
+.lot_lane {
+	fill: none;
+	stroke: #b9c6d3;
+	stroke-width: 0.6;
+	stroke-dasharray: 3 3;
+	vector-effect: non-scaling-stroke;
+>>>>>>> refs/heads/abc
 }
 
+<<<<<<< HEAD
 /* 4. ① 이용 방식 선택 (플랜 카드 & 폼) */
 #planCards {
 	display: flex;
 	gap: 12px;
 	margin-top: 10px;
 	margin-bottom: 16px;
+=======
+/* 하단 선택 상태 바 */
+.seat_bottom{
+	display:flex;
+	align-items:center;
+	gap:16px;
+	padding:16px 26px;
+	border-top:1px solid #eef1f5;
+	background:#fbfcfe;
+	font-size:13px;
+	color:#7d8794;
+	flex-wrap:wrap;
+>>>>>>> refs/heads/abc
 }
+<<<<<<< HEAD
 
 .planCard {
 	flex: 1;
@@ -112,19 +481,43 @@ body.resPage {
 	cursor: pointer;
 	background: #fff;
 	transition: all 0.2s;
+=======
+.seat_bottom strong{
+	color:#1769d2;
+>>>>>>> refs/heads/abc
 }
+<<<<<<< HEAD
 
 .planCard input {
 	position: absolute;
 	top: 12px;
 	right: 12px;
 	accent-color: var(--color-primary);
+=======
+.go_pay_btn{
+	margin-left:auto;
+	height:44px;
+	border:0;
+	border-radius:6px;
+	padding:0 26px;
+	background:#1769d2;
+	color:#fff;
+	font-size:14px;
+	font-weight:700;
+>>>>>>> refs/heads/abc
 }
+<<<<<<< HEAD
 
 .planCard.selected, .planCard:has(input:checked) {
 	border-color: #ffb400;
 	background: #fff8e6;
+=======
+.go_pay_btn:disabled{
+	background:#c2ccd8;
+	cursor:not-allowed;
+>>>>>>> refs/heads/abc
 }
+<<<<<<< HEAD
 
 .planCardTitle {
 	font-weight: 700;
@@ -138,21 +531,36 @@ body.resPage {
 	font-size: 12px;
 	color: var(--color-text-sub);
 	line-height: 1.5;
+=======
+.go_pay_btn:not(:disabled):hover{
+	background:#0d57b3;
+>>>>>>> refs/heads/abc
 }
 
-/* 폼 열 레이아웃 */
-.formRow {
-	display: flex;
-	align-items: center;
-	margin-bottom: 12px;
+/* 결제 모달(오윤섭 파트) - 인덱스 톤에 맞춘 최소한의 껍데기만 */
+.pay_modal{
+	position:fixed;
+	inset:0;
+	background:rgba(15,28,45,.55);
+	display:flex;
+	align-items:center;
+	justify-content:center;
+	z-index:200;
+	padding:20px;
 }
+<<<<<<< HEAD
 
 .formRow label {
 	width: 130px;
 	font-size: 13px;
 	font-weight: bold;
 	color: #444;
+=======
+.pay_modal.hidden{
+	display:none;
+>>>>>>> refs/heads/abc
 }
+<<<<<<< HEAD
 
 .formRow input, .formRow select {
 	flex: 1;
@@ -160,21 +568,50 @@ body.resPage {
 	border: 1px solid #ccc;
 	border-radius: 4px;
 	font-size: 13px;
+=======
+.pay_modal_inner{
+	background:#fff;
+	border-radius:12px;
+	width:100%;
+	max-width:460px;
+	max-height:88vh;
+	overflow-y:auto;
+	padding:26px;
+	position:relative;
+>>>>>>> refs/heads/abc
 }
+<<<<<<< HEAD
 
 #flightFieldset {
 	border: 1px solid #e0e0e0;
 	border-radius: 6px;
 	padding: 12px 14px;
 	margin: 16px 0;
+=======
+.pay_close{
+	position:absolute;
+	top:14px;
+	right:16px;
+	border:0;
+	background:none;
+	font-size:24px;
+	color:#98a2ae;
+>>>>>>> refs/heads/abc
 }
+<<<<<<< HEAD
 
 #flightFieldset legend {
 	font-size: 13px;
 	font-weight: bold;
 	color: #1e3a5f;
 	padding: 0 6px;
+=======
+.pay_modal_inner h3{
+	font-size:20px;
+	margin-bottom:6px;
+>>>>>>> refs/heads/abc
 }
+<<<<<<< HEAD
 
 #estimatedPriceBox {
 	margin-top: 16px;
@@ -183,13 +620,122 @@ body.resPage {
 	border-radius: 6px;
 	text-align: right;
 	font-size: 14px;
+=======
+.pay_modal_inner .pay_sub{
+	font-size:12px;
+	color:#8c96a3;
+	margin-bottom:3px;
+>>>>>>> refs/heads/abc
 }
+<<<<<<< HEAD
 
 #estimatedPrice {
 	font-size: 18px;
 	color: #b3261e;
+=======
+.form_row{
+	display:flex;
+	align-items:center;
+	gap:10px;
+	margin-top:12px;
+}
+.form_row label{
+	width:96px;
+	flex:none;
+	font-size:12px;
+	color:#77818e;
+}
+.form_row input,
+.form_row select{
+	flex:1;
+	height:42px;
+	border:1px solid #dce2e9;
+	border-radius:6px;
+	padding:0 12px;
+	outline:none;
+}
+.form_row input:focus,
+.form_row select:focus{
+	border-color:#1769d2;
+}
+.pay_fieldset{
+	margin-top:18px;
+	border:1px solid #e1e7ef;
+	border-radius:9px;
+	padding:14px 16px 18px;
+}
+.pay_fieldset legend{
+	font-size:13px;
+	font-weight:700;
+	padding:0 6px;
+	color:#1769d2;
+}
+.price_box{
+	margin-top:18px;
+	padding:14px 16px;
+	background:#f2f8ff;
+	border-radius:8px;
+	font-size:13px;
+	color:#48525e;
+}
+.price_box strong{
+	font-size:19px;
+	color:#1769d2;
+	margin-left:6px;
+}
+.pay_methods{
+	display:grid;
+	grid-template-columns:repeat(2,1fr);
+	gap:8px;
+	margin-top:16px;
+}
+.pay_option{
+	border:1px solid #dce2e9;
+	border-radius:7px;
+	padding:11px 12px;
+	font-size:13px;
+	cursor:pointer;
+}
+.pay_option input{
+	margin-right:7px;
+}
+.pay_footer{
+	display:flex;
+	align-items:center;
+	gap:12px;
+	margin-top:20px;
+	padding-top:16px;
+	border-top:1px solid #eef1f5;
+}
+.pay_footer .pay_amount{
+	font-size:13px;
+	color:#7d8794;
+}
+.pay_footer .pay_amount strong{
+	font-size:20px;
+	color:#1769d2;
+	margin:0 3px;
+}
+.pay_submit{
+	margin-left:auto;
+	height:44px;
+	border:0;
+	border-radius:6px;
+	padding:0 26px;
+	background:#1769d2;
+	color:#fff;
+	font-weight:700;
+}
+.pay_submit:disabled{
+	background:#c2ccd8;
+	cursor:not-allowed;
+}
+.hidden{
+	display:none;
+>>>>>>> refs/heads/abc
 }
 
+<<<<<<< HEAD
 /* 5. ② 좌석 선택 (툴바 & 2D 그리드) */
 #seatToolbar {
 	display: flex;
@@ -393,4 +939,10 @@ body.resPage {
 	background: #64748b;
 	color: #ccc;
 	cursor: not-allowed;
+=======
+@media(max-width:900px){
+	.zone_hero h1{ font-size:25px }
+	.plan_cards{ grid-template-columns:1fr }
+	.zone_tabs_wrap{ top:60px }
+>>>>>>> refs/heads/abc
 }

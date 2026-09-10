@@ -68,7 +68,15 @@ public class ParkingApiDao {
 		NodeList items = doc.getElementsByTagName("item");
 		for (int i = 0; i < items.getLength(); i++) {
 			Element item = (Element) items.item(i);
+			// ParkingSeatDto가 DB 좌석 엔티티(seatNo/isOccupied/...)로 바뀌면서
+			// 예전 필드명(parkLaneCode/carStatus/...)이 없어져 컴파일이 깨져 있었음 -> 새 필드로 매핑.
+			// API 응답 -> DB 좌석 엔티티 대응:
+			//   parklanecode(주차면번호) -> seatNo
+			//   carstatus(Y/N)          -> isOccupied
+			//   parklotno(주차장구분)     -> lotId
+			//   parkzoneno(주차구역구분)  -> floorId
 			ParkingSeatDto dto = new ParkingSeatDto();
+
 			// [2026-09-09] ParkingSeatDto가 DB 좌석 엔티티로 재작성되면서(ba9d037)
 			// 예전 setter(setParkLaneCode 등)가 사라져 main 빌드가 깨져 있었다.
 			// API 필드를 새 DTO 필드에 맞춰 다시 매핑한다.
@@ -77,6 +85,7 @@ public class ParkingApiDao {
 			//   parklotno(주차장 구분)    -> lotId
 			//   parkzoneno(구역 구분)     -> floorId
 			// terno(터미널)는 새 DTO에 대응 필드가 없어 버린다 - 현재 T1만 제공되므로 무방.
+
 			dto.setSeatNo(getTagValue(item, "parklanecode"));
 			dto.setIsOccupied(getTagValue(item, "carstatus"));
 			dto.setCarInDate(getTagValue(item, "carindate"));
