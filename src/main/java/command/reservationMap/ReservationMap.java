@@ -69,7 +69,7 @@ public class ReservationMap implements CommonExecute {
 		//
 		ReservationMapDao dao = ReservationMapDao.getDao();
 		
-		List<ReservationMapDto> dtos= dao.getPakingMap(null, null);
+		List<ReservationMapDto> dtos= dao.getPakingMap(null, null, null);
 		
 	}
 }
