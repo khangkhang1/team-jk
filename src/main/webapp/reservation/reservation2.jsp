@@ -79,6 +79,8 @@
 					<span id="zoneTitle">P1 구역</span>
 					<small id="zoneType">단기주차장 · 시간당 3,000원</small>
 				</h1>
+				<!-- 공공데이터 실시간 현황을 쓰는 구역일 때만 표시됨 -->
+				<span id="liveBadge" class="live_badge" style="display:none"></span>
 			</div>
 
 			<div class="zone_hero_right">
@@ -301,42 +303,47 @@
    - rows : 블록의 실제 가로세로 비율에 맞춘 주차 열 수
             (P1·P2는 두툼해서 4열, P3~P5는 납작해서 2열, 터미널 앞 P6~P9는 작아서 2열) */
 var ZONES = [
-	{ id:"P1", type:"장기주차장", price:2000, total:40, rows:4,
-	  box:{x:810,y:350,w:368,h:165},
-	  path:"M810 375 Q810 350 835 350 L1010 360 Q1040 370 1065 390 L1075 420 Q1090 430 1115 445 L1150 450 Q1170 460 1178 490 L1175 510 Q1165 515 1140 515 L845 515 Q810 515 810 515 Z" },
+	
+	
+		{ id:"P1", type:"장기주차장", price:2000, total:50, rows:4,
+		  box:{x:810,y:350,w:368,h:165},
+		  path:"M810 375 Q810 350 835 350 L1010 360 Q1040 370 1065 390 L1075 420 Q1090 430 1115 445 L1150 450 Q1170 460 1178 490 L1175 510 Q1165 515 1140 515 L845 515 Q810 515 810 515 Z" },
 
-	{ id:"P2", type:"장기주차장", price:2000, total:38, rows:4,
-	  box:{x:390,y:355,w:375,h:160},
-	  path:"M430 445 Q490 445 500 430 L510 420 Q520 390 535 375 L545 370 Q565 360 590 355 L760 355 Q765 355 765 355 L765 455 Q765 515 765 515 L420 515 Q390 515 395 505 Z" },
+		{ id:"P2", type:"장기주차장", price:2000, total:50, rows:4,
+		  box:{x:390,y:355,w:375,h:160},
+		  path:"M430 445 Q490 445 500 430 L510 420 Q520 390 535 375 L545 370 Q565 360 590 355 L760 355 Q765 355 765 355 L765 455 Q765 515 765 515 L420 515 Q390 515 395 505 Z" },
 
-	{ id:"P3", type:"단기주차장", price:3000, total:36, rows:2,
-	  box:{x:820,y:545,w:355,h:95},
-	  path:"M820 545 L1140 545 Q1175 560 1175 580 L1170 620 Q1140 640 1130 640 L820 640 Z" },
+		{ id:"P3", type:"단기주차장", price:3000, total:50, rows:2,
+		  box:{x:820,y:545,w:355,h:95},
+		  path:"M820 545 L1140 545 Q1175 560 1175 580 L1170 620 Q1140 640 1130 640 L820 640 Z" },
 
-	{ id:"P4", type:"단기주차장", price:3000, total:36, rows:2,
-	  box:{x:400,y:550,w:370,h:85},
-	  path:"M400 575 Q435 550 435 550 L755 550 Q770 550 770 575 L770 635 Q760 635 755 635 L435 635 Q410 630 410 630 Z" },
+		{ id:"P4", type:"단기주차장", price:3000, total:50, rows:2,
+		  box:{x:400,y:550,w:370,h:85},
+		  path:"M400 575 Q435 550 435 550 L755 550 Q770 550 770 575 L770 635 Q760 635 755 635 L435 635 Q410 630 410 630 Z" },
 
-	{ id:"P5", type:"단기주차장", price:3000, total:34, rows:2,
-	  box:{x:440,y:690,w:315,h:90},
-	  path:"M440 690 Q460 690 475 690 L735 690 Q755 690 755 690 L755 765 Q755 780 755 780 L475 780 Q440 780 440 780 Z" },
+		{ id:"P5", type:"단기주차장", price:3000, total:50, rows:2,
+		  box:{x:440,y:690,w:315,h:90},
+		  path:"M440 690 Q460 690 475 690 L735 690 Q755 690 755 690 L755 765 Q755 780 755 780 L475 780 Q440 780 440 780 Z" },
 
-	{ id:"P6", type:"단기주차장", price:3000, total:32, rows:2,
-	  box:{x:845,y:265,w:135,h:47},
-	  path:"M850 285 L980 265 L970 312 L845 312 Z" },
+		/* P6: 상단을 대칭 각도로 비스듬히 깎은 외곽선 적용 */
+		{ id:"P6", type:"단기주차장", price:3000, total:50, rows:3, bayW:6.2,
+		  box:{x:840, y:255, w:140, h:65},
+ 		 path:"M850 282 L980 258 L968 318 L840 318 Z" },
 
-	{ id:"P7", type:"단기주차장", price:3000, total:32, rows:2,
-	  box:{x:608,y:262,w:127,h:48},
-	  path:"M608 262 L733 285 L735 310 L625 310 Z" },
+		/* P7: 대칭 구조로 3개 레이어 정렬되도록 box 및 path 확장 */
+		{ id:"P7", type:"단기주차장", price:3000, total:50, rows:3, bayW:6.2,
+  		box:{x:600, y:255, w:140, h:65},
+  		path:"M600 258 L730 282 L740 318 L612 318 Z" },
+  		{ id:"P8", type:"단기주차장", price:3000, total:50, rows:2,
+  		  box:{x:860, y:195, w:125, h:45},
+  		  path:"M860 195 L985 195 L985 240 L860 240 Z" },
 
-	{ id:"P8", type:"단기주차장", price:3000, total:30, rows:2,
-	  box:{x:860,y:195,w:130,h:45},
-	  path:"M890 195 L990 240 L860 240 Z" },
+  		/* P9: P8과 동일한 직사각형 구조로 통일 */
+  		{ id:"P9", type:"단기주차장", price:3000, total:50, rows:2,
+  		  box:{x:600, y:195, w:125, h:45},
+  		  path:"M600 195 L725 195 L725 240 L600 240 Z" }
+	];
 
-	{ id:"P9", type:"단기주차장", price:3000, total:30, rows:2,
-	  box:{x:600,y:195,w:125,h:50},
-	  path:"M600 235 L700 195 L725 240 L620 245 Z" }
-];
 
 var currentZone = getZoneFromUrl() || "P1";
 var selectedSeat = null;
@@ -410,50 +417,132 @@ function layoutBays(zone, outlineEl, svgEl){
 		return { x1:start + inset, x2:end - inset };
 	}
 
-	/* 칸 크기는 실제 주차칸 비율(폭:깊이 = 1:2)로 고정하고, 블록을 그 칸으로 꽉 채운다.
-	   칸 수를 억지로 30~40에 맞추면 칸이 뚱뚱해지고 블록이 텅 비어 보여서,
-	   "블록을 실제 주차장처럼 채우는 쪽"을 택했다.
-	   -> BAY_UNIT 하나만 키우면 칸이 커지고 수가 줄어든다(조절 지점). */
-	var BAY_UNIT  = 0.115;                        // 블록 높이 대비 칸 폭 비율
-	var rows      = zone.rows;
-	var laneCount = Math.max(1, Math.floor(rows / 2));
-	var laneH     = zone.box.h * (rows > 2 ? 0.10 : 0.16);
-	var bayH      = (zone.box.h - laneH*laneCount - zone.box.h*0.06) / rows;
-	var bayW      = Math.max(zone.box.h * BAY_UNIT, bayH * 0.42);
+	/* 한 가지 배치(열 수, 칸 폭)로 실제 배치를 만들어보는 함수.
+	   블록이 사선/쐐기 모양이라 열 수에 따라 들어가는 칸 수가 크게 달라진다. */
+	function build(rows, bayW){
+		var laneCount = Math.max(1, Math.floor(rows / 2));
+		var laneH     = zone.box.h * (rows > 2 ? 0.10 : 0.16);
+		var bayH      = (zone.box.h - laneH*laneCount - zone.box.h*0.06) / rows;
+		if (bayH <= 0.5) return null;
 
-	var out = { bays:[], lanes:[] };
-	var y = zone.box.y + zone.box.h*0.03;
+		var res = { bays:[], lanes:[], bayW:bayW, bayH:bayH, rows:rows };
+		var y = zone.box.y + zone.box.h*0.03;
 
-	// 모든 줄이 같은 격자 위에 놓이도록 기준선을 하나 잡는다(줄마다 따로 가운데정렬하면 칸이 어긋나 보임)
-	var baseSpan = null;
-	for (var pr=0; pr<rows; pr++){
-		var probeY = zone.box.y + zone.box.h*0.03 + pr*(bayH) + (pr>0 ? laneH*Math.floor(pr/2) : 0);
-		var sp = spanAt(probeY + 0.8, probeY + bayH - 0.8);
-		if (sp && (!baseSpan || (sp.x2-sp.x1) > (baseSpan.x2-baseSpan.x1))) baseSpan = sp;
-	}
-	var gridX0 = baseSpan ? baseSpan.x1 : zone.box.x;
+		// 모든 줄이 같은 격자 위에 놓이도록 기준선을 하나 잡는다
+		// (줄마다 따로 가운데정렬하면 세로 열이 어긋나 보임)
+		var baseSpan = null;
+		for (var pr=0; pr<rows; pr++){
+			var probeY = zone.box.y + zone.box.h*0.03 + pr*bayH + (pr>0 ? laneH*Math.floor(pr/2) : 0);
+			var sp = spanAt(probeY + 0.8, probeY + bayH - 0.8);
+			if (sp && (!baseSpan || (sp.x2-sp.x1) > (baseSpan.x2-baseSpan.x1))) baseSpan = sp;
+		}
+		var gridX0 = baseSpan ? baseSpan.x1 : zone.box.x;
 
-	for (var r=0; r<rows; r++){
-		var span = spanAt(y + 0.8, y + bayH - 0.8);
-		if (span){
-			// 공통 기준선(gridX0)에 맞춰 칸을 놓되, 그 줄의 실제 구간 안에 들어가는 것만 남긴다
-			// -> 줄마다 길이는 달라도 세로 열은 정확히 맞물린다
-			var startIdx = Math.ceil((span.x1 - gridX0) / bayW);
-			for (var c=startIdx; ; c++){
-				var bx = gridX0 + c*bayW;
-				if (bx + bayW > span.x2) break;
-				if (bx < span.x1) continue;
-				out.bays.push({ x:bx + 0.3, y:y + 0.3, w:bayW - 0.6, h:bayH - 0.6 });
+		for (var r=0; r<rows; r++){
+			var span = spanAt(y + 0.8, y + bayH - 0.8);
+			if (span){
+				var startIdx = Math.ceil((span.x1 - gridX0) / bayW);
+				for (var c=startIdx; ; c++){
+					var bx = gridX0 + c*bayW;
+					if (bx + bayW > span.x2) break;
+					if (bx < span.x1) continue;
+					var b = { x:bx + 0.3, y:y + 0.3, w:bayW - 0.6, h:bayH - 0.6 };
+					// 네 모서리가 전부 블록 안에 있는 칸만 채택 (사선 구간에서 삐져나오는 것 방지)
+					if (inside(b.x, b.y) && inside(b.x+b.w, b.y) &&
+					    inside(b.x, b.y+b.h) && inside(b.x+b.w, b.y+b.h)){
+						res.bays.push(b);
+					}
+				}
+			}
+			y += bayH;
+			if (r % 2 === 1 && r < rows-1){
+				var laneSpan = spanAt(y + laneH*0.35, y + laneH*0.65);
+				if (laneSpan) res.lanes.push({ x1:laneSpan.x1, x2:laneSpan.x2, y:y + laneH/2 });
+				y += laneH;
 			}
 		}
-		y += bayH;
-		if (r % 2 === 1 && r < rows-1){
-			var laneSpan = spanAt(y + laneH*0.35, y + laneH*0.65);
-			if (laneSpan) out.lanes.push({ x1:laneSpan.x1, x2:laneSpan.x2, y:y + laneH/2 });
-			y += laneH;
+		return res;
+	}
+
+	/* 열 수와 칸 폭 조합을 훑어서
+	   ① 칸 수가 목표(zone.total)에 가깝고
+	   ② 칸 비율이 실제 주차칸(폭:깊이 = 1:2, 즉 0.5)에 가까운
+	   배치를 자동으로 고른다. 손으로 값 맞추지 않아도 구역 모양에 맞게 결정됨. */
+	var TARGET_RATIO = 0.5;
+	var best = null, bestScore = Infinity;
+	for (var rows = 2; rows <= 6; rows++){
+		for (var step = 0; step <= 40; step++){
+			var bw = zone.box.h * (0.06 + step*0.012);
+			var cand = build(rows, bw);
+			if (!cand || !cand.bays.length) continue;
+			var ratio = cand.bayW / cand.bayH;
+			if (ratio < 0.3 || ratio > 0.75) continue;          // 너무 얇거나 뚱뚱한 칸은 후보 제외
+			var score = Math.abs(cand.bays.length - zone.total)
+			          + Math.abs(ratio - TARGET_RATIO) * 22;    // 비율 어긋남에 가중치
+			if (score < bestScore){ bestScore = score; best = cand; }
 		}
 	}
-	return out;
+	return best || { bays:[], lanes:[] };
+}
+
+/* ============================================================
+   실시간 구역 주차 현황 (공공데이터 StatusOfParking)
+   - 서버(/Parking?t_gubun=zoneStatus)를 통해 받는다. 프론트에서 data.go.kr을 직접 부르지 않음
+     (서비스키 노출 방지 - 노션 '시스템 아키텍처'의 외부 API 처리 원칙).
+   - 실데이터가 있는 구역: P1, P2, P3, P5
+     (P4는 2026-07 폐지, P6~P9는 실제 인천공항에 없는 구역이라 임의 데이터 유지)
+   - 정적 HTML로 열었을 때(서버 없이 미리보기)는 조용히 실패하고 임의 데이터를 그대로 둔다.
+   ============================================================ */
+var LIVE_ZONE_STATUS = null;   // 한 번 받아서 캐시 (구역 탭 전환마다 재호출하지 않음)
+
+function loadLiveZoneStatus(cb){
+	if (LIVE_ZONE_STATUS !== null) { cb && cb(); return; }
+	try {
+		var xhr = new XMLHttpRequest();
+		xhr.open("GET", "Parking?t_gubun=zoneStatus", true);
+		xhr.onreadystatechange = function(){
+			if (xhr.readyState !== 4) return;
+			if (xhr.status === 200){
+				try { LIVE_ZONE_STATUS = JSON.parse(xhr.responseText); }
+				catch(e){ LIVE_ZONE_STATUS = {}; }
+			} else {
+				LIVE_ZONE_STATUS = {};   // 서버 없이 열었을 때 등 - 임의 데이터로 진행
+			}
+			cb && cb();
+		};
+		xhr.send();
+	} catch(e){
+		LIVE_ZONE_STATUS = {};
+		cb && cb();
+	}
+}
+
+function applyLiveZoneStatus(zoneId){
+	var badgeEl = document.getElementById("liveBadge");
+	if (!LIVE_ZONE_STATUS) return;
+	var live = LIVE_ZONE_STATUS[zoneId];
+	if (!live){
+		// 실데이터 없는 구역(P4, P6~P9)은 임의 데이터 그대로 두고 배지도 숨긴다.
+		// (숨기지 않으면 직전 구역의 배지가 남아 실시간인 것처럼 보임)
+		if (badgeEl) badgeEl.style.display = "none";
+		return;
+	}
+
+	document.getElementById("zoneRemain").textContent = live.remain.toLocaleString() + "석";
+	document.getElementById("zoneTotal").textContent  = live.total.toLocaleString() + "석";
+	document.getElementById("zoneStatus").textContent = live.status;
+
+	// 실시간 값임을 화면에 표시 (발표 때 "실제 API 연동"임을 보여주는 근거)
+	if (badgeEl){
+		badgeEl.style.display = "";
+		badgeEl.textContent = "실시간 · " + live.floor + " (" + formatDatetm(live.datetm) + " 기준)";
+	}
+}
+
+function formatDatetm(s){
+	// 20260908112732.000 -> 09-08 11:27
+	if (!s || s.length < 12) return "";
+	return s.substring(4,6) + "-" + s.substring(6,8) + " " + s.substring(8,10) + ":" + s.substring(10,12);
 }
 
 function renderZoneTabs(){
@@ -511,14 +600,14 @@ function renderAll(){
 	// 그 블록의 실제 모양 안에 주차 칸을 배치한다.
 	document.getElementById("lotMapZoneLabel").textContent = zone.id + " 구역 · 지상";
 
-	var pad = Math.max(zone.box.w, zone.box.h) * 0.06;  // 블록 주변 도면이 조금 보이게 여백
+	var pad = Math.max(zone.box.w, zone.box.h) * 0.15;
 	document.getElementById("lotSvg").setAttribute("viewBox",
 		(zone.box.x - pad) + " " + (zone.box.y - pad) + " " +
 		(zone.box.w + pad*2) + " " + (zone.box.h + pad*2));
 
 	var outlineEl = document.getElementById("lotZoneOutline");
 	outlineEl.setAttribute("d", zone.path);
-
+	
 	// 블록 실제 모양 안에 들어가는 칸만 배치 -> 배치된 칸 수에 맞춰 좌석 데이터를 다시 맞춘다
 	var layout = layoutBays(zone, outlineEl, document.getElementById("lotSvg"));
 	seats = makeSeats(zone, layout.bays.length);
@@ -536,6 +625,11 @@ function renderAll(){
 	document.getElementById("seatRemainCount").textContent = remain;
 	ratio = seats.length ? remain / seats.length : 0;
 	statusEl.textContent = ratio > 0.5 ? "여유" : (ratio > 0.2 ? "보통" : "혼잡");
+
+	// 실시간 주차 현황 API(구역 단위)가 있는 구역이면 상단 요약을 실데이터로 덮어쓴다.
+	// 개별 칸(좌석 맵)은 그대로 우리 임의 데이터를 쓴다 - 실제 개별 주차면은 T1만 4,614면이라
+	// 전부 DB에 넣는 게 불가능해서, 구역 잔여대수만 실연동하기로 함(2026-09-08).
+	applyLiveZoneStatus(zone.id);
 
 	var svg = "";
 
@@ -613,10 +707,12 @@ document.getElementById("paymentCloseBtn").addEventListener("click", function(){
 
 renderZoneTabs();
 renderAll();
+
+// 실시간 구역 현황을 받아온 뒤 상단 요약만 실데이터로 갱신 (좌석 맵은 그대로)
+loadLiveZoneStatus(function(){
+	applyLiveZoneStatus(currentZone);
+});
 </script>
-	<script src="js/jquery-1.8.1.min.js"></script>
-	<script src="js/i18n.js"></script>
-	
 
 </body>
 </html>

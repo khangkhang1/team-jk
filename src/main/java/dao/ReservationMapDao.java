@@ -7,16 +7,18 @@ import java.sql.SQLException;
 
 import common.DBConnection;
 
-public class reservationDao {
+public class ReservationMapDao {
 	Connection 		  con=null;
 	PreparedStatement  ps=null;
 	ResultSet		   rs=null;
-	private reservationDao(){}
-	private static reservationDao dao = new reservationDao();
-	public static reservationDao getDao(){
+	private ReservationMapDao(){}
+	private static ReservationMapDao dao = new ReservationMapDao();
+	public static ReservationMapDao getDao(){
 		return dao;
 	}
 	
+	//주차상태 업데이트
+ 
 	
 	
 }

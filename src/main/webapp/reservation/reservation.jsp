@@ -1,3 +1,5 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -5,12 +7,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>주차맵 - 인천공항 주차예약</title>
 
+<!-- 인덱스(index2.html)와 같은 디자인 시스템을 그대로 씀 - 헤더/푸터/컨테이너 스타일 재사용 -->
+<link rel="stylesheet" href="css/index1.css">
+
 <link rel="stylesheet" href="css/c.css">
 <link rel="stylesheet" href="css/reservation.css">
 <link rel="stylesheet" href="css/payment.css">
-<style>
-
-</style>
 </head>
 
 <body>
@@ -77,6 +79,8 @@
 					<span id="zoneTitle">P1 구역</span>
 					<small id="zoneType">단기주차장 · 시간당 3,000원</small>
 				</h1>
+				<!-- 공공데이터 실시간 현황을 쓰는 구역일 때만 표시됨 -->
+				<span id="liveBadge" class="live_badge" style="display:none"></span>
 			</div>
 
 			<div class="zone_hero_right">
@@ -481,6 +485,66 @@ function layoutBays(zone, outlineEl, svgEl){
 	return best || { bays:[], lanes:[] };
 }
 
+/* ============================================================
+   실시간 구역 주차 현황 (공공데이터 StatusOfParking)
+   - 서버(/Parking?t_gubun=zoneStatus)를 통해 받는다. 프론트에서 data.go.kr을 직접 부르지 않음
+     (서비스키 노출 방지 - 노션 '시스템 아키텍처'의 외부 API 처리 원칙).
+   - 실데이터가 있는 구역: P1, P2, P3, P5
+     (P4는 2026-07 폐지, P6~P9는 실제 인천공항에 없는 구역이라 임의 데이터 유지)
+   - 정적 HTML로 열었을 때(서버 없이 미리보기)는 조용히 실패하고 임의 데이터를 그대로 둔다.
+   ============================================================ */
+var LIVE_ZONE_STATUS = null;   // 한 번 받아서 캐시 (구역 탭 전환마다 재호출하지 않음)
+
+function loadLiveZoneStatus(cb){
+	if (LIVE_ZONE_STATUS !== null) { cb && cb(); return; }
+	try {
+		var xhr = new XMLHttpRequest();
+		xhr.open("GET", "Parking?t_gubun=zoneStatus", true);
+		xhr.onreadystatechange = function(){
+			if (xhr.readyState !== 4) return;
+			if (xhr.status === 200){
+				try { LIVE_ZONE_STATUS = JSON.parse(xhr.responseText); }
+				catch(e){ LIVE_ZONE_STATUS = {}; }
+			} else {
+				LIVE_ZONE_STATUS = {};   // 서버 없이 열었을 때 등 - 임의 데이터로 진행
+			}
+			cb && cb();
+		};
+		xhr.send();
+	} catch(e){
+		LIVE_ZONE_STATUS = {};
+		cb && cb();
+	}
+}
+
+function applyLiveZoneStatus(zoneId){
+	var badgeEl = document.getElementById("liveBadge");
+	if (!LIVE_ZONE_STATUS) return;
+	var live = LIVE_ZONE_STATUS[zoneId];
+	if (!live){
+		// 실데이터 없는 구역(P4, P6~P9)은 임의 데이터 그대로 두고 배지도 숨긴다.
+		// (숨기지 않으면 직전 구역의 배지가 남아 실시간인 것처럼 보임)
+		if (badgeEl) badgeEl.style.display = "none";
+		return;
+	}
+
+	document.getElementById("zoneRemain").textContent = live.remain.toLocaleString() + "석";
+	document.getElementById("zoneTotal").textContent  = live.total.toLocaleString() + "석";
+	document.getElementById("zoneStatus").textContent = live.status;
+
+	// 실시간 값임을 화면에 표시 (발표 때 "실제 API 연동"임을 보여주는 근거)
+	if (badgeEl){
+		badgeEl.style.display = "";
+		badgeEl.textContent = "실시간 · " + live.floor + " (" + formatDatetm(live.datetm) + " 기준)";
+	}
+}
+
+function formatDatetm(s){
+	// 20260908112732.000 -> 09-08 11:27
+	if (!s || s.length < 12) return "";
+	return s.substring(4,6) + "-" + s.substring(6,8) + " " + s.substring(8,10) + ":" + s.substring(10,12);
+}
+
 function renderZoneTabs(){
 	var html = "";
 	for (var i=0;i<ZONES.length;i++){
@@ -562,6 +626,11 @@ function renderAll(){
 	ratio = seats.length ? remain / seats.length : 0;
 	statusEl.textContent = ratio > 0.5 ? "여유" : (ratio > 0.2 ? "보통" : "혼잡");
 
+	// 실시간 주차 현황 API(구역 단위)가 있는 구역이면 상단 요약을 실데이터로 덮어쓴다.
+	// 개별 칸(좌석 맵)은 그대로 우리 임의 데이터를 쓴다 - 실제 개별 주차면은 T1만 4,614면이라
+	// 전부 DB에 넣는 게 불가능해서, 구역 잔여대수만 실연동하기로 함(2026-09-08).
+	applyLiveZoneStatus(zone.id);
+
 	var svg = "";
 
 	// 주행로(점선)
@@ -638,6 +707,11 @@ document.getElementById("paymentCloseBtn").addEventListener("click", function(){
 
 renderZoneTabs();
 renderAll();
+
+// 실시간 구역 현황을 받아온 뒤 상단 요약만 실데이터로 갱신 (좌석 맵은 그대로)
+loadLiveZoneStatus(function(){
+	applyLiveZoneStatus(currentZone);
+});
 </script>
 
 </body>

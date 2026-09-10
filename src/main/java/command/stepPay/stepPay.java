@@ -1,4 +1,4 @@
-package common.stepPay;
+package command.stepPay;
 
 import javax.servlet.http.HttpServletRequest;
 
