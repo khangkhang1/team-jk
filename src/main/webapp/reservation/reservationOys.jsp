@@ -234,23 +234,20 @@
 <input type="text" id="reservationSeat" name="t_reservation_seat">
 
 			<div class="formRow">
-				<label data-i18n="res_dateLabel">날짜</label>
-				<input type="date" id="dateInput" name="t_reservation_date">
+				<label data-i18n="res_dateLabel">주차 날짜</label>
+				<input type="date" id="startDateInput" name="t_reservation_start_date">
 			</div>
 			<div class="formRow">
-				<label data-i18n="res_startTimeLabel">시작 시각</label>
+				<label data-i18n="res_startTimeLabel">주차 시각</label>
 				<select id="startTimeInput" name="t_reservation_start_time"></select>
 			</div>
-
+			<div class="formRow">
+				<label data-i18n="res_dateLabel">예상 출차 날짜</label>
+				<input type="date" id="endDateInput" name="t_reservation_end_date">
+			</div>
 			<div class="formRow plan1Only hidden" id="durationRow">
 				<label data-i18n="res_durationLabel">이용 시간</label>
-				<select id="durationInput" name="t_reservation_parking_time">
-					<option value="1">1시간</option>
-					<option value="2" selected>2시간</option>
-					<option value="3">3시간</option>
-					<option value="4">4시간</option>
-					<option value="6">6시간</option>
-				</select>
+				<select id="endTimeInput" name="t_reservation_end_time"></select>
 			</div>
 
 			<div class="plan2Only hidden" id="endFreeNotice">

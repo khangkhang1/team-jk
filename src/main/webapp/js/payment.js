@@ -38,61 +38,155 @@ function getCurrentLotInfo() {
 
 // ------- 시간 선택 초기화 -------
 function initPaymentTimeInputs() {
-	var select = document.getElementById('startTimeInput');
-	if (select.options.length === 0) {
+	var startSelect = document.getElementById('startTimeInput');
+	var endSelect = document.getElementById('endTimeInput');
+
+	// 30분 단위 시간 목록 생성 함수
+	function createTimeOptions() {
+		var options = [];
 		for (var h = 0; h < 24; h++) {
 			['00', '30'].forEach(function (m) {
 				var label = String(h).padStart(2, '0') + ':' + m;
-				var opt = document.createElement('option');
-				opt.value = label;
-				opt.textContent = label;
-				select.appendChild(opt);
+				options.push(label);
 			});
 		}
+		return options;
 	}
 
+	var timeOptions = createTimeOptions();
+
+	// startTimeInput 옵션 생성
+	if (startSelect.options.length === 0) {
+		timeOptions.forEach(function (time) {
+			var opt = document.createElement('option');
+			opt.value = time;
+			opt.textContent = time;
+			startSelect.appendChild(opt);
+		});
+	}
+
+	// endTimeInput 옵션 생성
+	if (endSelect.options.length === 0) {
+		timeOptions.forEach(function (time) {
+			var opt = document.createElement('option');
+			opt.value = time;
+			opt.textContent = time;
+			endSelect.appendChild(opt);
+		});
+	}
+
+	// 날짜 설정
 	var today = new Date();
 	var yyyy = today.getFullYear();
 	var mm = String(today.getMonth() + 1).padStart(2, '0');
 	var dd = String(today.getDate()).padStart(2, '0');
+	var todayStr = yyyy + '-' + mm + '-' + dd;
 	var params = getPayUrlParams();
 
-	document.getElementById('dateInput').value = params.get('date') || (yyyy + '-' + mm + '-' + dd);
-
+	// 입차 날짜 설정 (startDateInput 사용)
+	document.getElementById('startDateInput').value = params.get('date') || todayStr;
+	
+	// 시작 시각 설정
 	var startFromUrl = params.get('start');
 	if (startFromUrl) {
-		select.value = startFromUrl;
+		startSelect.value = startFromUrl;
 	} else {
 		var roundedHour = today.getHours();
 		var roundedMin = today.getMinutes() < 30 ? '30' : '00';
 		if (roundedMin === '00') roundedHour = (roundedHour + 1) % 24;
-		select.value = String(roundedHour).padStart(2, '0') + ':' + roundedMin;
+		startSelect.value = String(roundedHour).padStart(2, '0') + ':' + roundedMin;
 	}
+
+	// 출차 시각 초기값 설정 (URL 파라미터가 있으면 적용, 없으면 시작 시각 + 1시간)
+	var endFromUrl = params.get('end');
+	if (endFromUrl) {
+		endSelect.value = endFromUrl;
+	} else {
+		updateDefaultEndDateTime();
+	}
+
+	// 시작 시각 변경 시 출차 시각도 자동으로 1시간 뒤로 조정되도록 이벤트 바인딩
+	startSelect.addEventListener('change', function () {
+		updateDefaultEndDateTime();
+		if (typeof updatePaymentPrice === 'function') {
+			updatePaymentPrice();
+		}
+	});
+
+	// 출차 시각 변경 시에도 금액 재계산
+	endSelect.addEventListener('change', function () {
+		if (typeof updatePaymentPrice === 'function') {
+			updatePaymentPrice();
+		}
+	});
+}
+
+//출차 시각 설정
+function updateDefaultEndDateTime() {
+	var startDateVal = document.getElementById('startDateInput').value;
+	var startTimeVal = document.getElementById('startTimeInput').value;
+
+	if (!startDateVal || !startTimeVal) return;
+
+	var startDt = new Date(startDateVal + 'T' + startTimeVal);
+	var endDt = new Date(startDt.getTime() + 60 * 60 * 1000); // 1시간 추가
+
+	var endYyyy = endDt.getFullYear();
+	var endMm = String(endDt.getMonth() + 1).padStart(2, '0');
+	var endDd = String(endDt.getDate()).padStart(2, '0');
+
+	var endHh = String(endDt.getHours()).padStart(2, '0');
+	var endMi = String(endDt.getMinutes()).padStart(2, '0');
+
+	document.getElementById('endDateInput').value = endYyyy + '-' + endMm + '-' + endDd;
+	document.getElementById('endTimeInput').value = endHh + ':' + endMi;
 }
 
 // ------- 예상 금액 -------
 function updatePaymentPrice() {
-	var date = document.getElementById('dateInput').value;
-	var start = document.getElementById('startTimeInput').value;
+	var startDate = document.getElementById('startDateInput').value;
+	var startTime = document.getElementById('startTimeInput').value;
+	var endDate = document.getElementById('endDateInput').value;
+	var endTime = document.getElementById('endTimeInput').value;
 	var info = getCurrentLotInfo();
-
-	var estInput = document.getElementById('estimatedPriceInput');
 
 	if (payState.plan === '2') {
 		document.getElementById('estimatedPrice').textContent =
 			'출차 시 정산 (시간당 ' + PLAN2_HOURLY_PRICE.toLocaleString() + '원, 페널티 요금)';
-		if (estInput) estInput.value = 0; // 또는 '출차 시 정산'
 	} else if (payState.plan === '1') {
-		var duration = parseInt(document.getElementById('durationInput').value, 10);
-		var totalPrice = duration * info.price;
-		document.getElementById('estimatedPrice').textContent = totalPrice.toLocaleString() + '원';
-		if (estInput) estInput.value = totalPrice;
+		// 모든 날짜 및 시간 정보가 갖춰진 경우
+		if (startDate && startTime && endDate && endTime) {
+			// "YYYY-MM-DD" + "THH:mm" 포맷으로 Date 객체 생성
+			var startDateTime = new Date(startDate + 'T' + startTime);
+			var endDateTime = new Date(endDate + 'T' + endTime);
+
+			// 출차 일시가 입차 일시보다 빠른 경우 예외 처리
+			if (endDateTime <= startDateTime) {
+				document.getElementById('estimatedPrice').textContent = '날짜/시각 확인 필요';
+				document.getElementById('estimatedPriceInput').value = 0;
+				payState.timeChosen = false;
+				refreshPaymentFooter();
+				return;
+			}
+
+			// Milliseconds 차이를 시간 단위(소수점)로 변환
+			var diffMs = endDateTime - startDateTime;
+			var durationHours = diffMs / (1000 * 60 * 60);
+
+			// 총 금액 계산 (시간 * 시간당 금액)
+			var totalPrice = Math.round(durationHours * info.price);
+
+			document.getElementById('estimatedPrice').textContent = totalPrice.toLocaleString() + '원';
+			document.getElementById('estimatedPriceInput').value = totalPrice;
+		} else {
+			document.getElementById('estimatedPrice').textContent = '-';
+			document.getElementById('estimatedPriceInput').value = '';
+		}
 	} else {
 		document.getElementById('estimatedPrice').textContent = '-';
-		if (estInput) estInput.value = '';
 	}
 
-	payState.timeChosen = !!(date && start);
+	payState.timeChosen = !!(startDate && startTime && endDate && endTime);
 	refreshPaymentFooter();
 }
 
@@ -151,9 +245,24 @@ paymentModalEl.addEventListener('click', function (e) {
 	if (e.target === paymentModalEl) closePaymentModal();
 });
 
-document.getElementById('dateInput').addEventListener('change', updatePaymentPrice);
-document.getElementById('startTimeInput').addEventListener('change', updatePaymentPrice);
-document.getElementById('durationInput').addEventListener('change', updatePaymentPrice);
+// 입차 날짜/시각 변경 시: 출차 일시 +1시간 자동 세팅 및 금액 계산
+['startDateInput', 'startTimeInput'].forEach(function (id) {
+	var el = document.getElementById(id);
+	if (el) {
+		el.addEventListener('change', function () {
+			updateDefaultEndDateTime();
+			updatePaymentPrice();
+		});
+	}
+});
+
+// 출차 날짜/시각 변경 시: 금액 계산
+['endDateInput', 'endTimeInput'].forEach(function (id) {
+	var el = document.getElementById(id);
+	if (el) {
+		el.addEventListener('change', updatePaymentPrice);
+	}
+});
 
 document.getElementById('flightRoundtripInput').addEventListener('change', function () {
 	if (this.value === 'oneway') {
