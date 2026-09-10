@@ -7,54 +7,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>자주 묻는 질문 | 인천공항 주차예약</title>
 <link href="${pageContext.request.contextPath}/css/index1.css" rel="stylesheet">
+<link href="${pageContext.request.contextPath}/css/faq.css" rel="stylesheet">
 
-<style>
-/* FAQ 전용 - 공용 index1.css를 건드리지 않으려고 이 페이지 안에 둠 */
-.faq_page{padding-top:120px}
-
-.faq_cate{display:flex;gap:8px;margin-bottom:22px;flex-wrap:wrap}
-.faq_cate a{
-	padding:8px 16px;border:1px solid #e0e5ec;border-radius:20px;
-	font-size:13px;color:#687585;background:#fff;transition:.2s
-}
-.faq_cate a:hover{border-color:#1769d2;color:#1769d2}
-.faq_cate a.on{background:#1769d2;border-color:#1769d2;color:#fff}
-
-.faq_list{border-top:2px solid #2b3340}
-
-.faq_item{border-bottom:1px solid #e7ebf0;background:#fff}
-
-.faq_item summary{
-	display:flex;align-items:center;gap:12px;
-	padding:18px 20px;cursor:pointer;font-size:15px;font-weight:600;
-	color:#2b3340;list-style:none
-}
-.faq_item summary::-webkit-details-marker{display:none}
-.faq_item summary:hover{background:#f7f9fc}
-
-.faq_q{
-	flex:0 0 26px;height:26px;border-radius:50%;
-	background:#1769d2;color:#fff;font-size:13px;font-weight:700;
-	display:flex;align-items:center;justify-content:center
-}
-.faq_tag{
-	margin-left:auto;flex:0 0 auto;
-	font-size:11px;color:#8c96a3;font-weight:500
-}
-
-.faq_body{
-	display:flex;gap:12px;
-	padding:18px 20px 22px;background:#f7f9fc;
-	font-size:14px;color:#5a6470;line-height:1.75
-}
-.faq_a{
-	flex:0 0 26px;height:26px;border-radius:50%;
-	background:#8c96a3;color:#fff;font-size:13px;font-weight:700;
-	display:flex;align-items:center;justify-content:center
-}
-.faq_body ul{margin:6px 0 0 0;padding-left:16px;list-style:disc}
-.faq_body li{margin-bottom:4px}
-</style>
 </head>
 
 <body>
