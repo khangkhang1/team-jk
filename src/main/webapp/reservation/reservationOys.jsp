@@ -6,7 +6,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>주차맵 - 인천공항 주차예약</title>
-
+ <!-- 1. jQuery 먼저 로드 (V1 SDK 동작에 필수) -->
+  <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+  <!-- 2. 포트원 v1 SDK 로드 -->
+  <script src="https://cdn.iamport.kr/v1/iamport.js"></script>
 <!-- 인덱스(index2.html)와 같은 디자인 시스템을 그대로 씀 - 헤더/푸터/컨테이너 스타일 재사용 -->
 <link rel="stylesheet" href="css/index1.css">
 
@@ -15,11 +18,95 @@
 <link rel="stylesheet" href="css/payment.css">
 
 <script>
-	function goPayment(){
-		pay.method = "post";
-		pay.action = "Reservation";
-		pay.submit();
-	}
+//1. Document가 준비된 후 식별코드 초기화
+$(document).ready(function() {
+    var IMP = window.IMP;
+    IMP.init("imp43028000");
+});
+
+// 2. 예약 버튼 클릭 시 호출
+function goPayment() {
+    var method = document.pay.t_reservation_pay_method.value;
+
+    if (!method) {
+        alert("결제 수단을 선택해 주세요.");
+        return;
+    }
+
+    if (confirm("예약 및 결제를 진행하시겠습니까?")) {
+        payment(method); // 결제 프로세스 시작
+    }
+}
+
+// 3. 포트원 결제창 호출 함수
+function payment(method) {
+    var IMP = window.IMP;
+
+    // 모달창 등에 입력된 예상 금액 가져오기 (없으면 기본값 설정)
+    var amountVal = document.getElementById("estimatedPriceInput").value;
+    var price = amountVal ? parseInt(amountVal) : document.pay.t_reservation_deposit_amount; 
+
+    // 카카오페이 결제
+    if (method === "kakaoPay") {
+        IMP.request_pay({
+            pg: "kakaopay",
+            pay_method: "card",
+            merchant_uid: "ORD_" + new Date().getTime(),
+            name: "인천공항 주차장 예약",
+            amount: price,
+            buyer_name: "홍길동",            // 필요 시 로그인 회원 이름으로 교체
+            buyer_email: "test@example.com"
+        }, handleResponse);
+
+    // 신용카드 결제
+    } else if (method === "creditCard") {
+        IMP.request_pay({
+            pg: "html5_inicis.INIpayTest",
+            pay_method: "card",
+            merchant_uid: "ORD_" + new Date().getTime(),
+            name: "인천공항 주차장 예약",
+            amount: price,
+            buyer_name: "홍길동",
+            buyer_email: "test@example.com"
+        }, handleResponse);
+
+    } else {
+        alert("선택하신 결제 수단은 현재 미지원입니다.");
+        return;
+    }
+}
+
+// 4. 포트원 결제 완료 응답 처리 함수
+function handleResponse(rsp) {
+    if (rsp.success) {
+    	var seat = document.pay.t_reservation_seat.value;
+    	var plan = document.pay.t_reservation_plan.value;
+    	if(plan === '1') plan = "예약형"
+        	else plan = "자율출차형"
+    	var deposit_amount = document.pay.t_reservation_deposit_amount.value;
+    	alert(
+    			'예약이 완료되었습니다.\n\n' +
+    			'좌석: ' + seat + '\n' +
+    			'이용방식: ' + plan + '\n' +
+    			'예약금: ' + deposit_amount + '원 결제\n\n' +
+    			'(실제 결제/서버 저장 및 항공편 결항 감지 API 연동은 다음 단계에서 연결됩니다)'
+    		);
+
+        // 서버(Servlet)로 보낼 hidden input에 포트원 번호 등록
+        document.getElementById("impUidInput").value = rsp.imp_uid;
+        document.getElementById("merchantUidInput").value = rsp.merchant_uid;
+
+        // 결제 성공 시에만 최종적으로 Servlet으로 Form Submit 전송!
+        var form = document.pay;
+        form.method = "post";
+        form.action = "Reservation"; // Reservation Servlet으로 전송
+        form.submit();
+
+    } else {
+        alert("결제에 실패했거나 취소되었습니다.\n사유: " + rsp.error_msg);
+        return;
+    }
+}
 </script>
 </head>
 
@@ -231,7 +318,7 @@
 <input type="hidden" name="t_gubun" value="payment">
 	<div id="paymentModal" class="hidden">
 		<div id="paymentModalInner">
-			<button id="paymentCloseBtn">&times;</button>
+			<button id="paymentCloseBtn" type="button">&times;</button>
 
 			<h3 id="paymentSeatTitle">-</h3>
 			<p id="paymentLotInfo">-</p>
@@ -296,8 +383,11 @@
 			<div id="paymentFooter">
 				<div id="payBarPrice"><span data-i18n="res_depositLabel">예약금</span> <strong id="payBarAmount">-</strong>원</div>
 <!-- Servlet으로 예약금 넘기기 위한 input / 예약 목록 확인 시 예약금 노출 / 필요 없는 경우 삭제 예정 -->
-				<input type="hidden" name="t_reservation_deposit_amount">
-				<button id="payBtn" data-i18n="res_payBtn" onclick="goPayment()" disabled>결제하기</button>
+				<input type="hidden" id="depositAmount" name="t_reservation_deposit_amount" value="5000">
+<!-- 포트원 결제 검증 및 DB 저장을 위한 hidden input 추가 -->
+				<input type="hidden" name="t_imp_uid" id="impUidInput">
+				<input type="hidden" name="t_merchant_uid" id="merchantUidInput">
+				<button id="payBtn" data-i18n="res_payBtn" onclick="goPayment()" disabled type="button">결제하기</button>
 			</div>
 		</div>
 	</div>

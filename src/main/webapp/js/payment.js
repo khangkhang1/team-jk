@@ -281,7 +281,7 @@ document.querySelectorAll('input[name="t_reservation_pay_method"]').forEach(func
 });
 
 // ------- 결제하기 -------
-document.getElementById('payBtn').addEventListener('click', function () {
+/*document.getElementById('payBtn').addEventListener('click', function () {
 	alert(
 		'예약이 완료되었습니다.\n\n' +
 		'좌석: ' + payState.seatLabel + '\n' +
@@ -291,3 +291,4 @@ document.getElementById('payBtn').addEventListener('click', function () {
 	);
 	closePaymentModal();
 });
+*/
