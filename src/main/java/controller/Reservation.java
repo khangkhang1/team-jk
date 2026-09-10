@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import command.reservation.Payment;
 import command.reservationMap.ReservationMap;
 import command.stepPay.StepPay;
 import common.CommonExecute;
@@ -53,6 +54,8 @@ public class Reservation extends HttpServlet {
 
 			
 		}else if(gubun.equals("payment")){
+			CommonExecute mem = new Payment();
+			mem.execute(request);
 			viewPage = "/reservation/reservationOys.jsp";
 		}
 
