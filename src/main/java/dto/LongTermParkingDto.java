@@ -1,5 +1,5 @@
 package dto;
-
+//asdf
 // 장기주차장 P1~P5의 혼잡도 계산 결과를 담는 DTO
 public class LongTermParkingDto {
 
