@@ -1158,6 +1158,39 @@ color:#555
 }
 
 
+.search_button_wrap{
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+}
+
+.search_button_wrap .search_btn,
+.search_button_wrap .realtime_btn{
+    width:100%;
+    height:46px;
+    border-radius:5px;
+    padding:0 22px;
+    font-size:13px;
+    font-weight:700;
+    white-space:nowrap;
+}
+
+.search_button_wrap .realtime_btn{
+    border:1px solid #1769d2;
+    background:#fff;
+    color:#1769d2;
+    cursor:pointer;
+}
+
+.search_button_wrap .realtime_btn:hover{
+    background:#1769d2;
+    color:#fff;
+}
+
+
+
+
+
 /* CONTENT GRID */
 
 .info_grid{

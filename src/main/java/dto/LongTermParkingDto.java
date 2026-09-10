@@ -27,7 +27,7 @@ public class LongTermParkingDto {
 
         this.occupiedCount = occupiedCount;
 
-        this.availableCount = totalCount - occupiedCount;
+        this.availableCount = Math.max(0,totalCount - occupiedCount);
 
         if (totalCount > 0) {
             this.occupancyRate =

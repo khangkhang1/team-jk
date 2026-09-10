@@ -280,9 +280,17 @@ INCHEON AIRPORT PARKING SERVICE
 </div>
 
 
-<button class="search_btn" type="button" onclick="updateParkingByTime()">
-주차 현황 조회
-</button>
+<div class="search_button_wrap">
+
+        <button type="button" class="realtime_btn" onclick="returnToRealtime()">
+            실시간 주차 현황 조회
+        </button>
+        <button type="button" class="search_btn" onclick="updateParkingByTime()">
+            주차 현황 조회
+        </button>
+
+
+    </div>
 
 
 </div>
@@ -1129,58 +1137,58 @@ Copyright © Parking Reservation Project. All rights reserved.
 
 const parkingData={
 	    "09":{
-	        P1:2700,
-	        P2:2500,
-	        P3:1700,
-	        P4:1800,
+	        P1:50,
+	        P2:750,
+	        P3:850,
+	        P4:250,
 	        P5:1000,
-	        P6:500,
-	        P7:500,
-	        P8:600,
+	        P6:200,
+	        P7:30,
+	        P8:800,
 	        P9:600
 	    },
 
 	    "12":{
-	        P1:2200,
-	        P2:2100,
+	        P1:46,
+	        P2:799,
 	        P3:1450,
-	        P4:1500,
+	        P4:80,
 	        P5:850,
-	        P6:420,
-	        P7:430,
+	        P6:180,
+	        P7:180,
 	        P8:520,
-	        P9:520
+	        P9:244
 	    },
 
 	    "15":{
-	        P1:1800,
-	        P2:1700,
+	        P1:41,
+	        P2:755,
 	        P3:1200,
-	        P4:1250,
-	        P5:700,
-	        P6:350,
-	        P7:360,
-	        P8:430,
-	        P9:430
+	        P4:150,
+	        P5:888,
+	        P6:333,
+	        P7:254,
+	        P8:32,
+	        P9:467
 	    },
 
 	    "18":{
-	        P1:1000,
+	        P1:56,
 	        P2:900,
 	        P3:800,
-	        P4:750,
+	        P4:25,
 	        P5:500,
 	        P6:250,
 	        P7:280,
-	        P8:320,
+	        P8:170,
 	        P9:320
 	    },
 
 	    "21":{
-	        P1:2000,
-	        P2:1900,
+	        P1:380,
+	        P2:804,
 	        P3:1400,
-	        P4:1450,
+	        P4:350,
 	        P5:800,
 	        P6:400,
 	        P7:420,
@@ -1255,6 +1263,27 @@ const parkingData={
 	        renderParkingZoneInfo(zone);
 	    }
 	}
+	
+	function returnToRealtime(){
+
+	    /*
+	     * 실시간 모드로 변경
+	     */
+	    realtimeMode=true;
+
+	    /*
+	     * 선택 시간 표시 초기화
+	     */
+	    document.getElementById("selectedTime").textContent=
+	        "현재 실시간 기준";
+
+	    /*
+	     * 최신 API 데이터 다시 조회
+	     */
+	    refreshParking();
+	}
+	
+	
 
 
 	function refreshParking(){
@@ -1262,14 +1291,190 @@ const parkingData={
 	    const btn=
 	        document.querySelector(".refresh_btn");
 
+	    if(!btn){
+	        return;
+	    }
+
 	    btn.classList.add("loading");
+	    btn.disabled=true;
 
-	    setTimeout(function(){
+	    /*
+	     * 미래 시간 조회 상태라면
+	     * API를 다시 호출하지 않고
+	     * 현재 더미 데이터를 그대로 유지한다.
+	     */
+	    if(!realtimeMode){
 
-	        window.location.href=
-	            "parkingStatus";
+	        setTimeout(function(){
 
-	    },600);
+	            const selected=
+	                document.querySelector(
+	                    ".parking_area.active"
+	                );
+
+	            if(selected){
+
+	                const zone=
+	                    selected.id.replace(
+	                        "parking",
+	                        ""
+	                    );
+
+	                renderParkingZoneInfo(zone);
+	            }
+
+	            btn.classList.remove("loading");
+	            btn.disabled=false;
+
+	        },600);
+
+	        return;
+	    }
+
+	    /*
+	     * 현재 시간 상태라면
+	     * 서버에서 최신 API 데이터를 가져온다.
+	     */
+	    fetch("parkingStatus?refresh=true")
+
+	        .then(function(response){
+
+	            if(!response.ok){
+
+	                throw new Error(
+	                    "주차 정보를 불러오지 못했습니다."
+	                );
+	            }
+
+	            return response.json();
+	        })
+
+	        .then(function(result){
+
+	            /*
+	             * 기존 parkingZoneData를
+	             * 최신 API 데이터로 교체
+	             */
+	            const newData={};
+
+	            /*
+	             * 장기주차장 P1~P5
+	             */
+	            result.longTerm.forEach(
+	                function(dto){
+
+	                    const zone=
+	                        dto.parkLotNo;
+
+	                    newData[zone]={
+
+	                        type:"장기주차장",
+
+	                        totalCount:
+	                            dto.totalCount,
+
+	                        occupiedCount:
+	                            dto.occupiedCount,
+
+	                        availableCount:
+	                            dto.availableCount,
+
+	                        occupancyRate:
+	                            dto.occupancyRate,
+
+	                        status:
+	                            dto.congestion
+	                    };
+	                }
+	            );
+
+	            /*
+	             * 단기주차장 P6~P9
+	             *
+	             * 중요:
+	             * ParkingService에서 이미
+	             * P6~P9로 변환해서 보내므로
+	             * 별도의 zoneMap이 필요하지 않다.
+	             */
+	            result.shortTerm.forEach(
+	                function(dto){
+
+	                    const zone=
+	                        dto.parkZoneNo;
+
+	                    newData[zone]={
+
+	                        type:"단기주차장",
+
+	                        totalCount:
+	                            dto.totalCount,
+
+	                        occupiedCount:
+	                            dto.occupiedCount,
+
+	                        availableCount:
+	                            dto.availableCount,
+
+	                        occupancyRate:
+	                            dto.occupancyRate,
+
+	                        status:
+	                            dto.congestion
+	                    };
+	                }
+	            );
+
+	            /*
+	             * 최신 데이터로 교체
+	             */
+	            parkingZoneData=
+	                newData;
+
+	            /*
+	             * 전체 주차 가능 대수 갱신
+	             */
+	            setRealtimeParking();
+
+	            /*
+	             * 현재 선택된 구역 정보 갱신
+	             */
+	            const selected=
+	                document.querySelector(
+	                    ".parking_area.active"
+	                );
+
+	            if(selected){
+
+	                const zone=
+	                    selected.id.replace(
+	                        "parking",
+	                        ""
+	                    );
+
+	                renderParkingZoneInfo(zone);
+	            }
+
+	        })
+
+	        .catch(function(error){
+
+	            console.error(
+	                "주차 정보 새로고침 오류:",
+	                error
+	            );
+
+	            alert(
+	                "주차 정보를 새로고침하지 못했습니다."
+	            );
+
+	        })
+
+	        .finally(function(){
+
+	            btn.classList.remove("loading");
+	            btn.disabled=false;
+
+	        });
 	}
 
 
@@ -1286,7 +1491,7 @@ const parkingData={
             (List<ShortTermParkingDto>) request.getAttribute("shortTermList");
 %>
 
-const parkingZoneData={
+let parkingZoneData={
 
 <%
     if(longTermList != null){
@@ -1562,8 +1767,116 @@ let realtimeMode=true;
 
 	    return "#94a3b8";
 	}
+	
+	function getDummyStatus(zone,key){
+
+	    const totalCount=
+	        parkingZoneData[zone]?.totalCount||0;
+
+	    const currentCount=
+	        parkingData[key]?.[zone]||0;
+
+	    if(totalCount===0){
+	        return "보통";
+	    }
+
+	    const ratio=
+	        currentCount/totalCount;
+
+	    if(ratio>=0.30){
+	        return "여유";
+	    }
+
+	    if(ratio>=0.15){
+	        return "보통";
+	    }
+
+	    if(ratio>=0.05){
+	        return "혼잡";
+	    }
+
+	    return "매우 혼잡";
+	}
 
 
+	/* =========================================================
+	   미래 시간대 혼잡도
+	========================================================= */
+
+	/*
+	function getDummyStatus(zone,key){
+
+	    const dummyStatus={
+
+	        "09":{
+	            P1:"여유",
+	            P2:"여유",
+	            P3:"보통",
+	            P4:"보통",
+	            P5:"여유",
+	            P6:"혼잡",
+	            P7:"여유",
+	            P8:"보통",
+	            P9:"여유"
+	        },
+
+	        "12":{
+	            P1:"보통",
+	            P2:"보통",
+	            P3:"혼잡",
+	            P4:"혼잡",
+	            P5:"보통",
+	            P6:"혼잡",
+	            P7:"보통",
+	            P8:"혼잡",
+	            P9:"보통"
+	        },
+
+	        "15":{
+	            P1:"혼잡",
+	            P2:"혼잡",
+	            P3:"혼잡",
+	            P4:"혼잡",
+	            P5:"혼잡",
+	            P6:"매우 혼잡",
+	            P7:"혼잡",
+	            P8:"매우 혼잡",
+	            P9:"혼잡"
+	        },
+
+	        "18":{
+	            P1:"매우 혼잡",
+	            P2:"매우 혼잡",
+	            P3:"매우 혼잡",
+	            P4:"매우 혼잡",
+	            P5:"혼잡",
+	            P6:"매우 혼잡",
+	            P7:"혼잡",
+	            P8:"매우 혼잡",
+	            P9:"혼잡"
+	        },
+
+	        "21":{
+	            P1:"보통",
+	            P2:"보통",
+	            P3:"혼잡",
+	            P4:"혼잡",
+	            P5:"보통",
+	            P6:"혼잡",
+	            P7:"보통",
+	            P8:"혼잡",
+	            P9:"보통"
+	        }
+
+	    };
+
+	    return dummyStatus[key] && dummyStatus[key][zone]
+	        ?dummyStatus[key][zone]
+	        :"보통";
+	}
+	*/
+	
+	
 	/* =========================================================
 	   P1~P9 상태 원 갱신
 	========================================================= */
@@ -1842,27 +2155,67 @@ let realtimeMode=true;
 	    /*
 	     * 혼잡도
 	     */
+	    let currentStatus;
 
+	    if(realtimeMode){
+
+	        currentStatus=
+	            data.status;
+
+	    }else{
+
+	        const timeElement=
+	            document.getElementById("entryTime");
+
+	        const time=
+	            timeElement&&timeElement.value
+	                ?timeElement.value
+	                :"09:00";
+
+	        const hour=
+	            parseInt(
+	                time.split(":")[0],
+	                10
+	            );
+
+	        const key=
+	            hour<=10
+	                ?"09"
+	                :hour<=13
+	                    ?"12"
+	                    :hour<=16
+	                        ?"15"
+	                        :hour<=19
+	                            ?"18"
+	                            :"21";
+
+	        currentStatus=
+	            getDummyStatus(zone,key);
+	    }
+
+
+	    /*
+	     * 혼잡도 텍스트
+	     */
 	    const statusElement=
 	        document.getElementById(
 	            "parkingInfoStatus"
 	        );
 
 	    statusElement.textContent=
-	        data.status;
+	        currentStatus;
 
 
 	    /*
-	     * 혼잡도 색상
+	     * 혼잡도 동그라미 색상
 	     */
-
 	    const statusCircle=
 	        document.getElementById(
 	            "parkingInfoStatusCircle"
 	        );
 
 	    statusCircle.style.fill=
-	        getStatusColor(data.status);
+	        getStatusColor(currentStatus);
 
 
 	    /*
