@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import command.reservationMap.ReservationMap;
+import command.stepPay.StepPay;
 import command.stepPay.stepPay;
 import common.CommonExecute;
 
@@ -41,7 +42,7 @@ public class Reservation extends HttpServlet {
 		
 		if(gubun.equals("ReservationMap")) {
 			CommonExecute memMap = new ReservationMap();
-			CommonExecute memPay = new stepPay();
+			CommonExecute memPay = new StepPay();
 			memMap.execute(request);
 			memPay.execute(request);
 			
