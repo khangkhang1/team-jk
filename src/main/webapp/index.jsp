@@ -1,3 +1,9 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ page import="java.util.List" %>
+<%@ page import="dto.LongTermParkingDto" %>
+<%@ page import="dto.ShortTermParkingDto" %>
+
 <!DOCTYPE html>
 <html lang="ko">
 <link rel="stylesheet" href="css/index1.css">
@@ -1112,6 +1118,15 @@ Copyright © Parking Reservation Project. All rights reserved.
 
 
 <script>
+
+<%
+	List<LongTermParkingDto> longTermList =
+	        (List<LongTermParkingDto>) request.getAttribute("longTermList");
+	
+	List<ShortTermParkingDto> shortTermList =
+	        (List<ShortTermParkingDto>) request.getAttribute("shortTermList");
+%>
+
 const parkingData={
 	    "09":{
 	        P1:2700,
@@ -1202,9 +1217,12 @@ const parkingData={
 
 	function updateParkingByTime(){
 
+		realtimeMode=false;
+
 	    const time=
 	        document.getElementById("entryTime").value||"09:00";
 
+	        
 	    const hour=
 	        parseInt(time.split(":")[0],10);
 
@@ -1248,9 +1266,8 @@ const parkingData={
 
 	    setTimeout(function(){
 
-	        updateParkingByTime();
-
-	        btn.classList.remove("loading");
+	        window.location.href=
+	            "parkingStatus";
 
 	    },600);
 	}
@@ -1260,6 +1277,76 @@ const parkingData={
 	   주차구역 데이터
 	========================================================= */
 
+	
+	<%
+    longTermList =
+            (List<LongTermParkingDto>) request.getAttribute("longTermList");
+
+    shortTermList =
+            (List<ShortTermParkingDto>) request.getAttribute("shortTermList");
+%>
+
+const parkingZoneData={
+
+<%
+    if(longTermList != null){
+        for(LongTermParkingDto dto : longTermList){
+%>
+
+    "<%= dto.getParkLotNo() %>":{
+        type:"장기주차장",
+        totalCount:<%= dto.getTotalCount() %>,
+        occupiedCount:<%= dto.getOccupiedCount() %>,
+        availableCount:<%= dto.getAvailableCount() %>,
+        occupancyRate:<%= dto.getOccupancyRate() %>,
+        status:"<%= dto.getCongestion() %>"
+    },
+
+<%
+        }
+    }
+
+    if(shortTermList != null){
+        for(ShortTermParkingDto dto : shortTermList){
+%>
+
+    "<%= dto.getParkZoneNo() %>":{
+        type:"단기주차장",
+        totalCount:<%= dto.getTotalCount() %>,
+        occupiedCount:<%= dto.getOccupiedCount() %>,
+        availableCount:<%= dto.getAvailableCount() %>,
+        occupancyRate:<%= dto.getOccupancyRate() %>,
+        status:"<%= dto.getCongestion() %>"
+    },
+
+<%
+        }
+    }
+%>
+
+};
+
+let realtimeMode=true;
+
+	function setRealtimeParking(){
+	
+	    let total=0;
+	
+	    Object.keys(parkingZoneData).forEach(function(zone){
+	
+	        total+=
+	            parkingZoneData[zone].availableCount;
+	    });
+	
+	    document.getElementById(
+	        "totalParking"
+	    ).textContent=
+	        total.toLocaleString();
+	}
+
+
+	
+	/*
 	const parkingZoneData={
 
 	    P1:{
@@ -1317,7 +1404,7 @@ const parkingData={
 	    }
 
 	};
-
+	*/
 
 	/* =========================================================
 	   정보창 위치
@@ -1469,8 +1556,11 @@ const parkingData={
 	        return "#ef4444";
 	    }
 
-	    return "#94a3b8";
+	    if(status==="매우 혼잡"){
+	        return "#b91c1c";
+	    }
 
+	    return "#94a3b8";
 	}
 
 
@@ -1479,7 +1569,9 @@ const parkingData={
 	========================================================= */
 
 	function updateParkingByTime(){
-
+		
+		realtimeMode=false;
+		
 	    const time=
 	        document.getElementById("entryTime").value||
 	        "09:00";
@@ -1648,14 +1740,24 @@ const parkingData={
 	     * 현재 선택 시간의 실제 주차 가능 대수
 	     */
 
-	    const currentData=
-	        getCurrentParkingData();
+	    let currentCount;
 
-	    const currentCount=
-	        currentData &&
-	        currentData[zone] !== undefined
-	            ?currentData[zone]
-	            :data.count;
+	    if(realtimeMode){
+
+	        currentCount=
+	            data.availableCount;
+
+	    }else{
+
+	        const currentData=
+	            getCurrentParkingData();
+
+	        currentCount=
+	            currentData &&
+	            currentData[zone] !== undefined
+	                ?currentData[zone]
+	                :data.availableCount;
+	    }
 
 
 	    /*
@@ -1841,10 +1943,6 @@ const parkingData={
 	updateHeader();
 
 
-	/* 주차 상태 점 표시 */
-
-	updateParkingStatusDots();
-
 
 	const today=new Date();
 
@@ -1867,7 +1965,7 @@ const parkingData={
 	    +"-"
 	    +String(tomorrow.getDate()).padStart(2,"0");
 
-
+	setRealtimeParking();
 
 </script>
 
