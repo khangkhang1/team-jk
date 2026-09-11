@@ -15,8 +15,6 @@
 
 <div class="wrap">
 
-	<%-- 배너 없는 페이지라 불투명 헤더 --%>
-	<% request.setAttribute("headerSolid", "Y"); %>
 	<%@ include file="../common_header.jsp" %>
 
 	<main class="main faq_page">
