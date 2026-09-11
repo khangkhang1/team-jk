@@ -2892,7 +2892,7 @@ let realtimeMode=true;
 	        zone+
 	        " 주차구역 예약 페이지로 이동합니다."
 	    );
-	    location.href = "reservation/reservation2.jsp";
+	    location.href = "reservation/reservationOys.jsp";
 	    
 	}
 
