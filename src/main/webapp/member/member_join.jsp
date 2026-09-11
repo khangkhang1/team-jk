@@ -8,60 +8,19 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>회원가입 | 인천공항 주차예약</title>
-<script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery-1.8.1.min.js"></script>
-<script src="${pageContext.request.contextPath}/js/common.js"></script>
-<script src="${pageContext.request.contextPath}/js/member.js"></script>
-<link rel="stylesheet" href="${pageContext.request.contextPath}/css/member_join.css">
+
+<script type="text/javascript" src="js/jquery-1.8.1.min.js"></script>
+<script src="js/member.js"></script>
+<link rel="stylesheet" href="css/member_join.css">
+
 </head>
 
 <body>
-	<form name="go">
-		<input type="hidden" name="t_gubun">
-	</form>
 	<div class="wrap">
-
 		<!-- HEADER -->
 		<header class="header">
 
-			<div class="header_inner">
-
-				<a href="${pageContext.request.contextPath}/index.jsp" class="logo"> 인천공항 주차예약 <small>INCHEON
-						AIRPORT PARKING</small>
-				</a>
-
-				<nav class="header_menu">
-
-					<li><a href="#">교통 · 주차</a>
-
-						<div class="header_dropdown">
-							<a href="#">주차장 이용 안내</a> <a href="#">주차 요금</a> <a href="#">주차장
-								혼잡도</a>
-						</div></li>
-
-					<li><a href="#">주차 예약 조회</a>
-
-						<div class="header_dropdown">
-							<a href="#">예약 내역</a> <a href="#">예약 확인</a> <a href="#">예약 취소</a>
-							<a href="#">이용 내역</a>
-						</div></li>
-
-					<li><a href="#">공지 사항</a>
-
-						<div class="header_dropdown">
-							<a href="#">공지 사항</a> <a href="#">자주 하는 질문</a>
-						</div></li>
-
-				</nav>
-
-				<div class="header_right">
-					<a href="javascript:movePage('Member','login')">로그인</a> <span>|</span>
-					<a href="javascript:movePage('Member','join')" class="join_link">회원가입</a>
-				</div>
-
-				<button class="menu_btn">☰</button>
-
-			</div>
-
+			<%@include file="../common_header.jsp"%>
 		</header>
 
 
@@ -113,10 +72,10 @@
 
 									<div class="input_button">
 
-										<input type="text" id="member_id" oninput="setEmpty()" name="t_id" maxlength="20"
-											placeholder="아이디를 입력해주세요"> <input type="button"
-											onclick="checkId()" value="중복확인" id="idCheckBtn"> <input
-											type="text" name="t_id_check">
+										<input type="text" id="member_id" oninput="setEmpty()"
+											name="t_id" maxlength="20" placeholder="아이디를 입력해주세요">
+										<input type="button" onclick="checkId()" value="중복확인"
+											id="idCheckBtn"> <input type="text" name="t_id_check">
 									</div>
 
 									<span class="form_hint"> 영문 소문자, 숫자를 포함하여 4~20자로 입력해주세요.
@@ -290,7 +249,9 @@
 								<button type="button" class="cancel_btn" id="cancelBtn">
 									취소</button>
 
-								<input type="button" onclick="goSave()" value="회원가입" class="join_btn"></button>
+								<input type="button" onclick="goSave()" value="회원가입"
+									class="join_btn">
+								</button>
 
 							</div>
 

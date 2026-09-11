@@ -1,13 +1,16 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
-<%@ page import="java.util.List" %>
-<%@ page import="dto.LongTermParkingDto" %>
-<%@ page import="dto.ShortTermParkingDto" %>
+	pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ page import="java.util.List"%>
+<%@ page import="dto.LongTermParkingDto"%>
+<%@ page import="dto.ShortTermParkingDto"%>
 
 <!DOCTYPE html>
 <html lang="ko">
 <link rel="stylesheet" href="css/index1.css">
-
+<script src="js/common.js"></script>
 <head>
 
 <meta charset="UTF-8">
@@ -16,365 +19,296 @@
 <title>인천공항 주차예약</title>
 
 <style>
-
 </style>
 
 </head>
 
 
 <body>
+	<form name="go">
+		<input type="hidden" name="t_gubun">
+	</form>
+	<div class="wrap">
 
-<div class="wrap">
+		<!-- HEADER -->
+		<header class="header">
 
-<!-- HEADER -->
-<header class="header">
+			<div class="header_inner">
 
-    <div class="header_inner">
+				<a href="#" class="logo"> 인천공항 주차예약 <small>INCHEON
+						AIRPORT PARKING</small>
+				</a>
 
-        <a href="#" class="logo">
-            인천공항 주차예약
-            <small>INCHEON AIRPORT PARKING</small>
-        </a>
+				<nav class="header_menu">
 
-        <nav class="header_menu">
+					<!-- 교통 · 주차 -->
+					<li><a href="#parking">교통 · 주차</a>
 
-            <!-- 교통 · 주차 -->
-            <li>
-                <a href="#parking">교통 · 주차</a>
+						<div class="header_dropdown">
+							<a href="#guide">주차장 이용 안내</a> <a href="#parking">주차 요금</a> <a
+								href="#parking">주차장 혼잡도</a>
+						</div></li>
 
-                <div class="header_dropdown">
-                    <a href="#guide">주차장 이용 안내</a>
-                    <a href="#parking">주차 요금</a>
-                    <a href="#parking">주차장 혼잡도</a>
-                </div>
-            </li>
+					<!-- 주차 예약 조회 -->
+					<li><a href="#reserve">주차 예약 조회</a>
 
-            <!-- 주차 예약 조회 -->
-            <li>
-                <a href="#reserve">주차 예약 조회</a>
+						<div class="header_dropdown">
+							<a href="#reserve">예약 내역</a> <a href="#reserve">예약 확인</a> <a
+								href="#reserve">예약 취소</a> <a href="#reserve">이용 내역</a>
+						</div></li>
 
-                <div class="header_dropdown">
-                    <a href="#reserve">예약 내역</a>
-                    <a href="#reserve">예약 확인</a>
-                    <a href="#reserve">예약 취소</a>
-                    <a href="#reserve">이용 내역</a>
-                </div>
-            </li>
+					<!-- 공지 사항 -->
+					<li><a href="#notice">공지 사항</a>
 
-            <!-- 공지 사항 -->
-            <li>
-                <a href="#notice">공지 사항</a>
+						<div class="header_dropdown">
+							<a href="#notice">공지 사항</a> <a href="#notice">자주 하는 질문</a>
+						</div></li>
 
-                <div class="header_dropdown">
-                    <a href="#notice">공지 사항</a>
-                    <a href="#notice">자주 하는 질문</a>
-                </div>
-            </li>
+				</nav>
 
-        </nav>
+				<div class="header_right">
+					<c:if test="${not empty sessionName }">
+						<a href="javascript:movePage('Member','logout')">Logout</a>
+						<span>|</span>
+						<a>${sessionName }님.</a>
+					</c:if>
 
-        <div class="header_right">
-            <a href="#">로그인</a>
-            <span>|</span>
-            <a href="#">회원가입</a>
-        </div>
+					<c:if test="${empty sessionName }">
+						<a href="javascript:movePage('Member','join')">Join</a>
+						<span>|</span>
+						<a href="javascript:movePage('Member','login')">Login </c:if>
+				</div>
 
-        <button class="menu_btn" aria-label="메뉴">☰</button>
+				<button class="menu_btn" aria-label="메뉴">☰</button>
 
-    </div>
+			</div>
 
-</header>
+		</header>
 
 
 
-<!-- MAIN -->
+		<!-- MAIN -->
 
-<main class="main">
+		<main class="main">
 
 
-<!-- HERO -->
+			<!-- HERO -->
 
-<section class="hero">
+			<section class="hero">
 
-<div class="hero_inner">
+				<div class="hero_inner">
 
-<div class="hero_eyebrow">
-INCHEON AIRPORT PARKING SERVICE
-</div>
+					<div class="hero_eyebrow">INCHEON AIRPORT PARKING SERVICE</div>
 
-<h1>
-편리한 여행의 시작,
-<br>
-주차부터 간편하게
-</h1>
+					<h1>
+						편리한 여행의 시작, <br> 주차부터 간편하게
+					</h1>
 
-<p>
-인천공항 주차장의 실시간 현황을 확인하고
-<br>
-원하는 날짜와 시간에 주차 공간을 미리 예약하세요.
-</p>
+					<p>
+						인천공항 주차장의 실시간 현황을 확인하고 <br> 원하는 날짜와 시간에 주차 공간을 미리 예약하세요.
+					</p>
 
-<span class="hero_badge">
-실시간 주차 현황 제공 · 간편 예약 서비스
-</span>
+					<span class="hero_badge"> 실시간 주차 현황 제공 · 간편 예약 서비스 </span>
 
-</div>
+				</div>
 
-</section>
+			</section>
 
 
-<!-- QUICK MENU -->
+			<!-- QUICK MENU -->
 
-<div class="quick_wrap">
+			<div class="quick_wrap">
 
-<div class="quick_menu">
+				<div class="quick_menu">
 
 
-<a href="#reserve" class="quick_item">
+					<a href="#reserve" class="quick_item">
 
-<div class="quick_icon">P</div>
+						<div class="quick_icon">P</div>
 
-<div class="quick_text">
+						<div class="quick_text">
 
-<strong>주차 예약</strong>
+							<strong>주차 예약</strong> <span>원하는 날짜와 시간으로 예약</span>
 
-<span>원하는 날짜와 시간으로 예약</span>
+						</div>
 
-</div>
+					</a> <a href="#notice" class="quick_item">
 
-</a>
+						<div class="quick_icon">✓</div>
 
+						<div class="quick_text">
 
-<a href="#notice" class="quick_item">
+							<strong>예약 조회</strong> <span>예약 내역을 간편하게 확인</span>
 
-<div class="quick_icon">✓</div>
+						</div>
 
-<div class="quick_text">
+					</a> <a href="#parking" class="quick_item">
 
-<strong>예약 조회</strong>
+						<div class="quick_icon">⌖</div>
 
-<span>예약 내역을 간편하게 확인</span>
+						<div class="quick_text">
 
-</div>
+							<strong>주차장 현황</strong> <span>실시간 주차 가능 공간 확인</span>
 
-</a>
+						</div>
 
+					</a> <a href="#guide" class="quick_item">
 
-<a href="#parking" class="quick_item">
+						<div class="quick_icon">i</div>
 
-<div class="quick_icon">⌖</div>
+						<div class="quick_text">
 
-<div class="quick_text">
+							<strong>이용 안내</strong> <span>주차장 이용 방법 안내</span>
 
-<strong>주차장 현황</strong>
+						</div>
 
-<span>실시간 주차 가능 공간 확인</span>
+					</a>
 
-</div>
 
-</a>
+				</div>
 
+			</div>
 
-<a href="#guide" class="quick_item">
 
-<div class="quick_icon">i</div>
+			<div class="container">
 
-<div class="quick_text">
 
-<strong>이용 안내</strong>
+				<!-- RESERVATION -->
 
-<span>주차장 이용 방법 안내</span>
+				<section class="section" id="reserve">
 
-</div>
+					<div class="section_head">
 
-</a>
+						<div>
 
+							<h2>주차 예약 · 실시간 주차맵</h2>
 
-</div>
+							<p>입차 시간을 선택하고 조회하면 해당 시간대의 주차 현황을 주차맵에 표시합니다.</p>
 
-</div>
+						</div>
 
+					</div>
 
-<div class="container">
 
+					<div class="parking_control_box">
 
-<!-- RESERVATION -->
 
-<section class="section" id="reserve">
+						<div class="reserve_control">
 
-<div class="section_head">
 
-<div>
+							<div class="reserve_tabs">
 
-<h2>주차 예약 · 실시간 주차맵</h2>
+								<button class="active" type="button">제1여객터미널</button>
 
-<p>
-입차 시간을 선택하고 조회하면 해당 시간대의 주차 현황을 주차맵에 표시합니다.
-</p>
+								<button type="button">제2여객터미널</button>
 
-</div>
+							</div>
 
-</div>
 
+							<div class="control_grid">
 
-<div class="parking_control_box">
 
+								<div class="field">
 
-<div class="reserve_control">
+									<label>주차장</label> <select id="parkingTerminal">
 
+										<option>제1여객터미널 주차장</option>
+										<option>제2여객터미널 주차장</option>
 
-<div class="reserve_tabs">
+									</select>
 
-<button class="active" type="button">
-제1여객터미널
-</button>
+								</div>
 
-<button type="button">
-제2여객터미널
-</button>
 
-</div>
+								<div class="field">
 
+									<label>입차일</label> <input type="date" id="startDate">
 
-<div class="control_grid">
+								</div>
 
 
-<div class="field">
+								<div class="field">
 
-<label>주차장</label>
+									<label>입차 시간</label> <input type="time" id="entryTime"
+										value="09:00">
 
-<select id="parkingTerminal">
+								</div>
 
-<option>제1여객터미널 주차장</option>
-<option>제2여객터미널 주차장</option>
 
-</select>
+								<div class="field">
 
-</div>
+									<label>출차일</label> <input type="date" id="endDate">
 
+								</div>
 
-<div class="field">
 
-<label>입차일</label>
+								<div class="search_button_wrap">
 
-<input type="date" id="startDate">
+									<button type="button" class="realtime_btn"
+										onclick="returnToRealtime()">실시간 주차 현황 조회</button>
+									<button type="button" class="search_btn"
+										onclick="updateParkingByTime()">주차 현황 조회</button>
 
-</div>
 
+								</div>
 
-<div class="field">
 
-<label>입차 시간</label>
+							</div>
 
-<input type="time" id="entryTime" value="09:00">
 
-</div>
+							<div class="selected_time">
 
+								<span>조회 기준</span> <strong id="selectedTime"> 오늘 09:00
+									기준 </strong> <small> 선택한 시간대에 맞는 주차 현황을 조회합니다. </small>
 
-<div class="field">
+							</div>
 
-<label>출차일</label>
 
-<input type="date" id="endDate">
+						</div>
 
-</div>
 
+						<!-- MAP HEADER -->
 
-<div class="search_button_wrap">
+						<div class="map_header">
 
-        <button type="button" class="realtime_btn" onclick="returnToRealtime()">
-            실시간 주차 현황 조회
-        </button>
-        <button type="button" class="search_btn" onclick="updateParkingByTime()">
-            주차 현황 조회
-        </button>
+							<div>
 
+								<h3>제1여객터미널 전체 주차맵</h3>
 
-    </div>
+								<p>구역별 색상으로 주차 가능 상태를 확인할 수 있습니다.</p>
 
+							</div>
 
-</div>
 
+							<div class="map_legend">
 
-<div class="selected_time">
+								<span> <i class="legend available"></i> 여유
+								</span> <span> <i class="legend normal"></i> 보통
+								</span> <span> <i class="legend busy"></i> 혼잡
+								</span>
 
-<span>조회 기준</span>
+							</div>
 
-<strong id="selectedTime">
-오늘 09:00 기준
-</strong>
+						</div>
 
-<small>
-선택한 시간대에 맞는 주차 현황을 조회합니다.
-</small>
 
-</div>
+						<!-- PARKING MAP -->
+						<div class="parking_map_real">
 
+							<!-- 주차장 실제 이미지 -->
+							<img src="images/parking_map.png" alt="인천공항 제1여객터미널 주차장"
+								class="parking_map_image">
 
-</div>
 
-
-<!-- MAP HEADER -->
-
-<div class="map_header">
-
-<div>
-
-<h3>제1여객터미널 전체 주차맵</h3>
-
-<p>
-구역별 색상으로 주차 가능 상태를 확인할 수 있습니다.
-</p>
-
-</div>
-
-
-<div class="map_legend">
-
-<span>
-<i class="legend available"></i>
-여유
-</span>
-
-<span>
-<i class="legend normal"></i>
-보통
-</span>
-
-<span>
-<i class="legend busy"></i>
-혼잡
-</span>
-
-</div>
-
-</div>
-
-
-<!-- PARKING MAP -->
-<div class="parking_map_real">
-
-    <!-- 주차장 실제 이미지 -->
-    <img
-        src="images/parking_map.png"
-        alt="인천공항 제1여객터미널 주차장"
-        class="parking_map_image"
-    >
-
-
-    <!-- 클릭 가능한 SVG -->
-<svg
-    class="parking_svg"
-    viewBox="0 0 1600 900"
-    preserveAspectRatio="none">
+							<!-- 클릭 가능한 SVG -->
+							<svg class="parking_svg" viewBox="0 0 1600 900"
+								preserveAspectRatio="none">
 
     <!-- ================================================= -->
     <!-- P2 -->
     <!-- ================================================= -->
-    <path
-        id="parkingP2"
-        class="parking_area"
-        d="
+    <path id="parkingP2" class="parking_area"
+									d="
             M430 445
             Q490 440 500 425
             L510 415
@@ -389,15 +323,11 @@ INCHEON AIRPORT PARKING SERVICE
             Q390 515 395 505
             Z
         "
-        onclick="selectParkingZone('P2')"
-    >
+									onclick="selectParkingZone('P2')">
 
     </path>
 
-    <text
-        class="parking_area_text"
-        x="625"
-        y="450">
+    <text class="parking_area_text" x="625" y="450">
         P2
     </text>
 
@@ -405,10 +335,8 @@ INCHEON AIRPORT PARKING SERVICE
     <!-- ================================================= -->
     <!-- P1 -->
     <!-- ================================================= -->
-    <path
-        id="parkingP1"
-        class="parking_area"
-        d="
+    <path id="parkingP1" class="parking_area"
+									d="
             M810 380
             Q810 355 835 355
             L1010 355
@@ -423,15 +351,11 @@ INCHEON AIRPORT PARKING SERVICE
             Q810 515 810 515
             Z
         "
-        onclick="selectParkingZone('P1')"
-    >
+									onclick="selectParkingZone('P1')">
 
     </path>
 
-    <text
-        class="parking_area_text"
-        x="960"
-        y="450">
+    <text class="parking_area_text" x="960" y="450">
         P1
     </text>
 
@@ -439,10 +363,8 @@ INCHEON AIRPORT PARKING SERVICE
     <!-- ================================================= -->
     <!-- P4 -->
     <!-- ================================================= -->
-    <path
-        id="parkingP4"
-        class="parking_area"
-        d="
+    <path id="parkingP4" class="parking_area"
+									d="
             M400 570
             Q430 545 435 545
             L755 545
@@ -453,15 +375,11 @@ INCHEON AIRPORT PARKING SERVICE
             Q415 640 415 640
             Z
         "
-        onclick="selectParkingZone('P4')"
-    >
+									onclick="selectParkingZone('P4')">
 
     </path>
 
-    <text
-        class="parking_area_text"
-        x="600"
-        y="605">
+    <text class="parking_area_text" x="600" y="605">
         P4
     </text>
 
@@ -469,10 +387,8 @@ INCHEON AIRPORT PARKING SERVICE
     <!-- ================================================= -->
     <!-- P3 -->
     <!-- ================================================= -->
-    <path
-        id="parkingP3"
-        class="parking_area"
-        d="
+    <path id="parkingP3" class="parking_area"
+									d="
             M815 545
             L1140 545
             Q1175 560 1175 580
@@ -481,15 +397,11 @@ INCHEON AIRPORT PARKING SERVICE
             L815 640
             Z
         "
-        onclick="selectParkingZone('P3')"
-    >
+									onclick="selectParkingZone('P3')">
 
     </path>
 
-    <text
-        class="parking_area_text"
-        x="960"
-        y="600">
+    <text class="parking_area_text" x="960" y="600">
         P3
     </text>
 
@@ -497,10 +409,8 @@ INCHEON AIRPORT PARKING SERVICE
     <!-- ================================================= -->
     <!-- P5 -->
     <!-- ================================================= -->
-    <path
-        id="parkingP5"
-        class="parking_area"
-        d="
+    <path id="parkingP5" class="parking_area"
+									d="
             M440 690
             Q460 690 475 690
             L735 690
@@ -511,15 +421,11 @@ INCHEON AIRPORT PARKING SERVICE
             Q440 780 440 780
             Z
         "
-        onclick="selectParkingZone('P5')"
-    >
+									onclick="selectParkingZone('P5')">
 
     </path>
 
-    <text
-        class="parking_area_text"
-        x="600"
-        y="740">
+    <text class="parking_area_text" x="600" y="740">
         P5
     </text>
 
@@ -527,25 +433,19 @@ INCHEON AIRPORT PARKING SERVICE
     <!-- ================================================= -->
     <!-- P9 -->
     <!-- ================================================= -->
-    <path
-        id="parkingP9"
-        class="parking_area"
-        d="
+    <path id="parkingP9" class="parking_area"
+									d="
             M600 235
             L700 195
             L725 240
             L620 245
             Z
         "
-        onclick="selectParkingZone('P9')"
-    >
+									onclick="selectParkingZone('P9')">
 
     </path>
 
-    <text
-        class="parking_area_text"
-        x="680"
-        y="225">
+    <text class="parking_area_text" x="680" y="225">
         P9
     </text>
 
@@ -553,24 +453,18 @@ INCHEON AIRPORT PARKING SERVICE
     <!-- ================================================= -->
     <!-- P8 -->
     <!-- ================================================= -->
-    <path
-        id="parkingP8"
-        class="parking_area"
-        d="
+    <path id="parkingP8" class="parking_area"
+									d="
             M890 195
             L990 240
             L860 240
             Z
         "
-        onclick="selectParkingZone('P8')"
-    >
+									onclick="selectParkingZone('P8')">
 
     </path>
 
-    <text
-        class="parking_area_text"
-        x="900"
-        y="225">
+    <text class="parking_area_text" x="900" y="225">
         P8
     </text>
 
@@ -578,25 +472,19 @@ INCHEON AIRPORT PARKING SERVICE
     <!-- ================================================= -->
     <!-- P7 -->
     <!-- ================================================= -->
-    <path
-        id="parkingP7"
-        class="parking_area"
-        d="
+    <path id="parkingP7" class="parking_area"
+									d="
             M608 262
             L738 284
             L735 310
             L625 310
             Z
         "
-        onclick="selectParkingZone('P7')"
-    >
+									onclick="selectParkingZone('P7')">
 
     </path>
 
-    <text
-        class="parking_area_text"
-        x="665"
-        y="295">
+    <text class="parking_area_text" x="665" y="295">
         P7
     </text>
 
@@ -604,25 +492,19 @@ INCHEON AIRPORT PARKING SERVICE
     <!-- ================================================= -->
     <!-- P6 -->
     <!-- ================================================= -->
-    <path
-        id="parkingP6"
-        class="parking_area"
-        d="
+    <path id="parkingP6" class="parking_area"
+									d="
             M850 285
             L980 265
             L970 312
             L845 312
             Z
         "
-        onclick="selectParkingZone('P6')"
-    >
+									onclick="selectParkingZone('P6')">
 
     </path>
 
-    <text
-        class="parking_area_text"
-        x="910"
-        y="295">
+    <text class="parking_area_text" x="910" y="295">
         P6
     </text>
 
@@ -630,103 +512,61 @@ INCHEON AIRPORT PARKING SERVICE
     <!-- ================================================= -->
     <!-- 선택 정보 연결선 + 정보 박스 -->
     <!-- ================================================= -->
-    <g
-        id="parkingInfoLayer"
-        class="parking_info_layer"
-        style="display:none;">
+    <g id="parkingInfoLayer" class="parking_info_layer"
+									style="display:none;">
 
         <!-- 점선 연결선 -->
-        <polyline
-            id="parkingInfoLine"
-            class="parking_info_line"
-            points=""
-        />
+        <polyline id="parkingInfoLine" class="parking_info_line"
+									points="" />
 
 
         <!-- 정보 박스 -->
         <g id="parkingInfoBox">
 
-            <rect
-                class="parking_info_box_bg"
-                x="0"
-                y="0"
-                width="260"
-                height="220"
-                rx="16"
-            />
+            <rect class="parking_info_box_bg" x="0" y="0" width="260"
+									height="220" rx="16" />
 
             <!-- 구역 번호 -->
-            <text
-                id="parkingInfoName"
-                class="parking_info_name"
-                x="20"
-                y="38">
+            <text id="parkingInfoName" class="parking_info_name" x="20"
+									y="38">
                 P9
             </text>
 
 
             <!-- 주차장 종류 -->
-            <text
-                id="parkingInfoType"
-                class="parking_info_type"
-                x="20"
-                y="64">
+            <text id="parkingInfoType" class="parking_info_type" x="20"
+									y="64">
                 단기주차장
             </text>
 
 
             <!-- 혼잡도 -->
-            <circle
-                id="parkingInfoStatusCircle"
-                class="parking_info_status_circle"
-                cx="29"
-                cy="94"
-                r="7"
-            />
+            <circle id="parkingInfoStatusCircle"
+									class="parking_info_status_circle" cx="29" cy="94" r="7" />
 
-            <text
-                id="parkingInfoStatus"
-                class="parking_info_status"
-                x="45"
-                y="100">
+            <text id="parkingInfoStatus" class="parking_info_status"
+									x="45" y="100">
                 여유
             </text>
 
 
             <!-- 주차 가능 -->
-            <text
-                class="parking_info_count_label"
-                x="20"
-                y="132">
+            <text class="parking_info_count_label" x="20" y="132">
                 현재 주차 가능
             </text>
 
-            <text
-                id="parkingInfoCount"
-                class="parking_info_count"
-                x="20"
-                y="160">
+            <text id="parkingInfoCount" class="parking_info_count"
+									x="20" y="160">
                 600대
             </text>
 
 
             <!-- 예약 버튼 -->
-            <g
-                class="parking_reserve_button"
-                onclick="reserveParking()">
+            <g class="parking_reserve_button" onclick="reserveParking()">
 
-                <rect
-                    x="20"
-                    y="177"
-                    width="220"
-                    height="30"
-                    rx="8"
-                />
+                <rect x="20" y="177" width="220" height="30" rx="8" />
 
-                <text
-                    x="130"
-                    y="198"
-                    text-anchor="middle">
+                <text x="130" y="198" text-anchor="middle">
                     예약하기
                 </text>
 
@@ -738,677 +578,505 @@ INCHEON AIRPORT PARKING SERVICE
 
 </svg>
 
-</div>
+						</div>
 
 
-<!-- 선택된 주차장 상세정보 -->
+						<!-- 선택된 주차장 상세정보 -->
 
-<div
-    class="parking_selected_info"
-    id="parkingSelectedInfo"
->
+						<div class="parking_selected_info" id="parkingSelectedInfo">
 
-    <div class="parking_selected_top">
+							<div class="parking_selected_top">
 
-        <div>
-            <div
-                class="parking_selected_name"
-                id="parkingSelectedName"
-            >
-                P1
-            </div>
+								<div>
+									<div class="parking_selected_name" id="parkingSelectedName">
+										P1</div>
 
-            <div
-                class="parking_selected_type"
-                id="parkingSelectedType"
-            >
-                장기주차장
-            </div>
-        </div>
+									<div class="parking_selected_type" id="parkingSelectedType">
+										장기주차장</div>
+								</div>
 
-    </div>
+							</div>
 
 
-    <div class="parking_selected_data">
+							<div class="parking_selected_data">
 
-        <div class="parking_selected_item">
+								<div class="parking_selected_item">
 
-            <span>
-                현재 주차 가능
-            </span>
+									<span> 현재 주차 가능 </span> <strong id="parkingSelectedCount">
+										2,700대 </strong>
 
-            <strong id="parkingSelectedCount">
-                2,700대
-            </strong>
+								</div>
 
-        </div>
 
+								<div class="parking_selected_item">
 
-        <div class="parking_selected_item">
+									<span> 주차 상태 </span> <strong id="parkingSelectedStatus"
+										class="parking_status_available"> 여유 </strong>
 
-            <span>
-                주차 상태
-            </span>
+								</div>
 
-            <strong
-                id="parkingSelectedStatus"
-                class="parking_status_available"
-            >
-                여유
-            </strong>
+							</div>
 
-        </div>
+						</div>
 
-    </div>
+						<!-- MAP BOTTOM -->
 
-</div>
+						<div class="map_bottom">
 
-<!-- MAP BOTTOM -->
 
-<div class="map_bottom">
+							<div>
 
+								<span class="pin_icon">⌖</span> <span id="mapSelectedText">
+									주차 구역을 클릭하면 상세 현황을 확인할 수 있습니다. </span>
 
-<div>
+							</div>
 
-<span class="pin_icon">⌖</span>
 
-<span id="mapSelectedText">
-주차 구역을 클릭하면 상세 현황을 확인할 수 있습니다.
-</span>
+							<div class="map_total">
+								전체 가능 <strong id="totalParking">0</strong> <b>대</b>
+							</div>
 
-</div>
 
+							<button class="refresh_btn" type="button"
+								onclick="refreshParking()">
 
-<div class="map_total">
-    전체 가능
-    <strong id="totalParking">0</strong>
-    <b>대</b>
-</div>
+								<span class="refresh_icon">↻</span> 새로고침
 
+							</button>
 
-<button
-class="refresh_btn"
-type="button"
-onclick="refreshParking()">
 
-<span class="refresh_icon">↻</span>
+						</div>
 
-새로고침
 
-</button>
 
+						<!-- PARKING CONGESTION -->
+						<div class="parking_congestion">
 
-</div>
-
-
-
-<!-- PARKING CONGESTION -->
-<div class="parking_congestion">
-
-    <div class="parking_congestion_head">
-        <div>
-            <h3>주차장별 실시간 혼잡도</h3>
-            <p id="parkingCongestionTime">
-                현재 실시간 기준
-            </p>
-        </div>
-    </div>
-
-    <div class="parking_congestion_grid">
-
-        <!-- P1 -->
-        <div class="parking_congestion_card" id="congestionCardP1">
-            <div class="congestion_card_top">
-                <div>
-                    <span class="congestion_zone">P1</span>
-                    <strong class="congestion_type">장기주차장</strong>
-                </div>
-                <span class="congestion_status" id="congestionStatusP1">
-                    -
-                </span>
-            </div>
-
-            <div class="congestion_count">
-                <strong id="congestionCountP1">-</strong>
-                <span>대 가능</span>
-            </div>
-
-            <div class="congestion_bar">
-                <div class="congestion_fill" id="congestionFillP1"></div>
-            </div>
-
-            <div class="congestion_percent">
-                <span>주차면</span>
-                <strong id="congestionPercentP1">-</strong>
-            </div>
-        </div>
-
-
-        <!-- P2 -->
-        <div class="parking_congestion_card" id="congestionCardP2">
-            <div class="congestion_card_top">
-                <div>
-                    <span class="congestion_zone">P2</span>
-                    <strong class="congestion_type">장기주차장</strong>
-                </div>
-                <span class="congestion_status" id="congestionStatusP2">
-                    -
-                </span>
-            </div>
-
-            <div class="congestion_count">
-                <strong id="congestionCountP2">-</strong>
-                <span>대 가능</span>
-            </div>
-
-            <div class="congestion_bar">
-                <div class="congestion_fill" id="congestionFillP2"></div>
-            </div>
-
-            <div class="congestion_percent">
-                <span>주차면</span>
-                <strong id="congestionPercentP2">-</strong>
-            </div>
-        </div>
-
-
-        <!-- P3 -->
-        <div class="parking_congestion_card" id="congestionCardP3">
-            <div class="congestion_card_top">
-                <div>
-                    <span class="congestion_zone">P3</span>
-                    <strong class="congestion_type">장기주차장</strong>
-                </div>
-                <span class="congestion_status" id="congestionStatusP3">
-                    -
-                </span>
-            </div>
-
-            <div class="congestion_count">
-                <strong id="congestionCountP3">-</strong>
-                <span>대 가능</span>
-            </div>
-
-            <div class="congestion_bar">
-                <div class="congestion_fill" id="congestionFillP3"></div>
-            </div>
-
-            <div class="congestion_percent">
-                <span>주차면</span>
-                <strong id="congestionPercentP3">-</strong>
-            </div>
-        </div>
-
-
-        <!-- P4 -->
-        <div class="parking_congestion_card" id="congestionCardP4">
-            <div class="congestion_card_top">
-                <div>
-                    <span class="congestion_zone">P4</span>
-                    <strong class="congestion_type">장기주차장</strong>
-                </div>
-                <span class="congestion_status" id="congestionStatusP4">
-                    -
-                </span>
-            </div>
-
-            <div class="congestion_count">
-                <strong id="congestionCountP4">-</strong>
-                <span>대 가능</span>
-            </div>
-
-            <div class="congestion_bar">
-                <div class="congestion_fill" id="congestionFillP4"></div>
-            </div>
-
-            <div class="congestion_percent">
-                <span>주차면</span>
-                <strong id="congestionPercentP4">-</strong>
-            </div>
-        </div>
-
-
-        <!-- P5 -->
-        <div class="parking_congestion_card" id="congestionCardP5">
-            <div class="congestion_card_top">
-                <div>
-                    <span class="congestion_zone">P5</span>
-                    <strong class="congestion_type">장기주차장</strong>
-                </div>
-                <span class="congestion_status" id="congestionStatusP5">
-                    -
-                </span>
-            </div>
-
-            <div class="congestion_count">
-                <strong id="congestionCountP5">-</strong>
-                <span>대 가능</span>
-            </div>
-
-            <div class="congestion_bar">
-                <div class="congestion_fill" id="congestionFillP5"></div>
-            </div>
-
-            <div class="congestion_percent">
-                <span>주차면</span>
-                <strong id="congestionPercentP5">-</strong>
-            </div>
-        </div>
-
-
-        <!-- P6 -->
-        <div class="parking_congestion_card" id="congestionCardP6">
-            <div class="congestion_card_top">
-                <div>
-                    <span class="congestion_zone">P6</span>
-                    <strong class="congestion_type">단기주차장</strong>
-                </div>
-                <span class="congestion_status" id="congestionStatusP6">
-                    -
-                </span>
-            </div>
-
-            <div class="congestion_count">
-                <strong id="congestionCountP6">-</strong>
-                <span>대 가능</span>
-            </div>
-
-            <div class="congestion_bar">
-                <div class="congestion_fill" id="congestionFillP6"></div>
-            </div>
-
-            <div class="congestion_percent">
-                <span>주차면</span>
-                <strong id="congestionPercentP6">-</strong>
-            </div>
-        </div>
-
-
-        <!-- P7 -->
-        <div class="parking_congestion_card" id="congestionCardP7">
-            <div class="congestion_card_top">
-                <div>
-                    <span class="congestion_zone">P7</span>
-                    <strong class="congestion_type">단기주차장</strong>
-                </div>
-                <span class="congestion_status" id="congestionStatusP7">
-                    -
-                </span>
-            </div>
-
-            <div class="congestion_count">
-                <strong id="congestionCountP7">-</strong>
-                <span>대 가능</span>
-            </div>
-
-            <div class="congestion_bar">
-                <div class="congestion_fill" id="congestionFillP7"></div>
-            </div>
-
-            <div class="congestion_percent">
-                <span>주차면</span>
-                <strong id="congestionPercentP7">-</strong>
-            </div>
-        </div>
-
-
-        <!-- P8 -->
-        <div class="parking_congestion_card" id="congestionCardP8">
-            <div class="congestion_card_top">
-                <div>
-                    <span class="congestion_zone">P8</span>
-                    <strong class="congestion_type">단기주차장</strong>
-                </div>
-                <span class="congestion_status" id="congestionStatusP8">
-                    -
-                </span>
-            </div>
-
-            <div class="congestion_count">
-                <strong id="congestionCountP8">-</strong>
-                <span>대 가능</span>
-            </div>
-
-            <div class="congestion_bar">
-                <div class="congestion_fill" id="congestionFillP8"></div>
-            </div>
-
-            <div class="congestion_percent">
-                <span>주차면</span>
-                <strong id="congestionPercentP8">-</strong>
-            </div>
-        </div>
+							<div class="parking_congestion_head">
+								<div>
+									<h3>주차장별 실시간 혼잡도</h3>
+									<p id="parkingCongestionTime">현재 실시간 기준</p>
+								</div>
+							</div>
 
-
-        <!-- P9 -->
-        <div class="parking_congestion_card" id="congestionCardP9">
-            <div class="congestion_card_top">
-                <div>
-                    <span class="congestion_zone">P9</span>
-                    <strong class="congestion_type">단기주차장</strong>
-                </div>
-                <span class="congestion_status" id="congestionStatusP9">
-                    -
-                </span>
-            </div>
+							<div class="parking_congestion_grid">
 
-            <div class="congestion_count">
-                <strong id="congestionCountP9">-</strong>
-                <span>대 가능</span>
-            </div>
+								<!-- P1 -->
+								<div class="parking_congestion_card" id="congestionCardP1">
+									<div class="congestion_card_top">
+										<div>
+											<span class="congestion_zone">P1</span> <strong
+												class="congestion_type">장기주차장</strong>
+										</div>
+										<span class="congestion_status" id="congestionStatusP1">
+											- </span>
+									</div>
 
-            <div class="congestion_bar">
-                <div class="congestion_fill" id="congestionFillP9"></div>
-            </div>
+									<div class="congestion_count">
+										<strong id="congestionCountP1">-</strong> <span>대 가능</span>
+									</div>
 
-            <div class="congestion_percent">
-                <span>주차면</span>
-                <strong id="congestionPercentP9">-</strong>
-            </div>
-        </div>
+									<div class="congestion_bar">
+										<div class="congestion_fill" id="congestionFillP1"></div>
+									</div>
+
+									<div class="congestion_percent">
+										<span>주차면</span> <strong id="congestionPercentP1">-</strong>
+									</div>
+								</div>
+
+
+								<!-- P2 -->
+								<div class="parking_congestion_card" id="congestionCardP2">
+									<div class="congestion_card_top">
+										<div>
+											<span class="congestion_zone">P2</span> <strong
+												class="congestion_type">장기주차장</strong>
+										</div>
+										<span class="congestion_status" id="congestionStatusP2">
+											- </span>
+									</div>
+
+									<div class="congestion_count">
+										<strong id="congestionCountP2">-</strong> <span>대 가능</span>
+									</div>
+
+									<div class="congestion_bar">
+										<div class="congestion_fill" id="congestionFillP2"></div>
+									</div>
+
+									<div class="congestion_percent">
+										<span>주차면</span> <strong id="congestionPercentP2">-</strong>
+									</div>
+								</div>
+
+
+								<!-- P3 -->
+								<div class="parking_congestion_card" id="congestionCardP3">
+									<div class="congestion_card_top">
+										<div>
+											<span class="congestion_zone">P3</span> <strong
+												class="congestion_type">장기주차장</strong>
+										</div>
+										<span class="congestion_status" id="congestionStatusP3">
+											- </span>
+									</div>
+
+									<div class="congestion_count">
+										<strong id="congestionCountP3">-</strong> <span>대 가능</span>
+									</div>
+
+									<div class="congestion_bar">
+										<div class="congestion_fill" id="congestionFillP3"></div>
+									</div>
+
+									<div class="congestion_percent">
+										<span>주차면</span> <strong id="congestionPercentP3">-</strong>
+									</div>
+								</div>
+
+
+								<!-- P4 -->
+								<div class="parking_congestion_card" id="congestionCardP4">
+									<div class="congestion_card_top">
+										<div>
+											<span class="congestion_zone">P4</span> <strong
+												class="congestion_type">장기주차장</strong>
+										</div>
+										<span class="congestion_status" id="congestionStatusP4">
+											- </span>
+									</div>
+
+									<div class="congestion_count">
+										<strong id="congestionCountP4">-</strong> <span>대 가능</span>
+									</div>
+
+									<div class="congestion_bar">
+										<div class="congestion_fill" id="congestionFillP4"></div>
+									</div>
+
+									<div class="congestion_percent">
+										<span>주차면</span> <strong id="congestionPercentP4">-</strong>
+									</div>
+								</div>
+
+
+								<!-- P5 -->
+								<div class="parking_congestion_card" id="congestionCardP5">
+									<div class="congestion_card_top">
+										<div>
+											<span class="congestion_zone">P5</span> <strong
+												class="congestion_type">장기주차장</strong>
+										</div>
+										<span class="congestion_status" id="congestionStatusP5">
+											- </span>
+									</div>
+
+									<div class="congestion_count">
+										<strong id="congestionCountP5">-</strong> <span>대 가능</span>
+									</div>
+
+									<div class="congestion_bar">
+										<div class="congestion_fill" id="congestionFillP5"></div>
+									</div>
+
+									<div class="congestion_percent">
+										<span>주차면</span> <strong id="congestionPercentP5">-</strong>
+									</div>
+								</div>
+
+
+								<!-- P6 -->
+								<div class="parking_congestion_card" id="congestionCardP6">
+									<div class="congestion_card_top">
+										<div>
+											<span class="congestion_zone">P6</span> <strong
+												class="congestion_type">단기주차장</strong>
+										</div>
+										<span class="congestion_status" id="congestionStatusP6">
+											- </span>
+									</div>
+
+									<div class="congestion_count">
+										<strong id="congestionCountP6">-</strong> <span>대 가능</span>
+									</div>
+
+									<div class="congestion_bar">
+										<div class="congestion_fill" id="congestionFillP6"></div>
+									</div>
+
+									<div class="congestion_percent">
+										<span>주차면</span> <strong id="congestionPercentP6">-</strong>
+									</div>
+								</div>
 
-    </div>
 
-</div>
+								<!-- P7 -->
+								<div class="parking_congestion_card" id="congestionCardP7">
+									<div class="congestion_card_top">
+										<div>
+											<span class="congestion_zone">P7</span> <strong
+												class="congestion_type">단기주차장</strong>
+										</div>
+										<span class="congestion_status" id="congestionStatusP7">
+											- </span>
+									</div>
 
+									<div class="congestion_count">
+										<strong id="congestionCountP7">-</strong> <span>대 가능</span>
+									</div>
 
+									<div class="congestion_bar">
+										<div class="congestion_fill" id="congestionFillP7"></div>
+									</div>
 
+									<div class="congestion_percent">
+										<span>주차면</span> <strong id="congestionPercentP7">-</strong>
+									</div>
+								</div>
 
 
+								<!-- P8 -->
+								<div class="parking_congestion_card" id="congestionCardP8">
+									<div class="congestion_card_top">
+										<div>
+											<span class="congestion_zone">P8</span> <strong
+												class="congestion_type">단기주차장</strong>
+										</div>
+										<span class="congestion_status" id="congestionStatusP8">
+											- </span>
+									</div>
 
+									<div class="congestion_count">
+										<strong id="congestionCountP8">-</strong> <span>대 가능</span>
+									</div>
 
-</div>
+									<div class="congestion_bar">
+										<div class="congestion_fill" id="congestionFillP8"></div>
+									</div>
 
-</section>
+									<div class="congestion_percent">
+										<span>주차면</span> <strong id="congestionPercentP8">-</strong>
+									</div>
+								</div>
 
 
-<!-- NOTICE -->
+								<!-- P9 -->
+								<div class="parking_congestion_card" id="congestionCardP9">
+									<div class="congestion_card_top">
+										<div>
+											<span class="congestion_zone">P9</span> <strong
+												class="congestion_type">단기주차장</strong>
+										</div>
+										<span class="congestion_status" id="congestionStatusP9">
+											- </span>
+									</div>
 
-<section class="section" id="notice">
+									<div class="congestion_count">
+										<strong id="congestionCountP9">-</strong> <span>대 가능</span>
+									</div>
 
-<div class="info_grid">
+									<div class="congestion_bar">
+										<div class="congestion_fill" id="congestionFillP9"></div>
+									</div>
 
+									<div class="congestion_percent">
+										<span>주차면</span> <strong id="congestionPercentP9">-</strong>
+									</div>
+								</div>
 
-<div class="panel">
+							</div>
 
+						</div>
 
-<div class="section_head">
 
-<div>
 
-<h2>공지사항</h2>
 
-<p>
-주차 서비스의 새로운 소식을 알려드립니다.
-</p>
 
-</div>
 
-<a href="#" class="more">
-더보기 →
-</a>
 
-</div>
+					</div>
 
+				</section>
 
-<ul class="notice_list">
 
+				<!-- NOTICE -->
 
-<li>
+				<section class="section" id="notice">
 
-<span class="notice_tag">
-공지
-</span>
+					<div class="info_grid">
 
-<strong>
-주차예약 서비스 이용 안내
-</strong>
 
-<span class="notice_date">
-2026.09.02
-</span>
+						<div class="panel">
 
-</li>
 
+							<div class="section_head">
 
-<li>
+								<div>
 
-<span class="notice_tag">
-안내
-</span>
+									<h2>공지사항</h2>
 
-<strong>
-실시간 주차 현황 업데이트 안내
-</strong>
+									<p>주차 서비스의 새로운 소식을 알려드립니다.</p>
 
-<span class="notice_date">
-2026.09.01
-</span>
+								</div>
 
-</li>
+								<a href="#" class="more"> 더보기 → </a>
 
+							</div>
 
-<li>
 
-<span class="notice_tag">
-공지
-</span>
+							<ul class="notice_list">
 
-<strong>
-제1여객터미널 주차장 이용 안내
-</strong>
 
-<span class="notice_date">
-2026.08.28
-</span>
+								<li><span class="notice_tag"> 공지 </span> <strong>
+										주차예약 서비스 이용 안내 </strong> <span class="notice_date"> 2026.09.02 </span>
 
-</li>
+								</li>
 
 
-<li>
+								<li><span class="notice_tag"> 안내 </span> <strong>
+										실시간 주차 현황 업데이트 안내 </strong> <span class="notice_date">
+										2026.09.01 </span></li>
 
-<span class="notice_tag">
-안내
-</span>
 
-<strong>
-주차예약 시스템 점검 안내
-</strong>
+								<li><span class="notice_tag"> 공지 </span> <strong>
+										제1여객터미널 주차장 이용 안내 </strong> <span class="notice_date">
+										2026.08.28 </span></li>
 
-<span class="notice_date">
-2026.08.25
-</span>
 
-</li>
+								<li><span class="notice_tag"> 안내 </span> <strong>
+										주차예약 시스템 점검 안내 </strong> <span class="notice_date"> 2026.08.25 </span>
 
+								</li>
 
-</ul>
 
-</div>
+							</ul>
 
+						</div>
 
-<!-- GUIDE -->
 
-<div class="panel" id="guide">
+						<!-- GUIDE -->
 
+						<div class="panel" id="guide">
 
-<div class="section_head">
 
-<div>
+							<div class="section_head">
 
-<h2>이용 안내</h2>
+								<div>
 
-<p>
-처음 이용하셔도 쉽게 예약할 수 있습니다.
-</p>
+									<h2>이용 안내</h2>
 
-</div>
+									<p>처음 이용하셔도 쉽게 예약할 수 있습니다.</p>
 
-</div>
+								</div>
 
+							</div>
 
-<div class="guide_list">
 
+							<div class="guide_list">
 
-<div class="guide_item">
 
-<span class="guide_num">
-01
-</span>
+								<div class="guide_item">
 
-<strong>
-주차장 선택
-</strong>
+									<span class="guide_num"> 01 </span> <strong> 주차장 선택 </strong> <span>
+										원하는 터미널과 주차구역을 선택하세요. </span>
 
-<span>
-원하는 터미널과 주차구역을 선택하세요.
-</span>
+								</div>
 
-</div>
 
+								<div class="guide_item">
 
-<div class="guide_item">
+									<span class="guide_num"> 02 </span> <strong> 예약 정보 입력
+									</strong> <span> 입·출차 날짜와 시간을 입력하세요. </span>
 
-<span class="guide_num">
-02
-</span>
+								</div>
 
-<strong>
-예약 정보 입력
-</strong>
 
-<span>
-입·출차 날짜와 시간을 입력하세요.
-</span>
+								<div class="guide_item">
 
-</div>
+									<span class="guide_num"> 03 </span> <strong> 예약 확인 </strong> <span>
+										예약 가능 여부를 확인하고 신청하세요. </span>
 
+								</div>
 
-<div class="guide_item">
 
-<span class="guide_num">
-03
-</span>
+								<div class="guide_item">
 
-<strong>
-예약 확인
-</strong>
+									<span class="guide_num"> 04 </span> <strong> 주차 이용 </strong> <span>
+										예약 시간에 맞춰 편리하게 이용하세요. </span>
 
-<span>
-예약 가능 여부를 확인하고 신청하세요.
-</span>
+								</div>
 
-</div>
 
+							</div>
 
-<div class="guide_item">
+						</div>
 
-<span class="guide_num">
-04
-</span>
 
-<strong>
-주차 이용
-</strong>
+					</div>
 
-<span>
-예약 시간에 맞춰 편리하게 이용하세요.
-</span>
+				</section>
 
-</div>
 
+			</div>
 
-</div>
+		</main>
 
-</div>
 
+		<!-- FOOTER -->
 
-</div>
+		<footer class="footer">
 
-</section>
 
+			<div class="footer_inner">
 
-</div>
 
-</main>
+				<div class="footer_top">
 
 
-<!-- FOOTER -->
+					<div class="footer_logo">
 
-<footer class="footer">
+						인천공항 주차예약 <small> INCHEON AIRPORT PARKING </small>
 
+					</div>
 
-<div class="footer_inner">
 
+					<div class="footer_links">
 
-<div class="footer_top">
+						<a href="#"> 이용약관 </a> <a href="#"> 개인정보처리방침 </a> <a href="#">
+							사이트맵 </a>
 
+					</div>
 
-<div class="footer_logo">
 
-인천공항 주차예약
+				</div>
 
-<small>
-INCHEON AIRPORT PARKING
-</small>
 
-</div>
+				<div class="footer_info">
 
+					<p>제1여객터미널 주차예약 서비스 · 본 사이트는 팀프로젝트 목적으로 제작되었습니다.</p>
 
-<div class="footer_links">
+					<p>문의 : 제1여객터미널 주차상황실</p>
 
-<a href="#">
-이용약관
-</a>
+					<p class="copyright">Copyright © Parking Reservation Project.
+						All rights reserved.</p>
 
-<a href="#">
-개인정보처리방침
-</a>
+				</div>
 
-<a href="#">
-사이트맵
-</a>
 
-</div>
+			</div>
 
+		</footer>
 
-</div>
 
+	</div>
 
-<div class="footer_info">
 
-<p>
-제1여객터미널 주차예약 서비스 · 본 사이트는 팀프로젝트 목적으로 제작되었습니다.
-</p>
+	<script>
 
-<p>
-문의 : 제1여객터미널 주차상황실
-</p>
+<%List<LongTermParkingDto> longTermList = (List<LongTermParkingDto>) request.getAttribute("longTermList");
 
-<p class="copyright">
-Copyright © Parking Reservation Project. All rights reserved.
-</p>
-
-</div>
-
-
-</div>
-
-</footer>
-
-
-</div>
-
-
-<script>
-
-<%
-	List<LongTermParkingDto> longTermList =
-	        (List<LongTermParkingDto>) request.getAttribute("longTermList");
-	
-	List<ShortTermParkingDto> shortTermList =
-	        (List<ShortTermParkingDto>) request.getAttribute("shortTermList");
-%>
+List<ShortTermParkingDto> shortTermList = (List<ShortTermParkingDto>) request.getAttribute("shortTermList");%>
 
 const parkingData={
 	    "09":{
@@ -1761,51 +1429,41 @@ const parkingData={
 	========================================================= */
 
 	
-	<%
-    longTermList =
-            (List<LongTermParkingDto>) request.getAttribute("longTermList");
+	<%longTermList = (List<LongTermParkingDto>) request.getAttribute("longTermList");
 
-    shortTermList =
-            (List<ShortTermParkingDto>) request.getAttribute("shortTermList");
-%>
+shortTermList = (List<ShortTermParkingDto>) request.getAttribute("shortTermList");%>
 
 let parkingZoneData={
 
-<%
-    if(longTermList != null){
-        for(LongTermParkingDto dto : longTermList){
-%>
+<%if (longTermList != null) {
+	for (LongTermParkingDto dto : longTermList) {%>
 
-    "<%= dto.getParkLotNo() %>":{
+    "<%=dto.getParkLotNo()%>":{
         type:"장기주차장",
-        totalCount:<%= dto.getTotalCount() %>,
-        occupiedCount:<%= dto.getOccupiedCount() %>,
-        availableCount:<%= dto.getAvailableCount() %>,
-        occupancyRate:<%= dto.getOccupancyRate() %>,
-        status:"<%= dto.getCongestion() %>"
+        totalCount:<%=dto.getTotalCount()%>,
+        occupiedCount:<%=dto.getOccupiedCount()%>,
+        availableCount:<%=dto.getAvailableCount()%>,
+        occupancyRate:<%=dto.getOccupancyRate()%>,
+        status:"<%=dto.getCongestion()%>"
     },
 
-<%
-        }
-    }
+<%}
+}
 
-    if(shortTermList != null){
-        for(ShortTermParkingDto dto : shortTermList){
-%>
+if (shortTermList != null) {
+for (ShortTermParkingDto dto : shortTermList) {%>
 
-    "<%= dto.getParkZoneNo() %>":{
+    "<%=dto.getParkZoneNo()%>":{
         type:"단기주차장",
-        totalCount:<%= dto.getTotalCount() %>,
-        occupiedCount:<%= dto.getOccupiedCount() %>,
-        availableCount:<%= dto.getAvailableCount() %>,
-        occupancyRate:<%= dto.getOccupancyRate() %>,
-        status:"<%= dto.getCongestion() %>"
+        totalCount:<%=dto.getTotalCount()%>,
+        occupiedCount:<%=dto.getOccupiedCount()%>,
+        availableCount:<%=dto.getAvailableCount()%>,
+        occupancyRate:<%=dto.getOccupancyRate()%>,
+        status:"<%=dto.getCongestion()%>"
     },
 
-<%
-        }
-    }
-%>
+<%}
+}%>
 
 };
 
