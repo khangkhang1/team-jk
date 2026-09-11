@@ -3,6 +3,13 @@
 <%@ page import="java.util.List" %>
 <%@ page import="dto.LongTermParkingDto" %>
 <%@ page import="dto.ShortTermParkingDto" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+
+
+
+
 
 <!DOCTYPE html>
 <html lang="ko">
@@ -23,7 +30,18 @@
 
 
 <body>
+<script>
+function movePage(servlet, gubun) {
+	go.t_gubun.value = gubun;
+	go.method = "post";
+	go.action = servlet;
+	go.submit();
+}
+</script>
 
+<form name="go">
+	<input type="hidden" name="t_gubun">
+</form>
 <div class="wrap">
 
 <!-- HEADER -->
@@ -72,11 +90,21 @@
             </li>
 
         </nav>
-
+		
         <div class="header_right">
-            <a href="#">로그인</a>
-            <span>|</span>
-            <a href="#">회원가입</a>
+			<c:if test="${not empty sessionName }">
+				<a>${sessionName }님.</a>
+				<span>|</span>
+				<a href="javascript:movePage('Member','logout')">Logout</a>
+
+			</c:if>
+
+			<c:if test="${empty sessionName }">
+				<a href="javascript:movePage('Member','join')">Join</a>
+				<span>|</span>
+				<a href="javascript:movePage('Member','login')">Login</a>
+			</c:if>
+            
         </div>
 
         <button class="menu_btn" aria-label="메뉴">☰</button>
