@@ -353,7 +353,7 @@ function handleResponse(rsp) {
 				<legend data-i18n="res_flightSectionTitle">✈️ 항공권 정보 (필수)</legend>
 				<div class="formRow">
 					<label data-i18n="res_flightNo">항공편명</label>
-					<input type="text" id="flightNoInput" placeholder="예: KE001" name="t_reservation_flight_no">
+					<input type="text" id="flightNoInput" placeholder="1 입력 필요(test단계)" name="t_reservation_flight_no">
 				</div>
 <!-- 예약 유형 선택 후 결제창 진입: 왕복 여부 선택 불필요 판단 / 이후 수정 필요할 것 같음 -->
 				<div class="formRow">
