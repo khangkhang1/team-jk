@@ -3,7 +3,7 @@ package test;
 import java.util.List;
 
 import dao.ShortTermParkingDao;
-import dto.ParkingSeatDto;
+import dto.ParkingSeatDto1;
 
 public class ParkingApiTest {
 	//단기 api test
@@ -12,7 +12,7 @@ public class ParkingApiTest {
 
         ShortTermParkingDao dao = new ShortTermParkingDao();
 
-        List<ParkingSeatDto> list =
+        List<ParkingSeatDto1> list =
                 dao.getAllParkingStatus("T1");
 
         System.out.println("=================================");
@@ -30,7 +30,7 @@ public class ParkingApiTest {
         int occupied03 = 0;
         int occupied04 = 0;
 
-        for (ParkingSeatDto dto : list) {
+        for (ParkingSeatDto1 dto : list) {
 
             if (!"01".equals(dto.getParkLotNo())) {
                 continue;

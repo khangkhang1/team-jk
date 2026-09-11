@@ -16,7 +16,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
-import dto.ParkingSeatDto;
+import dto.ParkingSeatDto1;
 
 // 인천공항공사 ParkLocationData API 호출 담당 DAO
 // T1 단기주차장 개별 주차면 정보를 조회한다.
@@ -29,12 +29,12 @@ public class ShortTermParkingDao {
             "8A6C6Mp2ylWbir47yE6IJtBplIUUhhvbxRr3CbDEGe4URfJZBRmcEoT5SdFTxhrK%2Bdk8bO1MQY%2BOV7guUPsrDw%3D%3D";
 
     // 주차면 현황 조회
-    public List<ParkingSeatDto> getParkingStatus(
+    public List<ParkingSeatDto1> getParkingStatus(
             String terminalId,
             int numOfRows,
             int pageNo) {
 
-        List<ParkingSeatDto> list = new ArrayList<>();
+        List<ParkingSeatDto1> list = new ArrayList<>();
 
         String url = BASE_URL
                 + "?serviceKey=" + SERVICE_KEY
@@ -74,10 +74,10 @@ public class ShortTermParkingDao {
 
     // T1 전체 주차면 조회
     // API가 한 번에 최대 1,000건이므로 페이지를 반복해서 조회한다.
-    public List<ParkingSeatDto> getAllParkingStatus(
+    public List<ParkingSeatDto1> getAllParkingStatus(
             String terminalId) {
 
-        List<ParkingSeatDto> allList =
+        List<ParkingSeatDto1> allList =
                 new ArrayList<>();
 
         int pageNo = 1;
@@ -85,7 +85,7 @@ public class ShortTermParkingDao {
 
         while (true) {
 
-            List<ParkingSeatDto> pageList =
+            List<ParkingSeatDto1> pageList =
                     getParkingStatus(
                             terminalId,
                             numOfRows,
@@ -123,11 +123,11 @@ public class ShortTermParkingDao {
         return allList;
     }
 
-    // XML → ParkingSeatDto 리스트 변환
-    private List<ParkingSeatDto> parseXml(
+    // XML → ParkingSeatDto1 리스트 변환
+    private List<ParkingSeatDto1> parseXml(
             String xml) throws Exception {
 
-        List<ParkingSeatDto> list =
+        List<ParkingSeatDto1> list =
                 new ArrayList<>();
 
         DocumentBuilderFactory factory =
@@ -168,8 +168,8 @@ public class ShortTermParkingDao {
             Element item =
                     (Element) items.item(i);
 
-            ParkingSeatDto dto =
-                    new ParkingSeatDto();
+            ParkingSeatDto1 dto =
+                    new ParkingSeatDto1();
 
             dto.setParkLaneCode(
                     getTagValue(

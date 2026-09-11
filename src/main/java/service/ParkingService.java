@@ -6,7 +6,7 @@ import java.util.List;
 import dao.LongTermParkingDao;
 import dao.ShortTermParkingDao;
 import dto.LongTermParkingDto;
-import dto.ParkingSeatDto;
+import dto.ParkingSeatDto1;
 import dto.ParkingStatusDto;
 import dto.ShortTermParkingDto;
 
@@ -119,7 +119,7 @@ public class ParkingService {
                 new ArrayList<>();
 
         // T1 전체 주차면 조회
-        List<ParkingSeatDto> seats =
+        List<ParkingSeatDto1> seats =
                 shortTermParkingDao.getAllParkingStatus("T1");
 
         // API 구역별 집계
@@ -134,7 +134,7 @@ public class ParkingService {
             int totalCount = 0;
             int occupiedCount = 0;
 
-            for (ParkingSeatDto seat : seats) {
+            for (ParkingSeatDto1 seat : seats) {
 
                 if (seat.getParkZoneNo() == null) {
                     continue;
