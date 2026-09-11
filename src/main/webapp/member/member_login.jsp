@@ -7,10 +7,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>인천공항 주차예약 - 로그인</title>
-<script type="text/javascript" src="js/jquery-1.8.1.min.js"></script>
-<script src="js/common.js"></script>
-<script src="js/member.js"></script>
-<link rel="stylesheet" href="css/member_login.css">
+<script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery-1.8.1.min.js"></script>
+<script src="${pageContext.request.contextPath}/js/common.js"></script>
+<script src="${pageContext.request.contextPath}/js/member.js"></script>
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/member_login.css">
 
 
 </head>
@@ -25,7 +25,7 @@
 
 		<div class="header_inner">
 
-			<a href="index.html" class="logo"> <span class="logo_main">인천공항
+			<a href="${pageContext.request.contextPath}/index.jsp" class="logo"> <span class="logo_main">인천공항
 					주차예약</span> <span class="logo_sub">INCHEON AIRPORT PARKING</span>
 			</a>
 
@@ -38,7 +38,7 @@
 
 			<div class="header_right">
 
-				<a href="Member" class="active">로그인</a> <span class="divider">|</span>
+				<a href="${pageContext.request.contextPath}/Member" class="active">로그인</a> <span class="divider">|</span>
 				<a href="javascript:movePage('Member','join')">회원가입</a>
 
 			</div>
@@ -160,7 +160,7 @@
 	</footer>
 
 
-	<script src="js/member.js"></script>
+	<script src="${pageContext.request.contextPath}/js/member.js"></script>
 
 </body>
 </html>

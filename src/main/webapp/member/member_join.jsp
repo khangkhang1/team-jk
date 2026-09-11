@@ -8,10 +8,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>회원가입 | 인천공항 주차예약</title>
-<script type="text/javascript" src="js/jquery-1.8.1.min.js"></script>
-<script src="js/common.js"></script>
-<script src="js/member.js"></script>
-<link rel="stylesheet" href="css/member_join.css">
+<script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery-1.8.1.min.js"></script>
+<script src="${pageContext.request.contextPath}/js/common.js"></script>
+<script src="${pageContext.request.contextPath}/js/member.js"></script>
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/member_join.css">
 </head>
 
 <body>
@@ -25,7 +25,7 @@
 
 			<div class="header_inner">
 
-				<a href="index3.html" class="logo"> 인천공항 주차예약 <small>INCHEON
+				<a href="${pageContext.request.contextPath}/index.jsp" class="logo"> 인천공항 주차예약 <small>INCHEON
 						AIRPORT PARKING</small>
 				</a>
 
@@ -355,7 +355,7 @@
 	</div>
 
 
-	<script src="js/member.js"></script>
+	<script src="${pageContext.request.contextPath}/js/member.js"></script>
 
 </body>
 

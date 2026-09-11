@@ -26,7 +26,7 @@
 
 	<div class="header_inner">
 
-		<a href="${pageContext.request.contextPath}/index2.html" class="logo">
+		<a href="${pageContext.request.contextPath}/index.jsp" class="logo">
 			인천공항 주차예약
 			<small>INCHEON AIRPORT PARKING</small>
 		</a>
@@ -36,12 +36,12 @@
 
 			<!-- 교통 · 주차 -->
 			<li>
-				<a href="${pageContext.request.contextPath}/index2.html#parking">교통 · 주차</a>
+				<a href="${pageContext.request.contextPath}/index.jsp#parking">교통 · 주차</a>
 
 				<div class="header_dropdown">
-					<a href="${pageContext.request.contextPath}/index2.html#guide">주차장 이용 안내</a>
-					<a href="${pageContext.request.contextPath}/index2.html#parking">주차 요금</a>
-					<a href="${pageContext.request.contextPath}/index2.html#parking">주차장 혼잡도</a>
+					<a href="${pageContext.request.contextPath}/index.jsp#guide">주차장 이용 안내</a>
+					<a href="${pageContext.request.contextPath}/index.jsp#parking">주차 요금</a>
+					<a href="${pageContext.request.contextPath}/index.jsp#parking">주차장 혼잡도</a>
 				</div>
 			</li>
 
@@ -70,10 +70,9 @@
 		</ul>
 
 		<div class="header_right">
-			<a href="${pageContext.request.contextPath}/login.html">로그인</a>
+			<a href="${pageContext.request.contextPath}/member/member_login.jsp">로그인</a>
 			<span>|</span>
-			<%-- TODO: 회원가입 페이지가 아직 없어서 로그인으로 보내둠. 생기면 교체할 것 --%>
-			<a href="${pageContext.request.contextPath}/login.html">회원가입</a>
+			<a href="${pageContext.request.contextPath}/member/member_join.jsp">회원가입</a>
 		</div>
 
 		<button class="menu_btn" aria-label="메뉴">☰</button>

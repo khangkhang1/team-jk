@@ -8,11 +8,11 @@
 <title>주차맵 - 인천공항 주차예약</title>
 
 <!-- 인덱스(index2.html)와 같은 디자인 시스템을 그대로 씀 - 헤더/푸터/컨테이너 스타일 재사용 -->
-<link rel="stylesheet" href="css/index1.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/index1.css">
 
-<link rel="stylesheet" href="css/c.css">
-<link rel="stylesheet" href="css/reservation.css">
-<link rel="stylesheet" href="css/payment.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/c.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/reservation.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/payment.css">
 </head>
 
 <body>
@@ -25,22 +25,22 @@
 	<header class="header scrolled">
 		<div class="header_inner">
 
-			<a href="index2.html" class="logo">
+			<a href="${pageContext.request.contextPath}/index.jsp" class="logo">
 				인천공항 주차예약
 				<small>INCHEON AIRPORT PARKING</small>
 			</a>
 
 			<nav class="header_menu">
 				<li>
-					<a href="index2.html#parking">교통 · 주차</a>
+					<a href="${pageContext.request.contextPath}/index.jsp#parking">교통 · 주차</a>
 					<div class="header_dropdown">
-						<a href="index2.html#guide">주차장 이용 안내</a>
-						<a href="index2.html#parking">주차 요금</a>
-						<a href="index2.html#parking">주차장 혼잡도</a>
+						<a href="${pageContext.request.contextPath}/index.jsp#guide">주차장 이용 안내</a>
+						<a href="${pageContext.request.contextPath}/index.jsp#parking">주차 요금</a>
+						<a href="${pageContext.request.contextPath}/index.jsp#parking">주차장 혼잡도</a>
 					</div>
 				</li>
 				<li>
-					<a href="index2.html#reserve" class="active">주차 예약 조회</a>
+					<a href="${pageContext.request.contextPath}/index.jsp#reserve" class="active">주차 예약 조회</a>
 					<div class="header_dropdown">
 						<a href="#">예약 내역</a>
 						<a href="#">예약 확인</a>
@@ -49,7 +49,7 @@
 					</div>
 				</li>
 				<li>
-					<a href="index2.html#notice">공지 사항</a>
+					<a href="${pageContext.request.contextPath}/index.jsp#notice">공지 사항</a>
 					<div class="header_dropdown">
 						<a href="#">공지 사항</a>
 						<a href="#">자주 하는 질문</a>
@@ -58,9 +58,9 @@
 			</nav>
 
 			<div class="header_right">
-				<a href="login.html">로그인</a>
+				<a href="${pageContext.request.contextPath}/member/member_login.jsp">로그인</a>
 				<span>|</span>
-				<a href="login.html">회원가입</a>
+				<a href="${pageContext.request.contextPath}/member/member_join.jsp">회원가입</a>
 			</div>
 
 			<button class="menu_btn" aria-label="메뉴">☰</button>
@@ -73,7 +73,7 @@
 	<section class="zone_hero">
 		<div class="zone_hero_inner">
 			<div>
-				<a href="index2.html#reserve" class="zone_back">← 전체 주차맵으로</a>
+				<a href="${pageContext.request.contextPath}/index.jsp#reserve" class="zone_back">← 전체 주차맵으로</a>
 				<div class="zone_hero_eyebrow">INCHEON AIRPORT T1 PARKING</div>
 				<h1>
 					<span id="zoneTitle">P1 구역</span>
@@ -174,7 +174,7 @@
 							</div>
 							<svg id="lotSvg" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="구역 상세 주차맵">
 								<!-- 실제 도면 (viewBox로 이 구역만 확대해서 보임) -->
-								<image id="lotBaseImage" href="images/parking_map.png" x="0" y="0" width="1600" height="900"/>
+								<image id="lotBaseImage" href="${pageContext.request.contextPath}/images/parking_map.png" x="0" y="0" width="1600" height="900"/>
 								<!-- 이 구역 블록 외곽선 -->
 								<path id="lotZoneOutline" class="lot_zone_outline"/>
 								<!-- 주차 칸들 -->
