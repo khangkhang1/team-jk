@@ -27,7 +27,7 @@ public class ReservationMap implements CommonExecute {
             startTime = "2026-09-11 09:00";
         }
         if (endTime == null || endTime.trim().isEmpty()) {
-            endTime = "2026-09-11 18:00";
+            endTime = "2099-12-31 23:59";
         }
 
         ReservationMapDao dao = ReservationMapDao.getDao();
