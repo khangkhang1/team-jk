@@ -19,15 +19,15 @@ public class ReservationMap implements CommonExecute {
         String startTime = request.getParameter("reqStartTime");
         String endTime = request.getParameter("reqEndTime");
 
-        // 기본값 설정
+        // [수정] 기본값 설정: 테스트 날짜(2026-09-11) 데이터가 조회되도록 범위 지정
         if (parkingLotId == null || parkingLotId.trim().isEmpty()) {
             parkingLotId = "P1";
         }
         if (startTime == null || startTime.trim().isEmpty()) {
-            startTime = "2026-09-11 09:00";
+            startTime = "2026-09-11 00:00"; // 해당 일자 시작점
         }
         if (endTime == null || endTime.trim().isEmpty()) {
-            endTime = "2099-12-31 23:59";
+            endTime = "2026-09-13 23:59";   // 해당 일자 종료점 (2099년 대신 해당 날짜 전체 조회)
         }
 
         ReservationMapDao dao = ReservationMapDao.getDao();

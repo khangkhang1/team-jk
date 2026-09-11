@@ -1,44 +1,138 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>주차맵 - 인천공항 주차예약</title>
+<!-- 1. jQuery 먼저 로드 (V1 SDK 동작에 필수) -->
+<script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+<!-- 2. 포트원 v1 SDK 로드 -->
+<script src="https://cdn.iamport.kr/v1/iamport.js"></script>
 
-<!-- 인덱스 디자인 시스템 CSS -->
-<link rel="stylesheet" href="css/index1.css">
-<link rel="stylesheet" href="css/c.css">
-<link rel="stylesheet" href="css/reservation.css">
-<link rel="stylesheet" href="css/payment.css">
+<!-- CSS 적용 -->
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/index1.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/c.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/reservation.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/payment.css">
+
+<script>
+// DB 좌석 데이터가 Controller/Servlet에서 전송되었을 경우 받아오기 (없으면 null 처리)
+var dbSeatList = ${dbSeatListJson != null ? dbSeatListJson : "null"};
+
+// 1. Document가 준비된 후 식별코드 초기화
+$(document).ready(function() {
+    var IMP = window.IMP;
+    IMP.init("imp43028000");
+});
+
+// 2. 예약 버튼 클릭 시 호출
+function goPayment() {
+    var method = document.pay.t_reservation_pay_method.value;
+
+    if (!method) {
+        alert("결제 수단을 선택해 주세요.");
+        return;
+    }
+
+    if (confirm("예약 및 결제를 진행하시겠습니까?")) {
+        payment(method); // 결제 프로세스 시작
+    }
+}
+
+// 3. 포트원 결제창 호출 함수
+function payment(method) {
+    var IMP = window.IMP;
+
+    // 모달창 등에 입력된 예상 금액 가져오기
+    var amountVal = document.getElementById("estimatedPriceInput").value;
+    var depositVal = document.getElementById("depositAmount").value;
+    var price = amountVal ? parseInt(amountVal) : (depositVal ? parseInt(depositVal) : 5000); 
+
+    // 카카오페이 결제
+    if (method === "kakaoPay") {
+        IMP.request_pay({
+            pg: "kakaopay",
+            pay_method: "card",
+            merchant_uid: "ORD_" + new Date().getTime(),
+            name: "인천공항 주차장 예약",
+            amount: price,
+            buyer_name: "홍길동",
+            buyer_email: "test@example.com"
+        }, handleResponse);
+
+    // 신용카드 결제
+    } else if (method === "creditCard") {
+        IMP.request_pay({
+            pg: "html5_inicis.INIpayTest",
+            pay_method: "card",
+            merchant_uid: "ORD_" + new Date().getTime(),
+            name: "인천공항 주차장 예약",
+            amount: price,
+            buyer_name: "홍길동",
+            buyer_email: "test@example.com"
+        }, handleResponse);
+
+    } else {
+        alert("선택하신 결제 수단은 현재 미지원입니다.");
+        return;
+    }
+}
+
+// 4. 포트원 결제 완료 응답 처리 함수
+function handleResponse(rsp) {
+    if (rsp.success) {
+        var seat = document.pay.t_reservation_seat.value;
+        var plan = document.pay.t_reservation_plan.value;
+        var planText = (plan === '1') ? "예약형" : "자율출차형";
+        var deposit_amount = document.pay.t_reservation_deposit_amount.value;
+
+        alert(
+            '예약이 완료되었습니다.\n\n' +
+            '좌석: ' + seat + '\n' +
+            '이용방식: ' + planText + '\n' +
+            '예약금: ' + deposit_amount + '원 결제'
+        );
+
+        // 서버(Servlet)로 보낼 hidden input에 포트원 번호 등록
+        document.getElementById("impUidInput").value = rsp.imp_uid;
+        document.getElementById("merchantUidInput").value = rsp.merchant_uid;
+
+        // 결제 성공 시 최종적으로 Servlet으로 Form Submit 전송
+        var form = document.pay;
+        form.method = "post";
+        form.action = "Reservation";
+        form.submit();
+
+    } else {
+        alert("결제에 실패했거나 취소되었습니다.\n사유: " + rsp.error_msg);
+        return;
+    }
+}
+</script>
 </head>
 
 <body>
 <div class="wrap detail_body_top">
 
-	<!-- ============================================================
-	     HEADER
-	     ============================================================ -->
+	<!-- HEADER -->
 	<header class="header scrolled">
 		<div class="header_inner">
-
-			<a href="index2.html" class="logo">
+			<a href="${pageContext.request.contextPath}/index.jsp" class="logo">
 				인천공항 주차예약
 				<small>INCHEON AIRPORT PARKING</small>
 			</a>
-
 			<nav class="header_menu">
 				<li>
-					<a href="index2.html#parking">교통 · 주차</a>
+					<a href="${pageContext.request.contextPath}/index.jsp#parking">교통 · 주차</a>
 					<div class="header_dropdown">
-						<a href="index2.html#guide">주차장 이용 안내</a>
-						<a href="index2.html#parking">주차 요금</a>
-						<a href="index2.html#parking">주차장 혼잡도</a>
+						<a href="${pageContext.request.contextPath}/index.jsp#guide">주차장 이용 안내</a>
+						<a href="${pageContext.request.contextPath}/index.jsp#parking">주차 요금</a>
+						<a href="${pageContext.request.contextPath}/index.jsp#parking">주차장 혼잡도</a>
 					</div>
 				</li>
 				<li>
-					<a href="index2.html#reserve" class="active">주차 예약 조회</a>
+					<a href="${pageContext.request.contextPath}/index.jsp#reserve" class="active">주차 예약 조회</a>
 					<div class="header_dropdown">
 						<a href="#">예약 내역</a>
 						<a href="#">예약 확인</a>
@@ -47,7 +141,7 @@
 					</div>
 				</li>
 				<li>
-					<a href="index2.html#notice">공지 사항</a>
+					<a href="${pageContext.request.contextPath}/index.jsp#notice">공지 사항</a>
 					<div class="header_dropdown">
 						<a href="#">공지 사항</a>
 						<a href="#">자주 하는 질문</a>
@@ -56,28 +150,24 @@
 			</nav>
 
 			<div class="header_right">
-				<a href="login.html">로그인</a>
+				<a href="${pageContext.request.contextPath}/member/member_login.jsp">로그인</a>
 				<span>|</span>
-				<a href="login.html">회원가입</a>
+				<a href="${pageContext.request.contextPath}/member/member_join.jsp">회원가입</a>
 			</div>
-
 			<button class="menu_btn" aria-label="메뉴">☰</button>
 		</div>
 	</header>
 
-	<!-- ============================================================
-	     페이지 타이틀 밴드
-	     ============================================================ -->
+	<!-- 페이지 타이틀 밴드 -->
 	<section class="zone_hero">
 		<div class="zone_hero_inner">
 			<div>
-				<a href="index2.html#reserve" class="zone_back">← 전체 주차맵으로</a>
+				<a href="${pageContext.request.contextPath}/index.jsp#reserve" class="zone_back">← 전체 주차맵으로</a>
 				<div class="zone_hero_eyebrow">INCHEON AIRPORT T1 PARKING</div>
 				<h1>
-					<span id="zoneTitle">${selectedLotId} 구역</span>
+					<span id="zoneTitle">P1 구역</span>
 					<small id="zoneType">단기주차장 · 시간당 3,000원</small>
 				</h1>
-				<!-- 공공데이터 실시간 현황을 쓰는 구역일 때만 표시됨 -->
 				<span id="liveBadge" class="live_badge" style="display:none"></span>
 			</div>
 
@@ -98,9 +188,7 @@
 		</div>
 	</section>
 
-	<!-- ============================================================
-	     구역 탭
-	     ============================================================ -->
+	<!-- 구역 탭 -->
 	<div class="zone_tabs_wrap">
 		<div class="zone_tabs" id="zoneTabs"></div>
 	</div>
@@ -133,11 +221,11 @@
 					</div>
 				</div>
 
-				<!-- 좌석 선택 -->
+				<!-- 좌석 선택 (주차맵) -->
 				<div class="detail_box">
 					<div class="detail_box_head">
 						<div>
-							<h3><span id="seatBoxZone">${selectedLotId}</span> 구역 좌석</h3>
+							<h3><span id="seatBoxZone">P1</span> 구역 좌석</h3>
 							<p>자리를 클릭하면 결제 창이 열립니다. 예약된 자리와 결항 재배정 중인 자리는 선택할 수 없습니다.</p>
 						</div>
 						<div class="seat_toolbar" style="margin:0">
@@ -155,19 +243,15 @@
 							<span><i class="legend_box legend_cancelled"></i> ✈️ 결항 재배정중</span>
 						</div>
 
-						<!-- 주차 상세맵 -->
 						<div class="lot_map">
 							<div class="lot_gate">
 								<span class="gate_in">▲ 터미널 방향</span>
-								<span id="lotMapZoneLabel">${selectedLotId} 구역 · 지상</span>
+								<span id="lotMapZoneLabel">P1 구역 · 지상</span>
 								<span class="gate_out">진출입로</span>
 							</div>
 							<svg id="lotSvg" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="구역 상세 주차맵">
-								<!-- 실제 도면 -->
-								<image id="lotBaseImage" href="images/parking_map.png" x="0" y="0" width="1600" height="900"/>
-								<!-- 이 구역 블록 외곽선 -->
+								<image id="lotBaseImage" href="${pageContext.request.contextPath}/images/parking_map.png" x="0" y="0" width="1600" height="900"/>
 								<path id="lotZoneOutline" class="lot_zone_outline"/>
-								<!-- 주차 칸들 -->
 								<g id="seatGrid"></g>
 							</svg>
 						</div>
@@ -206,7 +290,7 @@
 </div>
 
 <!-- ============================================================ -->
-<!-- 결제 모듈 (수정 없이 그대로 유지)                             -->
+<!-- 결제 모듈 Form 및 모달창                                      -->
 <!-- ============================================================ -->
 <div class="pay_modal hidden" id="paymentModal">
 	<div class="pay_modal_inner">
@@ -348,14 +432,7 @@ function makeSeats(zone, count){
 	if (dbSeatList && dbSeatList.length > 0) {
 		for (var i = 0; i < dbSeatList.length; i++) {
 			var dbSeat = dbSeatList[i];
-			
-			// ★ DB에서 넘어오는 status 문자열 값에 따른 분기 처리
-			var state = "free";
-			if (dbSeat.status === "예약중") {
-				state = "taken";
-			} else if (dbSeat.status === "결항 재배정중") {
-				state = "cancelled"; // cancelled 클래스를 부여하여 클릭 불가 및 ✈️ 아이콘 표시
-			}
+			var state = (dbSeat.status === "예약 가능") ? "free" : "taken";
 			
 			var kind = "normal";
 			if (dbSeat.typeNm === "장애인차") kind = "disabled";
@@ -672,5 +749,6 @@ loadLiveZoneStatus(function(){
 });
 </script>
 
+<script src="${pageContext.request.contextPath}/js/payment.js"></script>
 </body>
 </html>
