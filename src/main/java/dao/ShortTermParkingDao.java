@@ -16,7 +16,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
-import dto.ParkingSeatDto;
+import dto.ParkingSeatDto1;
 
 // 인천공항공사 ParkLocationData API 호출 담당 DAO
 // T1 단기주차장 개별 주차면 정보를 조회한다.
@@ -29,12 +29,12 @@ public class ShortTermParkingDao {
             "8A6C6Mp2ylWbir47yE6IJtBplIUUhhvbxRr3CbDEGe4URfJZBRmcEoT5SdFTxhrK%2Bdk8bO1MQY%2BOV7guUPsrDw%3D%3D";
 
     // 주차면 현황 조회
-    public List<ParkingSeatDto> getParkingStatus(
+    public List<ParkingSeatDto1> getParkingStatus(
             String terminalId,
             int numOfRows,
             int pageNo) {
 
-        List<ParkingSeatDto> list = new ArrayList<>();
+        List<ParkingSeatDto1> list = new ArrayList<>();
 
         String url = BASE_URL
                 + "?serviceKey=" + SERVICE_KEY
@@ -72,12 +72,69 @@ public class ShortTermParkingDao {
         return list;
     }
 
+    // ------------------------------------------------------------
+    // 60초 캐시 (2026-09-11 추가)
+    //
+    // 이 API는 개별 주차면 단위라 T1만 4,614행이 통째로 내려온다. 실측 834ms.
+    // 화면을 열 때마다, 새로고침할 때마다 부르면 느린 데다 공공데이터포털의
+    // 일일 호출 제한도 금방 닳는다. 주차 현황이 1분 단위로 갱신되는 건
+    // 실무적으로 충분하므로 60초 동안은 받아둔 값을 그대로 돌려준다.
+    //
+    // 캐시가 static인 이유 : 서블릿은 요청마다 new ShortTermParkingDao()를 하므로
+    //   인스턴스 필드에 두면 캐시가 매번 비어 의미가 없다.
+    // 클래스 락을 잡는 이유 : 캐시가 만료된 순간 요청이 여러 개 몰리면
+    //   4,614행을 동시에 여러 번 받아오게 된다. 한 명만 받아오고 나머지는
+    //   그 결과를 쓰게 막는다.
+    // ------------------------------------------------------------
+    private static final long CACHE_MS = 60 * 1000L;
+    private static List<ParkingSeatDto1> allCache = null;
+    private static String allCacheKey = null;
+    private static long allCacheTime = 0L;
+
     // T1 전체 주차면 조회
     // API가 한 번에 최대 1,000건이므로 페이지를 반복해서 조회한다.
-    public List<ParkingSeatDto> getAllParkingStatus(
+    public List<ParkingSeatDto1> getAllParkingStatus(
             String terminalId) {
 
-        List<ParkingSeatDto> allList =
+        synchronized (ShortTermParkingDao.class) {
+
+            long now = System.currentTimeMillis();
+
+            boolean fresh =
+                    allCache != null
+                    && (now - allCacheTime) < CACHE_MS
+                    && allCacheKey != null
+                    && allCacheKey.equals(terminalId);
+
+            if (fresh) {
+                return allCache;
+            }
+
+            List<ParkingSeatDto1> fetched =
+                    fetchAllParkingStatus(terminalId);
+
+            // 호출 실패(빈 리스트)면 캐시를 갈아엎지 않는다.
+            // 직전에 받아둔 값이라도 보여주는 편이 빈 화면보다 낫다.
+            if (!fetched.isEmpty()) {
+                allCache = fetched;
+                allCacheKey = terminalId;
+                allCacheTime = now;
+                return fetched;
+            }
+
+            if (allCache != null) {
+                return allCache;
+            }
+
+            return fetched;
+        }
+    }
+
+    // 실제 호출부 (캐시를 거치지 않는다)
+    private List<ParkingSeatDto1> fetchAllParkingStatus(
+            String terminalId) {
+
+        List<ParkingSeatDto1> allList =
                 new ArrayList<>();
 
         int pageNo = 1;
@@ -85,7 +142,7 @@ public class ShortTermParkingDao {
 
         while (true) {
 
-            List<ParkingSeatDto> pageList =
+            List<ParkingSeatDto1> pageList =
                     getParkingStatus(
                             terminalId,
                             numOfRows,
@@ -123,11 +180,11 @@ public class ShortTermParkingDao {
         return allList;
     }
 
-    // XML → ParkingSeatDto 리스트 변환
-    private List<ParkingSeatDto> parseXml(
+    // XML → ParkingSeatDto1 리스트 변환
+    private List<ParkingSeatDto1> parseXml(
             String xml) throws Exception {
 
-        List<ParkingSeatDto> list =
+        List<ParkingSeatDto1> list =
                 new ArrayList<>();
 
         DocumentBuilderFactory factory =
@@ -168,8 +225,8 @@ public class ShortTermParkingDao {
             Element item =
                     (Element) items.item(i);
 
-            ParkingSeatDto dto =
-                    new ParkingSeatDto();
+            ParkingSeatDto1 dto =
+                    new ParkingSeatDto1();
 
             dto.setParkLaneCode(
                     getTagValue(

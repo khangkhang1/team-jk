@@ -5,9 +5,9 @@
 <head>
 <meta charset="UTF-8">
 <title>주차맵 - 인천공항 주차관리시스템</title>
-<link rel="stylesheet" href="css/c.css">
-<link rel="stylesheet" href="css/reservation.css">
-<link rel="stylesheet" href="css/payment.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/c.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/reservation.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/payment.css">
 <script>
 	function goPayment{
 		pay.method = "post";
@@ -20,7 +20,7 @@
 
 	<!-- 상단바 -->
 	<header id="topSearch">
-		<a href="Index.html" id="backBtn" title="메인으로" data-i18n="common_back">← 메인으로</a>
+		<a href="${pageContext.request.contextPath}/index.jsp" id="backBtn" title="메인으로" data-i18n="common_back">← 메인으로</a>
 		<div id="logo" data-i18n="res_pageTitle">주차맵</div>
 		<nav id="topNav">
 			<button id="langToggleBtn" class="langToggle">🇯🇵 日本語</button>
@@ -164,9 +164,9 @@
 	<!-- 결제 모듈 END -->
 	<!-- ============================================================ -->
 
-	<script src="js/jquery-1.8.1.min.js"></script>
-	<script src="js/i18n.js"></script>
-	<script src="js/payment.js"></script>
-	<script src="js/reservation.js"></script>
+	<script src="${pageContext.request.contextPath}/js/jquery-1.8.1.min.js"></script>
+	<script src="${pageContext.request.contextPath}/js/i18n.js"></script>
+	<script src="${pageContext.request.contextPath}/js/payment.js"></script>
+	<script src="${pageContext.request.contextPath}/js/reservation.js"></script>
 </body>
 </html>

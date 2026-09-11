@@ -114,10 +114,6 @@ public class DBConnection {
 			e.printStackTrace();
 		}
 
-		String db_url = "jdbc:oracle:thin:@jsl-704:1523/xe";
-		String db_user = "icn_parking";      // TODO: 팀 DB 계정 확정되면 교체
-		String db_passward = "1234";       // TODO: 팀 DB 비밀번호 확정되면 교체
-
 		try {
 			con = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
 		} catch (SQLException e) {

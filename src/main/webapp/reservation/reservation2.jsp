@@ -8,11 +8,11 @@
 <title>주차맵 - 인천공항 주차예약</title>
 
 <!-- 인덱스(index2.html)와 같은 디자인 시스템을 그대로 씀 - 헤더/푸터/컨테이너 스타일 재사용 -->
-<link rel="stylesheet" href="css/index1.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/index1.css">
 
-<link rel="stylesheet" href="css/c.css">
-<link rel="stylesheet" href="css/reservation.css">
-<link rel="stylesheet" href="css/payment.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/c.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/reservation.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/payment.css">
 </head>
 
 <body>
@@ -25,22 +25,22 @@
 	<header class="header scrolled">
 		<div class="header_inner">
 
-			<a href="index2.html" class="logo">
+			<a href="${pageContext.request.contextPath}/index.jsp" class="logo">
 				인천공항 주차예약
 				<small>INCHEON AIRPORT PARKING</small>
 			</a>
 
 			<nav class="header_menu">
 				<li>
-					<a href="index2.html#parking">교통 · 주차</a>
+					<a href="${pageContext.request.contextPath}/index.jsp#parking">교통 · 주차</a>
 					<div class="header_dropdown">
-						<a href="index2.html#guide">주차장 이용 안내</a>
-						<a href="index2.html#parking">주차 요금</a>
-						<a href="index2.html#parking">주차장 혼잡도</a>
+						<a href="${pageContext.request.contextPath}/index.jsp#guide">주차장 이용 안내</a>
+						<a href="${pageContext.request.contextPath}/index.jsp#parking">주차 요금</a>
+						<a href="${pageContext.request.contextPath}/index.jsp#parking">주차장 혼잡도</a>
 					</div>
 				</li>
 				<li>
-					<a href="index2.html#reserve" class="active">주차 예약 조회</a>
+					<a href="${pageContext.request.contextPath}/index.jsp#reserve" class="active">주차 예약 조회</a>
 					<div class="header_dropdown">
 						<a href="#">예약 내역</a>
 						<a href="#">예약 확인</a>
@@ -49,7 +49,7 @@
 					</div>
 				</li>
 				<li>
-					<a href="index2.html#notice">공지 사항</a>
+					<a href="${pageContext.request.contextPath}/index.jsp#notice">공지 사항</a>
 					<div class="header_dropdown">
 						<a href="#">공지 사항</a>
 						<a href="#">자주 하는 질문</a>
@@ -58,9 +58,9 @@
 			</nav>
 
 			<div class="header_right">
-				<a href="login.html">로그인</a>
+				<a href="${pageContext.request.contextPath}/member/member_login.jsp">로그인</a>
 				<span>|</span>
-				<a href="login.html">회원가입</a>
+				<a href="${pageContext.request.contextPath}/member/member_join.jsp">회원가입</a>
 			</div>
 
 			<button class="menu_btn" aria-label="메뉴">☰</button>
@@ -73,7 +73,7 @@
 	<section class="zone_hero">
 		<div class="zone_hero_inner">
 			<div>
-				<a href="index2.html#reserve" class="zone_back">← 전체 주차맵으로</a>
+				<a href="${pageContext.request.contextPath}/index.jsp#reserve" class="zone_back">← 전체 주차맵으로</a>
 				<div class="zone_hero_eyebrow">INCHEON AIRPORT T1 PARKING</div>
 				<h1>
 					<span id="zoneTitle">P1 구역</span>
@@ -174,7 +174,7 @@
 							</div>
 							<svg id="lotSvg" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="구역 상세 주차맵">
 								<!-- 실제 도면 (viewBox로 이 구역만 확대해서 보임) -->
-								<image id="lotBaseImage" href="images/parking_map.png" x="0" y="0" width="1600" height="900"/>
+								<image id="lotBaseImage" href="${pageContext.request.contextPath}/images/parking_map.png" x="0" y="0" width="1600" height="900"/>
 								<!-- 이 구역 블록 외곽선 -->
 								<path id="lotZoneOutline" class="lot_zone_outline"/>
 								<!-- 주차 칸들 -->
@@ -487,7 +487,7 @@ function layoutBays(zone, outlineEl, svgEl){
 
 /* ============================================================
    실시간 구역 주차 현황 (공공데이터 StatusOfParking)
-   - 서버(/Parking?t_gubun=zoneStatus)를 통해 받는다. 프론트에서 data.go.kr을 직접 부르지 않음
+   - 서버(/parkingStatus)를 통해 받는다. 프론트에서 data.go.kr을 직접 부르지 않음
      (서비스키 노출 방지 - 노션 '시스템 아키텍처'의 외부 API 처리 원칙).
    - 실데이터가 있는 구역: P1, P2, P3, P5
      (P4는 2026-07 폐지, P6~P9는 실제 인천공항에 없는 구역이라 임의 데이터 유지)
@@ -495,15 +495,38 @@ function layoutBays(zone, outlineEl, svgEl){
    ============================================================ */
 var LIVE_ZONE_STATUS = null;   // 한 번 받아서 캐시 (구역 탭 전환마다 재호출하지 않음)
 
+/* /parkingStatus 는 서버 사정에 맞춘 모양으로 준다.
+   { longTerm:[{parkLotNo,totalCount,availableCount,congestion,floor,datetm}...],
+     shortTerm:[{parkZoneNo, ...}...] }
+   화면 쪽 코드는 { P1:{remain,total,status,floor,datetm}, ... } 를 기대하므로 여기서 바꿔준다.
+   서버 응답 형식을 화면에 맞춰 고치는 대신 화면에서 흡수하는 이유 :
+   같은 응답을 index.jsp 도 쓰고 있어서, 서버를 바꾸면 그쪽이 깨진다. */
+function normalizeZoneStatus(raw){
+	var out = {};
+	function put(row, keyName){
+		if (!row || !row[keyName]) return;
+		out[row[keyName]] = {
+			remain : row.availableCount,
+			total  : row.totalCount,
+			status : row.congestion,
+			floor  : row.floor  || "",
+			datetm : row.datetm || ""
+		};
+	}
+	(raw.longTerm  || []).forEach(function(r){ put(r, "parkLotNo");  });
+	(raw.shortTerm || []).forEach(function(r){ put(r, "parkZoneNo"); });
+	return out;
+}
+
 function loadLiveZoneStatus(cb){
 	if (LIVE_ZONE_STATUS !== null) { cb && cb(); return; }
 	try {
 		var xhr = new XMLHttpRequest();
-		xhr.open("GET", "Parking?t_gubun=zoneStatus", true);
+		xhr.open("GET", "${pageContext.request.contextPath}/parkingStatus?refresh=true", true);
 		xhr.onreadystatechange = function(){
 			if (xhr.readyState !== 4) return;
 			if (xhr.status === 200){
-				try { LIVE_ZONE_STATUS = JSON.parse(xhr.responseText); }
+				try { LIVE_ZONE_STATUS = normalizeZoneStatus(JSON.parse(xhr.responseText)); }
 				catch(e){ LIVE_ZONE_STATUS = {}; }
 			} else {
 				LIVE_ZONE_STATUS = {};   // 서버 없이 열었을 때 등 - 임의 데이터로 진행
