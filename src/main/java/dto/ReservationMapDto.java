@@ -9,10 +9,10 @@ public class ReservationMapDto {
 	    private String parkingLotId;      // 주차장ID
 	    private String seatId;       // 좌석ID
 	    private String type;          // 타입 (예: 경차, 장애인, 전기차 등)
-	    private Boolean isReserved;   // 예약 가능 여부/상태 표현용
+	    private String isReserved;   // 예약 가능 여부/상태 표현용
 	    private String entryTime;       // 입차(예약 시작) 시간
 	    private String exitTime;        // 출차(예약 종료) 시간
-		public ReservationMapDto(String parkingLotId, String seatId, String type, Boolean isReserved) {
+		public ReservationMapDto(String parkingLotId, String seatId, String type, String isReserved) {
 			super();
 			this.parkingLotId = parkingLotId;
 			this.seatId = seatId;
@@ -21,13 +21,13 @@ public class ReservationMapDto {
 			
 		}
 		
-		public ReservationMapDto(String parkingLotId, String seatId, String type, Boolean isReserved,
+		public ReservationMapDto(String parkingLotId, String seatId, String type, String isReserved2,
 				String startTime, String endTime) {
 			super();
 			this.parkingLotId = parkingLotId;
 			this.seatId = seatId;
 			this.type = type;
-			this.isReserved = isReserved;
+			this.isReserved = isReserved2;
 			this.entryTime = startTime;
 			this.exitTime = endTime;
 		}
@@ -54,10 +54,10 @@ public class ReservationMapDto {
 		public void setType(String type) {
 			this.type = type;
 		}
-		public Boolean getIsReserved() {
+		public String getIsReserved() {
 			return isReserved;
 		}
-		public void setIsReserved(Boolean isReserved) {
+		public void setIsReserved(String isReserved) {
 			this.isReserved = isReserved;
 		}
 

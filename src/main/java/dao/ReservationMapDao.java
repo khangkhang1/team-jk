@@ -19,25 +19,51 @@ public class ReservationMapDao {
 	public static ReservationMapDao getDao(){
 		return dao;
 	}
+	//주차 상태
 	public List<ReservationMapDto> getPakingMap(String map ,String startTime, String endTime) {
 		ArrayList<ReservationMapDto> dtos=new ArrayList<>();
-		String sql = "SELECT  LOT_ID,SEAT_NO,park_status\r\n"
-				+ "FROM ICN_SEAT \r\n"
-				+ "where LOT_ID='?'";
+		String sql = "SELECT \r\n"
+				+ "    s.LOT_ID,\r\n"
+				+ "    s.SEAT_NO,\r\n"
+				+ "    DECODE(s.SEAT_TYPE, 'N', '일반차', 'E', '수소차', 'D', '장애인차') AS SEAT_TYPE_NM,\r\n"
+				+ "    CASE \r\n"
+				+ "        WHEN p.SEAT_NO IS NOT NULL THEN '예약중' -- 해당 시간대 예약 중\r\n"
+				+ "        ELSE '예약 가능'                             -- 예약 가능\r\n"
+				+ "    END AS PARK_STATUS\r\n"
+				+ "FROM \r\n"
+				+ "    ICN_SEAT s\r\n"
+				+ "LEFT JOIN \r\n"
+				+ "    ICN_RESERVATION p \r\n"
+				+ "    ON s.SEAT_NO = p.SEAT_NO\r\n"
+				+ "   AND p.RESERVATION_START_TIME < TO_DATE(?, 'YYYY-MM-DD HH24:MI')\r\n"
+				+ "   AND p.RESERVATION_END_TIME   > TO_DATE(?, 'YYYY-MM-DD HH24:MI')\r\n"
+				+ "WHERE \r\n"
+				+ "    s.LOT_ID = ?\r\n"
+				+ "ORDER BY \r\n"
+				+ "    s.SEAT_NO ASC";
 		
 		try {
 			con=DBConnection.getConnection();
-			LogPreparedStatement ps =new LogPreparedStatement(con, sql);
+			ps =new LogPreparedStatement(con, sql);
 			
-			ps.setString(1, map);
+			
+			ps.setString(1, endTime);
+			ps.setString(2, startTime);
+			ps.setString(3, map);
 			rs=ps.executeQuery();
-			String parkingLotId =rs.getString("LOT_ID");
+			while (rs.next()) {
+				String parkingLotId =rs.getString("LOT_ID");
 			String seatId=rs.getString("SEAT_NO");
-			String type = rs.getString("park_status");
-			ReservationMapDto dto =new ReservationMapDto(parkingLotId, seatId, type, true,startTime,endTime);
+			String type = rs.getString("SEAT_TYPE_NM");
+			
+			String isReserved =rs.getString("PARK_STATUS");
+			ReservationMapDto dto =new ReservationMapDto(parkingLotId, seatId, type, isReserved,startTime,endTime);
+			dtos.add(dto);
+			}
+			
 		} catch (Exception e) {
-			// TODO: handle exception
-		}finally {
+			e.printStackTrace();
+			}finally {
 			DBConnection.closeDB(con, ps, rs);
 		}
 		
