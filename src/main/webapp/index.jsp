@@ -2864,7 +2864,7 @@ let realtimeMode=true;
 	        zone+
 	        " 주차구역 예약 페이지로 이동합니다."
 	    );
-	    //location.href = "index1.html"; 파일 넘기기
+	    location.href = "reservation/reservation2.jsp";
 	    
 	}
 
