@@ -1,6 +1,8 @@
 package service;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import dao.LongTermParkingDao;
@@ -94,13 +96,19 @@ public class ParkingService {
         int occupiedCount =
                 status.getParking();
 
-        result.add(
+        LongTermParkingDto dto =
                 new LongTermParkingDto(
                         parkLotNo,
                         totalCount,
                         occupiedCount
-                )
-        );
+                );
+
+        // 화면 "실시간 배지"용 - 실제 구역명과 공항측 집계시각.
+        // 우리 라벨(P1~P5)은 임의로 붙인 것이라, 실제로 어느 주차장인지 보여주려면 필요하다.
+        dto.setFloor(status.getFloor());
+        dto.setDateTm(status.getDateTm());
+
+        result.add(dto);
     }
 
     // ============================================================
@@ -121,6 +129,9 @@ public class ParkingService {
         // T1 전체 주차면 조회
         List<ParkingSeatDto1> seats =
                 shortTermParkingDao.getAllParkingStatus("T1");
+
+        String queriedAt =
+                new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
 
         // API 구역별 집계
         for (int zoneNo = 1; zoneNo <= 4; zoneNo++) {
@@ -152,13 +163,19 @@ public class ParkingService {
                 }
             }
 
-            result.add(
+            ShortTermParkingDto dto =
                     new ShortTermParkingDto(
                             svgZoneNo,
                             totalCount,
                             occupiedCount
-                    )
-            );
+                    );
+
+            // ParkLocationData에는 집계시각 필드가 없다. 그래서 우리가 조회한 시각을 넣는다.
+            // 장기 쪽 dateTm(공항측 집계시각)과 의미가 다르므로 화면 문구도 "조회 기준"으로 쓸 것.
+            dto.setFloor("T1 단기주차장 " + apiZoneNo + "구역");
+            dto.setDateTm(queriedAt);
+
+            result.add(dto);
         }
 
         return result;

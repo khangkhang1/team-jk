@@ -487,7 +487,7 @@ function layoutBays(zone, outlineEl, svgEl){
 
 /* ============================================================
    실시간 구역 주차 현황 (공공데이터 StatusOfParking)
-   - 서버(/Parking?t_gubun=zoneStatus)를 통해 받는다. 프론트에서 data.go.kr을 직접 부르지 않음
+   - 서버(/parkingStatus)를 통해 받는다. 프론트에서 data.go.kr을 직접 부르지 않음
      (서비스키 노출 방지 - 노션 '시스템 아키텍처'의 외부 API 처리 원칙).
    - 실데이터가 있는 구역: P1, P2, P3, P5
      (P4는 2026-07 폐지, P6~P9는 실제 인천공항에 없는 구역이라 임의 데이터 유지)
@@ -495,15 +495,38 @@ function layoutBays(zone, outlineEl, svgEl){
    ============================================================ */
 var LIVE_ZONE_STATUS = null;   // 한 번 받아서 캐시 (구역 탭 전환마다 재호출하지 않음)
 
+/* /parkingStatus 는 서버 사정에 맞춘 모양으로 준다.
+   { longTerm:[{parkLotNo,totalCount,availableCount,congestion,floor,datetm}...],
+     shortTerm:[{parkZoneNo, ...}...] }
+   화면 쪽 코드는 { P1:{remain,total,status,floor,datetm}, ... } 를 기대하므로 여기서 바꿔준다.
+   서버 응답 형식을 화면에 맞춰 고치는 대신 화면에서 흡수하는 이유 :
+   같은 응답을 index.jsp 도 쓰고 있어서, 서버를 바꾸면 그쪽이 깨진다. */
+function normalizeZoneStatus(raw){
+	var out = {};
+	function put(row, keyName){
+		if (!row || !row[keyName]) return;
+		out[row[keyName]] = {
+			remain : row.availableCount,
+			total  : row.totalCount,
+			status : row.congestion,
+			floor  : row.floor  || "",
+			datetm : row.datetm || ""
+		};
+	}
+	(raw.longTerm  || []).forEach(function(r){ put(r, "parkLotNo");  });
+	(raw.shortTerm || []).forEach(function(r){ put(r, "parkZoneNo"); });
+	return out;
+}
+
 function loadLiveZoneStatus(cb){
 	if (LIVE_ZONE_STATUS !== null) { cb && cb(); return; }
 	try {
 		var xhr = new XMLHttpRequest();
-		xhr.open("GET", "Parking?t_gubun=zoneStatus", true);
+		xhr.open("GET", "${pageContext.request.contextPath}/parkingStatus?refresh=true", true);
 		xhr.onreadystatechange = function(){
 			if (xhr.readyState !== 4) return;
 			if (xhr.status === 200){
-				try { LIVE_ZONE_STATUS = JSON.parse(xhr.responseText); }
+				try { LIVE_ZONE_STATUS = normalizeZoneStatus(JSON.parse(xhr.responseText)); }
 				catch(e){ LIVE_ZONE_STATUS = {}; }
 			} else {
 				LIVE_ZONE_STATUS = {};   // 서버 없이 열었을 때 등 - 임의 데이터로 진행
