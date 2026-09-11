@@ -195,11 +195,15 @@ function refreshPaymentFooter() {
 	document.getElementById('payBarAmount').textContent = DEPOSIT_PRICE.toLocaleString();
 
 	var flightOk = true;
+	var flightArriveInputOk = true;
 	if (payState.plan === '1') {
 		flightOk = document.getElementById('flightNoInput').value.trim() !== ''
 			&& document.getElementById('flightRoundtripInput').value === 'round';
+		var flightArriveInput = document.getElementById('flightArriveInput');
+		
+		flightArriveInputOk = flightArriveInput && flightArriveInput.value.trim() !== '';
 	}
-	var ready = payState.plan && payState.timeChosen && payState.payMethod && flightOk;
+	var ready = payState.plan && payState.timeChosen && payState.payMethod && flightOk && flightArriveInputOk;
 	document.getElementById('payBtn').disabled = !ready;
 }
 
@@ -279,6 +283,13 @@ document.querySelectorAll('input[name="t_reservation_pay_method"]').forEach(func
 		refreshPaymentFooter();
 	});
 });
+
+//도착 예정 시간 입력 시 결제 버튼 활성화 판단 로직
+var flightArriveInputEl = document.getElementById('flightArriveInput');
+if (flightArriveInputEl) {
+	flightArriveInputEl.addEventListener('input', refreshPaymentFooter);
+	flightArriveInputEl.addEventListener('change', refreshPaymentFooter);
+}
 
 // ------- 결제하기 -------
 /*document.getElementById('payBtn').addEventListener('click', function () {

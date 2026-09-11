@@ -80,7 +80,8 @@ function payment(method) {
 // 4. 포트원 결제 완료 응답 처리 함수
 function handleResponse(rsp) {
     if (rsp.success) {
-    	var seat = document.pay.t_reservation_seat.value;
+/*    	
+		var seat = document.pay.t_reservation_seat.value;
     	var plan = document.pay.t_reservation_plan.value;
     	if(plan === '1') plan = "예약형"
         	else plan = "자율출차형"
@@ -92,6 +93,7 @@ function handleResponse(rsp) {
     			'예약금: ' + deposit_amount + '원 결제\n\n' +
     			'(실제 결제/서버 저장 및 항공편 결항 감지 API 연동은 다음 단계에서 연결됩니다)'
     		);
+*/
 
         // 서버(Servlet)로 보낼 hidden input에 포트원 번호 등록
         document.getElementById("impUidInput").value = rsp.imp_uid;
@@ -384,7 +386,7 @@ function handleResponse(rsp) {
 			<div id="paymentFooter">
 				<div id="payBarPrice"><span data-i18n="res_depositLabel">예약금</span> <strong id="payBarAmount">-</strong>원</div>
 <!-- Servlet으로 예약금 넘기기 위한 input / 예약 목록 확인 시 예약금 노출 / 필요 없는 경우 삭제 예정 -->
-				<input type="text" id="depositAmount" name="t_reservation_deposit_amount" value="5000">
+				<input type="hidden" id="depositAmount" name="t_reservation_deposit_amount" value="5000">
 <!-- 포트원 결제 검증 및 DB 저장을 위한 hidden input 추가 -->
 				<input type="hidden" name="t_imp_uid" id="impUidInput">
 				<input type="hidden" name="t_merchant_uid" id="merchantUidInput">
