@@ -94,7 +94,7 @@ boolean headerOverlay = "Y".equals(request.getAttribute("headerOverlay"));
 			<c:if test="${empty sessionName }">
 				<a href="javascript:movePage('Member','join')">Join</a>
 				<span>|</span>
-				<a href="javascript:movePage('Member','login')">Login 
+				<a href="javascript:movePage('Member','login')">Login</a>
 			</c:if>
 		</div>
 
