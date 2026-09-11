@@ -9,7 +9,8 @@ import dto.PaymentDto;
 import dto.ReservationInfoDto;
 
 public class Payment implements CommonExecute {
-
+//현재 결제 성공 메세지를 reservationOys.jsp에서 출력 후 넘어옴 -> dao에서 문제 발생 시 성공 메세지 출력 이후 실패 가능성 존재
+//	==> jsp가 아닌 여기에서 성공 여부 출력하도록 수정 예정
 	@Override
 	public void execute(HttpServletRequest request) {
 		PaymentDao dao = PaymentDao.getDao();
