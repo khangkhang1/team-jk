@@ -9,27 +9,29 @@
      같은 폴더 : <%@ include file="common_header.jsp" %>
      하위 폴더 : <%@ include file="../common_header.jsp" %>
 
- [배너 없는 페이지는 앞에 이 줄을 추가]
-     <% request.setAttribute("headerSolid", "Y"); %>
-   안 주면 헤더가 투명 + 흰 글씨라 흰 배경 페이지에서 안 보인다.
+ [기본은 불투명 헤더(흰 배경 + 검은 글씨)라 그냥 쓰면 된다]
+
+ [메인처럼 히어로 배너 위에 겹쳐 올리는 투명 헤더가 필요할 때만 앞에 이 줄 추가]
+     <% request.setAttribute("headerOverlay", "Y"); %>
+   투명 상태로 시작했다가 스크롤을 내리면 불투명해진다.
 
  [페이지 <head>에 CSS 필수. 없으면 불릿 달린 맨 화면이 나온다]
      <link href="${pageContext.request.contextPath}/css/index1.css" rel="stylesheet">
 --%>
 <%
 // 정적 include 는 파라미터를 못 넘기므로 request 속성으로 받는다.
-// 안 넘어오면 "N"(투명 헤더)이 기본 - web_jsl common_header.jsp 의 null 처리와 같은 방식.
-String headerSolid = (String) request.getAttribute("headerSolid");
-if (headerSolid == null)
-	headerSolid = "N";
+// 기본은 불투명(solid). 페이지 대부분이 흰 배경이라 투명이 기본이면
+// 흰 글씨가 흰 배경에 묻혀서 안 보인다 - 안전한 쪽을 기본값으로 둔다.
+// 메인처럼 배너 위에 겹쳐야 하는 화면만 headerOverlay="Y" 를 넘긴다.
+boolean headerOverlay = "Y".equals(request.getAttribute("headerOverlay"));
 %>
-<script src="js/common.js"></script>
+<script src="${pageContext.request.contextPath}/js/common.js"></script>
 
 <form name="go">
 	<input type="hidden" name="t_gubun">
 </form>
-<header class="header<%="Y".equals(headerSolid) ? " scrolled" : ""%>"
-	data-solid="<%=headerSolid%>">
+<header class="header<%=headerOverlay ? "" : " scrolled"%>"
+	data-overlay="<%=headerOverlay ? "Y" : "N"%>">
 
 	<div class="header_inner">
 
@@ -110,8 +112,8 @@ if (headerSolid == null)
 		if (!header)
 			return;
 
-		// solid 페이지는 맨 위로 올려도 불투명 유지
-		var solid = header.dataset.solid === "Y";
+		// overlay 페이지가 아니면 맨 위로 올려도 계속 불투명 유지
+		var solid = header.dataset.overlay !== "Y";
 
 		function updateHeader() {
 			header.classList.toggle("scrolled", solid || window.scrollY > 40);

@@ -8,10 +8,10 @@
 
 <title>인천공항 주차예약 - 로그인</title>
 
-<script type="text/javascript" src="js/jquery-1.8.1.min.js"></script>
-<script src="js/member.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery-1.8.1.min.js"></script>
+<script src="${pageContext.request.contextPath}/js/member.js"></script>
 
-<link rel="stylesheet" href="css/member_login.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/member_login.css">
 <link href="${pageContext.request.contextPath}/css/index1.css"
 	rel="stylesheet">
 </head>

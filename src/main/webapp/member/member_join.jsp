@@ -9,9 +9,9 @@
 
 <title>회원가입 | 인천공항 주차예약</title>
 
-<script type="text/javascript" src="js/jquery-1.8.1.min.js"></script>
-<script src="js/member.js"></script>
-<link rel="stylesheet" href="css/member_join.css">
+<script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery-1.8.1.min.js"></script>
+<script src="${pageContext.request.contextPath}/js/member.js"></script>
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/member_join.css">
 
 </head>
 
