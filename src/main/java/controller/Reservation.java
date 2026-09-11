@@ -56,7 +56,8 @@ public class Reservation extends HttpServlet {
 		}else if(gubun.equals("payment")){
 			CommonExecute mem = new Payment();
 			mem.execute(request);
-			viewPage = "/reservation/reservationOys.jsp";
+			viewPage = "common_alert.jsp";
+			
 		}
 
 		RequestDispatcher rd = request.getRequestDispatcher(viewPage);

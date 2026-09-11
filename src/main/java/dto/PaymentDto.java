@@ -13,16 +13,15 @@ public class PaymentDto {
 	
 	--------------모두 not null--------------
 */
-	private int estimate_amount, deposit_amount;
+	private int payment_estimate_amount, payment_deposit_amount;
 	private String payment_id, reservation_id, payment_method, payment_date, payment_type;
 	
 	//결제 시 생성자
-	public PaymentDto(String payment_id, String reservation_id, int estimate_amount, int deposit_amount, String payment_method,
+	public PaymentDto(String payment_id, String reservation_id, int payment_deposit_amount, String payment_method,
 				String payment_type, String payment_date) {
 		this.payment_id 	= payment_id;
 		this.reservation_id = reservation_id;
-		this.estimate_amount = estimate_amount;
-		this.deposit_amount = deposit_amount;
+		this.payment_deposit_amount = payment_deposit_amount;
 		this.payment_method = payment_method;
 		this.payment_type 	= payment_type;
 		this.payment_date 	= payment_date;
@@ -36,12 +35,12 @@ public class PaymentDto {
 		return reservation_id;
 	}
 
-	public int getEstimate_amount() {
-		return estimate_amount;
+	public int getPayment_stimate_amount() {
+		return payment_estimate_amount;
 	}
 	
-	public int getDeposit_amount() {
-		return deposit_amount;
+	public int getPayment_deposit_amount() {
+		return payment_deposit_amount;
 	}
 
 	public String getPayment_method() {
