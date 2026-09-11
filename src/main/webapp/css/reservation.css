@@ -341,6 +341,20 @@
 .bay_g.cancelled:hover .bay{
 	fill:#ffdede;
 }
+
+/* ★ [중요] 선택된 상태 (.selected)가 최우선 적용되도록 맨 아래에배치 ★ */
+.bay_g.selected .bay,
+.bay_g.disabled_seat.selected .bay,
+.bay_g.ev_seat.selected .bay {
+	fill:#1769d2 !important;
+	stroke:#0d57b3 !important;
+}
+
+.bay_g.selected .bay_label,
+.bay_g.disabled_seat.selected .bay_label,
+.bay_g.ev_seat.selected .bay_label {
+	fill:#fff !important;
+}
 /* 주행로 표시 */
 .lot_lane {
 	fill: none;
