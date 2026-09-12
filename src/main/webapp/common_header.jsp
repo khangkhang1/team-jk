@@ -36,7 +36,7 @@ boolean headerOverlay = "Y".equals(request.getAttribute("headerOverlay"));
 	<div class="header_inner">
 
 
-		<a href="javascript:movePage('Index','')" class="logo"> 인천공항 주차예약
+		<a href="javascript:movePage('ParkingStatus','')" class="logo"> 인천공항 주차예약
 			<small>INCHEON AIRPORT PARKING</small>
 		</a>
 
