@@ -1,5 +1,7 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+<%@ page pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%--
  공통 헤더 (강선구). 개인프로젝트 common_menu.jsp 와 같은 방식.
 
@@ -23,14 +25,18 @@
     // 메인처럼 배너 위에 겹쳐야 하는 화면만 headerOverlay="Y" 를 넘긴다.
     boolean headerOverlay = "Y".equals(request.getAttribute("headerOverlay"));
 %>
+<script src="${pageContext.request.contextPath}/js/common.js"></script>
 
-<header class="header<%= headerOverlay ? "" : " scrolled" %>"
-        data-overlay="<%= headerOverlay ? "Y" : "N" %>">
-
+<form name="go">
+	<input type="hidden" name="t_gubun">
+</form>
+<header class="header<%=headerOverlay ? "" : " scrolled"%>"
+	data-overlay="<%=headerOverlay ? "Y" : "N"%>">
+	
 	<div class="header_inner">
 
-		<a href="${pageContext.request.contextPath}/index2.html" class="logo">
-			인천공항 주차예약
+
+		<a href="javascript:movePage('Index','')" class="logo"> 인천공항 주차예약
 			<small>INCHEON AIRPORT PARKING</small>
 		</a>
 
@@ -38,46 +44,60 @@
 		<ul class="header_menu">
 
 			<!-- 교통 · 주차 -->
-			<li>
-				<a href="${pageContext.request.contextPath}/index2.html#parking">교통 · 주차</a>
+
+			<li><a
+				href="${pageContext.request.contextPath}/index.jsp#parking">교통 ·
+					주차</a>
 
 				<div class="header_dropdown">
-					<a href="${pageContext.request.contextPath}/index2.html#guide">주차장 이용 안내</a>
-					<a href="${pageContext.request.contextPath}/index2.html#parking">주차 요금</a>
-					<a href="${pageContext.request.contextPath}/index2.html#parking">주차장 혼잡도</a>
-				</div>
-			</li>
+					<a href="${pageContext.request.contextPath}/index.jsp#guide">주차장
+						이용 안내</a> <a
+						href="${pageContext.request.contextPath}/index.jsp#parking">주차
+						요금</a> <a href="${pageContext.request.contextPath}/index.jsp#parking">주차장
+						혼잡도</a>
+				</div></li>
+
 
 			<!-- 주차 예약 조회 -->
-			<li>
-				<a href="${pageContext.request.contextPath}/reservation.html">주차 예약 조회</a>
+			<li><a
+				href="${pageContext.request.contextPath}/reservation.html">주차 예약
+					조회</a>
 
 				<div class="header_dropdown">
 					<a href="${pageContext.request.contextPath}/mypage.html">예약 내역</a>
 					<a href="${pageContext.request.contextPath}/mypage.html">예약 확인</a>
 					<a href="${pageContext.request.contextPath}/mypage.html">예약 취소</a>
 					<a href="${pageContext.request.contextPath}/mypage.html">이용 내역</a>
-				</div>
-			</li>
+				</div></li>
 
 			<!-- 공지 사항 -->
-			<li>
-				<a href="${pageContext.request.contextPath}/notice.html">공지 사항</a>
+			<li><a href="${pageContext.request.contextPath}/notice.html">공지
+					사항</a>
 
 				<div class="header_dropdown">
 					<a href="${pageContext.request.contextPath}/notice.html">공지 사항</a>
-					<a href="${pageContext.request.contextPath}/faq/faq.jsp">자주 하는 질문</a>
-				</div>
-			</li>
+					<a href="${pageContext.request.contextPath}/faq/faq.jsp">자주 하는
+						질문</a>
+				</div></li>
 
 		</ul>
 
 		<div class="header_right">
-			<a href="${pageContext.request.contextPath}/login.html">로그인</a>
-			<span>|</span>
-			<%-- TODO: 회원가입 페이지가 아직 없어서 로그인으로 보내둠. 생기면 교체할 것 --%>
-			<a href="${pageContext.request.contextPath}/login.html">회원가입</a>
+
+			<c:if test="${not empty sessionName }">
+				<a>${sessionName }님.</a>
+				<span>|</span>
+				<a href="javascript:movePage('Member','logout')">Logout</a>
+
+			</c:if>
+
+			<c:if test="${empty sessionName }">
+				<a href="javascript:movePage('Member','join')">Join</a>
+				<span>|</span>
+				<a href="javascript:movePage('Member','login')">Login</a>
+			</c:if>
 		</div>
+
 
 		<button class="menu_btn" aria-label="메뉴">☰</button>
 
@@ -87,19 +107,19 @@
 
 <%-- 스크롤 시 헤더 축소. index2.html에 같은 스크립트가 있으니 그 페이지 전환 시 기존 것 삭제할 것 --%>
 <script>
-(function(){
-	var header = document.querySelector(".header");
-	if (!header) return;
+	(function() {
+		var header = document.querySelector(".header");
+		if (!header)
+			return;
 
-	// overlay 페이지만 스크롤에 따라 투명<->불투명이 바뀐다.
-	// 나머지 페이지는 계속 불투명 유지(맨 위로 올려도 글씨가 사라지지 않게).
-	var overlay = header.dataset.overlay === "Y";
+		// overlay 페이지가 아니면 맨 위로 올려도 계속 불투명 유지
+		var solid = header.dataset.overlay !== "Y";
 
-	function updateHeader(){
-		header.classList.toggle("scrolled", !overlay || window.scrollY > 40);
-	}
+		function updateHeader() {
+			header.classList.toggle("scrolled", solid || window.scrollY > 40);
+		}
 
-	window.addEventListener("scroll", updateHeader);
-	updateHeader();
-})();
+		window.addEventListener("scroll", updateHeader);
+		updateHeader();
+	})();
 </script>

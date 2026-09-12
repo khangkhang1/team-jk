@@ -6,13 +6,109 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>주차맵 - 인천공항 주차예약</title>
-
+ <!-- 1. jQuery 먼저 로드 (V1 SDK 동작에 필수) -->
+  <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+  <!-- 2. 포트원 v1 SDK 로드 -->
+  <script src="https://cdn.iamport.kr/v1/iamport.js"></script>
 <!-- 인덱스(index2.html)와 같은 디자인 시스템을 그대로 씀 - 헤더/푸터/컨테이너 스타일 재사용 -->
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/index1.css">
 
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/c.css">
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/reservation.css">
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/payment.css">
+
+<script>
+//1. Document가 준비된 후 식별코드 초기화
+$(document).ready(function() {
+    var IMP = window.IMP;
+    IMP.init("imp43028000");
+});
+
+// 2. 예약 버튼 클릭 시 호출
+function goPayment() {
+    var method = document.pay.t_reservation_pay_method.value;
+
+    if (!method) {
+        alert("결제 수단을 선택해 주세요.");
+        return;
+    }
+
+    if (confirm("예약 및 결제를 진행하시겠습니까?")) {
+        payment(method); // 결제 프로세스 시작
+    }
+}
+
+// 3. 포트원 결제창 호출 함수
+function payment(method) {
+    var IMP = window.IMP;
+
+    // 모달창 등에 입력된 예상 금액 가져오기 (없으면 기본값 설정)
+//    var amountVal = document.getElementById("estimatedPriceInput").value;
+//    var price = amountVal ? parseInt(amountVal) : document.pay.t_reservation_deposit_amount; 
+	 var price = document.getElementById("depositAmount").value;
+
+    // 카카오페이 결제
+    if (method === "kakaoPay") {
+        IMP.request_pay({
+            pg: "kakaopay",
+            pay_method: "card",
+            merchant_uid: "ORD_" + new Date().getTime(),
+            name: "인천공항 주차장 예약",
+            amount: price,
+            buyer_name: "홍길동",            // 필요 시 로그인 회원 이름으로 교체
+            buyer_email: "test@example.com"
+        }, handleResponse);
+
+    // 신용카드 결제
+    } else if (method === "creditCard") {
+        IMP.request_pay({
+            pg: "html5_inicis.INIpayTest",
+            pay_method: "card",
+            merchant_uid: "ORD_" + new Date().getTime(),
+            name: "인천공항 주차장 예약",
+            amount: price,
+            buyer_name: "홍길동",
+            buyer_email: "test@example.com"
+        }, handleResponse);
+
+    } else {
+        alert("선택하신 결제 수단은 현재 미지원입니다.");
+        return;
+    }
+}
+
+// 4. 포트원 결제 완료 응답 처리 함수
+function handleResponse(rsp) {
+    if (rsp.success) {
+    	var seat = document.pay.t_reservation_seat.value;
+    	var plan = document.pay.t_reservation_plan.value;
+    	if(plan === '1') plan = "예약형"
+        	else plan = "자율출차형"
+    	var deposit_amount = document.pay.t_reservation_deposit_amount.value;
+    	alert(
+    			'예약이 완료되었습니다.\n\n' +
+    			'좌석: ' + seat + '\n' +
+    			'이용방식: ' + plan + '\n' +
+    			'예약금: ' + deposit_amount + '원 결제\n\n' +
+    			'(실제 결제/서버 저장 및 항공편 결항 감지 API 연동은 다음 단계에서 연결됩니다)'
+    		);
+
+        // 서버(Servlet)로 보낼 hidden input에 포트원 번호 등록
+        document.getElementById("impUidInput").value = rsp.imp_uid;
+        document.getElementById("merchantUidInput").value = rsp.merchant_uid;
+
+        // 결제 성공 시에만 최종적으로 Servlet으로 Form Submit 전송!
+        var form = document.pay;
+        form.method = "post";
+        form.action = "Reservation"; // Reservation Servlet으로 전송
+        form.submit();
+
+    } else {
+        alert("결제에 실패했거나 취소되었습니다.\n사유: " + rsp.error_msg);
+        return;
+    }
+}
+</script>
 </head>
 
 <body>
@@ -219,75 +315,84 @@
 <!-- 결제 모듈 (담당: 오윤섭) — 이 블록은 껍데기 스타일만 인덱스 톤에 맞췄고 -->
 <!-- 내용/기능은 원본 그대로. 완성되면 이 자리에 통째로 교체하면 됨.        -->
 <!-- ============================================================ -->
-<div class="pay_modal hidden" id="paymentModal">
-	<div class="pay_modal_inner">
-		<button class="pay_close" id="paymentCloseBtn">&times;</button>
+<form name="pay">
+<input type="hidden" name="t_gubun" value="payment">
+	<div id="paymentModal" class="hidden">
+		<div id="paymentModalInner">
+			<button id="paymentCloseBtn" type="button">&times;</button>
 
-		<h3 id="paymentSeatTitle">-</h3>
-		<p class="pay_sub" id="paymentLotInfo">-</p>
-		<p class="pay_sub" id="paymentPlanInfo">-</p>
+			<h3 id="paymentSeatTitle">-</h3>
+			<p id="paymentLotInfo">-</p>
+			<p id="paymentPlanInfo">-</p>
 
-		<div class="form_row">
-			<label>날짜</label>
-			<input type="date" id="dateInput">
-		</div>
-		<div class="form_row">
-			<label>시작 시각</label>
-			<select id="startTimeInput"></select>
-		</div>
+<!-- Servlet으로 예약 유형 및 좌석 정보 넘기기 위한 input / 결제 시 DB에 저장 위함-->
+<input type="hidden" id="reservationPlan" name="t_reservation_plan">
+<input type="hidden" id="reservationSeat" name="t_reservation_seat">
 
-		<div class="form_row plan1Only" id="durationRow">
-			<label>이용 시간</label>
-			<select id="durationInput">
-				<option value="1">1시간</option>
-				<option value="2" selected>2시간</option>
-				<option value="3">3시간</option>
-				<option value="4">4시간</option>
-				<option value="6">6시간</option>
-			</select>
-		</div>
-
-		<div class="plan2Only hidden" id="endFreeNotice">
-			<p class="pay_sub" style="margin-top:12px">종료 시각은 정하지 않습니다 (자유출차, 페널티 요금 적용)</p>
-		</div>
-
-		<fieldset class="pay_fieldset plan1Only" id="flightFieldset">
-			<legend>✈️ 항공권 정보 (필수)</legend>
-			<div class="form_row">
-				<label>항공편명</label>
-				<input type="text" id="flightNoInput" placeholder="예: KE001" autocomplete="off">
+			<div class="formRow">
+				<label data-i18n="res_dateLabel">주차 날짜</label>
+				<input type="date" id="startDateInput" name="t_reservation_start_date">
 			</div>
-			<div class="form_row">
-				<label>왕복 여부</label>
-				<select id="flightRoundtripInput">
-					<option value="round">왕복</option>
-					<option value="oneway">편도 (이용 불가)</option>
-				</select>
+			<div class="formRow">
+				<label data-i18n="res_startTimeLabel">주차 시각</label>
+				<select id="startTimeInput" name="t_reservation_start_time"></select>
 			</div>
-			<div class="form_row">
-				<label>귀국 도착 예정</label>
-				<input type="time" id="flightArriveInput">
+			<div class="formRow">
+				<label data-i18n="res_dateLabel">예상 출차 날짜</label>
+				<input type="date" id="endDateInput" name="t_reservation_end_date">
 			</div>
-		</fieldset>
+			<div class="formRow plan1Only hidden" id="durationRow">
+				<label data-i18n="res_durationLabel">이용 시간</label>
+				<select id="endTimeInput" name="t_reservation_end_time"></select>
+			</div>
 
-		<div class="price_box">예상 금액 <strong id="estimatedPrice">-</strong></div>
+			<div class="plan2Only hidden" id="endFreeNotice">
+				<p data-i18n="res_endFreeNotice">종료 시각은 정하지 않습니다 (자유출차, 페널티 요금 적용)</p>
+			</div>
 
+			<fieldset class="plan1Only hidden" id="flightFieldset">
+				<legend data-i18n="res_flightSectionTitle">✈️ 항공권 정보 (필수)</legend>
+				<div class="formRow">
+					<label data-i18n="res_flightNo">항공편명</label>
+					<input type="text" id="flightNoInput" placeholder="1 입력 필요(test단계)" name="t_reservation_flight_no">
+				</div>
+<!-- 예약 유형 선택 후 결제창 진입: 왕복 여부 선택 불필요 판단 / 이후 수정 필요할 것 같음 -->
+				<div class="formRow">
+					<label data-i18n="res_flightRoundtrip">왕복 여부</label>
+					<select id="flightRoundtripInput">
+						<option value="round">왕복</option>
+						<option value="oneway">편도 (이용 불가)</option>
+					</select>
+				</div>
+<!-- 귀국 도착 예정 시간은 name으로 넘길 필요가 있는가? -->
+				<div class="formRow">
+					<label data-i18n="res_flightArriveTime">귀국 도착 예정</label>
+					<input type="time" id="flightArriveInput">
+				</div>
+			</fieldset>
 
 			<div id="estimatedPriceBox"><span data-i18n="res_estimated">예상 금액</span>: <strong id="estimatedPrice">-</strong></div>
+<!-- Servlet으로 예상 금액 넘기기 위한 input(payment.js수정) / 예약 목록 확인 시 예상 금액 노출-->
+			<input type="hidden" name="t_reservation_estimate_amount" id="estimatedPriceInput">
 			<div id="payMethodArea">
-				<label class="payOption"><input type="radio" name="payMethod" value="kakao"> 카카오페이</label>
-				<label class="payOption"><input type="radio" name="payMethod" value="naver"> 네이버페이</label>
-				<label class="payOption"><input type="radio" name="payMethod" value="card"> 카드</label>
-				<label class="payOption"><input type="radio" name="payMethod" value="account"> 계좌이체</label>
+				<label class="payOption"><input type="radio" name="t_reservation_pay_method" value="kakaoPay"> 카카오페이</label>
+				<label class="payOption"><input type="radio" name="t_reservation_pay_method" value="naverPay"> 네이버페이</label>
+				<label class="payOption"><input type="radio" name="t_reservation_pay_method" value="creditCard"> 카드</label>
+				<label class="payOption"><input type="radio" name="t_reservation_pay_method" value="account"> 계좌이체</label>
 			</div>
 
 			<div id="paymentFooter">
 				<div id="payBarPrice"><span data-i18n="res_depositLabel">예약금</span> <strong id="payBarAmount">-</strong>원</div>
-				<button id="payBtn" data-i18n="res_payBtn" disabled>결제하기</button>
+<!-- Servlet으로 예약금 넘기기 위한 input / 예약 목록 확인 시 예약금 노출 / 필요 없는 경우 삭제 예정 -->
+				<input type="text" id="depositAmount" name="t_reservation_deposit_amount" value="5000">
+<!-- 포트원 결제 검증 및 DB 저장을 위한 hidden input 추가 -->
+				<input type="hidden" name="t_imp_uid" id="impUidInput">
+				<input type="hidden" name="t_merchant_uid" id="merchantUidInput">
+				<button id="payBtn" data-i18n="res_payBtn" onclick="goPayment()" disabled type="button">결제하기</button>
 			</div>
 		</div>
 	</div>
-
+</form>
 <!-- 결제 모듈 END -->
 
 <script>
@@ -705,30 +810,67 @@ function renderAll(){
 	document.getElementById("goPayBtn").disabled = true;
 }
 
-/* 이용 방식 카드 선택 */
+// 
+/* 이용 방식 카드 선택 시 hidden input(t_reservation_plan) 업데이트 */
 var planCards = document.querySelectorAll(".plan_card");
-for (var p=0;p<planCards.length;p++){
-	planCards[p].addEventListener("click", function(){
-		for (var q=0;q<planCards.length;q++) planCards[q].classList.remove("selected");
-		this.classList.add("selected");
-		var isPlan1 = this.querySelector("input").value === "1";
-		document.getElementById("flightFieldset").classList.toggle("hidden", !isPlan1);
-		document.getElementById("durationRow").classList.toggle("hidden", !isPlan1);
-		document.getElementById("endFreeNotice").classList.toggle("hidden", isPlan1);
-	});
+for (var p = 0; p < planCards.length; p++) {
+    planCards[p].addEventListener("click", function() {
+        for (var q = 0; q < planCards.length; q++) {
+            planCards[q].classList.remove("selected");
+        }
+        this.classList.add("selected");
+        
+        var selectedRadio = this.querySelector("input[name='planType']");
+        if (selectedRadio) {
+            selectedRadio.checked = true;
+            
+            // 1. 선택된 이용 방식 값(1 또는 2) 추출
+            var planVal = selectedRadio.value;
+            
+            // 2. 결제 폼 내 hidden input에 대입
+            var planInput = document.getElementById("reservationPlan");
+            if (planInput) {
+                planInput.value = planVal;
+            }
+
+            // UI 보이기/숨기기 처리
+            var isPlan1 = (planVal === "1");
+            document.getElementById("flightFieldset").classList.toggle("hidden", !isPlan1);
+            document.getElementById("durationRow").classList.toggle("hidden", !isPlan1);
+            document.getElementById("endFreeNotice").classList.toggle("hidden", isPlan1);
+        }
+    });
 }
 
-/* 결제 모달 열기/닫기 */
-document.getElementById("goPayBtn").addEventListener("click", function(){
-	if (!selectedSeat) return;
-	var zone = findZone(currentZone);
-	document.getElementById("paymentSeatTitle").textContent = selectedSeat + " 자리 예약";
-	document.getElementById("paymentLotInfo").textContent   = "인천공항 1터미널 " + zone.id + " 구역 · " + zone.type;
-	document.getElementById("paymentPlanInfo").textContent  = "시간당 " + zone.price.toLocaleString() + "원";
-	document.getElementById("paymentModal").classList.remove("hidden");
+/* 결제 모달 열기 이벤트 (payment.js의 openPaymentModal 호출) */
+document.getElementById("goPayBtn").addEventListener("click", function() {
+    if (!selectedSeat) return;
+    
+    // 현재 선택된 이용 방식 값('1' 또는 '2') 추출
+    var currentPlan = "1";
+    var selectedRadio = document.querySelector("input[name='planType']:checked");
+    if (selectedRadio) {
+        currentPlan = selectedRadio.value;
+    }
+    
+    // hidden input에 기본값 세팅
+    var planInput = document.getElementById("reservationPlan");
+    if (planInput) planInput.value = currentPlan;
+    
+    var seatInput = document.getElementById("reservationSeat");
+    if (seatInput) seatInput.value = selectedSeat;
+    
+    // payment.js에 정의된 전역 모달 열기 함수 호출 (이 안에서 시간 옵션 및 날짜 자동 생성됨)
+    if (typeof window.openPaymentModal === "function") {
+        window.openPaymentModal(selectedSeat, currentPlan);
+    } else {
+        // payment.js가 로드되지 않았을 경우 예외 처리
+        document.getElementById("paymentModal").classList.remove("hidden");
+    }
 });
-document.getElementById("paymentCloseBtn").addEventListener("click", function(){
-	document.getElementById("paymentModal").classList.add("hidden");
+
+document.getElementById("paymentCloseBtn").addEventListener("click", function() {
+    document.getElementById("paymentModal").classList.add("hidden");
 });
 
 renderZoneTabs();
@@ -739,6 +881,6 @@ loadLiveZoneStatus(function(){
 	applyLiveZoneStatus(currentZone);
 });
 </script>
-
+<script src="${pageContext.request.contextPath}/js/payment.js"></script>
 </body>
 </html>

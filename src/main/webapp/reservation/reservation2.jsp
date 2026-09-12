@@ -272,22 +272,19 @@
 
 		<div class="price_box">예상 금액 <strong id="estimatedPrice">-</strong></div>
 
+		<div class="pay_methods">
+			<label class="pay_option"><input type="radio" name="payMethod" value="kakao"> 카카오페이</label>
+			<label class="pay_option"><input type="radio" name="payMethod" value="naver"> 네이버페이</label>
+			<label class="pay_option"><input type="radio" name="payMethod" value="card"> 카드</label>
+			<label class="pay_option"><input type="radio" name="payMethod" value="account"> 계좌이체</label>
+		</div>
 
-			<div id="estimatedPriceBox"><span data-i18n="res_estimated">예상 금액</span>: <strong id="estimatedPrice">-</strong></div>
-			<div id="payMethodArea">
-				<label class="payOption"><input type="radio" name="payMethod" value="kakao"> 카카오페이</label>
-				<label class="payOption"><input type="radio" name="payMethod" value="naver"> 네이버페이</label>
-				<label class="payOption"><input type="radio" name="payMethod" value="card"> 카드</label>
-				<label class="payOption"><input type="radio" name="payMethod" value="account"> 계좌이체</label>
-			</div>
-
-			<div id="paymentFooter">
-				<div id="payBarPrice"><span data-i18n="res_depositLabel">예약금</span> <strong id="payBarAmount">-</strong>원</div>
-				<button id="payBtn" data-i18n="res_payBtn" disabled>결제하기</button>
-			</div>
+		<div class="pay_footer">
+			<div class="pay_amount">예약금 <strong id="payBarAmount">-</strong>원</div>
+			<button class="pay_submit" id="payBtn" disabled>결제하기</button>
 		</div>
 	</div>
-
+</div>
 <!-- 결제 모듈 END -->
 
 <script>

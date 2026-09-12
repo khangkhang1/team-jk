@@ -1,29 +1,26 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
 <title>주차맵 - 인천공항 주차관리시스템</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/c.css">
-<link rel="stylesheet" href="css/reservation.css">
-<link rel="stylesheet" href="css/payment.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/c.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/reservation.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/payment.css">
+<script>
+	function goPayment{
+		pay.method = "post";
+		pay.action = "Reservation";
+		pay.submit();
+	}
+</script>
 </head>
 <body class="resPage">
 
-	<!-- 상단 유틸리티 바 -->
-	<div id="utilBar">
-		<span id="utilTagline">인천국제공항 1터미널 주차 예약 서비스</span>
-		<div id="utilRight">
-			<a href="#" class="utilIcon" title="즐겨찾기">⭐</a>
-			<a href="#" class="utilIcon" title="검색">🔍</a>
-		</div>
-	</div>
-
 	<!-- 상단바 -->
 	<header id="topSearch">
-		<a href="index.jsp" id="backBtn" title="메인으로" data-i18n="common_back">← 메인으로</a>
+		<a href="${pageContext.request.contextPath}/index.jsp" id="backBtn" title="메인으로" data-i18n="common_back">← 메인으로</a>
 		<div id="logo" data-i18n="res_pageTitle">주차맵</div>
 		<nav id="topNav">
 			<button id="langToggleBtn" class="langToggle">🇯🇵 日本語</button>
@@ -40,7 +37,7 @@
 				<p id="lotAddr">인천공항 1터미널 · 시간당 <span id="lotPrice">3,000</span>원</p>
 			</div>
 		</div>
-
+<form name="rec">
 		<!-- 이용 방식 필터 - 예전엔 결제창 안에 있었는데, 좌석 고르기 전에 먼저 정하는 게 자연스러워서 여기로 옮김 -->
 		<div id="planFilter">
 			<div class="filterTitle" data-i18n="res_planFilterTitle">이용 방식</div>
@@ -78,13 +75,15 @@
 		</div>
 
 		<div id="seatGrid"></div>
-
+</form>
 	</div>
 
 	<!-- ============================================================ -->
 	<!-- 결제 모듈 (담당: 오윤섭 예정) — 이 모달 블록은 여기서부터 END 주석까지 독립적으로 개발하고, -->
 	<!-- 완성되면 이 자리에 통째로 교체/병합하면 됨. css/payment.css, js/payment.js도 같이 분리돼 있음. -->
 	<!-- ============================================================ -->
+<form name="pay">
+<input type="hidden" name="t_gubun" value="payment">
 	<div id="paymentModal" class="hidden">
 		<div id="paymentModalInner">
 			<button id="paymentCloseBtn">&times;</button>
@@ -93,18 +92,22 @@
 			<p id="paymentLotInfo">-</p>
 			<p id="paymentPlanInfo">-</p>
 
+<!-- Servlet으로 예약 유형 및 좌석 정보 넘기기 위한 input / 결제 시 DB에 저장 위함-->
+<input type="text" id="reservationPlan" name="t_reservation_plan">
+<input type="text" id="reservationSeat" name="t_reservation_seat">
+
 			<div class="formRow">
 				<label data-i18n="res_dateLabel">날짜</label>
-				<input type="date" id="dateInput">
+				<input type="date" id="dateInput" name="t_reservation_date">
 			</div>
 			<div class="formRow">
 				<label data-i18n="res_startTimeLabel">시작 시각</label>
-				<select id="startTimeInput"></select>
+				<select id="startTimeInput" name="t_reservation_start_time"></select>
 			</div>
 
 			<div class="formRow plan1Only hidden" id="durationRow">
 				<label data-i18n="res_durationLabel">이용 시간</label>
-				<select id="durationInput">
+				<select id="durationInput" name="t_reservation_parking_time">
 					<option value="1">1시간</option>
 					<option value="2" selected>2시간</option>
 					<option value="3">3시간</option>
@@ -121,8 +124,9 @@
 				<legend data-i18n="res_flightSectionTitle">✈️ 항공권 정보 (필수)</legend>
 				<div class="formRow">
 					<label data-i18n="res_flightNo">항공편명</label>
-					<input type="text" id="flightNoInput" placeholder="예: KE001">
+					<input type="text" id="flightNoInput" placeholder="예: KE001" name="t_reservation_flight_no">
 				</div>
+<!-- 예약 유형 선택 후 결제창 진입: 왕복 여부 선택 불필요 판단 / 이후 수정 필요할 것 같음 -->
 				<div class="formRow">
 					<label data-i18n="res_flightRoundtrip">왕복 여부</label>
 					<select id="flightRoundtripInput">
@@ -130,6 +134,7 @@
 						<option value="oneway">편도 (이용 불가)</option>
 					</select>
 				</div>
+<!-- 귀국 도착 예정 시간은 name으로 넘길 필요가 있는가? -->
 				<div class="formRow">
 					<label data-i18n="res_flightArriveTime">귀국 도착 예정</label>
 					<input type="time" id="flightArriveInput">
@@ -137,27 +142,31 @@
 			</fieldset>
 
 			<div id="estimatedPriceBox"><span data-i18n="res_estimated">예상 금액</span>: <strong id="estimatedPrice">-</strong></div>
-
+<!-- Servlet으로 예상 금액 넘기기 위한 input(payment.js수정) / 예약 목록 확인 시 예상 금액 노출-->
+			<input type="hidden" name="t_reservation_estimate_amount" id="estimatedPriceInput">
 			<div id="payMethodArea">
-				<label class="payOption"><input type="radio" name="payMethod" value="kakao"> 카카오페이</label>
-				<label class="payOption"><input type="radio" name="payMethod" value="naver"> 네이버페이</label>
-				<label class="payOption"><input type="radio" name="payMethod" value="card"> 카드</label>
-				<label class="payOption"><input type="radio" name="payMethod" value="account"> 계좌이체</label>
+				<label class="payOption"><input type="radio" name="t_reservation_pay_method" value="kakaoPay"> 카카오페이</label>
+				<label class="payOption"><input type="radio" name="t_reservation_pay_method" value="naverPay"> 네이버페이</label>
+				<label class="payOption"><input type="radio" name="t_reservation_pay_method" value="creditCard"> 카드</label>
+				<label class="payOption"><input type="radio" name="t_reservation_pay_method" value="account"> 계좌이체</label>
 			</div>
 
 			<div id="paymentFooter">
 				<div id="payBarPrice"><span data-i18n="res_depositLabel">예약금</span> <strong id="payBarAmount">-</strong>원</div>
+<!-- Servlet으로 예약금 넘기기 위한 input / 예약 목록 확인 시 예약금 노출 / 필요 없는 경우 삭제 예정 -->
+				<input type="hidden" name="t_reservation_deposit_amount">
 				<button id="payBtn" data-i18n="res_payBtn" disabled>결제하기</button>
 			</div>
 		</div>
 	</div>
+</form>
 	<!-- ============================================================ -->
 	<!-- 결제 모듈 END -->
 	<!-- ============================================================ -->
 
-	<script src="js/jquery-1.8.1.min.js"></script>
-	<script src="js/i18n.js"></script>
-	<script src="js/payment.js"></script>
-	<script src="js/reservation.js"></script>
+	<script src="${pageContext.request.contextPath}/js/jquery-1.8.1.min.js"></script>
+	<script src="${pageContext.request.contextPath}/js/i18n.js"></script>
+	<script src="${pageContext.request.contextPath}/js/payment.js"></script>
+	<script src="${pageContext.request.contextPath}/js/reservation.js"></script>
 </body>
 </html>

@@ -1,6 +1,20 @@
 /********조인********/
+function checkIdFormat() {
+	var id = mem.t_id.value;
+
+	// 영문 소문자와 숫자만 허용, 4~20자
+	var idPattern = /^(?=.*[a-z])(?=.*\d)[a-z0-9]{4,20}$/;
+	if (!idPattern.test(id)) {
+		alert("아이디는 영문 소문자와 숫자만 사용하여 4~20자로 입력해주세요.");
+		mem.t_id.focus();
+		return false;
+	}
+
+	return true;
+}
 function goSave() {
 	if (checkEmpty(mem.t_id, "ID 입력하세요!")) return;
+	if (!checkIdFormat()) return;
 	if (mem.t_id_check.value == "") {
 		alert("ID 중복 검사 하시오.");
 		return;
@@ -31,6 +45,7 @@ function goSave() {
 
 function checkId() {
 	if (checkEmpty(mem.t_id, "아이디 입력")) return;
+	if (!checkIdFormat()) return;
 	var id = mem.t_id.value;
 	$.ajax({
 		type: "POST",
