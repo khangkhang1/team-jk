@@ -13,7 +13,7 @@ import dto.LongTermParkingDto;
 import dto.ShortTermParkingDto;
 import service.ParkingService;
 
-@WebServlet("/parkingStatus")
+@WebServlet("/ParkingStatus")
 public class ParkingStatus extends HttpServlet {
 
     private static final long serialVersionUID = 1L;

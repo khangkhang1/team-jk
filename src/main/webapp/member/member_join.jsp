@@ -9,9 +9,11 @@
 
 <title>회원가입 | 인천공항 주차예약</title>
 
-<script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery-1.8.1.min.js"></script>
+<script type="text/javascript"
+	src="${pageContext.request.contextPath}/js/jquery-1.8.1.min.js"></script>
 <script src="${pageContext.request.contextPath}/js/member.js"></script>
-<link rel="stylesheet" href="${pageContext.request.contextPath}/css/member_join.css">
+<link rel="stylesheet"
+	href="${pageContext.request.contextPath}/css/member_join.css">
 
 </head>
 
@@ -78,7 +80,8 @@
 											id="idCheckBtn"> <input type="text" name="t_id_check">
 									</div>
 
-									<span class="form_hint"> 영문 소문자, 숫자를 포함하여 4~20자로 입력해주세요.
+									<span class="form_hint"> 영문 소문자를 최소 1자 이상 포함하여 4~20자로
+										입력해주세요.<br> 특수문자는 !@#$%^&*_-.만 가능합니다.
 									</span>
 
 								</div>
@@ -96,7 +99,7 @@
 
 									<input type="password" id="password" name="t_password"
 										maxlength="70" placeholder="비밀번호를 입력해주세요"> <span
-										class="form_hint"> 안전한 비밀번호를 입력해주세요. </span>
+										class="form_hint">6~16자로 입력해주세요.특수문자는 !@#$%^&*_+?.-만 사용할 수 있습니다.</span>
 
 								</div>
 
@@ -205,8 +208,8 @@
 
 							</div>
 
-
-							<!-- 약관 -->
+							
+							<!-- 약관 --><!-- 
 							<div class="agree_area">
 
 								<div class="agree_all">
@@ -241,7 +244,7 @@
 								</div>
 
 							</div>
-
+							-->
 
 							<!-- BUTTON -->
 							<div class="form_buttons">
