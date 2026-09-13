@@ -43,30 +43,85 @@ public class DBConnection {
 	// ※ jsl-704는 인터넷 도메인이 아니라 학원 랜(192.168.0.48)에서만 풀리는 컴퓨터
 	//   이름입니다. 집이나 핫스팟에서는 이름 자체가 해석되지 않아 접속이 안 됩니다.
 	//   계정 문제가 아니므로 아이디를 바꿔봐야 소용없습니다.
-	//   집에서 작업해야 한다면 이 줄을 공인 IP로 바꾸면 됩니다(학원/집 양쪽 다 됨).
-	//   다만 공인 IP는 바뀔 수 있으니 평소에는 jsl-704로 두는 걸 권합니다.
-	private static final String DB_URL = "jdbc:oracle:thin:@jsl-704:1523/xe";
+	//
+	// [2026-09-13] 학원 밖에서도 붙도록 자동 전환을 넣었습니다.
+	//   1) jsl-704 로 먼저 시도 (학원에서는 여기서 끝 - 기존과 동일)
+	//   2) 안 되면 src/main/java/db_local.properties 의 db.host 로 시도
+	//   3) 성공한 호스트를 기억해두고 다음 호출부터는 바로 그쪽으로 감
+	//
+	//   db_local.properties 는 .gitignore 되어 있어 각자 PC에만 있습니다.
+	//   공인 IP를 소스에 박지 않는 이유: 이 저장소가 public 이라 "인터넷에서 붙는
+	//   DB 주소 + 계정 + 비번"이 그대로 노출됩니다. 학원 전체가 쓰는 DB 서버라 위험합니다.
+	//   집에서 쓰려면 db_local.properties.example 을 복사해 db_local.properties 로 만들고
+	//   db.host 한 줄만 채우면 됩니다. 학원에서는 이 파일이 없어도 됩니다.
+	private static final String HOST_ACADEMY = "jsl-704";
+	private static final String PORT_SERVICE = "1523/xe";
 	private static final String DB_USER = "icn_parking";
 	private static final String DB_PASSWORD = "1234";
 
+	// 마지막으로 접속에 성공한 호스트. 집에서 매번 jsl-704 실패를 기다리지 않으려고 기억해둠.
+	private static String cachedHost = null;
+
 	public static Connection getConnection() {
-		Connection con = null;
 		try {
 			Class.forName("oracle.jdbc.driver.OracleDriver");
 		} catch (ClassNotFoundException e) {
 			// 여기서 걸리면 계정 문제가 아니라 ojdbc8.jar이 빌드패스에 없는 겁니다.
 			System.out.println("오라클 드라이버를 찾지 못했습니다. ojdbc8.jar 빌드패스를 확인하세요.");
 			e.printStackTrace();
+			return null;
 		}
 
-		try {
-			con = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
-		} catch (SQLException e) {
-			System.out.println("DB 접속 오류 (ORA-" + e.getErrorCode() + ") : " + e.getMessage());
-			System.out.println("-> common/DBTest.java 를 실행하면 원인을 단계별로 알려줍니다.");
-			e.printStackTrace();
+		// 시도 순서: 지난번 성공한 곳 -> 학원 -> db_local.properties  (LinkedHashSet: 순서 유지 + 중복 제거)
+		java.util.LinkedHashSet<String> hosts = new java.util.LinkedHashSet<>();
+		if (cachedHost != null) hosts.add(cachedHost);
+		hosts.add(HOST_ACADEMY);
+		String localHost = readLocalHost();
+		if (localHost != null) hosts.add(localHost);
+
+		SQLException last = null;
+		for (String host : hosts) {
+			String url = "jdbc:oracle:thin:@" + host + ":" + PORT_SERVICE;
+			try {
+				Connection con = DriverManager.getConnection(url, DB_USER, DB_PASSWORD);
+				if (!host.equals(cachedHost)) {
+					System.out.println("DB 접속 : " + host
+							+ (host.equals(HOST_ACADEMY) ? " (학원)" : " (db_local.properties)"));
+					cachedHost = host;
+				}
+				return con;
+			} catch (SQLException e) {
+				last = e;   // 다음 후보로. 전부 실패하면 아래에서 한 번에 안내.
+			}
 		}
-		return con;
+
+		System.out.println("DB 접속 오류 - 시도한 호스트 : " + hosts);
+		if (last != null) {
+			System.out.println("마지막 오류 (ORA-" + last.getErrorCode() + ") : " + last.getMessage());
+		}
+		if (localHost == null) {
+			System.out.println("-> 학원 밖이라면 src/main/java/db_local.properties.example 을 복사해"
+					+ " db_local.properties 를 만들고 db.host 를 채우세요.");
+		}
+		System.out.println("-> common/DBTest.java 를 실행하면 원인을 단계별로 알려줍니다.");
+		if (last != null) last.printStackTrace();
+		return null;
+	}
+
+	// src/main/java/db_local.properties 의 db.host 를 읽는다. 파일이 없으면 null.
+	// 이클립스가 src/main/java 의 .properties 를 build/classes 로 복사해주므로 클래스패스
+	// 루트("/")에서 읽힌다. Tomcat 에서는 WEB-INF/classes 가 그 자리다.
+	private static String readLocalHost() {
+		try (java.io.InputStream in = DBConnection.class.getResourceAsStream("/db_local.properties")) {
+			if (in == null) return null;
+			java.util.Properties p = new java.util.Properties();
+			p.load(in);
+			String host = p.getProperty("db.host");
+			if (host == null || host.trim().isEmpty()) return null;
+			return host.trim();
+		} catch (java.io.IOException e) {
+			return null;
+		}
 	}
 
 	// DB 연결 종료. 연결과 반대 순서(rs -> ps -> con)로 닫습니다.
