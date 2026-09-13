@@ -130,7 +130,30 @@ public class PaymentDao {
 		
 		return result;
 	}
-		
+	
+//좌석 예약 여부 확인(중복 예약 방지용)
+	public int checkReservation(String seat) {
+		int result = 0;
+		String sql = "select count(*) as count from icn_reservation\r\n"
+				+ "where seat_no = ? and reservation_status = ? or reservation_status = ?";
+		try {
+			con    = DBConnection.getConnection();
+			LogPreparedStatement ps = new LogPreparedStatement(con, sql);
+			ps.setString(1, seat);
+			ps.setString(2, "1");
+			ps.setString(3, "2");
+			rs 	   = ps.executeQuery();
+			if(rs.next()) {
+				result = rs.getInt("count");
+			}
+		}catch(Exception e) {
+			System.out.println("checkReservation()오류 :"+sql);
+			e.printStackTrace();
+		}finally {
+			DBConnection.closeDB(con, ps, rs);
+		}	
+		return result;
+	}
 //=================================이후로 결제 method=================================
 
 //결제 번호 생성
