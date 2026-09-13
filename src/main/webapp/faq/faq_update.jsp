@@ -1,44 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ page import="dao.*,dto.*" %>
 <%--
- FAQ 수정 화면 (관리자 전용).
- 목록의 [수정] → faq.js goUpdateForm(faq_id) 가 t_faq_id 를 POST 로 보내서 이 화면이 열린다.
- 수정완료 버튼 → faq.js goUpdate() → db_faq_update.jsp
+ FAQ 수정 화면. Faq?t_gubun=updateForm&t_faq_id=N 이 dto 를 담아 forward 한다.
+ [수정완료] -> faq.js goUpdate() -> Faq?t_gubun=update
 --%>
-<%
-	String loginLevel = (String)session.getAttribute("sessionLevel");
-	boolean isAdmin = (loginLevel != null && loginLevel.equals("admin"));
-
-	// 글번호가 없거나 숫자가 아니면(주소를 직접 친 경우) 0 으로 두고 아래에서 "없는 글" 처리
-	String faqId = request.getParameter("t_faq_id");
-	int faq_id = 0;
-	if (faqId != null && faqId.matches("[0-9]+")) faq_id = Integer.parseInt(faqId);
-
-	FaqDto dto = null;
-	if (isAdmin) {
-		FaqDao dao = new FaqDao();
-		dto = dao.getFaqView(faq_id);
-	}
-
-	if (!isAdmin) {
-%>
-<script>
-	alert("관리자만 사용할 수 있는 메뉴입니다.");
-	location.href = "faq_list.jsp";
-</script>
-<%
-	} else if (dto == null) {
-%>
-<script>
-	alert("존재하지 않는 글입니다.");
-	location.href = "faq_list.jsp";
-</script>
-<%
-	} else {
-		// 스크립틀릿의 dto 를 EL 에서 쓰기 위해 request 에 담는다
-		request.setAttribute("dto", dto);
-%>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -68,15 +33,14 @@
 				</div>
 			</div>
 
-			<form name="faq" method="post">
-				<%-- 어느 글을 고칠지 알아야 하므로 글번호를 hidden 으로 같이 보낸다 --%>
+			<form name="faq" method="post" action="${pageContext.request.contextPath}/Faq">
+				<input type="hidden" name="t_gubun">
 				<input type="hidden" name="t_faq_id" value="${dto.faq_id}">
 
 				<table class="faq_form">
 					<tr>
 						<th>카테고리</th>
 						<td>
-							<%-- 저장돼 있던 값에 selected. 값이 같은지만 비교하면 된다 --%>
 							<select name="t_category">
 								<option value="예약"      ${dto.category == '예약'      ? 'selected' : ''}>예약</option>
 								<option value="요금·결제" ${dto.category == '요금·결제' ? 'selected' : ''}>요금·결제</option>
@@ -113,7 +77,7 @@
 				<div class="faq_btns">
 					<input type="button" value="수정완료" class="faq_btn faq_btn_primary" onclick="goUpdate()">
 					<input type="reset" value="다시쓰기" class="faq_btn">
-					<input type="button" value="목록" class="faq_btn" onclick="location.href='faq_list.jsp'">
+					<input type="button" value="목록" class="faq_btn" onclick="location.href='${pageContext.request.contextPath}/Faq'">
 				</div>
 			</form>
 
@@ -126,6 +90,3 @@
 
 </body>
 </html>
-<%
-	}
-%>

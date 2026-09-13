@@ -1,22 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ page import="dto.*,dao.*,java.util.*" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-
-<%
-	request.setCharacterEncoding("utf-8");
-	FaqDao dao = new FaqDao();
-	String loginLevel = (String)session.getAttribute("sessionLevel");
-	boolean isAdmin = (loginLevel != null && loginLevel.equals("admin"));
-	String category = request.getParameter("t_category");
-	if (category == null) category = "";
-
-	ArrayList<FaqDto> dtos = dao.getFaqList(category, isAdmin);
-
-	request.setAttribute("dtos", dtos);
-	request.setAttribute("category", category);
-	request.setAttribute("isAdmin", isAdmin);
-%>
+<%--
+ FAQ 목록. Faq 서블릿이 dtos / category / isAdmin 을 request 에 담아 forward 한다.
+ (이 JSP 를 직접 열면 빈 목록이 나온다. 반드시 /Faq 로 들어올 것)
+--%>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -34,7 +22,9 @@
 
 	<%@ include file="../common_header.jsp" %>
 
-	<form name="faq" method="post">
+	<%-- 수정/삭제 이동용 숨김 폼. faq.js 가 t_gubun / t_faq_id 를 채워서 Faq 서블릿으로 POST 한다 --%>
+	<form name="faq" method="post" action="${pageContext.request.contextPath}/Faq">
+		<input type="hidden" name="t_gubun">
 		<input type="hidden" name="t_faq_id">
 	</form>
 
@@ -49,16 +39,16 @@
 					<p>예약부터 출차까지, 자주 들어오는 문의를 모았습니다.</p>
 				</div>
 				<c:if test="${isAdmin}">
-					<a href="faq_write.jsp" class="faq_btn faq_btn_primary">글쓰기</a>
+					<a href="${pageContext.request.contextPath}/Faq?t_gubun=writeForm" class="faq_btn faq_btn_primary">글쓰기</a>
 				</c:if>
 			</div>
 
 			<div class="faq_cate">
-				<a href="faq_list.jsp"                     class="${empty category        ? 'on' : ''}">전체</a>
-				<a href="faq_list.jsp?t_category=예약"      class="${category == '예약'      ? 'on' : ''}">예약</a>
-				<a href="faq_list.jsp?t_category=요금·결제" class="${category == '요금·결제' ? 'on' : ''}">요금·결제</a>
-				<a href="faq_list.jsp?t_category=입·출차"   class="${category == '입·출차'   ? 'on' : ''}">입·출차</a>
-				<a href="faq_list.jsp?t_category=항공편"    class="${category == '항공편'    ? 'on' : ''}">항공편</a>
+				<a href="${pageContext.request.contextPath}/Faq"                     class="${empty category        ? 'on' : ''}">전체</a>
+				<a href="${pageContext.request.contextPath}/Faq?t_category=예약"      class="${category == '예약'      ? 'on' : ''}">예약</a>
+				<a href="${pageContext.request.contextPath}/Faq?t_category=요금·결제" class="${category == '요금·결제' ? 'on' : ''}">요금·결제</a>
+				<a href="${pageContext.request.contextPath}/Faq?t_category=입·출차"   class="${category == '입·출차'   ? 'on' : ''}">입·출차</a>
+				<a href="${pageContext.request.contextPath}/Faq?t_category=항공편"    class="${category == '항공편'    ? 'on' : ''}">항공편</a>
 			</div>
 
 			<div class="faq_list">

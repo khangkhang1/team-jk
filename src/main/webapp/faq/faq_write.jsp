@@ -1,23 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%--
- FAQ 등록 화면 (관리자 전용). 저장 버튼 → faq.js goSave() → db_faq_save.jsp
+ FAQ 등록 화면. Faq?t_gubun=writeForm (관리자 확인은 서블릿에서). [저장] -> faq.js goSave() -> Faq?t_gubun=save
 --%>
-<%
-	// 관리자 전용 화면. 목록에서 버튼을 숨겨도 주소를 직접 치면 들어올 수 있으니
-	// 화면 자체에서 한 번 더 막는다. (수업 faq_update.jsp 와 같은 방식)
-	String loginLevel = (String)session.getAttribute("sessionLevel");
-	boolean isAdmin = (loginLevel != null && loginLevel.equals("admin"));
-
-	if (!isAdmin) {
-%>
-<script>
-	alert("관리자만 사용할 수 있는 메뉴입니다.");
-	location.href = "faq_list.jsp";
-</script>
-<%
-	} else {
-%>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -47,8 +32,9 @@
 				</div>
 			</div>
 
-			<%-- 파라미터는 팀 규칙대로 전부 t_ 접두어 --%>
-			<form name="faq" method="post">
+			<form name="faq" method="post" action="${pageContext.request.contextPath}/Faq">
+				<input type="hidden" name="t_gubun">
+
 				<table class="faq_form">
 					<tr>
 						<th>카테고리</th>
@@ -89,7 +75,7 @@
 				<div class="faq_btns">
 					<input type="button" value="저장" class="faq_btn faq_btn_primary" onclick="goSave()">
 					<input type="reset" value="다시쓰기" class="faq_btn">
-					<input type="button" value="목록" class="faq_btn" onclick="location.href='faq_list.jsp'">
+					<input type="button" value="목록" class="faq_btn" onclick="location.href='${pageContext.request.contextPath}/Faq'">
 				</div>
 			</form>
 
@@ -102,6 +88,3 @@
 
 </body>
 </html>
-<%
-	}
-%>

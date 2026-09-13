@@ -4,13 +4,16 @@
 --   공지는 "날짜순으로 흘러가는 글"이고 FAQ는 "카테고리별로 고정돼 있는 Q&A"라
 --   정렬 기준(sort_no)과 분류(category)가 필요하다. 조회수·첨부파일은 필요 없다.
 --
--- 화면 : faq/faq_list.jsp (목록+카테고리 필터)
---        faq/faq_write.jsp → db_faq_save.jsp (등록, 관리자)
---        faq/faq_update.jsp → db_faq_update.jsp (수정, 관리자)
---        db_faq_delete.jsp (삭제, 관리자)
--- DAO  : dao.FaqDao / DTO : dto.FaqDto
+-- 서블릿 : controller.Faq (/Faq, t_gubun 으로 분기 - Member 서블릿과 같은 구조)
+--   Faq                     목록 + 카테고리 필터(t_category)      → faq/faq_list.jsp
+--   Faq?t_gubun=writeForm   등록 화면 (관리자)                    → faq/faq_write.jsp
+--   Faq?t_gubun=save        등록 처리 (관리자) command.faq.FaqSave → common_alert.jsp
+--   Faq?t_gubun=updateForm  수정 화면 (관리자)                    → faq/faq_update.jsp
+--   Faq?t_gubun=update      수정 처리 (관리자) command.faq.FaqUpdate
+--   Faq?t_gubun=delete      삭제 처리 (관리자) command.faq.FaqDelete
+-- DAO : dao.FaqDao / DTO : dto.FaqDto
 --
--- 관리자 판별은 세션 sessionLevel = 'admin' (로그인 파트가 넣어줌). 등록자 ID 는 세션 sessionId.
+-- 관리자 판별은 세션 sessionLevel = 'top' (MemberLogin 이 manager 로그인 때 넣어줌). 등록자 ID 는 세션 sessionId.
 
 CREATE SEQUENCE icn_faq_seq
     START WITH 1

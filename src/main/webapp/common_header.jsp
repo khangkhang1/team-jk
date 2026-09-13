@@ -76,7 +76,7 @@
 
 				<div class="header_dropdown">
 					<a href="${pageContext.request.contextPath}/notice.html">공지 사항</a>
-					<a href="${pageContext.request.contextPath}/faq/faq_list.jsp">자주 하는
+					<a href="${pageContext.request.contextPath}/Faq">자주 하는
 						질문</a>
 				</div></li>
 
