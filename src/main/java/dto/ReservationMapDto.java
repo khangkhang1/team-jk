@@ -1,13 +1,13 @@
 package dto;
 
+import java.security.Timestamp;
 import java.util.List;
 
-public class reservationDto {
+public class ReservationMapDto {
 	
 	
 	    private Integer parkingLotId;      // 주차장ID
-	    private String parkingLotName;      // 주차장 이름
-	    private Integer hourlyRate;         // 시간당요금	
+	    private String parkingLotName;      // 주차장 이름  
 	    private Integer floorId;       // 층ID
 	    private Integer floorNumber;   // 층번호
 	    private String zoneType;       // 구역구분
@@ -17,8 +17,24 @@ public class reservationDto {
 	    private Integer column;       // 열 (맵 타일 배치용)
 	    private String type;          // 타입 (예: 경차, 장애인, 전기차 등)
 	    private Boolean isReserved;   // 예약 가능 여부/상태 표현용
+	    private Timestamp entryTime;       // 입차(예약 시작) 시간
+	    private Timestamp exitTime;        // 출차(예약 종료) 시간
+	    
+	    
 		public Integer getParkingLotId() {
 			return parkingLotId;
+		}
+		public Timestamp getEntryTime() {
+			return entryTime;
+		}
+		public void setEntryTime(Timestamp entryTime) {
+			this.entryTime = entryTime;
+		}
+		public Timestamp getExitTime() {
+			return exitTime;
+		}
+		public void setExitTime(Timestamp exitTime) {
+			this.exitTime = exitTime;
 		}
 		public void setParkingLotId(Integer parkingLotId) {
 			this.parkingLotId = parkingLotId;
@@ -29,12 +45,7 @@ public class reservationDto {
 		public void setParkingLotName(String parkingLotName) {
 			this.parkingLotName = parkingLotName;
 		}
-		public Integer getHourlyRate() {
-			return hourlyRate;
-		}
-		public void setHourlyRate(Integer hourlyRate) {
-			this.hourlyRate = hourlyRate;
-		}
+		
 		public Integer getFloorId() {
 			return floorId;
 		}

@@ -9,23 +9,17 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import command.reservation.Payment;
-import command.reservationMap.ReservationMap;
-import command.stepPay.StepPay;
-import common.CommonExecute;
-
-
 /**
- * Servlet implementation class reservation
+ * Servlet implementation class Index
  */
-@WebServlet("/Reservation")
-public class Reservation extends HttpServlet {
+@WebServlet("/Index")
+public class Index extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public Reservation() {
+    public Index() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -34,35 +28,11 @@ public class Reservation extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
 		request.setCharacterEncoding("utf-8");
-		String gubun = request.getParameter("t_gubun");
-		if(gubun == null) gubun ="ReservationMap";
-		String viewPage ="";
-		
-		if(gubun.equals("ReservationMap")) {
-			CommonExecute memMap = new ReservationMap();
-			CommonExecute memPay = new StepPay();
-			memMap.execute(request);
-			memPay.execute(request);
-			viewPage ="/reservation/reservationOys.jsp";
-
-		}else if(gubun.equals("stepPay")) {
-			CommonExecute mem = new StepPay();
-			mem.execute(request);
-			viewPage ="/reservation/reservationOys.jsp";
-
-			
-		}else if(gubun.equals("payment")){
-			CommonExecute mem = new Payment();
-			mem.execute(request);
-			viewPage = "common_alert.jsp";
-			
-		}
-
-		RequestDispatcher rd = request.getRequestDispatcher(viewPage);
+		RequestDispatcher rd =
+						request.getRequestDispatcher("index.jsp");
 		rd.forward(request, response);
-		
+	
 	}
 
 	/**
