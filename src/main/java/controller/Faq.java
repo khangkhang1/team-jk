@@ -17,19 +17,7 @@ import common.CommonExecute;
 import dao.FaqDao;
 import dto.FaqDto;
 
-/**
- * FAQ(자주 묻는 질문) 서블릿 - 강선구 담당.
- * 팀의 Member 서블릿, 개인프로젝트 Player 서블릿과 같은 프론트컨트롤러 + Command 구조.
- *
- *   Faq                       목록. t_category 가 있으면 그 카테고리만
- *   Faq?t_gubun=writeForm     등록 화면                      (관리자)
- *   Faq?t_gubun=save          등록 처리 -> common_alert.jsp  (관리자) command.faq.FaqSave
- *   Faq?t_gubun=updateForm    수정 화면                      (관리자)
- *   Faq?t_gubun=update        수정 처리 -> common_alert.jsp  (관리자) command.faq.FaqUpdate
- *   Faq?t_gubun=delete        삭제 처리 -> common_alert.jsp  (관리자) command.faq.FaqDelete
- *
- * 관리자 판별 : 세션 sessionLevel == "top" (MemberLogin 이 manager 로그인 때 넣어줌)
- */
+
 @WebServlet("/Faq")
 public class Faq extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -84,7 +72,6 @@ public class Faq extends HttpServlet {
 			return;
 		}
 
-		// 기본 : 목록. 카테고리 파라미터가 없으면 전체.
 		String category = request.getParameter("t_category");
 		if (category == null) category = "";
 		boolean isAdmin = isAdmin(request);
@@ -101,7 +88,6 @@ public class Faq extends HttpServlet {
 		return "top".equals(request.getSession().getAttribute("sessionLevel"));
 	}
 
-	// 글번호 파라미터 -> int. 없거나 숫자가 아니면 0 (조회하면 "없는 글" 처리로 이어짐)
 	public static int parseId(String s) {
 		if (s != null && s.matches("[0-9]+")) return Integer.parseInt(s);
 		return 0;
