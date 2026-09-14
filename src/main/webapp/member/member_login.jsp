@@ -12,6 +12,7 @@
 <script src="${pageContext.request.contextPath}/js/member.js"></script>
 
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/member_login.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/member_menu.css">
 <link href="${pageContext.request.contextPath}/css/index1.css"
 	rel="stylesheet">
 </head>
@@ -29,7 +30,13 @@
 	<!-- MAIN -->
 	<main class="login_page">
 
-		<div class="login_container">
+		<div class="member_page_layout">
+
+			<aside class="member_menu_sidebar">
+				<%@ include file="member_menu.jsp" %>
+			</aside>
+
+			<div class="login_container">
 
 			<!-- PAGE TITLE -->
 			<div class="page_title">
@@ -57,7 +64,7 @@
 					<div class="input_group">
 
 						<label for="member_id"> 아이디 </label> <input type="text"
-							id="member_id" name="t_id" maxlength="20"
+							id="member_id" name="t_id" maxlength="20" onkeypress="checkEnter()"
 							placeholder="아이디를 입력해주세요" autocomplete="username" autofocus>
 
 						<p class="error_message" id="idError"></p>
@@ -69,7 +76,7 @@
 					<div class="input_group">
 
 						<label for="password"> 비밀번호 </label> <input type="password"
-							id="password" name="t_password" maxlength="70"
+							id="password" name="t_password" maxlength="70" onkeypress="checkEnterPassword()"
 							placeholder="비밀번호를 입력해주세요" autocomplete="current-password">
 
 						<p class="error_message" id="passwordError"></p>
@@ -110,6 +117,7 @@
 
 			</div>
 
+			</div>
 		</div>
 
 	</main>
@@ -139,8 +147,6 @@
 	</footer>
 
 
-	<script src="${pageContext.request.contextPath}/js/member.js"></script>
-
 </body>
 </html>
-```
+

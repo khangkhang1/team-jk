@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import command.member.MemberExit;
 import command.member.MemberLogin;
 import command.member.MemberLogout;
 import command.member.MemberMyInfo;
@@ -90,9 +91,16 @@ public class Member extends HttpServlet {
 				viewPage = "member/member_update.jsp";
 			}
 		} else if (gubun.equals("memberUpdate")) {
-			MemberUpdate mem = new MemberUpdate();
-			mem.execute(request);
-			viewPage = "common_alert_view.jsp";
+			String id = (String) request.getSession().getAttribute("sessionId");
+			if (id == null) {
+				request.setAttribute("t_msg", "로그인 정보가 만료되었습니다.");
+				request.setAttribute("t_url", "Member");
+				viewPage = "common_alert.jsp";
+			} else {
+				MemberUpdate mem = new MemberUpdate();
+				mem.execute(request);
+				viewPage = "common_alert.jsp";
+			}
 		} else if (gubun.equals("passwordUpdateForm")) {
 			viewPage = "member/member_password.jsp";
 		} else if (gubun.equals("passwordUpdate")) {
@@ -105,6 +113,10 @@ public class Member extends HttpServlet {
 			CommonExecute mem = new MemberSendPassword();
 			mem.execute(request);
 			viewPage = "common_alert_view.jsp";
+		}else if (gubun.equals("memberExit")) {
+			MemberExit mem= new MemberExit();
+			mem.execute(request);
+			viewPage = "common_alert.jsp";
 		}
 
 		RequestDispatcher rd = request.getRequestDispatcher(viewPage);

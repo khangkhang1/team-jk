@@ -80,7 +80,7 @@ public class MemberDao {
 
 	public String getLoginName(String member_id, String password) {
 		String name = "";
-		String sql = "select name from icn_member where member_id=? and password=?";
+		String sql = "select name from icn_member where member_id=? and password=? and exit_date is null";
 		try {
 			con = DBConnection.getConnection();
 			ps = new LogPreparedStatement(con, sql);
@@ -108,6 +108,7 @@ public class MemberDao {
 			ps.setString(1, member_id);
 			rs = ps.executeQuery();
 			if (rs.next()) {
+				dto=new MemberDto();
 				dto.setMember_id(member_id);
 				dto.setName(rs.getString("name"));
 				// dto.setPassword(rs.getString("password"));
@@ -137,7 +138,7 @@ public class MemberDao {
 			con = DBConnection.getConnection();
 			ps = new LogPreparedStatement(con, sql);
 			ps.setString(1, password);
-			ps.setString(2, password);
+			ps.setString(2, member_id);
 			result = ps.executeUpdate();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -183,6 +184,23 @@ public class MemberDao {
 			ps.setString(4,dto.getVehicle_number());
 			ps.setString(5,dto.getVehicle_type());
 			ps.setString(6,dto.getMember_id());
+			result=ps.executeUpdate();
+		}catch(Exception e) {
+			e.printStackTrace();
+			System.out.println("Error: "+ps.toString());
+		}finally {
+			DBConnection.closeDB(con, ps, rs);
+		}
+		return result;
+	}
+
+	public int memberExit(String id) {
+		int result=0;
+		String sql="update icn_member set exit_date=sysdate where member_id=?";
+		try {
+			con=DBConnection.getConnection();
+			ps=new LogPreparedStatement(con, sql);
+			ps.setString(1,id);
 			result=ps.executeUpdate();
 		}catch(Exception e) {
 			e.printStackTrace();
