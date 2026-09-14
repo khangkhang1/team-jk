@@ -66,7 +66,7 @@
                 <a href="#notice">공지 사항</a>
 
                 <div class="header_dropdown">
-                    <a href="#notice">공지 사항</a>
+                    <a href="Notice">공지 사항</a>
                     <a href="#notice">자주 하는 질문</a>
                 </div>
             </li>
