@@ -1,4 +1,5 @@
 
+
 /* 주차맵 페이지 전용 스타일. 결제 모달 관련 스타일은 css/payment.css로 분리돼 있음.
    색상 변수는 css/c.css의 :root에서 가져옴 (인천공항 사이트 참고 디자인 시스템). */
 
@@ -22,6 +23,7 @@ body.resPage {
 	font-size: 15px;
 	font-weight: 700;
 	margin-right: 16px;
+
 
 /* ============================================================
    세부 주차맵 전용 스타일 (인덱스 디자인 톤에 맞춤)
@@ -142,6 +144,7 @@ body.resPage {
 	background:#1769d2;
 	border-radius:3px 3px 0 0;
 }
+
 
 
 /* 2. 주차장 요약 카드 */
@@ -385,6 +388,7 @@ body.resPage {
 	pointer-events: none;
 	user-select: none;
 }
+
 
 .stepSummaryValue {
 	font-size: 13px;
@@ -906,8 +910,145 @@ body.resPage {
 	display:none;
 }
 
+.pay_modal.hidden{
+	display:none;
+}
+.pay_modal_inner{
+	background:#fff;
+	border-radius:12px;
+	width:100%;
+	max-width:460px;
+	max-height:88vh;
+	overflow-y:auto;
+	padding:26px;
+	position:relative;
+}
+.pay_close{
+	position:absolute;
+	top:14px;
+	right:16px;
+	border:0;
+	background:none;
+	font-size:24px;
+	color:#98a2ae;
+}
+.pay_modal_inner h3{
+	font-size:20px;
+	margin-bottom:6px;
+}
+.pay_modal_inner .pay_sub{
+	font-size:12px;
+	color:#8c96a3;
+	margin-bottom:3px;
+}
+.form_row{
+	display:flex;
+	align-items:center;
+	gap:10px;
+	margin-top:12px;
+}
+.form_row label{
+	width:96px;
+	flex:none;
+	font-size:12px;
+	color:#77818e;
+}
+.form_row input,
+.form_row select{
+	flex:1;
+	height:42px;
+	border:1px solid #dce2e9;
+	border-radius:6px;
+	padding:0 12px;
+	outline:none;
+}
+.form_row input:focus,
+.form_row select:focus{
+	border-color:#1769d2;
+}
+.pay_fieldset{
+	margin-top:18px;
+	border:1px solid #e1e7ef;
+	border-radius:9px;
+	padding:14px 16px 18px;
+}
+.pay_fieldset legend{
+	font-size:13px;
+	font-weight:700;
+	padding:0 6px;
+	color:#1769d2;
+}
+.price_box{
+	margin-top:18px;
+	padding:14px 16px;
+	background:#f2f8ff;
+	border-radius:8px;
+	font-size:13px;
+	color:#48525e;
+}
+.price_box strong{
+	font-size:19px;
+	color:#1769d2;
+	margin-left:6px;
+}
+.pay_methods{
+	display:grid;
+	grid-template-columns:repeat(2,1fr);
+	gap:8px;
+	margin-top:16px;
+}
+.pay_option{
+	border:1px solid #dce2e9;
+	border-radius:7px;
+	padding:11px 12px;
+	font-size:13px;
+	cursor:pointer;
+}
+.pay_option input{
+	margin-right:7px;
+}
+.pay_footer{
+	display:flex;
+	align-items:center;
+	gap:12px;
+	margin-top:20px;
+	padding-top:16px;
+	border-top:1px solid #eef1f5;
+}
+.pay_footer .pay_amount{
+	font-size:13px;
+	color:#7d8794;
+}
+.pay_footer .pay_amount strong{
+	font-size:20px;
+	color:#1769d2;
+	margin:0 3px;
+}
+.pay_submit{
+	margin-left:auto;
+	height:44px;
+	border:0;
+	border-radius:6px;
+	padding:0 26px;
+	background:#1769d2;
+	color:#fff;
+	font-weight:700;
+}
+.pay_submit:disabled{
+	background:#c2ccd8;
+	cursor:not-allowed;
+}
+.hidden{
+	display:none;
+}
+
+
 @media(max-width:900px){
 	.zone_hero h1{ font-size:25px }
 	.plan_cards{ grid-template-columns:1fr }
 	.zone_tabs_wrap{ top:60px }
+
 }}}}}
+
+
+

@@ -7,44 +7,22 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>인천공항 주차예약 - 로그인</title>
-<script type="text/javascript" src="js/jquery-1.8.1.min.js"></script>
-<script src="js/common.js"></script>
-<script src="js/member.js"></script>
-<link rel="stylesheet" href="css/member_login.css">
 
+<script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery-1.8.1.min.js"></script>
+<script src="${pageContext.request.contextPath}/js/member.js"></script>
 
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/member_login.css">
+<link href="${pageContext.request.contextPath}/css/index1.css"
+	rel="stylesheet">
 </head>
 
 <body>
-	<form name="go">
-		<input type="hidden" name="t_gubun">
-	</form>
+
 
 	<!-- HEADER -->
 	<header class="header">
 
-		<div class="header_inner">
-
-			<a href="index.html" class="logo"> <span class="logo_main">인천공항
-					주차예약</span> <span class="logo_sub">INCHEON AIRPORT PARKING</span>
-			</a>
-
-			<nav class="gnb">
-
-				<a href="#">교통 · 주차</a> <a href="#">주차 예약 조회</a> <a href="#">공지
-					사항</a>
-
-			</nav>
-
-			<div class="header_right">
-
-				<a href="Member" class="active">로그인</a> <span class="divider">|</span>
-				<a href="javascript:movePage('Member','join')">회원가입</a>
-
-			</div>
-
-		</div>
-
+		<%@include file="../common_header.jsp"%>
 	</header>
 
 
@@ -80,7 +58,7 @@
 
 						<label for="member_id"> 아이디 </label> <input type="text"
 							id="member_id" name="t_id" maxlength="20"
-							placeholder="아이디를 입력해주세요" autocomplete="username" autofocus >
+							placeholder="아이디를 입력해주세요" autocomplete="username" autofocus>
 
 						<p class="error_message" id="idError"></p>
 
@@ -100,7 +78,8 @@
 
 
 					<!-- LOGIN BUTTON -->
-					<input type="button" onclick="memberLogin()" class="login_btn" value="로그인">
+					<input type="button" onclick="memberLogin()" class="login_btn"
+						value="로그인">
 
 
 					<!-- LOGIN MENU -->
@@ -160,7 +139,7 @@
 	</footer>
 
 
-	<script src="js/member.js"></script>
+	<script src="${pageContext.request.contextPath}/js/member.js"></script>
 
 </body>
 </html>

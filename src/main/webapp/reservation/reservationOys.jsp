@@ -1,549 +1,114 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>주차맵 - 인천공항 주차예약</title>
-
+ <!-- 1. jQuery 먼저 로드 (V1 SDK 동작에 필수) -->
+  <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+  <!-- 2. 포트원 v1 SDK 로드 -->
+  <script src="https://cdn.iamport.kr/v1/iamport.js"></script>
 <!-- 인덱스(index2.html)와 같은 디자인 시스템을 그대로 씀 - 헤더/푸터/컨테이너 스타일 재사용 -->
-<link rel="stylesheet" href="css/index1.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/index1.css">
 
-<style>
-/* ============================================================
-   세부 주차맵 전용 스타일 (인덱스 디자인 톤에 맞춤)
-   - 색상/모서리/그림자 값은 index1.css의 것과 같은 계열로 맞췄음
-   ============================================================ */
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/c.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/reservation.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/payment.css">
 
-/* 헤더가 fixed라서 본문이 가려지지 않게 여백 */
-.detail_body_top{
-	padding-top:86px;
-}
+<script>
+//1. Document가 준비된 후 식별코드 초기화
+$(document).ready(function() {
+    var IMP = window.IMP;
+    IMP.init("imp43028000");
+});
 
-/* 페이지 상단 타이틀 밴드 - 인덱스 히어로의 축소판 느낌 */
-.zone_hero{
-	background:linear-gradient(90deg,#123a6b 0%,#1769d2 100%);
-	color:#fff;
-	padding:34px 0 30px;
-}
-.zone_hero_inner{
-	max-width:1180px;
-	margin:auto;
-	padding:0 20px;
-	display:flex;
-	align-items:flex-end;
-	justify-content:space-between;
-	gap:20px;
-	flex-wrap:wrap;
-}
-.zone_hero_eyebrow{
-	font-size:12px;
-	letter-spacing:2px;
-	opacity:.8;
-	margin-bottom:8px;
-}
-.zone_hero h1{
-	font-size:32px;
-	letter-spacing:-1px;
-}
-.zone_hero h1 small{
-	display:inline-block;
-	margin-left:10px;
-	font-size:14px;
-	font-weight:500;
-	opacity:.9;
-	letter-spacing:0;
-}
-.zone_hero_right{
-	display:flex;
-	gap:26px;
-	font-size:13px;
-}
-.zone_hero_right div span{
-	display:block;
-	opacity:.75;
-	margin-bottom:4px;
-}
-.zone_hero_right div strong{
-	font-size:20px;
-}
-.zone_back{
-	display:inline-block;
-	margin-bottom:12px;
-	font-size:13px;
-	color:rgba(255,255,255,.85);
-}
-.zone_back:hover{
-	color:#fff;
-	text-decoration:underline;
+// 2. 예약 버튼 클릭 시 호출
+function goPayment() {
+    var method = document.pay.t_reservation_pay_method.value;
+
+    if (!method) {
+        alert("결제 수단을 선택해 주세요.");
+        return;
+    }
+
+    if (confirm("예약 및 결제를 진행하시겠습니까?")) {
+        payment(method); // 결제 프로세스 시작
+    }
 }
 
-/* 구역 탭 - 회의에서 층 개념은 안 쓰기로 했으므로 1층/2층 탭 대신 P1~P9 구역 탭 */
-.zone_tabs_wrap{
-	background:#fff;
-	border-bottom:1px solid #e5e9ef;
-	position:sticky;
-	top:66px;
-	z-index:50;
-}
-.zone_tabs{
-	max-width:1180px;
-	margin:auto;
-	padding:0 20px;
-	display:flex;
-	gap:4px;
-	overflow-x:auto;
-}
-.zone_tab{
-	flex:none;
-	border:0;
-	background:none;
-	padding:16px 18px 13px;
-	font-size:14px;
-	font-weight:600;
-	color:#8a929e;
-	position:relative;
-	white-space:nowrap;
-}
-.zone_tab .zone_tab_sub{
-	display:block;
-	font-size:11px;
-	font-weight:400;
-	color:#a8b0ba;
-	margin-top:3px;
-}
-.zone_tab:hover{
-	color:#1769d2;
-}
-.zone_tab.active{
-	color:#1769d2;
-}
-.zone_tab.active:after{
-	content:"";
-	position:absolute;
-	left:12px;
-	right:12px;
-	bottom:-1px;
-	height:3px;
-	background:#1769d2;
-	border-radius:3px 3px 0 0;
+// 3. 포트원 결제창 호출 함수
+function payment(method) {
+    var IMP = window.IMP;
+
+    // 모달창 등에 입력된 예상 금액 가져오기 (없으면 기본값 설정)
+//    var amountVal = document.getElementById("estimatedPriceInput").value;
+//    var price = amountVal ? parseInt(amountVal) : document.pay.t_reservation_deposit_amount; 
+	 var price = document.getElementById("depositAmount").value;
+
+    // 카카오페이 결제
+    if (method === "kakaoPay") {
+        IMP.request_pay({
+            pg: "kakaopay",
+            pay_method: "card",
+            merchant_uid: "ORD_" + new Date().getTime(),
+            name: "인천공항 주차장 예약",
+            amount: price,
+            buyer_name: "홍길동",            // 필요 시 로그인 회원 이름으로 교체
+            buyer_email: "test@example.com"
+        }, handleResponse);
+
+    // 신용카드 결제
+    } else if (method === "creditCard") {
+        IMP.request_pay({
+            pg: "html5_inicis.INIpayTest",
+            pay_method: "card",
+            merchant_uid: "ORD_" + new Date().getTime(),
+            name: "인천공항 주차장 예약",
+            amount: price,
+            buyer_name: "홍길동",
+            buyer_email: "test@example.com"
+        }, handleResponse);
+
+    } else {
+        alert("선택하신 결제 수단은 현재 미지원입니다.");
+        return;
+    }
 }
 
-/* 본문 카드 */
-.detail_section{
-	padding-top:34px;
-}
-.detail_box{
-	background:#fff;
-	border:1px solid #e1e7ef;
-	border-radius:12px;
-	overflow:hidden;
-	box-shadow:0 6px 22px rgba(30,50,80,.05);
-	margin-bottom:22px;
-}
-.detail_box_head{
-	display:flex;
-	justify-content:space-between;
-	align-items:end;
-	padding:22px 26px 16px;
-	border-bottom:1px solid #eef1f5;
-	flex-wrap:wrap;
-	gap:12px;
-}
-.detail_box_head h3{
-	font-size:18px;
-	letter-spacing:-.5px;
-}
-.detail_box_head p{
-	font-size:12px;
-	color:#8c96a3;
-	margin-top:6px;
-}
-.detail_box_body{
-	padding:22px 26px 26px;
-}
+// 4. 포트원 결제 완료 응답 처리 함수
+function handleResponse(rsp) {
+    if (rsp.success) {
+    	var seat = document.pay.t_reservation_seat.value;
+    	var plan = document.pay.t_reservation_plan.value;
+    	if(plan === '1') plan = "예약형"
+        	else plan = "자율출차형"
+    	var deposit_amount = document.pay.t_reservation_deposit_amount.value;
+    	alert(
+    			'예약이 완료되었습니다.\n\n' +
+    			'좌석: ' + seat + '\n' +
+    			'이용방식: ' + plan + '\n' +
+    			'예약금: ' + deposit_amount + '원 결제\n\n' +
+    			'(실제 결제/서버 저장 및 항공편 결항 감지 API 연동은 다음 단계에서 연결됩니다)'
+    		);
 
-/* 이용 방식(1안/2안) 카드 - 4차 회의에서 결제창에서 주차맵으로 옮기기로 한 필터 */
-.plan_cards{
-	display:grid;
-	grid-template-columns:repeat(2,1fr);
-	gap:12px;
-}
-.plan_card{
-	border:1px solid #dce2e9;
-	border-radius:9px;
-	padding:16px 18px;
-	cursor:pointer;
-	transition:.15s;
-	background:#fff;
-}
-.plan_card:hover{
-	border-color:#9dbde6;
-	background:#f8fbff;
-}
-.plan_card.selected{
-	border-color:#1769d2;
-	background:#f2f8ff;
-	box-shadow:0 0 0 1px #1769d2 inset;
-}
-.plan_card input{
-	margin-right:7px;
-}
-.plan_card_title{
-	display:block;
-	font-size:15px;
-	font-weight:700;
-	margin-bottom:6px;
-}
-.plan_card_desc{
-	display:block;
-	font-size:12px;
-	color:#7d8794;
-	line-height:1.6;
-}
+        // 서버(Servlet)로 보낼 hidden input에 포트원 번호 등록
+        document.getElementById("impUidInput").value = rsp.imp_uid;
+        document.getElementById("merchantUidInput").value = rsp.merchant_uid;
 
-/* 좌석 툴바 */
-.seat_toolbar{
-	display:flex;
-	align-items:center;
-	gap:14px;
-	flex-wrap:wrap;
-	margin-bottom:14px;
-}
-.seat_remain{
-	font-size:13px;
-	color:#687585;
-}
-.seat_remain strong{
-	font-size:20px;
-	color:#1769d2;
-	margin:0 3px;
-}
+        // 결제 성공 시에만 최종적으로 Servlet으로 Form Submit 전송!
+        var form = document.pay;
+        form.method = "post";
+        form.action = "Reservation"; // Reservation Servlet으로 전송
+        form.submit();
 
-/* 범례 */
-.seat_legend{
-	display:flex;
-	gap:16px;
-	flex-wrap:wrap;
-	font-size:12px;
-	color:#687585;
-	padding:12px 14px;
-	background:#f7f9fc;
-	border-radius:8px;
-	margin-bottom:18px;
+    } else {
+        alert("결제에 실패했거나 취소되었습니다.\n사유: " + rsp.error_msg);
+        return;
+    }
 }
-.seat_legend span{
-	display:flex;
-	align-items:center;
-	gap:6px;
-}
-.legend_box{
-	width:14px;
-	height:14px;
-	border-radius:4px;
-	display:inline-block;
-	border:1px solid transparent;
-}
-.legend_free     { background:#fff; border-color:#c9d4e0 }
-.legend_selected { background:#1769d2 }
-.legend_taken    { background:#c8cfd8 }
-.legend_disabled { background:#eaf1ff; border-color:#7aa5e8 }
-.legend_ev       { background:#eafaf1; border-color:#5cbd8b }
-.legend_cancelled{ background:#ffeaea; border-color:#e08585 }
-
-/* ============================================================
-   주차 상세맵 - 인덱스 맵에서 그 구역을 확대해 들어온 느낌.
-   실제 주차장처럼 "주차 베이 열 + 가운데 주행로(차선)" 구조로 그림.
-   ============================================================ */
-.lot_map{
-	background:#eef4f9;
-	border:1px solid #dce5ee;
-	border-radius:10px;
-	padding:22px 20px;
-	overflow-x:auto;
-}
-
-/* 입구/출구 표시 */
-.lot_gate{
-	display:flex;
-	justify-content:space-between;
-	align-items:center;
-	font-size:11px;
-	color:#7a8794;
-	letter-spacing:1px;
-	margin-bottom:12px;
-}
-.lot_gate .gate_in{
-	color:#20784a;
-	font-weight:700;
-}
-.lot_gate .gate_out{
-	color:#b94e4e;
-	font-weight:700;
-}
-
-/* 실제 도면을 구역 단위로 확대해서 보여주는 SVG */
-#lotSvg{
-	display:block;
-	width:100%;
-	height:auto;
-	background:#fff;
-	border-radius:8px;
-}
-/* 이 구역 블록 외곽선 - 인덱스에서 클릭한 그 도형 그대로 */
-.lot_zone_outline{
-	fill:rgba(23,105,210,.05);
-	stroke:#1769d2;
-	stroke-width:2;
-	vector-effect:non-scaling-stroke;
-}
-
-/* 주차 칸 (SVG rect) */
-.bay{
-	fill:#fff;
-	stroke:#9fb0c2;
-	stroke-width:0.6; /* 안병찬 수정: 0.8 -> 0.6 겹침 방지 */
-	vector-effect:non-scaling-stroke;
-	cursor:pointer;
-	transition:fill .12s;
-}
-.bay:hover{
-	fill:#d9e8ff;
-}
-.bay_label{
-	font-size:3.5px; /* 안병찬 수정: 4.2 -> 3.5 소형 구역 넘침 방지 */
-	font-weight:700;
-	fill:#5b6672;
-	text-anchor:middle;
-	dominant-baseline:central;
-	pointer-events:none;
-	user-select:none;
-}
-.bay_g.selected .bay{
-	fill:#1769d2;
-	stroke:#0d57b3;
-}
-.bay_g.selected .bay_label{
-	fill:#fff;
-}
-.bay_g.taken .bay{
-	fill:#c2cad4;
-	stroke:#aab4c0;
-	cursor:not-allowed;
-}
-.bay_g.taken .bay_label{
-	fill:#7d8794;
-}
-.bay_g.taken:hover .bay{
-	fill:#c2cad4;
-}
-.bay_g.disabled_seat .bay{
-	fill:#dbe8ff;
-	stroke:#6f9ce0;
-}
-.bay_g.ev_seat .bay{
-	fill:#dcf6e8;
-	stroke:#4fb684;
-}
-.bay_g.cancelled .bay{
-	fill:#ffdede;
-	stroke:#dd7b7b;
-	cursor:not-allowed;
-}
-.bay_g.cancelled:hover .bay{
-	fill:#ffdede;
-}
-/* 주행로 표시 */
-.lot_lane{
-	fill:none;
-	stroke:#b9c6d3;
-	stroke-width:0.6; /* 안병찬 수정 */
-	stroke-dasharray:3 3;
-	vector-effect:non-scaling-stroke;
-}
-
-/* 하단 선택 상태 바 */
-.seat_bottom{
-	display:flex;
-	align-items:center;
-	gap:16px;
-	padding:16px 26px;
-	border-top:1px solid #eef1f5;
-	background:#fbfcfe;
-	font-size:13px;
-	color:#7d8794;
-	flex-wrap:wrap;
-}
-.seat_bottom strong{
-	color:#1769d2;
-}
-.go_pay_btn{
-	margin-left:auto;
-	height:44px;
-	border:0;
-	border-radius:6px;
-	padding:0 26px;
-	background:#1769d2;
-	color:#fff;
-	font-size:14px;
-	font-weight:700;
-}
-.go_pay_btn:disabled{
-	background:#c2ccd8;
-	cursor:not-allowed;
-}
-.go_pay_btn:not(:disabled):hover{
-	background:#0d57b3;
-}
-
-/* 결제 모달(오윤섭 파트) - 인덱스 톤에 맞춘 최소한의 껍데기만 */
-.pay_modal{
-	position:fixed;
-	inset:0;
-	background:rgba(15,28,45,.55);
-	display:flex;
-	align-items:center;
-	justify-content:center;
-	z-index:200;
-	padding:20px;
-}
-.pay_modal.hidden{
-	display:none;
-}
-.pay_modal_inner{
-	background:#fff;
-	border-radius:12px;
-	width:100%;
-	max-width:460px;
-	max-height:88vh;
-	overflow-y:auto;
-	padding:26px;
-	position:relative;
-}
-.pay_close{
-	position:absolute;
-	top:14px;
-	right:16px;
-	border:0;
-	background:none;
-	font-size:24px;
-	color:#98a2ae;
-}
-.pay_modal_inner h3{
-	font-size:20px;
-	margin-bottom:6px;
-}
-.pay_modal_inner .pay_sub{
-	font-size:12px;
-	color:#8c96a3;
-	margin-bottom:3px;
-}
-.form_row{
-	display:flex;
-	align-items:center;
-	gap:10px;
-	margin-top:12px;
-}
-.form_row label{
-	width:96px;
-	flex:none;
-	font-size:12px;
-	color:#77818e;
-}
-.form_row input,
-.form_row select{
-	flex:1;
-	height:42px;
-	border:1px solid #dce2e9;
-	border-radius:6px;
-	padding:0 12px;
-	outline:none;
-}
-.form_row input:focus,
-.form_row select:focus{
-	border-color:#1769d2;
-}
-.pay_fieldset{
-	margin-top:18px;
-	border:1px solid #e1e7ef;
-	border-radius:9px;
-	padding:14px 16px 18px;
-}
-.pay_fieldset legend{
-	font-size:13px;
-	font-weight:700;
-	padding:0 6px;
-	color:#1769d2;
-}
-.price_box{
-	margin-top:18px;
-	padding:14px 16px;
-	background:#f2f8ff;
-	border-radius:8px;
-	font-size:13px;
-	color:#48525e;
-}
-.price_box strong{
-	font-size:19px;
-	color:#1769d2;
-	margin-left:6px;
-}
-.pay_methods{
-	display:grid;
-	grid-template-columns:repeat(2,1fr);
-	gap:8px;
-	margin-top:16px;
-}
-.pay_option{
-	border:1px solid #dce2e9;
-	border-radius:7px;
-	padding:11px 12px;
-	font-size:13px;
-	cursor:pointer;
-}
-.pay_option input{
-	margin-right:7px;
-}
-.pay_footer{
-	display:flex;
-	align-items:center;
-	gap:12px;
-	margin-top:20px;
-	padding-top:16px;
-	border-top:1px solid #eef1f5;
-}
-.pay_footer .pay_amount{
-	font-size:13px;
-	color:#7d8794;
-}
-.pay_footer .pay_amount strong{
-	font-size:20px;
-	color:#1769d2;
-	margin:0 3px;
-}
-.pay_submit{
-	margin-left:auto;
-	height:44px;
-	border:0;
-	border-radius:6px;
-	padding:0 26px;
-	background:#1769d2;
-	color:#fff;
-	font-weight:700;
-}
-.pay_submit:disabled{
-	background:#c2ccd8;
-	cursor:not-allowed;
-}
-.hidden{
-	display:none;
-}
-
-@media(max-width:900px){
-	.zone_hero h1{ font-size:25px }
-	.plan_cards{ grid-template-columns:1fr }
-	.zone_tabs_wrap{ top:60px }
-}
-</style>
+</script>
 </head>
 
 <body>
@@ -556,22 +121,22 @@
 	<header class="header scrolled">
 		<div class="header_inner">
 
-			<a href="index.jsp" class="logo">
+			<a href="${pageContext.request.contextPath}/index.jsp" class="logo">
 				인천공항 주차예약
 				<small>INCHEON AIRPORT PARKING</small>
 			</a>
 
 			<nav class="header_menu">
 				<li>
-					<a href="index.jsp#parking">교통 · 주차</a>
+					<a href="${pageContext.request.contextPath}/index.jsp#parking">교통 · 주차</a>
 					<div class="header_dropdown">
-						<a href="index.jsp#guide">주차장 이용 안내</a>
-						<a href="index.jsp#parking">주차 요금</a>
-						<a href="index.jsp#parking">주차장 혼잡도</a>
+						<a href="${pageContext.request.contextPath}/index.jsp#guide">주차장 이용 안내</a>
+						<a href="${pageContext.request.contextPath}/index.jsp#parking">주차 요금</a>
+						<a href="${pageContext.request.contextPath}/index.jsp#parking">주차장 혼잡도</a>
 					</div>
 				</li>
 				<li>
-					<a href="index.jsp#reserve" class="active">주차 예약 조회</a>
+					<a href="${pageContext.request.contextPath}/index.jsp#reserve" class="active">주차 예약 조회</a>
 					<div class="header_dropdown">
 						<a href="#">예약 내역</a>
 						<a href="#">예약 확인</a>
@@ -580,7 +145,7 @@
 					</div>
 				</li>
 				<li>
-					<a href="index.jsp#notice">공지 사항</a>
+					<a href="${pageContext.request.contextPath}/index.jsp#notice">공지 사항</a>
 					<div class="header_dropdown">
 						<a href="#">공지 사항</a>
 						<a href="#">자주 하는 질문</a>
@@ -589,9 +154,9 @@
 			</nav>
 
 			<div class="header_right">
-				<a href="member/member_login.jsp">로그인</a>
+				<a href="${pageContext.request.contextPath}/member/member_login.jsp">로그인</a>
 				<span>|</span>
-				<a href="member/member_join.jsp">회원가입</a>
+				<a href="${pageContext.request.contextPath}/member/member_join.jsp">회원가입</a>
 			</div>
 
 			<button class="menu_btn" aria-label="메뉴">☰</button>
@@ -604,12 +169,14 @@
 	<section class="zone_hero">
 		<div class="zone_hero_inner">
 			<div>
-				<a href="index.jsp#reserve" class="zone_back">← 전체 주차맵으로</a>
+				<a href="${pageContext.request.contextPath}/index.jsp#reserve" class="zone_back">← 전체 주차맵으로</a>
 				<div class="zone_hero_eyebrow">INCHEON AIRPORT T1 PARKING</div>
 				<h1>
 					<span id="zoneTitle">P1 구역</span>
 					<small id="zoneType">단기주차장 · 시간당 3,000원</small>
 				</h1>
+				<!-- 공공데이터 실시간 현황을 쓰는 구역일 때만 표시됨 -->
+				<span id="liveBadge" class="live_badge" style="display:none"></span>
 			</div>
 
 			<div class="zone_hero_right">
@@ -703,7 +270,7 @@
 							</div>
 							<svg id="lotSvg" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="구역 상세 주차맵">
 								<!-- 실제 도면 (viewBox로 이 구역만 확대해서 보임) -->
-								<image id="lotBaseImage" href="images/parking_map.png" x="0" y="0" width="1600" height="900"/>
+								<image id="lotBaseImage" href="${pageContext.request.contextPath}/images/parking_map.png" x="0" y="0" width="1600" height="900"/>
 								<!-- 이 구역 블록 외곽선 -->
 								<path id="lotZoneOutline" class="lot_zone_outline"/>
 								<!-- 주차 칸들 -->
@@ -748,72 +315,84 @@
 <!-- 결제 모듈 (담당: 오윤섭) — 이 블록은 껍데기 스타일만 인덱스 톤에 맞췄고 -->
 <!-- 내용/기능은 원본 그대로. 완성되면 이 자리에 통째로 교체하면 됨.        -->
 <!-- ============================================================ -->
-<div class="pay_modal hidden" id="paymentModal">
-	<div class="pay_modal_inner">
-		<button class="pay_close" id="paymentCloseBtn">&times;</button>
+<form name="pay">
+<input type="hidden" name="t_gubun" value="payment">
+	<div id="paymentModal" class="hidden">
+		<div id="paymentModalInner">
+			<button id="paymentCloseBtn" type="button">&times;</button>
 
-		<h3 id="paymentSeatTitle">-</h3>
-		<p class="pay_sub" id="paymentLotInfo">-</p>
-		<p class="pay_sub" id="paymentPlanInfo">-</p>
+			<h3 id="paymentSeatTitle">-</h3>
+			<p id="paymentLotInfo">-</p>
+			<p id="paymentPlanInfo">-</p>
 
-		<div class="form_row">
-			<label>날짜</label>
-			<input type="date" id="dateInput">
-		</div>
-		<div class="form_row">
-			<label>시작 시각</label>
-			<select id="startTimeInput"></select>
-		</div>
+<!-- Servlet으로 예약 유형 및 좌석 정보 넘기기 위한 input / 결제 시 DB에 저장 위함-->
+<input type="hidden" id="reservationPlan" name="t_reservation_plan">
+<input type="hidden" id="reservationSeat" name="t_reservation_seat">
 
-		<div class="form_row plan1Only" id="durationRow">
-			<label>이용 시간</label>
-			<select id="durationInput">
-				<option value="1">1시간</option>
-				<option value="2" selected>2시간</option>
-				<option value="3">3시간</option>
-				<option value="4">4시간</option>
-				<option value="6">6시간</option>
-			</select>
-		</div>
-
-		<div class="plan2Only hidden" id="endFreeNotice">
-			<p class="pay_sub" style="margin-top:12px">종료 시각은 정하지 않습니다 (자유출차, 페널티 요금 적용)</p>
-		</div>
-
-		<fieldset class="pay_fieldset plan1Only" id="flightFieldset">
-			<legend>✈️ 항공권 정보 (필수)</legend>
-			<div class="form_row">
-				<label>항공편명</label>
-				<input type="text" id="flightNoInput" placeholder="예: KE001" autocomplete="off">
+			<div class="formRow">
+				<label data-i18n="res_dateLabel">주차 날짜</label>
+				<input type="date" id="startDateInput" name="t_reservation_start_date">
 			</div>
-			<div class="form_row">
-				<label>왕복 여부</label>
-				<select id="flightRoundtripInput">
-					<option value="round">왕복</option>
-					<option value="oneway">편도 (이용 불가)</option>
-				</select>
+			<div class="formRow">
+				<label data-i18n="res_startTimeLabel">주차 시각</label>
+				<select id="startTimeInput" name="t_reservation_start_time"></select>
 			</div>
-			<div class="form_row">
-				<label>귀국 도착 예정</label>
-				<input type="time" id="flightArriveInput">
+			<div class="formRow">
+				<label data-i18n="res_dateLabel">예상 출차 날짜</label>
+				<input type="date" id="endDateInput" name="t_reservation_end_date">
 			</div>
-		</fieldset>
+			<div class="formRow plan1Only hidden" id="durationRow">
+				<label data-i18n="res_durationLabel">이용 시간</label>
+				<select id="endTimeInput" name="t_reservation_end_time"></select>
+			</div>
 
-		<div class="price_box">예상 금액 <strong id="estimatedPrice">-</strong></div>
+			<div class="plan2Only hidden" id="endFreeNotice">
+				<p data-i18n="res_endFreeNotice">종료 시각은 정하지 않습니다 (자유출차, 페널티 요금 적용)</p>
+			</div>
 
-		<div class="pay_methods">
-			<label class="pay_option"><input type="radio" name="payMethod" value="kakao"> 카카오페이</label>
-			<label class="pay_option"><input type="radio" name="payMethod" value="naver"> 네이버페이</label>
-			<label class="pay_option"><input type="radio" name="payMethod" value="card"> 카드</label>
-			<label class="pay_option"><input type="radio" name="payMethod" value="account"> 계좌이체</label>
-		</div>
+			<fieldset class="plan1Only hidden" id="flightFieldset">
+				<legend data-i18n="res_flightSectionTitle">✈️ 항공권 정보 (필수)</legend>
+				<div class="formRow">
+					<label data-i18n="res_flightNo">항공편명</label>
+					<input type="text" id="flightNoInput" placeholder="1 입력 필요(test단계)" name="t_reservation_flight_no">
+				</div>
+<!-- 예약 유형 선택 후 결제창 진입: 왕복 여부 선택 불필요 판단 / 이후 수정 필요할 것 같음 -->
+				<div class="formRow">
+					<label data-i18n="res_flightRoundtrip">왕복 여부</label>
+					<select id="flightRoundtripInput">
+						<option value="round">왕복</option>
+						<option value="oneway">편도 (이용 불가)</option>
+					</select>
+				</div>
+<!-- 귀국 도착 예정 시간은 name으로 넘길 필요가 있는가? -->
+				<div class="formRow">
+					<label data-i18n="res_flightArriveTime">귀국 도착 예정</label>
+					<input type="time" id="flightArriveInput">
+				</div>
+			</fieldset>
 
-		<div class="pay_footer">
-			<div class="pay_amount">예약금 <strong id="payBarAmount">-</strong>원</div>
-			<button class="pay_submit" id="payBtn" disabled>결제하기</button>
+			<div id="estimatedPriceBox"><span data-i18n="res_estimated">예상 금액</span>: <strong id="estimatedPrice">-</strong></div>
+<!-- Servlet으로 예상 금액 넘기기 위한 input(payment.js수정) / 예약 목록 확인 시 예상 금액 노출-->
+			<input type="hidden" name="t_reservation_estimate_amount" id="estimatedPriceInput">
+			<div id="payMethodArea">
+				<label class="payOption"><input type="radio" name="t_reservation_pay_method" value="kakaoPay"> 카카오페이</label>
+				<label class="payOption"><input type="radio" name="t_reservation_pay_method" value="naverPay"> 네이버페이</label>
+				<label class="payOption"><input type="radio" name="t_reservation_pay_method" value="creditCard"> 카드</label>
+				<label class="payOption"><input type="radio" name="t_reservation_pay_method" value="account"> 계좌이체</label>
+			</div>
+
+			<div id="paymentFooter">
+				<div id="payBarPrice"><span data-i18n="res_depositLabel">예약금</span> <strong id="payBarAmount">-</strong>원</div>
+<!-- Servlet으로 예약금 넘기기 위한 input / 예약 목록 확인 시 예약금 노출 / 필요 없는 경우 삭제 예정 -->
+				<input type="text" id="depositAmount" name="t_reservation_deposit_amount" value="5000">
+<!-- 포트원 결제 검증 및 DB 저장을 위한 hidden input 추가 -->
+				<input type="hidden" name="t_imp_uid" id="impUidInput">
+				<input type="hidden" name="t_merchant_uid" id="merchantUidInput">
+				<button id="payBtn" data-i18n="res_payBtn" onclick="goPayment()" disabled type="button">결제하기</button>
+			</div>
 		</div>
 	</div>
-</div>
+</form>
 <!-- 결제 모듈 END -->
 
 <script>
@@ -832,42 +411,47 @@
    - rows : 블록의 실제 가로세로 비율에 맞춘 주차 열 수
             (P1·P2는 두툼해서 4열, P3~P5는 납작해서 2열, 터미널 앞 P6~P9는 작아서 2열) */
 var ZONES = [
-	{ id:"P1", type:"장기주차장", price:2000, total:40, rows:4,
-	  box:{x:810,y:350,w:368,h:165},
-	  path:"M810 375 Q810 350 835 350 L1010 360 Q1040 370 1065 390 L1075 420 Q1090 430 1115 445 L1150 450 Q1170 460 1178 490 L1175 510 Q1165 515 1140 515 L845 515 Q810 515 810 515 Z" },
+	
+	
+		{ id:"P1", type:"장기주차장", price:2000, total:50, rows:4,
+		  box:{x:810,y:350,w:368,h:165},
+		  path:"M810 375 Q810 350 835 350 L1010 360 Q1040 370 1065 390 L1075 420 Q1090 430 1115 445 L1150 450 Q1170 460 1178 490 L1175 510 Q1165 515 1140 515 L845 515 Q810 515 810 515 Z" },
 
-	{ id:"P2", type:"장기주차장", price:2000, total:38, rows:4,
-	  box:{x:390,y:355,w:375,h:160},
-	  path:"M430 445 Q490 445 500 430 L510 420 Q520 390 535 375 L545 370 Q565 360 590 355 L760 355 Q765 355 765 355 L765 455 Q765 515 765 515 L420 515 Q390 515 395 505 Z" },
+		{ id:"P2", type:"장기주차장", price:2000, total:50, rows:4,
+		  box:{x:390,y:355,w:375,h:160},
+		  path:"M430 445 Q490 445 500 430 L510 420 Q520 390 535 375 L545 370 Q565 360 590 355 L760 355 Q765 355 765 355 L765 455 Q765 515 765 515 L420 515 Q390 515 395 505 Z" },
 
-	{ id:"P3", type:"단기주차장", price:3000, total:36, rows:2,
-	  box:{x:820,y:545,w:355,h:95},
-	  path:"M820 545 L1140 545 Q1175 560 1175 580 L1170 620 Q1140 640 1130 640 L820 640 Z" },
+		{ id:"P3", type:"단기주차장", price:3000, total:50, rows:2,
+		  box:{x:820,y:545,w:355,h:95},
+		  path:"M820 545 L1140 545 Q1175 560 1175 580 L1170 620 Q1140 640 1130 640 L820 640 Z" },
 
-	{ id:"P4", type:"단기주차장", price:3000, total:36, rows:2,
-	  box:{x:400,y:550,w:370,h:85},
-	  path:"M400 575 Q435 550 435 550 L755 550 Q770 550 770 575 L770 635 Q760 635 755 635 L435 635 Q410 630 410 630 Z" },
+		{ id:"P4", type:"단기주차장", price:3000, total:50, rows:2,
+		  box:{x:400,y:550,w:370,h:85},
+		  path:"M400 575 Q435 550 435 550 L755 550 Q770 550 770 575 L770 635 Q760 635 755 635 L435 635 Q410 630 410 630 Z" },
 
-	{ id:"P5", type:"단기주차장", price:3000, total:34, rows:2,
-	  box:{x:440,y:690,w:315,h:90},
-	  path:"M440 690 Q460 690 475 690 L735 690 Q755 690 755 690 L755 765 Q755 780 755 780 L475 780 Q440 780 440 780 Z" },
+		{ id:"P5", type:"단기주차장", price:3000, total:50, rows:2,
+		  box:{x:440,y:690,w:315,h:90},
+		  path:"M440 690 Q460 690 475 690 L735 690 Q755 690 755 690 L755 765 Q755 780 755 780 L475 780 Q440 780 440 780 Z" },
 
-	{ id:"P6", type:"단기주차장", price:3000, total:25, rows:2, bayW:4.3,
-	  box:{x:849,y:268,w:124,h:38},
-	  path:"M973 268 L963 303 L855 306 L849 285 Z" },
+		/* P6: 상단을 대칭 각도로 비스듬히 깎은 외곽선 적용 */
+		{ id:"P6", type:"단기주차장", price:3000, total:50, rows:3, bayW:6.2,
+		  box:{x:840, y:255, w:140, h:65},
+ 		 path:"M850 282 L980 258 L968 318 L840 318 Z" },
 
-	{ id:"P7", type:"단기주차장", price:3000, total:25, rows:2, bayW:4.3,
-	  box:{x:611,y:268,w:124,h:38},
-	  path:"M611 268 L735 285 L729 306 L621 303 Z" },
+		/* P7: 대칭 구조로 3개 레이어 정렬되도록 box 및 path 확장 */
+		{ id:"P7", type:"단기주차장", price:3000, total:50, rows:3, bayW:6.2,
+  		box:{x:600, y:255, w:140, h:65},
+  		path:"M600 258 L730 282 L740 318 L612 318 Z" },
+  		{ id:"P8", type:"단기주차장", price:3000, total:50, rows:2,
+  		  box:{x:860, y:195, w:125, h:45},
+  		  path:"M860 195 L985 195 L985 240 L860 240 Z" },
 
-	{ id:"P8", type:"단기주차장", price:3000, total:25, rows:4, bayW:6.1,
-	  box:{x:866,y:197,w:116,h:43},
-	  path:"M889 197 L982 237 L866 240 Z" },
+  		/* P9: P8과 동일한 직사각형 구조로 통일 */
+  		{ id:"P9", type:"단기주차장", price:3000, total:50, rows:2,
+  		  box:{x:600, y:195, w:125, h:45},
+  		  path:"M600 195 L725 195 L725 240 L600 240 Z" }
+	];
 
-	{ id:"P9", type:"단기주차장", price:3000, total:25, rows:4, bayW:6.1,
-	  box:{x:601,y:197,w:118,h:43},
-	  path:"M697 197 L719 237 L601 240 Z" }
-];
 
 var currentZone = getZoneFromUrl() || "P1";
 var selectedSeat = null;
@@ -1009,6 +593,89 @@ function layoutBays(zone, outlineEl, svgEl){
 	return best || { bays:[], lanes:[] };
 }
 
+/* ============================================================
+   실시간 구역 주차 현황 (공공데이터 StatusOfParking)
+   - 서버(/parkingStatus)를 통해 받는다. 프론트에서 data.go.kr을 직접 부르지 않음
+     (서비스키 노출 방지 - 노션 '시스템 아키텍처'의 외부 API 처리 원칙).
+   - 실데이터가 있는 구역: P1, P2, P3, P5
+     (P4는 2026-07 폐지, P6~P9는 실제 인천공항에 없는 구역이라 임의 데이터 유지)
+   - 정적 HTML로 열었을 때(서버 없이 미리보기)는 조용히 실패하고 임의 데이터를 그대로 둔다.
+   ============================================================ */
+var LIVE_ZONE_STATUS = null;   // 한 번 받아서 캐시 (구역 탭 전환마다 재호출하지 않음)
+
+/* /parkingStatus 는 서버 사정에 맞춘 모양으로 준다.
+   { longTerm:[{parkLotNo,totalCount,availableCount,congestion,floor,datetm}...],
+     shortTerm:[{parkZoneNo, ...}...] }
+   화면 쪽 코드는 { P1:{remain,total,status,floor,datetm}, ... } 를 기대하므로 여기서 바꿔준다.
+   서버 응답 형식을 화면에 맞춰 고치는 대신 화면에서 흡수하는 이유 :
+   같은 응답을 index.jsp 도 쓰고 있어서, 서버를 바꾸면 그쪽이 깨진다. */
+function normalizeZoneStatus(raw){
+	var out = {};
+	function put(row, keyName){
+		if (!row || !row[keyName]) return;
+		out[row[keyName]] = {
+			remain : row.availableCount,
+			total  : row.totalCount,
+			status : row.congestion,
+			floor  : row.floor  || "",
+			datetm : row.datetm || ""
+		};
+	}
+	(raw.longTerm  || []).forEach(function(r){ put(r, "parkLotNo");  });
+	(raw.shortTerm || []).forEach(function(r){ put(r, "parkZoneNo"); });
+	return out;
+}
+
+function loadLiveZoneStatus(cb){
+	if (LIVE_ZONE_STATUS !== null) { cb && cb(); return; }
+	try {
+		var xhr = new XMLHttpRequest();
+		xhr.open("GET", "${pageContext.request.contextPath}/parkingStatus?refresh=true", true);
+		xhr.onreadystatechange = function(){
+			if (xhr.readyState !== 4) return;
+			if (xhr.status === 200){
+				try { LIVE_ZONE_STATUS = normalizeZoneStatus(JSON.parse(xhr.responseText)); }
+				catch(e){ LIVE_ZONE_STATUS = {}; }
+			} else {
+				LIVE_ZONE_STATUS = {};   // 서버 없이 열었을 때 등 - 임의 데이터로 진행
+			}
+			cb && cb();
+		};
+		xhr.send();
+	} catch(e){
+		LIVE_ZONE_STATUS = {};
+		cb && cb();
+	}
+}
+
+function applyLiveZoneStatus(zoneId){
+	var badgeEl = document.getElementById("liveBadge");
+	if (!LIVE_ZONE_STATUS) return;
+	var live = LIVE_ZONE_STATUS[zoneId];
+	if (!live){
+		// 실데이터 없는 구역(P4, P6~P9)은 임의 데이터 그대로 두고 배지도 숨긴다.
+		// (숨기지 않으면 직전 구역의 배지가 남아 실시간인 것처럼 보임)
+		if (badgeEl) badgeEl.style.display = "none";
+		return;
+	}
+
+	document.getElementById("zoneRemain").textContent = live.remain.toLocaleString() + "석";
+	document.getElementById("zoneTotal").textContent  = live.total.toLocaleString() + "석";
+	document.getElementById("zoneStatus").textContent = live.status;
+
+	// 실시간 값임을 화면에 표시 (발표 때 "실제 API 연동"임을 보여주는 근거)
+	if (badgeEl){
+		badgeEl.style.display = "";
+		badgeEl.textContent = "실시간 · " + live.floor + " (" + formatDatetm(live.datetm) + " 기준)";
+	}
+}
+
+function formatDatetm(s){
+	// 20260908112732.000 -> 09-08 11:27
+	if (!s || s.length < 12) return "";
+	return s.substring(4,6) + "-" + s.substring(6,8) + " " + s.substring(8,10) + ":" + s.substring(10,12);
+}
+
 function renderZoneTabs(){
 	var html = "";
 	for (var i=0;i<ZONES.length;i++){
@@ -1064,14 +731,14 @@ function renderAll(){
 	// 그 블록의 실제 모양 안에 주차 칸을 배치한다.
 	document.getElementById("lotMapZoneLabel").textContent = zone.id + " 구역 · 지상";
 
-	var pad = Math.max(zone.box.w, zone.box.h) * 0.06;  // 블록 주변 도면이 조금 보이게 여백
+	var pad = Math.max(zone.box.w, zone.box.h) * 0.15;
 	document.getElementById("lotSvg").setAttribute("viewBox",
 		(zone.box.x - pad) + " " + (zone.box.y - pad) + " " +
 		(zone.box.w + pad*2) + " " + (zone.box.h + pad*2));
 
 	var outlineEl = document.getElementById("lotZoneOutline");
 	outlineEl.setAttribute("d", zone.path);
-
+	
 	// 블록 실제 모양 안에 들어가는 칸만 배치 -> 배치된 칸 수에 맞춰 좌석 데이터를 다시 맞춘다
 	var layout = layoutBays(zone, outlineEl, document.getElementById("lotSvg"));
 	seats = makeSeats(zone, layout.bays.length);
@@ -1089,6 +756,11 @@ function renderAll(){
 	document.getElementById("seatRemainCount").textContent = remain;
 	ratio = seats.length ? remain / seats.length : 0;
 	statusEl.textContent = ratio > 0.5 ? "여유" : (ratio > 0.2 ? "보통" : "혼잡");
+
+	// 실시간 주차 현황 API(구역 단위)가 있는 구역이면 상단 요약을 실데이터로 덮어쓴다.
+	// 개별 칸(좌석 맵)은 그대로 우리 임의 데이터를 쓴다 - 실제 개별 주차면은 T1만 4,614면이라
+	// 전부 DB에 넣는 게 불가능해서, 구역 잔여대수만 실연동하기로 함(2026-09-08).
+	applyLiveZoneStatus(zone.id);
 
 	var svg = "";
 
@@ -1138,35 +810,77 @@ function renderAll(){
 	document.getElementById("goPayBtn").disabled = true;
 }
 
-/* 이용 방식 카드 선택 */
+// 
+/* 이용 방식 카드 선택 시 hidden input(t_reservation_plan) 업데이트 */
 var planCards = document.querySelectorAll(".plan_card");
-for (var p=0;p<planCards.length;p++){
-	planCards[p].addEventListener("click", function(){
-		for (var q=0;q<planCards.length;q++) planCards[q].classList.remove("selected");
-		this.classList.add("selected");
-		var isPlan1 = this.querySelector("input").value === "1";
-		document.getElementById("flightFieldset").classList.toggle("hidden", !isPlan1);
-		document.getElementById("durationRow").classList.toggle("hidden", !isPlan1);
-		document.getElementById("endFreeNotice").classList.toggle("hidden", isPlan1);
-	});
+for (var p = 0; p < planCards.length; p++) {
+    planCards[p].addEventListener("click", function() {
+        for (var q = 0; q < planCards.length; q++) {
+            planCards[q].classList.remove("selected");
+        }
+        this.classList.add("selected");
+        
+        var selectedRadio = this.querySelector("input[name='planType']");
+        if (selectedRadio) {
+            selectedRadio.checked = true;
+            
+            // 1. 선택된 이용 방식 값(1 또는 2) 추출
+            var planVal = selectedRadio.value;
+            
+            // 2. 결제 폼 내 hidden input에 대입
+            var planInput = document.getElementById("reservationPlan");
+            if (planInput) {
+                planInput.value = planVal;
+            }
+
+            // UI 보이기/숨기기 처리
+            var isPlan1 = (planVal === "1");
+            document.getElementById("flightFieldset").classList.toggle("hidden", !isPlan1);
+            document.getElementById("durationRow").classList.toggle("hidden", !isPlan1);
+            document.getElementById("endFreeNotice").classList.toggle("hidden", isPlan1);
+        }
+    });
 }
 
-/* 결제 모달 열기/닫기 */
-document.getElementById("goPayBtn").addEventListener("click", function(){
-	if (!selectedSeat) return;
-	var zone = findZone(currentZone);
-	document.getElementById("paymentSeatTitle").textContent = selectedSeat + " 자리 예약";
-	document.getElementById("paymentLotInfo").textContent   = "인천공항 1터미널 " + zone.id + " 구역 · " + zone.type;
-	document.getElementById("paymentPlanInfo").textContent  = "시간당 " + zone.price.toLocaleString() + "원";
-	document.getElementById("paymentModal").classList.remove("hidden");
+/* 결제 모달 열기 이벤트 (payment.js의 openPaymentModal 호출) */
+document.getElementById("goPayBtn").addEventListener("click", function() {
+    if (!selectedSeat) return;
+    
+    // 현재 선택된 이용 방식 값('1' 또는 '2') 추출
+    var currentPlan = "1";
+    var selectedRadio = document.querySelector("input[name='planType']:checked");
+    if (selectedRadio) {
+        currentPlan = selectedRadio.value;
+    }
+    
+    // hidden input에 기본값 세팅
+    var planInput = document.getElementById("reservationPlan");
+    if (planInput) planInput.value = currentPlan;
+    
+    var seatInput = document.getElementById("reservationSeat");
+    if (seatInput) seatInput.value = selectedSeat;
+    
+    // payment.js에 정의된 전역 모달 열기 함수 호출 (이 안에서 시간 옵션 및 날짜 자동 생성됨)
+    if (typeof window.openPaymentModal === "function") {
+        window.openPaymentModal(selectedSeat, currentPlan);
+    } else {
+        // payment.js가 로드되지 않았을 경우 예외 처리
+        document.getElementById("paymentModal").classList.remove("hidden");
+    }
 });
-document.getElementById("paymentCloseBtn").addEventListener("click", function(){
-	document.getElementById("paymentModal").classList.add("hidden");
+
+document.getElementById("paymentCloseBtn").addEventListener("click", function() {
+    document.getElementById("paymentModal").classList.add("hidden");
 });
 
 renderZoneTabs();
 renderAll();
-</script>
 
+// 실시간 구역 현황을 받아온 뒤 상단 요약만 실데이터로 갱신 (좌석 맵은 그대로)
+loadLiveZoneStatus(function(){
+	applyLiveZoneStatus(currentZone);
+});
+</script>
+<script src="${pageContext.request.contextPath}/js/payment.js"></script>
 </body>
 </html>

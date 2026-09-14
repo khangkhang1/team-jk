@@ -36,8 +36,11 @@ import java.sql.SQLException;
  * ─────────────────────────────────────────────────────────────────────
  */
 public class DBConnection {
+<<<<<<< HEAD
 
 //<<<<<<<HEAD
+=======
+>>>>>>> 8a7d0d86a222daab52e2d825adc9ba89a6910adc
 	  
 //오라클에 접속 하기 위해 만드는 클래스 Connection 이것이 들어가야한다
 	public static Connection getConnenction(){
@@ -86,6 +89,7 @@ public class DBConnection {
 		}
 		if(null!=con) {
 			try {
+<<<<<<< HEAD
 		
 			con.close();
 		} catch (SQLException e) {
@@ -93,6 +97,15 @@ public class DBConnection {
 		
 		}
 		}}
+=======
+			con.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		}
+		
+		}
+>>>>>>> 8a7d0d86a222daab52e2d825adc9ba89a6910adc
 
 	// 학원 내부망의 DB 서버 이름. 개인프로젝트(track27_11g)와 같은 서버를 쓰되
 	// 계정은 팀 전용(icn_parking)으로 분리했습니다 - 개인 데이터와 안 섞이게.
@@ -115,11 +128,14 @@ public class DBConnection {
 			System.out.println("오라클 드라이버를 찾지 못했습니다. ojdbc8.jar 빌드패스를 확인하세요.");
 			e.printStackTrace();
 		}
+<<<<<<< HEAD
 
 		String db_url = "jdbc:oracle:thin:@jsl-704:1523/xe";
 		String db_user = "icn_parking";      // TODO: 팀 DB 계정 확정되면 교체
 		String db_passward = "1234";       // TODO: 팀 DB 비밀번호 확정되면 교체
 
+=======
+>>>>>>> 8a7d0d86a222daab52e2d825adc9ba89a6910adc
 
 		try {
 			con = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
@@ -154,6 +170,7 @@ public class DBConnection {
 				e.printStackTrace();
 			}
 		}
+<<<<<<< HEAD
 	
 	
 
@@ -162,3 +179,8 @@ public class DBConnection {
 //>>>>>>> ijg
 
 }
+=======
+	}
+}
+
+>>>>>>> 8a7d0d86a222daab52e2d825adc9ba89a6910adc

@@ -3,6 +3,18 @@
 --   1) PK는 편명이 아니라 임의 생성 flight_id (같은 항공기가 하루에도 여러 번 운항해서 편명은 PK 불가)
 --   2) 레코드 생성 시점은 "예약 시 회원이 항공편명을 검색·입력하는 순간" (미리 전체 항공편을 적재해두지 않음)
 --   3) 결항여부(remark)만 실 API로 갱신, 나머지 항목은 참고용
+--
+-- [2026-09-10 변경] schedule_datetime / estimated_datetime : VARCHAR2(14) -> DATE
+--   처음엔 API 원본 문자열("202609062355", 12자리)을 그대로 담으려고 VARCHAR2로 뒀는데,
+--   예약 테이블(오윤섭)에서 도착시각과 예약시각을 비교해야 하고 지연 시간 계산도 필요해서
+--   DATE가 맞다. 문자열이면 "몇 분 차이"를 SQL에서 못 구한다.
+--   (오라클 DATE는 시:분:초까지 담기므로 TIMESTAMP까지는 필요 없다)
+--
+--   Java쪽은 DTO 필드를 문자열(API 포맷) 그대로 두고 SQL 경계에서만 변환한다.
+--     INSERT : to_date(?, 'YYYYMMDDHH24MI')
+--     SELECT : to_char(schedule_datetime, 'YYYYMMDDHH24MI')
+--   API가 값을 비워 보내는 경우가 있어 FlightDao.setApiDate()에서 12자리 검증 후
+--   아니면 NULL을 넣는다(그냥 넣으면 ORA-01861).
 
 CREATE SEQUENCE icn_flight_seq
     START WITH 1
@@ -13,8 +25,8 @@ CREATE TABLE icn_flight (
     flight_id           NUMBER          PRIMARY KEY,
     flight_no           VARCHAR2(10)    NOT NULL,           -- 편명, 예: OZ704 (중복 허용)
     airport              VARCHAR2(50),                       -- 상대(출발지) 공항명
-    schedule_datetime    VARCHAR2(14),                       -- 원래 도착 예정시각, API 원본 포맷 YYYYMMDDHH24MI 그대로 저장
-    estimated_datetime   VARCHAR2(14),                       -- 변경된 시각(API 응답 그대로)
+    schedule_datetime    DATE,                               -- 원래 도착 예정시각
+    estimated_datetime   DATE,                                -- 변경된(지연 등) 도착 예정시각
     remark               VARCHAR2(10)    DEFAULT '도착',      -- 현황: 도착/결항/지연/회항/착륙 (data.go.kr API 값 그대로)
     updated_at           DATE            DEFAULT SYSDATE      -- 마지막으로 API 재조회해서 갱신한 시각
 );
@@ -64,3 +76,32 @@ FROM icn_reservation r
 LEFT JOIN icn_flight f ON r.flight_id = f.flight_id
 WHERE r.member_id = ?
 ORDER BY r.start_time DESC;
+
+
+-- ============================================================
+-- [이미 테이블을 만든 사람용] VARCHAR2 -> DATE 변경 방법
+-- ============================================================
+-- 오라클은 값이 들어있는 컬럼의 자료형을 VARCHAR2에서 DATE로 바로 못 바꾼다.
+-- (ORA-01439: 데이터 유형을 변경할 열은 비어 있어야 합니다)
+
+-- 방법 A) 테스트 데이터뿐이라 지워도 되면 - 제일 간단
+DELETE FROM icn_flight;
+ALTER TABLE icn_flight MODIFY (schedule_datetime DATE, estimated_datetime DATE);
+COMMIT;
+
+-- 방법 B) 데이터를 살려야 하면 - 임시 컬럼을 거친다
+-- ALTER TABLE icn_flight ADD (sched_tmp DATE, est_tmp DATE);
+-- UPDATE icn_flight
+--    SET sched_tmp = to_date(schedule_datetime,  'YYYYMMDDHH24MI'),
+--        est_tmp   = to_date(estimated_datetime, 'YYYYMMDDHH24MI');
+-- ALTER TABLE icn_flight DROP (schedule_datetime, estimated_datetime);
+-- ALTER TABLE icn_flight RENAME COLUMN sched_tmp TO schedule_datetime;
+-- ALTER TABLE icn_flight RENAME COLUMN est_tmp   TO estimated_datetime;
+-- COMMIT;
+
+-- 확인
+-- SELECT flight_no,
+--        to_char(schedule_datetime,  'YYYY-MM-DD HH24:MI') AS 도착예정,
+--        to_char(estimated_datetime, 'YYYY-MM-DD HH24:MI') AS 변경시각,
+--        remark
+--   FROM icn_flight;
