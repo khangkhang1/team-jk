@@ -1,119 +1,321 @@
-/* =========================================================
-   HEADER
-========================================================= */
+/* ================================================= */
+/* RESET */
+/* ================================================= */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    text-decoration:none;
+}
+
+ul,
+ol{
+    list-style:none;
+}
+
+a{
+    color:inherit;
+}
+
+
+/* ================================================= */
+/* HEADER */
+/* ================================================= */
 
 .header{
     position:relative;
-
+    top:0;
+    left:0;
     width:100%;
-    height:86px;
-
-    background:#fff;
-
-    border-bottom:1px solid #e7ebf0;
-
-    color:#222;
-
-    box-shadow:0 3px 15px rgba(20,40,70,.05);
-
+    height:66px;
     z-index:100;
+    background:#fff;
+    border-bottom:1px solid #e7ebf0;
+    color:#222;
+    box-shadow:0 5px 20px rgba(20,40,70,.08);
+    transition:height .28s ease,background .28s ease,box-shadow .28s ease,border-color .28s ease;
 }
 
+
+/* ================================================= */
+/* HEADER OVERLAY */
+/* ================================================= */
+
+.header:before{
+    content:"";
+    position:fixed;
+    top:66px;
+    left:0;
+    width:100%;
+    height:calc(100vh - 66px);
+    background:rgba(0,0,0,.38);
+    opacity:0;
+    visibility:hidden;
+    transition:opacity .25s ease,visibility .25s ease,top .28s ease;
+    z-index:-1;
+    pointer-events:none;
+}
+
+
+/* 메뉴 hover 시 어두운 영역 표시 */
+
+.header:has(.header_menu:hover):before,
+.header:has(.header_menu:focus-within):before{
+    top:256px;
+    height:calc(100vh - 256px);
+    opacity:1;
+    visibility:visible;
+}
+
+
+/* ================================================= */
+/* 메뉴 hover 시 헤더 확장 */
+/* ================================================= */
+
+.header:has(.header_menu:hover),
+.header:has(.header_menu:focus-within){
+    height:256px;
+    background:#fff;
+    color:#222;
+    border-bottom:1px solid #e7ebf0;
+    box-shadow:0 5px 20px rgba(20,40,70,.08);
+}
+
+
+/* ================================================= */
+/* HEADER INNER */
+/* ================================================= */
 
 .header_inner{
     max-width:1280px;
     height:100%;
-
-    margin:auto;
-
+    margin:0 auto;
     display:flex;
     align-items:flex-start;
-
     gap:50px;
-
     padding:0 20px;
-
     position:relative;
+    z-index:2;
 }
 
 
-/* =========================================================
-   LOGO
-========================================================= */
+/* ================================================= */
+/* LOGO */
+/* ================================================= */
 
 .logo{
     margin-top:14px;
-
-    font-size:24px;
+    font-size:20px;
     font-weight:800;
-
     color:#1769d2;
-
     white-space:nowrap;
+    transition:.28s;
 }
-
 
 .logo small{
     display:block;
-
     margin-top:2px;
-
     font-size:10px;
-
     letter-spacing:1.8px;
-
     color:#8994a3;
-
     font-weight:600;
 }
 
 
-/* =========================================================
-   HEADER MENU
-========================================================= */
+/* ================================================= */
+/* HEADER MENU */
+/* ================================================= */
 
 .header_menu{
     display:flex;
-
-    height:86px;
-
-    margin:0;
+    gap:0;
+    height:66px;
+    align-items:flex-start;
+    position:static;
     padding:0;
-
+    margin:0;
     list-style:none;
 }
 
 
+/* 대메뉴 */
+
 .header_menu li{
     position:relative;
-
     width:180px;
-    height:86px;
-
+    height:66px;
     display:flex;
-
     align-items:center;
     justify-content:center;
+    margin:0;
+    padding:0;
 }
 
+
+/* 대메뉴 링크 */
 
 .header_menu>li>a{
     width:100%;
-    height:86px;
-
+    height:66px;
     display:flex;
-
     align-items:center;
     justify-content:center;
-
+    padding:0;
+    position:relative;
+    z-index:5;
     font-size:16px;
-
     font-weight:600;
-
-    transition:.2s;
+    color:inherit;
+    text-align:center;
+    transition:color .2s ease;
 }
 
 
+/* 대메뉴 hover */
+
 .header_menu>li>a:hover{
     color:#1769d2;
+}
+
+
+/* ================================================= */
+/* DROPDOWN */
+/* ================================================= */
+
+.header_dropdown{
+    position:absolute;
+    top:66px;
+    left:0;
+    width:100%;
+    height:190px;
+    padding:25px 0 20px;
+    background:transparent;
+    border:0;
+    box-shadow:none;
+    opacity:0;
+    visibility:hidden;
+    transform:translateY(-8px);
+    transition:opacity .2s ease,visibility .2s ease,transform .2s ease;
+    text-align:center;
+    z-index:4;
+}
+
+
+/* 메뉴 전체 hover 시 하위 메뉴 표시 */
+
+.header_menu:hover .header_dropdown,
+.header_menu:focus-within .header_dropdown{
+    opacity:1;
+    visibility:visible;
+    transform:translateY(0);
+}
+
+
+/* 하위 메뉴 링크 */
+
+.header_dropdown a{
+    display:block!important;
+    padding:7px 3px!important;
+    font-size:14px!important;
+    font-weight:500;
+    line-height:1.5;
+    color:#626d7a!important;
+    transition:color .2s ease,font-weight .2s ease;
+}
+
+
+/* 하위 메뉴 hover */
+
+.header_dropdown a:hover{
+    color:#1769d2!important;
+    font-weight:700;
+}
+
+
+/* ================================================= */
+/* HEADER RIGHT */
+/* ================================================= */
+
+.header_right{
+    margin-left:auto;
+    display:flex;
+    align-items:center;
+    gap:13px;
+    height:66px;
+    font-size:13px;
+    color:#222;
+    position:relative;
+    z-index:6;
+}
+
+
+/* 로그인 / 회원가입 기본 상태 */
+
+.header_right a{
+    color:inherit;
+    text-decoration:none;
+    transition:color .2s ease;
+}
+
+
+/* 로그인 / 회원가입 hover */
+
+.header_right a:hover{
+    color:#1769d2;
+}
+
+
+/* ================================================= */
+/* MOBILE MENU */
+/* ================================================= */
+
+.menu_btn{
+    display:none;
+    background:none;
+    border:0;
+    font-size:25px;
+    color:inherit;
+}
+
+
+/* ================================================= */
+/* RESPONSIVE */
+/* ================================================= */
+
+@media(max-width:900px){
+
+    .header{
+        height:60px;
+    }
+
+    .header_inner{
+        height:60px;
+        padding:0 20px;
+        align-items:center;
+    }
+
+    .logo{
+        margin-top:0;
+        font-size:20px;
+    }
+
+    .logo small{
+        font-size:9px;
+    }
+
+    .header_menu,
+    .header_right{
+        display:none;
+    }
+
+    .menu_btn{
+        display:block;
+        margin-left:auto;
+    }
+
+    .header:before{
+        display:none;
+    }
+
 }

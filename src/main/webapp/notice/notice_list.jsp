@@ -14,6 +14,7 @@
 
 <body>
     <!-- 기존 팀프로젝트 공통 헤더 삽입 위치 -->
+    <%@include file="/common_header.jsp" %>
     <!-- 공통 헤더는 별도 파일에서 불러올 예정 -->
 
     <main class="noticeMain">
@@ -189,8 +190,7 @@
 
     </main>
 
-    <!-- 기존 팀프로젝트 공통 푸터 삽입 위치 -->
-    <!-- 공통 푸터는 별도 파일에서 불러올 예정 -->
+    <%@include file="/common_footer.jsp" %>
 
 </body>
 </html>
