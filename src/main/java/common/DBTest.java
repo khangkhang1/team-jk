@@ -31,8 +31,9 @@ public class DBTest {
 	private static final String HOST = "jsl-704";
 	private static final int    PORT = 1523;
 	private static final String SERVICE = "xe";
-	private static final String USER = "icn_parking";
-	private static final String PASS = "1234";
+	// 계정/비번은 secret.properties 에서 읽는다 (common/SecretConfig 참고).
+	private static final String USER = SecretConfig.get("db.user");
+	private static final String PASS = SecretConfig.get("db.password");
 
 	private static final String URL = "jdbc:oracle:thin:@" + HOST + ":" + PORT + "/" + SERVICE;
 

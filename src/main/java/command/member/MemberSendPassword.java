@@ -1,5 +1,7 @@
 package command.member;
 
+
+import common.SecretConfig;
 import javax.servlet.http.HttpServletRequest;
 
 import common.CommonExecute;
@@ -25,8 +27,8 @@ public class MemberSendPassword implements CommonExecute {
 			msg ="ID나 연락처 정보가 정확하지 않습니다.";
 			gubun ="findpassword";
 		} else {
-			String fromUserEmail = "ct09md@gmail.com"; // 보내는 사람 주소
-		     String fromUserPassword = "gubi wpfw zhty evjr"; // 구글 계정 앱 비밀번호
+			String fromUserEmail = SecretConfig.get("mail.from"); // 보내는 사람 주소 - secret.properties
+		     String fromUserPassword = SecretConfig.get("mail.appPassword"); // 구글 앱 비밀번호 - secret.properties
 			
 		    int newPasswordLength=4;
 			String newPassword = dao.getNewPassword(newPasswordLength);

@@ -56,8 +56,7 @@ public class DBConnection {
 	//   db.host 한 줄만 채우면 됩니다. 학원에서는 이 파일이 없어도 됩니다.
 	private static final String HOST_ACADEMY = "jsl-704";
 	private static final String PORT_SERVICE = "1523/xe";
-	private static final String DB_USER = "icn_parking";
-	private static final String DB_PASSWORD = "1234";
+	// 계정/비번은 소스에 두지 않고 secret.properties 에서 읽는다 (common/SecretConfig 참고).
 
 	// 마지막으로 접속에 성공한 호스트. 집에서 매번 jsl-704 실패를 기다리지 않으려고 기억해둠.
 	private static String cachedHost = null;
@@ -83,7 +82,7 @@ public class DBConnection {
 		for (String host : hosts) {
 			String url = "jdbc:oracle:thin:@" + host + ":" + PORT_SERVICE;
 			try {
-				Connection con = DriverManager.getConnection(url, DB_USER, DB_PASSWORD);
+				Connection con = DriverManager.getConnection(url, SecretConfig.get("db.user"), SecretConfig.get("db.password"));
 				if (!host.equals(cachedHost)) {
 					System.out.println("DB 접속 : " + host
 							+ (host.equals(HOST_ACADEMY) ? " (학원)" : " (db_local.properties)"));

@@ -1,5 +1,7 @@
 package dao;
 
+
+import common.SecretConfig;
 import java.io.StringReader;
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -24,9 +26,9 @@ public class LongTermParkingDao {
 
     private static final String STATUS_URL =
             "http://apis.data.go.kr/B551177/StatusOfParking/getTrackingParking";
-
-    private static final String SERVICE_KEY =
-            "8A6C6Mp2ylWbir47yE6IJtBplIUUhhvbxRr3CbDEGe4URfJZBRmcEoT5SdFTxhrK%2Bdk8bO1MQY%2BOV7guUPsrDw%3D%3D";
+    // 서비스키는 소스에 두지 않고 secret.properties 의 api.serviceKey 에서 읽는다.
+    // 이 저장소가 public 이라 문자열로 박아두면 GitHub 에서 누구나 가져다 쓸 수 있다.
+    private static final String SERVICE_KEY = SecretConfig.get("api.serviceKey");
 
     // 전체 구역별 실시간 주차 현황 조회
     public List<ParkingStatusDto> getZoneStatusList() {
