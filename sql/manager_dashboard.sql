@@ -101,3 +101,40 @@ SELECT
  (SELECT COUNT(*) FROM icn_reservation WHERE reservation_status = '1'
   AND reservation_type = '1' AND reservation_end_time < SYSDATE) AS overdue_resv                                     -- 노쇼 의심
 FROM dual;
+
+
+-- ============================================================
+-- [2026-09-15 추가] 입·출차 처리 / 예약 관리 / 좌석·구역 현황 / 매출 통계
+--   쿼리 본문은 dao.ManagerDao 에 있다 (getReservationList, getReservationView, getGateTodayList,
+--   gateIn, gateOut, getSeatStatus, getSalesSummary/Daily/ByLot/ByMethod). 핵심만 적어둔다.
+-- ============================================================
+
+-- 입차 : 예약완료(1) → 주차 중(2). 상태 조건을 WHERE 에 둬서 두 번 눌러도 두 번 처리되지 않는다
+UPDATE icn_reservation SET reservation_status = '2'
+WHERE  reservation_id = ? AND reservation_status = '1';
+
+-- 출차 + 정산 (한 트랜잭션. 둘 중 하나라도 실패하면 rollback)
+UPDATE icn_reservation SET reservation_status = '3', reservation_out_time = SYSDATE
+WHERE  reservation_id = ? AND reservation_status = '2';
+INSERT INTO icn_payment (payment_id, payment_amount, payment_method, payment_type, payment_date, reservation_id)
+VALUES (?, ?, ?, ?, SYSDATE, ?);          -- payment_type : 추가 결제 '2' / 환불 '3'. 금액 0 이면 INSERT 없음
+-- 요금 = 이용시간(시작~지금) × 시간당 요금(common.FeeRule : 예약형 3,000 / 자유출차형 4,500, 최소 1시간) - 낸 예약금
+
+-- 좌석 현황 : 좌석마다 "걸려 있는 예약" 하나 (취소/출차 아님, 24시간 안에 시작, 종료 안 지남)
+SELECT s.seat_no, s.seat_type, a.reservation_id, a.reservation_status
+FROM   icn_seat s
+LEFT JOIN (SELECT seat_no, MAX(reservation_id) AS reservation_id FROM icn_reservation
+           WHERE reservation_status IN ('1','2') AND reservation_start_time <= SYSDATE + 1
+           AND  (reservation_end_time IS NULL OR reservation_end_time >= SYSDATE)
+           GROUP BY seat_no) x ON x.seat_no = s.seat_no
+LEFT JOIN icn_reservation a ON a.reservation_id = x.reservation_id
+WHERE  s.lot_id = ?;
+
+-- 매출 통계 (기간은 결제일 기준, from ~ to 포함)
+SELECT NVL(SUM(CASE WHEN r.reservation_status = '3' THEN amt END),0)               AS confirmed_sales,  -- 확정 매출
+       NVL(SUM(CASE WHEN p.payment_type IN ('1','2') THEN p.payment_amount END),0) AS paid_in,          -- 입금
+       NVL(SUM(CASE WHEN p.payment_type = '3' THEN p.payment_amount END),0)        AS refund            -- 환불
+FROM  (SELECT p.*, CASE WHEN p.payment_type = '3' THEN -p.payment_amount ELSE p.payment_amount END AS amt
+       FROM icn_payment p) p
+LEFT JOIN icn_reservation r ON r.reservation_id = p.reservation_id
+WHERE p.payment_date >= TO_DATE(?,'YYYY-MM-DD') AND p.payment_date < TO_DATE(?,'YYYY-MM-DD') + 1;

@@ -25,18 +25,18 @@
 
 		<p class="adm_nav_group">운영</p>
 		<a href="${ctx}/Manager?t_gubun=gate" class="${activeMenu == 'gate' ? 'on' : ''}">
-			<i>⇄</i> 입·출차 처리 <em>준비 중</em>
+			<i>⇄</i> 입·출차 처리
 		</a>
 		<a href="${ctx}/Manager?t_gubun=reservation" class="${activeMenu == 'reservation' ? 'on' : ''}">
-			<i>▤</i> 예약 관리 <em>준비 중</em>
+			<i>▤</i> 예약 관리
 		</a>
 		<a href="${ctx}/Manager?t_gubun=seat" class="${activeMenu == 'seat' ? 'on' : ''}">
-			<i>▣</i> 좌석·구역 현황 <em>준비 중</em>
+			<i>▣</i> 좌석·구역 현황
 		</a>
 
 		<p class="adm_nav_group">통계</p>
 		<a href="${ctx}/Manager?t_gubun=sales" class="${activeMenu == 'sales' ? 'on' : ''}">
-			<i>◔</i> 매출 통계 <em>준비 중</em>
+			<i>◔</i> 매출 통계
 		</a>
 
 		<p class="adm_nav_group">콘텐츠</p>

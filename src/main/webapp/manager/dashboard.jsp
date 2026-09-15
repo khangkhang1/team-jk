@@ -70,6 +70,7 @@
 			<div class="card">
 				<div class="card_head">
 					<h2>구역별 현재 이용률</h2>
+					<a class="card_link" href="${pageContext.request.contextPath}/Manager?t_gubun=seat">좌석 현황</a>
 					<span class="card_note">사용 중 / 전체 좌석</span>
 				</div>
 				<ul class="bar_list">
@@ -116,6 +117,7 @@
 			<div class="card">
 				<div class="card_head">
 					<h2>최근 예약</h2>
+					<a class="card_link" href="${pageContext.request.contextPath}/Manager?t_gubun=reservation">예약 관리</a>
 					<span class="card_note">이용 시작 시각 기준 10건</span>
 				</div>
 				<c:if test="${empty recent}">

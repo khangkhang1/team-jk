@@ -122,10 +122,7 @@ body.adm ul{list-style:none}
 .soon_icon{font-size:40px}
 .soon_card h2{margin:12px 0 6px;font-size:20px}
 .soon_card p{color:#687585}
-.adm_btn{
-	display:inline-block;margin-top:20px;padding:9px 20px;border-radius:6px;
-	background:#1769d2;color:#fff;font-size:13px
-}
+.soon_card .adm_btn{margin-top:20px;padding:9px 20px}
 
 /* ---------- 좁은 화면 ---------- */
 @media (max-width:1100px){
@@ -137,3 +134,81 @@ body.adm ul{list-style:none}
 	.adm_main{margin-left:0}
 	.adm_nav a em{display:none}
 }
+
+/* ---------- 폼 / 검색 ---------- */
+.adm_form{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.adm_form input[type=text],.adm_form input[type=date],.adm_form select{
+	padding:8px 11px;border:1px solid #cfd6df;border-radius:6px;font-size:13px;font-family:inherit;
+	color:#22293a;background:#fff;min-width:0
+}
+.adm_form input[type=text]{flex:1;min-width:160px}
+.adm_form input:focus,.adm_form select:focus{outline:none;border-color:#1769d2}
+.adm_form label{font-size:13px;color:#687585}
+.search_bar{gap:10px}
+.search_total{margin-left:auto;font-size:13px;color:#687585}
+.search_total strong{color:#1769d2}
+
+.adm_btn{
+	display:inline-block;padding:8px 16px;border-radius:6px;border:1px solid #1769d2;
+	background:#1769d2;color:#fff;font-size:13px;font-family:inherit;cursor:pointer;line-height:1.3;white-space:nowrap
+}
+.adm_btn:hover{background:#125ab8;border-color:#125ab8}
+.adm_btn_ghost{background:#fff;color:#2b3340;border-color:#cfd6df}
+.adm_btn_ghost:hover{background:#f7f9fc;color:#1769d2;border-color:#1769d2}
+.adm_btn_green{background:#1fa971;border-color:#1fa971}
+.adm_btn_green:hover{background:#178f5f;border-color:#178f5f}
+
+.card_link{margin-left:auto;font-size:12px;color:#1769d2}
+.card_link:hover{text-decoration:underline}
+.card_head .card_link + .card_note{margin-left:12px}
+
+/* ---------- 상세 표 / 표 보조 ---------- */
+.dl{width:100%;border-collapse:collapse;font-size:13px;margin-bottom:18px}
+.dl th{width:96px;padding:9px 10px;text-align:left;color:#687585;font-weight:600;background:#f7f9fc;border-bottom:1px solid #eef1f5}
+.dl td{padding:9px 12px;border-bottom:1px solid #eef1f5}
+.dl.compact{margin:10px 0 14px}
+.dl.compact th,.dl.compact td{padding:6px 10px}
+.dl tr.total th,.dl tr.total td{background:#eef3fb;color:#1769d2;font-size:14px}
+.dim{color:#8c96a3;font-size:12px}
+.minus{color:#c0392b}
+.sub_h{margin:4px 0 8px;font-size:13px;font-weight:700;color:#2b3340}
+.empty.small{padding:14px}
+.tbl_click tbody tr{cursor:pointer}
+.tbl_click tbody tr:hover td{background:#f7f9fc}
+.tbl_click tbody tr.sel td{background:#eef3fb}
+
+.action_box{margin-top:18px;padding:16px 18px;border-radius:10px;background:#f7f9fc;border:1px solid #e4e8ef}
+.action_box p{margin-bottom:10px;font-size:13px}
+.action_box.done{background:#eef0f3;color:#5a6470}
+.action_box.done p{margin:0}
+.action_box .adm_form select{width:130px}
+
+/* ---------- 페이지 번호 ---------- */
+.pager{display:flex;justify-content:center;gap:4px;margin-top:16px}
+.pager a{min-width:30px;padding:5px 8px;text-align:center;border:1px solid #e4e8ef;border-radius:6px;font-size:12px;color:#687585;background:#fff}
+.pager a:hover{border-color:#1769d2;color:#1769d2}
+.pager a.on{background:#1769d2;border-color:#1769d2;color:#fff}
+
+/* ---------- 구역 탭 + 좌석 격자 ---------- */
+.tabs{display:flex;gap:8px;flex-wrap:wrap}
+.tabs a{display:flex;flex-direction:column;align-items:center;min-width:72px;padding:9px 12px;border-radius:10px;background:#fff;border:1px solid #e4e8ef;font-size:12px;color:#687585}
+.tabs a strong{font-size:14px;color:#22293a}
+.tabs a:hover{border-color:#1769d2}
+.tabs a.on{background:#1769d2;border-color:#1769d2;color:#dbe7f8}
+.tabs a.on strong{color:#fff}
+
+.legend{display:flex;gap:14px;font-size:12px;color:#687585;align-items:center}
+.legend .sw{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:5px;vertical-align:-1px}
+.sw.parking{background:#1fa971}
+.sw.reserved{background:#e8a033}
+.sw.free{background:#e4e8ef}
+
+.seat_grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(64px,1fr));gap:8px}
+.seat{
+	position:relative;height:52px;border-radius:8px;border:1px solid #e4e8ef;background:#f3f5f9;
+	display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#8c96a3
+}
+.seat.parking{background:#1fa971;border-color:#1fa971;color:#fff}
+.seat.reserved{background:#e8a033;border-color:#e8a033;color:#fff}
+a.seat:hover{filter:brightness(.92)}
+.seat_ic{position:absolute;top:3px;right:5px;font-size:10px;font-weight:400}
