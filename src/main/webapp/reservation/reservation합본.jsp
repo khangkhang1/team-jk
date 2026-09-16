@@ -165,7 +165,7 @@ function handleResponse(rsp) {
 				<a href="${pageContext.request.contextPath}/index.jsp#reserve" class="zone_back">← 전체 주차맵으로</a>
 				<div class="zone_hero_eyebrow">INCHEON AIRPORT T1 PARKING</div>
 				<h1>
-					<span id="zoneTitle">P1 구역</span>
+					<span id="zoneTitle">${selectedLotId} 구역</span>
 					<small id="zoneType">단기주차장 · 시간당 3,000원</small>
 				</h1>
 				<span id="liveBadge" class="live_badge" style="display:none"></span>
@@ -225,7 +225,7 @@ function handleResponse(rsp) {
 				<div class="detail_box">
 					<div class="detail_box_head">
 						<div>
-							<h3><span id="seatBoxZone">P1</span> 구역 좌석</h3>
+							<h3><span id="seatBoxZone">${selectedLotId}</span> 구역 좌석</h3>
 							<p>자리를 클릭하면 결제 창이 열립니다. 예약된 자리와 결항 재배정 중인 자리는 선택할 수 없습니다.</p>
 						</div>
 						<div class="seat_toolbar" style="margin:0">
@@ -242,16 +242,18 @@ function handleResponse(rsp) {
 							<span><i class="legend_box legend_ev"></i> 🔌 전기차</span>
 							<span><i class="legend_box legend_cancelled"></i> ✈️ 결항 재배정중</span>
 						</div>
-
 						<div class="lot_map">
 							<div class="lot_gate">
 								<span class="gate_in">▲ 터미널 방향</span>
-								<span id="lotMapZoneLabel">P1 구역 · 지상</span>
+								<span id="lotMapZoneLabel">${selectedLotId} 구역 · 지상</span>
 								<span class="gate_out">진출입로</span>
 							</div>
 							<svg id="lotSvg" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="구역 상세 주차맵">
+								<!-- 실제 도면 -->
 								<image id="lotBaseImage" href="${pageContext.request.contextPath}/images/parking_map.png" x="0" y="0" width="1600" height="900"/>
+								<!-- 이 구역 블록 외곽선 -->
 								<path id="lotZoneOutline" class="lot_zone_outline"/>
+								<!-- 주차 칸들 -->
 								<g id="seatGrid"></g>
 							</svg>
 						</div>
@@ -410,6 +412,7 @@ var ZONES = [
 	  path:"M600 195 L725 195 L725 240 L600 240 Z" }
 ];
 
+
 var currentZone = "${selectedLotId}" || getZoneFromUrl() || "P1";
 var selectedSeat = null;
 
@@ -432,7 +435,14 @@ function makeSeats(zone, count){
 	if (dbSeatList && dbSeatList.length > 0) {
 		for (var i = 0; i < dbSeatList.length; i++) {
 			var dbSeat = dbSeatList[i];
-			var state = (dbSeat.status === "예약 가능") ? "free" : "taken";
+			
+			// DB에서 넘어오는 status 문자열 값에 따른 분기 처리
+			var state = "free";
+			if (dbSeat.status === "예약중") {
+				state = "taken";
+			} else if (dbSeat.status === "결항 재배정중") {
+				state = "cancelled";
+			}
 			
 			var kind = "normal";
 			if (dbSeat.typeNm === "장애인차") kind = "disabled";
@@ -445,22 +455,19 @@ function makeSeats(zone, count){
 			});
 		}
 	} else {
-		// DB 데이터가 없는 경우 임의 데이터 생성 예외 처리
-		var seed = zone.id.charCodeAt(1);
+		// DB 데이터가 없을 때만 작동하는 안전장치
 		var n_total = count || zone.total;
 		for (var i=1; i<=n_total; i++){
-			var n = (i*7 + seed*13) % 100;
-			var state = "free";
-			if (n < 34)      state = "taken";
-			else if (n < 40) state = "cancelled";
-			var kind = "normal";
-			if (i % 12 === 0)     kind = "disabled";
-			else if (i % 9 === 0) kind = "ev";
-			seats.push({ no: zone.id + "-" + String(i).padStart(2,"0"), state: state, kind: kind });
+			seats.push({ 
+				no: zone.id + "-" + String(i).padStart(2,"0"), 
+				state: "free", 
+				kind: (i % 12 === 0 ? "disabled" : (i % 9 === 0 ? "ev" : "normal")) 
+			});
 		}
 	}
 	return seats;
 }
+
 
 function layoutBays(zone, outlineEl, svgEl){
 	function inside(x, y){
@@ -485,6 +492,7 @@ function layoutBays(zone, outlineEl, svgEl){
 		if ((end - start) <= inset*2) return null;
 		return { x1:start + inset, x2:end - inset };
 	}
+
 
 	function build(rows, bayW){
 		var laneCount = Math.max(1, Math.floor(rows / 2));

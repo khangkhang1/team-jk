@@ -1,5 +1,7 @@
 package command.reservationMap;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
@@ -28,6 +30,21 @@ public class ReservationMap implements CommonExecute {
         }
         if (endTime == null || endTime.trim().isEmpty()) {
             endTime = "2026-09-13 23:59";   // 해당 일자 종료점 (2099년 대신 해당 날짜 전체 조회)
+            
+        }
+        
+        try {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+            
+            // String -> LocalDateTime 변환 후 3시간(+)
+            LocalDateTime dt = LocalDateTime.parse(endTime, formatter);
+            dt = dt.plusHours(3); 
+            
+            // 다시 String으로 변환
+            endTime = dt.format(formatter);
+        } catch (Exception e) {
+            // 포맷 에러 예외 처리 (필요시 로깅)
+            e.printStackTrace();
         }
 
         ReservationMapDao dao = ReservationMapDao.getDao();
