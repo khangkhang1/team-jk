@@ -695,7 +695,7 @@ function renderAll(){
 
 		var label = seat.no.indexOf("-") > -1 ? seat.no.split("-")[1] : seat.no;
 		if (seat.kind === "disabled")        label = "♿";
-		else if (seat.kind === "ev")         label = "⚡";
+		else if (seat.kind === "e")         label = "⚡";
 		else if (seat.state === "cancelled") label = "✈";
 
 		svg += '<g class="' + cls + '" data-seat="' + seat.no + '" data-state="' + seat.state + '">'
