@@ -29,7 +29,7 @@
 				<div class="card_head"><h2>예약번호 조회</h2></div>
 				<form method="get" action="${ctx}/Manager" class="adm_form">
 					<input type="hidden" name="t_gubun" value="gate">
-					<input type="text" name="t_reservation_id" value="${rid}" placeholder="예) R26-09-0010" autofocus>
+					<input type="text" name="t_reservation_id" value="<c:out value='${rid}'/>" placeholder="예) R26-09-0010" autofocus>
 					<button type="submit" class="adm_btn">조회</button>
 				</form>
 
@@ -62,7 +62,7 @@
 
 				<c:if test="${notFound}">
 					<div class="card_head"><h2>예약 상세</h2></div>
-					<p class="empty">"${rid}" 예약번호가 없습니다.</p>
+					<p class="empty">"<c:out value="${rid}"/>" 예약번호가 없습니다.</p>
 				</c:if>
 
 				<c:if test="${not empty view}">

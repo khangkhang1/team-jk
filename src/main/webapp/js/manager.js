@@ -48,3 +48,20 @@
 		}
 	});
 })();
+
+// 신고 처리(report_view.jsp) 저장 전 확인.
+// "처리 완료 / 반려" 로 바꿀 때는 처리 내용을 반드시 적게 한다. 나중에 근거를 대야 하기 때문.
+// (서버 command.manager.ReportAnswer 에서도 같은 검사를 한다 - 화면 검사만으로는 우회할 수 있어서)
+function checkReportAnswer(form) {
+	var status = form.t_report_status.value;
+	var answer = form.t_answer_content.value.replace(/^\s+|\s+$/g, "");
+
+	if (status === "3" || status === "4") {
+		if (answer === "") {
+			alert("처리 완료·반려로 바꿀 때는 처리 내용을 남겨야 합니다.");
+			form.t_answer_content.focus();
+			return false;
+		}
+	}
+	return confirm("이 내용으로 저장하시겠습니까?");
+}

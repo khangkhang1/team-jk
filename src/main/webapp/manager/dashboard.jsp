@@ -145,7 +145,37 @@
 
 		</section>
 
-		<%-- ④ 데이터 점검 --%>
+		<%-- ④ 미처리 신고 : 이용자가 올린 신고 중 아직 안 끝난 것 (오래된 순) --%>
+		<section class="card">
+			<div class="card_head">
+				<h2>미처리 신고 <c:if test="${reportWaiting > 0}"><span class="badge warn">${reportWaiting}</span></c:if></h2>
+				<a class="card_link" href="${pageContext.request.contextPath}/Manager?t_gubun=report">신고 내역</a>
+				<span class="card_note">접수·처리 중인 신고 5건 · 오래 걸린 것이 위</span>
+			</div>
+			<c:if test="${empty reportWait}">
+				<p class="empty">밀린 신고가 없습니다.</p>
+			</c:if>
+			<c:if test="${not empty reportWait}">
+			<table class="tbl tbl_click">
+				<thead><tr><th>상태</th><th>유형</th><th>제목</th><th>신고자</th><th>좌석</th><th>접수 일시</th><th>경과</th></tr></thead>
+				<tbody>
+				<c:forEach var="rp" items="${reportWait}">
+					<tr onclick="location.href='${pageContext.request.contextPath}/Manager?t_gubun=reportView&t_report_id=${rp.report_id}'">
+						<td><span class="badge rp${rp.report_status}">${rp.status_label}</span></td>
+						<td>${rp.type_label}</td>
+						<td class="ellipsis"><c:out value="${rp.title}"/></td>
+						<td>${rp.member_name}</td>
+						<td><c:out value="${empty rp.seat_no ? '-' : rp.seat_no}"/></td>
+						<td>${rp.reg_date}</td>
+						<td><span class="badge ${rp.elapsed_days >= 3 ? 'warn' : 'ok'}">${rp.elapsed_days}일</span></td>
+					</tr>
+				</c:forEach>
+				</tbody>
+			</table>
+			</c:if>
+		</section>
+
+		<%-- ⑤ 데이터 점검 --%>
 		<section class="card">
 			<div class="card_head">
 				<h2>데이터 점검</h2>

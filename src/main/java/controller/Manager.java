@@ -2,6 +2,7 @@ package controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.URLEncoder;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -17,10 +18,13 @@ import javax.servlet.http.HttpServletResponse;
 
 import command.manager.GateIn;
 import command.manager.GateOut;
+import command.manager.ReportAnswer;
 import common.CommonExecute;
 import common.CommonUtil;
 import common.FeeRule;
 import dao.ManagerDao;
+import dao.ReportDao;
+import dto.ReportDto;
 
 /**
  * 관리자 콘솔 서블릿 - 강선구 담당. 전 화면 관리자(sessionLevel == "top") 전용.
@@ -30,6 +34,9 @@ import dao.ManagerDao;
  *   Manager?t_gubun=gateIn         입차 처리   command.manager.GateIn  → common_alert.jsp
  *   Manager?t_gubun=gateOut        출차+정산   command.manager.GateOut → common_alert.jsp
  *   Manager?t_gubun=reservation    예약 관리 (t_select / t_search / t_status / t_nowPage)
+ *   Manager?t_gubun=report         신고 내역 (t_select / t_search / t_status / t_type / t_nowPage)
+ *   Manager?t_gubun=reportView     신고 상세 (t_report_id)
+ *   Manager?t_gubun=reportAnswer   신고 처리  command.manager.ReportAnswer → common_alert.jsp
  *   Manager?t_gubun=seat           좌석·구역 현황 (t_lot)
  *   Manager?t_gubun=sales          매출 통계 (t_from / t_to)
  *   Manager?t_gubun=salesCsv       매출 통계 CSV 내려받기 (엑셀에서 바로 열림)
@@ -65,6 +72,13 @@ public class Manager extends HttpServlet {
 
 		ManagerDao dao = new ManagerDao();
 
+		// 사이드 메뉴의 "신고 내역" 옆에 미처리 건수를 항상 띄운다.
+		// 다른 화면을 보고 있어도 밀린 신고가 눈에 들어오게 하려는 것. 화면을 그리지 않는 처리에는 붙이지 않는다.
+		if (!gubun.equals("salesCsv") && !gubun.equals("gateIn") && !gubun.equals("gateOut")
+				&& !gubun.equals("reportAnswer")) {
+			request.setAttribute("reportWaiting", new ReportDao().getWaitingCount());
+		}
+
 		if (COMING_SOON.containsKey(gubun)) {
 			request.setAttribute("activeMenu", gubun);
 			request.setAttribute("pageTitle", COMING_SOON.get(gubun));
@@ -87,6 +101,19 @@ public class Manager extends HttpServlet {
 		} else if (gubun.equals("reservation")) {
 			reservationList(request, dao);
 			forward(request, response, "manager/reservation_list.jsp");
+
+		} else if (gubun.equals("report")) {
+			reportList(request);
+			forward(request, response, "manager/report_list.jsp");
+
+		} else if (gubun.equals("reportView")) {
+			reportView(request);
+			forward(request, response, "manager/report_view.jsp");
+
+		} else if (gubun.equals("reportAnswer")) {
+			CommonExecute cmd = new ReportAnswer();
+			cmd.execute(request);
+			forward(request, response, "common_alert.jsp");
 
 		} else if (gubun.equals("seat")) {
 			seat(request, dao);
@@ -113,6 +140,7 @@ public class Manager extends HttpServlet {
 		request.setAttribute("unsold", dao.getUnsoldByLot(30));
 		request.setAttribute("recent", dao.getRecentReservations(10));
 		request.setAttribute("check",  dao.getIntegrityCheck());
+		request.setAttribute("reportWait", new ReportDao().getWaitingList(5));   // 아직 안 끝난 신고 (오래된 순)
 		request.setAttribute("activeMenu", "dashboard");
 		request.setAttribute("pageTitle", "대시보드");
 	}
@@ -159,6 +187,7 @@ public class Manager extends HttpServlet {
 
 		String nowPage = request.getParameter("t_nowPage");
 		int current_page = (nowPage == null || !nowPage.matches("[0-9]+")) ? 1 : Integer.parseInt(nowPage);
+		if (current_page < 1) current_page = 1;                 // 주소창에 0 을 넣어도 빈 목록이 나오지 않게
 
 		int totalCount = dao.getReservationCount(select, search, status);
 		int total_page = totalCount / LIST_PER_PAGE;
@@ -179,6 +208,78 @@ public class Manager extends HttpServlet {
 		request.setAttribute("startNo", start);
 		request.setAttribute("activeMenu", "reservation");
 		request.setAttribute("pageTitle", "예약 관리");
+	}
+
+	// ---------------------------------------------------------------- 신고 내역
+	// 이용자가 올린 신고를 접수 → 처리 중 → 처리 완료/반려로 관리하는 화면.
+	// 전화로 받아 적던 것을 화면에 남기면 누가·언제·어떻게 처리했는지가 기록으로 남는다 (対応履歴の可視化).
+	private void reportList(HttpServletRequest request) {
+		ReportDao dao = new ReportDao();
+
+		String select = CommonUtil.getCheckNull(request.getParameter("t_select"));
+		String search = CommonUtil.getCheckNull(request.getParameter("t_search")).trim();
+		String status = CommonUtil.getCheckNull(request.getParameter("t_status"));
+		String type   = CommonUtil.getCheckNull(request.getParameter("t_type"));
+		if (select.equals("")) select = "title";
+		// 코드값이 아니면 "전체"로 본다. 이상한 값이 그대로 화면 선택박스에 남지 않게 한다.
+		if (!status.matches("[1-4]")) status = "";
+		if (!type.matches("[1-5]"))   type   = "";
+
+		String nowPage = request.getParameter("t_nowPage");
+		int current_page = (nowPage == null || !nowPage.matches("[0-9]+")) ? 1 : Integer.parseInt(nowPage);
+		if (current_page < 1) current_page = 1;                 // 주소창에 0 을 넣어도 빈 목록이 나오지 않게
+
+		int totalCount = dao.getReportCount(select, search, status, type);
+		int total_page = totalCount / LIST_PER_PAGE;
+		if (totalCount % LIST_PER_PAGE != 0) total_page = total_page + 1;
+		if (total_page == 0) total_page = 1;
+		if (current_page > total_page) current_page = total_page;
+
+		int start = (current_page - 1) * LIST_PER_PAGE + 1;
+		int end   = current_page * LIST_PER_PAGE;
+
+		request.setAttribute("dtos", dao.getReportList(select, search, status, type, start, end));
+		request.setAttribute("select", select);
+		request.setAttribute("search", search);
+		request.setAttribute("status", status);
+		request.setAttribute("type", type);
+		request.setAttribute("totalCount", totalCount);
+		request.setAttribute("totalPage", total_page);
+		request.setAttribute("nowPage", current_page);
+		request.setAttribute("startNo", start);
+		request.setAttribute("activeMenu", "report");
+		request.setAttribute("pageTitle", "신고 내역");
+	}
+
+	private void reportView(HttpServletRequest request) {
+		String rid = CommonUtil.getCheckNull(request.getParameter("t_report_id")).trim();
+
+		if (rid.matches("[0-9]+")) {
+			ReportDto dto = new ReportDao().getReportView(Integer.parseInt(rid));
+			if (dto != null) request.setAttribute("dto", dto);      // 없으면 화면이 "없는 신고번호" 를 보여준다
+		}
+		request.setAttribute("rid", rid);
+		request.setAttribute("listUrl", listQuery(request));
+		request.setAttribute("activeMenu", "report");
+		request.setAttribute("pageTitle", "신고 상세");
+	}
+
+	// 상세에서 "목록으로" 를 눌렀을 때 보던 검색 조건·페이지로 돌아가게 주소를 만들어 둔다.
+	// 조건을 잃어버리면 관리자가 매번 다시 검색해야 한다 (한 건 처리하고 목록 → 다음 건 처리의 반복이라 체감이 크다).
+	private String listQuery(HttpServletRequest request) {
+		StringBuilder sb = new StringBuilder("Manager?t_gubun=report");
+		String[] keys = { "t_select", "t_search", "t_status", "t_type", "t_nowPage" };
+		for (String key : keys) {
+			String value = CommonUtil.getCheckNull(request.getParameter(key));
+			if (!value.equals("")) {
+				try {
+					// 한글 검색어가 주소에 그대로 들어가면 깨지므로 인코딩한다
+					sb.append("&").append(key).append("=").append(URLEncoder.encode(value, "UTF-8"));
+				} catch (Exception ignore) {
+				}
+			}
+		}
+		return sb.toString();
 	}
 
 	// ---------------------------------------------------------------- 좌석·구역 현황

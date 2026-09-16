@@ -26,7 +26,7 @@
 					<option value="member_id"      ${select == 'member_id'      ? 'selected' : ''}>회원 ID</option>
 					<option value="seat_no"        ${select == 'seat_no'        ? 'selected' : ''}>좌석</option>
 				</select>
-				<input type="text" name="t_search" value="${search}" placeholder="검색어">
+				<input type="text" name="t_search" value="<c:out value='${search}'/>" placeholder="검색어">
 				<select name="t_status">
 					<option value=""  ${status == ''  ? 'selected' : ''}>상태 전체</option>
 					<option value="1" ${status == '1' ? 'selected' : ''}>예약완료</option>
