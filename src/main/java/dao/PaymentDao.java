@@ -72,11 +72,11 @@ public class PaymentDao {
 			sql = "insert into icn_reservation\r\n"
 					+ "(reservation_id, reservation_status, reservation_start_time, reservation_end_time,\r\n"
 					+ "reservation_type, flight_id, member_id, seat_no,\r\n"
-					+ "reservation_estimate_amount, reservation_deposit_amount)\r\n"
+					+ "reservation_estimate_amount, reservation_deposit_amount, reservation_date)\r\n"
 					+ "values\r\n"
 					+ "(?, ?, to_date(?,'yyyy-MM-dd hh24:mi:ss'),\r\n"
 					+ "to_date(?,'yyyy-MM-dd hh24:mi:ss'),\r\n"
-					+ "?, ?, ?, ?, ?, ?)";
+					+ "?, ?, ?, ?, ?, ?, to_date(?, 'yyyy-MM-dd hh24:mi:ss'))";
 			
 			try {
 				con = DBConnection.getConnection();
@@ -91,7 +91,8 @@ public class PaymentDao {
 				ps.setString(7, "manager");
 				ps.setString(8, r_dto.getSeat_no());
 				ps.setInt(9, r_dto.getReservation_estimate_amount());
-				ps.setInt(10, r_dto.getReservation_estimate_amount());
+				ps.setInt(10, r_dto.getReservation_deposit_amount());
+				ps.setString(11, r_dto.getReservation_date());
 				result = ps.executeUpdate();
 			}catch(Exception e) {
 				System.out.println("saveReservation() 오류:" + ps.toString());
@@ -103,10 +104,10 @@ public class PaymentDao {
 			sql = "insert into icn_reservation\r\n"
 					+ "(reservation_id, reservation_status, reservation_start_time,\r\n"
 					+ "reservation_type, member_id, seat_no,\r\n"
-					+ "reservation_deposit_amount)\r\n"
+					+ "reservation_deposit_amount, reservation_date)\r\n"
 					+ "values\r\n"
 					+ "(?, ?, to_date(?,'yyyy-MM-dd hh24:mi:ss'),\r\n"
-					+ "?, ?, ?, ?)";
+					+ "?, ?, ?, ?, to_date(?,'yyyy-MM-dd hh24:mi:ss'))";
 			
 			try {
 				con = DBConnection.getConnection();
@@ -119,6 +120,7 @@ public class PaymentDao {
 				ps.setString(5, "manager");
 				ps.setString(6, r_dto.getSeat_no());
 				ps.setInt(7, r_dto.getReservation_deposit_amount());
+				ps.setString(8, r_dto.getReservation_date());
 				result = ps.executeUpdate();
 			}catch(Exception e) {
 				System.out.println("saveReservation() 오류:" + ps.toString());

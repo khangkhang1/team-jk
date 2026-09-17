@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -45,7 +46,9 @@ function payment(method) {
     // 모달창 등에 입력된 예상 금액 가져오기 (없으면 기본값 설정)
 //    var amountVal = document.getElementById("estimatedPriceInput").value;
 //    var price = amountVal ? parseInt(amountVal) : document.pay.t_reservation_deposit_amount; 
-	 var price = document.getElementById("depositAmount").value;
+	var plan = document.getElementById("reservationPlan").value;
+	var plan1_price = document.getElementById("estimatedPriceInput").value;
+	var price = plan === '1' ? plan1_price : 5000;
 
     // 카카오페이 결제
     if (method === "kakaoPay") {
@@ -375,7 +378,7 @@ function handleResponse(rsp) {
 
 			<div id="estimatedPriceBox"><span data-i18n="res_estimated">예상 금액</span>: <strong id="estimatedPrice">-</strong></div>
 <!-- Servlet으로 예상 금액 넘기기 위한 input(payment.js수정) / 예약 목록 확인 시 예상 금액 노출-->
-			<input type="hidden" name="t_reservation_estimate_amount" id="estimatedPriceInput">
+			<input type="text" name="t_reservation_estimate_amount" id="estimatedPriceInput">
 			<div id="payMethodArea">
 				<label class="payOption"><input type="radio" name="t_reservation_pay_method" value="kakaoPay"> 카카오페이</label>
 				<label class="payOption"><input type="radio" name="t_reservation_pay_method" value="naverPay"> 네이버페이</label>
@@ -386,7 +389,7 @@ function handleResponse(rsp) {
 			<div id="paymentFooter">
 				<div id="payBarPrice"><span data-i18n="res_depositLabel">예약금</span> <strong id="payBarAmount">-</strong>원</div>
 <!-- Servlet으로 예약금 넘기기 위한 input / 예약 목록 확인 시 예약금 노출 / 필요 없는 경우 삭제 예정 -->
-				<input type="hidden" id="depositAmount" name="t_reservation_deposit_amount" value="5000">
+				<input type="text" id="depositAmount" name="t_reservation_deposit_amount" value="5000">
 <!-- 포트원 결제 검증 및 DB 저장을 위한 hidden input 추가 -->
 				<input type="hidden" name="t_imp_uid" id="impUidInput">
 				<input type="hidden" name="t_merchant_uid" id="merchantUidInput">

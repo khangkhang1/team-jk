@@ -25,7 +25,9 @@ public class Payment implements CommonExecute {
 		String flight_no = request.getParameter("t_reservation_flight_no");
 		String payment_method = request.getParameter("t_reservation_pay_method");
 		int estimate_amount = Integer.parseInt(request.getParameter("t_reservation_estimate_amount"));
-		int deposit_amount = Integer.parseInt(request.getParameter("t_reservation_deposit_amount"));
+		int deposit_amount = 
+				plan.equals("1") ? 0 : Integer.parseInt(request.getParameter("t_reservation_deposit_amount"));
+		int pay_amount = plan.equals("1") ? estimate_amount : deposit_amount;
 		String member_id = (String)request.getSession().getAttribute("sessionId");
 		ReservationInfoDto r_dto = null;
 		
@@ -38,13 +40,13 @@ public class Payment implements CommonExecute {
 			//1유형 2유형 구분하여 예약 dto생성, dao에 넘김(예약 저장)
 			if(plan.equals("1")) {
 				r_dto = new ReservationInfoDto(reservation_id, flight_no, "1", start_date, start_time, end_date, end_time, plan, member_id, seat,
-												estimate_amount, deposit_amount);
+												estimate_amount, deposit_amount, CommonUtil.getTodayTime());
 			} else {
-				r_dto = new ReservationInfoDto(reservation_id, "1", start_date, start_time, plan, member_id, seat, deposit_amount);
+				r_dto = new ReservationInfoDto(reservation_id, "1", start_date, start_time, plan, member_id, seat, deposit_amount, CommonUtil.getTodayTime());
 			}
 			
 			//결제 dto생성, dao에 넘김(결제 저장)
-			PaymentDto p_dto = new PaymentDto(payment_id, reservation_id, deposit_amount, payment_method, "1", CommonUtil.getTodayTime());
+			PaymentDto p_dto = new PaymentDto(payment_id, reservation_id, pay_amount, payment_method, "1", CommonUtil.getTodayTime());
 			
 			//dao가 모두 정상 실행될 경우 result == 2 / 이후 오토커밋 수정 예정(하나만 오류인 경우 둘 중 하나는 DB에 저장되기 때문)
 			int result = dao.saveReservation(r_dto);
@@ -59,7 +61,7 @@ public class Payment implements CommonExecute {
 				msg = "예약이 완료되었습니다.\r\n"
 						+ "좌석:  "+seat+"\r\n"
 						+ "이용방식:  "+plan+"\r\n"
-						+ "예약금:  "+deposit_amount+"원 결제";
+						+ "결제액:  "+pay_amount+"원 결제";
 			}
 		}
 		
