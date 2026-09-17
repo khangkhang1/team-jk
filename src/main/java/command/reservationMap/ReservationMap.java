@@ -38,7 +38,7 @@ public class ReservationMap implements CommonExecute {
             
             // String -> LocalDateTime 변환 후 3시간(+)
             LocalDateTime dt = LocalDateTime.parse(endTime, formatter);
-            dt = dt.plusHours(3); 
+            dt = dt.minusHours(3); 
             
             // 다시 String으로 변환
             endTime = dt.format(formatter);

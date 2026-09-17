@@ -75,7 +75,7 @@ public class ReservationMapDao {
 	    return dtos;
 	}
 	
-	//주차상태 업데이트
+	//결항렌덤 배정 업데이트
  
 	
 	

@@ -46,7 +46,7 @@ public class Reservation extends HttpServlet {
 			memMap.execute(request);
 //			memPay.execute(request);
 			
-			viewPage ="reservation/reservation합본.jsp";
+			viewPage ="reservation/reservation2.jsp";
 			
 		}
 		

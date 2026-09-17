@@ -353,7 +353,13 @@ function makeSeats(zone, count){
 			if (dbSeat.status === "예약중") {
 				state = "taken";
 			} else if (dbSeat.status === "결항 재배정중") {
-				state = "cancelled"; // cancelled 클래스를 부여하여 클릭 불가 및 ✈️ 아이콘 표시
+				// ★ 추가된 핵심 로직: P6~P9(예약형)일 때만 결항 아이콘 적용
+				if (zone.id === "P6" || zone.id === "P7" || zone.id === "P8" || zone.id === "P9") {
+					state = "cancelled"; // cancelled 클래스를 부여하여 클릭 불가 및 ✈️ 아이콘 표시
+				} else {
+					// P1~P5(자유출차형)는 결항이 떠도 그냥 '예약중(이용중)'으로 덮어버림
+					state = "taken"; 
+				}
 			}
 			
 			var kind = "N";
