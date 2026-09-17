@@ -36,7 +36,6 @@ import java.sql.SQLException;
  * ─────────────────────────────────────────────────────────────────────
  */
 public class DBConnection {
-
 	  
 //오라클에 접속 하기 위해 만드는 클래스 Connection 이것이 들어가야한다
 	public static Connection getConnenction(){
@@ -85,22 +84,11 @@ public class DBConnection {
 		}
 		if(null!=con) {
 			try {
-
 			con.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
-		
 		}
 		}
-		
-	try {
-		con.close();
-	} catch (SQLException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	}
-	
-	
 		
 		}
 
@@ -126,11 +114,7 @@ public class DBConnection {
 			e.printStackTrace();
 		}
 
-		String db_url = "jdbc:oracle:thin:@jsl-704:1523/xe";
-		String db_user = "icn_parking";      // TODO: 팀 DB 계정 확정되면 교체
-		String db_passward = "1234";       // TODO: 팀 DB 비밀번호 확정되면 교체
-
-	try {
+		try {
 			con = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
 		} catch (SQLException e) {
 			System.out.println("DB 접속 오류 (ORA-" + e.getErrorCode() + ") : " + e.getMessage());
@@ -163,11 +147,6 @@ public class DBConnection {
 				e.printStackTrace();
 			}
 		}
-
-	
-
+	}
 }
 
-	
-
-	}
