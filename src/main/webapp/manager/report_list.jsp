@@ -60,7 +60,6 @@
 				</tr></thead>
 				<tbody>
 				<c:forEach var="r" items="${dtos}" varStatus="s">
-					<%-- 상세로 갈 때 지금 보고 있는 검색 조건·페이지를 같이 넘긴다 (돌아올 때 그대로 복원) --%>
 					<c:url var="viewUrl" value="/Manager">
 						<c:param name="t_gubun" value="reportView"/>
 						<c:param name="t_report_id" value="${r.report_id}"/>
@@ -93,7 +92,6 @@
 				</tbody>
 			</table>
 
-			<%-- 페이지 번호 5개씩 (팀 규칙). 검색 조건은 c:url 로 같이 넘긴다 --%>
 			<c:set var="pStart" value="${nowPage - ((nowPage - 1) mod 5)}" />
 			<c:set var="pEnd"   value="${pStart + 4 > totalPage ? totalPage : pStart + 4}" />
 			<div class="pager">
@@ -114,7 +112,7 @@
 		</section>
 
 	</main>
-</div><%-- .adm_main (manager_menu.jsp 에서 열림) --%>
+</div>
 
 </body>
 </html>
