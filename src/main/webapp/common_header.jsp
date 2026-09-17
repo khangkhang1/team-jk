@@ -1,5 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>  
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <link href="${pageContext.request.contextPath}/css/common/common_header.css" rel="stylesheet">
 
 
@@ -7,7 +10,7 @@
 
 	<div class="header_inner">
 
-		<a href="${pageContext.request.contextPath}/index2.html" class="logo">
+		<a href="ParkingStatus" class="logo">
 			인천공항 주차예약
 			<small>INCHEON AIRPORT PARKING</small>
 		</a>
@@ -39,10 +42,10 @@
 
 			<!-- 공지 사항 -->
 			<li>
-				<a href="${pageContext.request.contextPath}/notice.html">공지 사항</a>
+				<a href="Notice">공지 사항</a>
 
 				<div class="header_dropdown">
-					<a href="${pageContext.request.contextPath}/notice.html">공지 사항</a>
+					<a href="Notice">공지 사항</a>
 					<a href="${pageContext.request.contextPath}/faq/faq.jsp">자주 하는 질문</a>
 				</div>
 			</li>

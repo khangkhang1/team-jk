@@ -10,7 +10,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import command.notice.NoticeList;
+import command.notice.NoticeSave;
 import common.CommonExecute;
+import common.CommonUtil;
 
 /**
  * Servlet implementation class Notice
@@ -42,6 +44,23 @@ public class Notice extends HttpServlet {
 			CommonExecute noti = new NoticeList();
 			noti.execute(request);
 			viewPage = "notice/notice_list.jsp";
+		//공지사항 등록 폼
+		} else if(gubun.equals("noticeWriteForm")) {
+			request.setAttribute("toDay", CommonUtil.getToday());
+			viewPage = "notice/notice_write.jsp";
+			
+		//공지 등록 저장
+		} else if(gubun.equals("save")) {
+			CommonExecute noti = new NoticeSave();
+			noti.execute(request);
+			viewPage ="common_alert.jsp";
+		
+		} else if(gubun.equals("noticeView")) {
+			
+			viewPage = "notice/notice_view.jsp";
+		} else if(gubun.equals("noticeUpdateForm")) {
+			
+			viewPage = "notice/notice_update.jsp";
 		}
 		
 		

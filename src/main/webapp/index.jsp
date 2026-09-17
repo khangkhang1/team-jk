@@ -63,7 +63,7 @@
 
             <!-- 공지 사항 -->
             <li>
-                <a href="#notice">공지 사항</a>
+                <a href="Notice">공지 사항</a>
 
                 <div class="header_dropdown">
                     <a href="Notice">공지 사항</a>

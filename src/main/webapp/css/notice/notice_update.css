@@ -1,5 +1,4 @@
 
-/* 기본 초기화 */
 *{
     margin:0;
     padding:0;
@@ -23,8 +22,8 @@ textarea{
     font:inherit;
 }
 
-/* 공지사항 작성 전체 */
-.noticeWrite{
+/* 공지사항 수정 전체 */
+.noticeUpdate{
     width:90%;
     max-width:1100px;
     margin:0 auto;
@@ -49,10 +48,10 @@ textarea{
     color:#64748b;
 }
 
-/* 작성 폼 */
+/* 수정 폼 */
 .writeTable{
     background:#fff;
-    border-top:3px solid #fff;
+    border-top:3px solid #2563eb;
     border-bottom:1px solid #dbe2ea;
     box-shadow:0 4px 15px rgba(15,23,42,0.04);
 }
@@ -83,7 +82,7 @@ textarea{
     color:#334155;
 }
 
-/* 입력 영역 */
+/* 제목 및 작성자 입력 */
 .writeRow > input[type="text"]{
     flex:1;
     min-width:0;
@@ -157,7 +156,7 @@ textarea{
     border-color:#2563eb;
 }
 
-/* 첨부파일 영역 */
+/* 파일 영역 */
 .fileArea{
     flex:1;
     min-width:0;
@@ -165,6 +164,38 @@ textarea{
     padding:15px 0;
 }
 
+/* 기존 파일 */
+.oldFile{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:15px;
+    flex-wrap:wrap;
+    font-size:14px;
+    color:#475569;
+}
+
+.oldFile span{
+    overflow-wrap:anywhere;
+}
+
+/* 기존 파일 삭제 버튼 */
+.deleteFileBtn{
+    padding:7px 12px;
+    border:1px solid #fecaca;
+    border-radius:4px;
+    background:#fff;
+    color:#dc2626;
+    font-size:12px;
+    cursor:pointer;
+    transition:background 0.2s;
+}
+
+.deleteFileBtn:hover{
+    background:#fef2f2;
+}
+
+/* 새 파일 선택 */
 .fileArea input[type="file"]{
     width:100%;
     font-size:14px;
@@ -188,11 +219,10 @@ textarea{
     margin-top:30px;
 }
 
-/* 취소 버튼 */
 .cancelBtn,
 .submitBtn{
     display:inline-block;
-    min-width:100px;
+    min-width:110px;
     padding:13px 25px;
     border-radius:5px;
     font-size:14px;
@@ -202,6 +232,7 @@ textarea{
     transition:background 0.2s,border-color 0.2s;
 }
 
+/* 취소 버튼 */
 .cancelBtn{
     border:1px solid #cbd5e1;
     background:#fff;
@@ -212,7 +243,7 @@ textarea{
     background:#f1f5f9;
 }
 
-/* 등록 버튼 */
+/* 수정 완료 버튼 */
 .submitBtn{
     border:1px solid #2563eb;
     background:#2563eb;
@@ -220,14 +251,14 @@ textarea{
 }
 
 .submitBtn:hover{
-    background:#1d4ed8;
     border-color:#1d4ed8;
+    background:#1d4ed8;
 }
 
 /* 반응형 */
 @media screen and (max-width:768px){
 
-    .noticeWrite{
+    .noticeUpdate{
         width:92%;
         padding:45px 0 70px;
     }
@@ -283,14 +314,19 @@ textarea{
         padding:15px 0;
     }
 
+    .oldFile{
+        align-items:flex-start;
+    }
+
     .writeBtn{
         margin-top:25px;
     }
 
     .cancelBtn,
     .submitBtn{
-        min-width:85px;
+        min-width:95px;
         padding:12px 18px;
+        font-size:13px;
     }
 
 }
