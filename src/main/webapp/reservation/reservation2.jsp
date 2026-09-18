@@ -30,15 +30,15 @@
 
 			<nav class="header_menu">
 				<li>
-					<a href="index2.html#parking">교통 · 주차</a>
+					<a href="${pageContext.request.contextPath}/index.jsp#parking">교통 · 주차</a>
 					<div class="header_dropdown">
-						<a href="index2.html#guide">주차장 이용 안내</a>
-						<a href="index2.html#parking">주차 요금</a>
-						<a href="index2.html#parking">주차장 혼잡도</a>
+						<a href="${pageContext.request.contextPath}/index.jsp#guide">주차장 이용 안내</a>
+						<a href="${pageContext.request.contextPath}/index.jsp#parking">주차 요금</a>
+						<a href="${pageContext.request.contextPath}/index.jsp#parking">주차장 혼잡도</a>
 					</div>
 				</li>
 				<li>
-					<a href="index2.html#reserve" class="active">주차 예약 조회</a>
+					<a href="index" class="active">주차 예약 조회</a>
 					<div class="header_dropdown">
 						<a href="#">예약 내역</a>
 						<a href="#">예약 확인</a>
@@ -47,7 +47,7 @@
 					</div>
 				</li>
 				<li>
-					<a href="index2.html#notice">공지 사항</a>
+					<a href="${pageContext.request.contextPath}/index.jsp#notice">공지 사항</a>
 					<div class="header_dropdown">
 						<a href="#">공지 사항</a>
 						<a href="#">자주 하는 질문</a>
@@ -56,10 +56,10 @@
 			</nav>
 
 			<div class="header_right">
-				<a href="login.html">로그인</a>
+				<a href="${pageContext.request.contextPath}/member/member_login.jsp">로그인</a>
 				<span>|</span>
-				<a href="login.html">회원가입</a>
-			</div>
+				<a href="${pageContext.request.contextPath}/member/member_join.jsp">회원가입</a>
+				</div>
 
 			<button class="menu_btn" aria-label="메뉴">☰</button>
 		</div>
@@ -71,7 +71,7 @@
 	<section class="zone_hero">
 		<div class="zone_hero_inner">
 			<div>
-				<a href="index2.html#reserve" class="zone_back">← 전체 주차맵으로</a>
+				<a href="${pageContext.request.contextPath}/index.jsp#reserve" class="zone_back">← 전체 주차맵으로</a>
 				<div class="zone_hero_eyebrow">INCHEON AIRPORT T1 PARKING</div>
 				<h1>
 					<span id="zoneTitle">${selectedLotId} 구역</span>
@@ -629,19 +629,26 @@ function renderAll(){
 	    seatEls[k].addEventListener("click", function(){
 	        if (this.getAttribute("data-state") !== "free") return;
 	        
-	        // 미리 심어둔 속성값을 바로 읽어오므로 지연 없이 즉시 반응합니다!
 	        var seatKind = this.getAttribute("data-kind");
 	        
-	        // 장애인 자리 체크
-	        if (seatKind === "D" && !isUserDisabled) {
-	            alert("♿ 장애인 전용 구역은 장애인 등록 회원만 선택하실 수 있습니다.");
-	            return;
-	        }
+	        // ★ 정의되지 않은 변수 에러 방지용 안전장치 (기본값 설정)
+	        var manager = (typeof isManager !== 'undefined') ? isManager : false;
+	        var userDisabled = (typeof isUserDisabled !== 'undefined') ? isUserDisabled : false;
+	        var userEv = (typeof isUserEv !== 'undefined') ? isUserEv : false;
 	        
-	        // 전기차/수소차 자리 체크
-	        if (seatKind === "E" && !isUserEv) {
-	            alert("⚡ 전기차/수소차 전용 구역은 친환경차 등록 회원만 선택하실 수 있습니다.");
-	            return;
+	        // 관리자가 아닐 때만 제한 조건 체크
+	        if (!manager) {
+	            // 장애인 자리 체크
+	            if (seatKind === "D" && !userDisabled) {
+	                alert("♿ 장애인 전용 구역은 장애인 등록 회원만 선택하실 수 있습니다.");
+	                return;
+	            }
+	            
+	            // 전기차/수소차 자리 체크
+	            if (seatKind === "E" && !userEv) {
+	                alert("⚡ 전기차/수소차 전용 구역은 친환경차 등록 회원만 선택하실 수 있습니다.");
+	                return;
+	            }
 	        }
 	        
 	        // 정상 선택 로직
