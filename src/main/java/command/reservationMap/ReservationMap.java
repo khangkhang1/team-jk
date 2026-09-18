@@ -26,10 +26,10 @@ public class ReservationMap implements CommonExecute {
             parkingLotId = "P1";
         }
         if (startTime == null || startTime.trim().isEmpty()) {
-            startTime = "2026-09-11 00:00"; // 해당 일자 시작점
+            startTime = "2026-09-17 00:00"; // 해당 일자 시작점
         }
         if (endTime == null || endTime.trim().isEmpty()) {
-            endTime = "2026-09-13 23:59";   // 해당 일자 종료점 (2099년 대신 해당 날짜 전체 조회)
+            endTime = "2026-09-17 23:59";   // 해당 일자 종료점 (2099년 대신 해당 날짜 전체 조회)
             
         }
         
@@ -48,6 +48,11 @@ public class ReservationMap implements CommonExecute {
         }
 
         ReservationMapDao dao = ReservationMapDao.getDao();
+        
+        // ★ [핵심 추가] 맵 데이터를 화면에 그리기 직전에, 결항으로 묶인 예약건들을 빈자리로 자동 재배정합니다.
+        dao.autoReassignCancelledVictims();
+
+        // 재배정이 끝난 최신 상태의 맵 데이터를 가져옵니다.
         List<ReservationMapDto> dtos = dao.getPakingMap(parkingLotId.toUpperCase(), startTime, endTime);
 
         // JSP로 데이터 전달
