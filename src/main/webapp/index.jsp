@@ -92,6 +92,11 @@ function movePage(servlet, gubun) {
         </nav>
 		
         <div class="header_right">
+			<%-- [임시] 관리자(sessionLevel = top)로 로그인했을 때만 보이는 관리자 콘솔 버튼 (common_header.jsp 와 동일) --%>
+			<c:if test="${sessionLevel eq 'top'}">
+				<a href="${pageContext.request.contextPath}/Manager" class="header_admin">관리자 콘솔</a>
+			</c:if>
+
 			<c:if test="${not empty sessionName }">
 				<a>${sessionName }님.</a>
 				<span>|</span>

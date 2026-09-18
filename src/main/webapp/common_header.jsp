@@ -84,6 +84,13 @@
 
 		<div class="header_right">
 
+			<%-- [임시] 관리자(sessionLevel = top)로 로그인했을 때만 관리자 콘솔로 가는 버튼.
+			     관리자 화면을 주소로 직접 쳐서 들어가고 있어서 임시로 넣어둔 것.
+			     일반 회원에게는 아예 그려지지 않는다 (숨기는 게 아니라 HTML 자체가 없음). --%>
+			<c:if test="${sessionLevel eq 'top'}">
+				<a href="${pageContext.request.contextPath}/Manager" class="header_admin">관리자 콘솔</a>
+			</c:if>
+
 			<c:if test="${not empty sessionName }">
 				<a>${sessionName }님.</a>
 				<span>|</span>

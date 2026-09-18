@@ -2016,3 +2016,25 @@ rgba(0,20,45,.25) 100%
 
 }
 
+
+/* ================================================= */
+/* [임시] 관리자 콘솔 버튼 (헤더 오른쪽)               */
+/* 관리자로 로그인했을 때만 JSP 가 그려준다.           */
+/* 글자색을 currentColor 로 두어 투명 헤더(흰 글씨)와   */
+/* 불투명 헤더(검은 글씨) 양쪽에서 다 보이게 한다.      */
+/* ================================================= */
+.header_right .header_admin{
+    padding:5px 11px;
+    border:1px solid currentColor;
+    border-radius:14px;
+    font-size:12px;
+    font-weight:700;
+    letter-spacing:-.2px;
+    white-space:nowrap;
+    line-height:1.2;
+}
+.header_right a.header_admin:hover{
+    background:#1769d2;
+    border-color:#1769d2;
+    color:#fff;
+}
