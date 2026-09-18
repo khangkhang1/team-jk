@@ -111,24 +111,23 @@
 
 				<!-- 이용 방식 -->
 				<div class="detail_box">
-					<div class="detail_box_head">
-						<div>
-							<h3>이용 방식 선택</h3>
-							<p>먼저 이용 방식을 고르면, 그 방식으로 이용 가능한 자리만 활성화됩니다.</p>
-						</div>
-					</div>
+					
 					<div class="detail_box_body">
 						<div class="plan_cards">
+						 <c:if test="${ selectedLotId eq 'P6'|| selectedLotId eq 'P7'|| selectedLotId eq 'P8'||selectedLotId eq 'P9'}">
 							<label class="plan_card selected">
-								<input type="radio" name="planType" value="1" checked>
+								<input type="hidden" name="planType" value="1" checked>
 								<span class="plan_card_title">예약형 (1안)</span>
 								<span class="plan_card_desc">시작·종료 시각을 미리 정합니다. 왕복 항공권 정보 입력 필수. 기본 요금.</span>
 							</label>
+							</c:if>
+							<c:if test="${ selectedLotId eq 'P1'|| selectedLotId eq 'P2'|| selectedLotId eq 'P3'||selectedLotId eq  'P4'|| selectedLotId eq 'P5'}">
 							<label class="plan_card">
-								<input type="radio" name="planType" value="2">
+								<input type="hidden" name="planType" value="2">
 								<span class="plan_card_title">자유출차형 (2안)</span>
 								<span class="plan_card_desc">시작 시각만 정하고 종료는 자유입니다. 장기주차 구역 전용, 페널티 요금 적용.</span>
 							</label>
+							</c:if>
 						</div>
 					</div>
 				</div>
@@ -354,12 +353,18 @@ function makeSeats(zone, count){
 			if (dbSeat.status === "예약중") {
 				state = "taken";
 			} else if (dbSeat.status === "결항 재배정중") {
-				state = "cancelled"; // cancelled 클래스를 부여하여 클릭 불가 및 ✈️ 아이콘 표시
+				// ★ 추가된 핵심 로직: P6~P9(예약형)일 때만 결항 아이콘 적용
+				if (zone.id === "P6" || zone.id === "P7" || zone.id === "P8" || zone.id === "P9") {
+					state = "cancelled"; // cancelled 클래스를 부여하여 클릭 불가 및 ✈️ 아이콘 표시
+				} else {
+					// P1~P5(자유출차형)는 결항이 떠도 그냥 '예약중(이용중)'으로 덮어버림
+					state = "taken"; 
+				}
 			}
 			
-			var kind = "normal";
-			if (dbSeat.typeNm === "장애인차") kind = "disabled";
-			else if (dbSeat.typeNm === "수소차" || dbSeat.typeNm === "전기차") kind = "ev";
+			var kind = "N";
+			if (dbSeat.typeNm === "장애인차") kind = "D";
+			else if (dbSeat.typeNm === "수소차" || dbSeat.typeNm === "전기차") kind = "E";
 			
 			seats.push({
 				no: dbSeat.seatNo,
@@ -377,8 +382,8 @@ function makeSeats(zone, count){
 			if (n < 34)      state = "taken";
 			else if (n < 40) state = "cancelled";
 			var kind = "normal";
-			if (i % 12 === 0)     kind = "disabled";
-			else if (i % 9 === 0) kind = "ev";
+			if (i % 12 === 0)     kind = "D";
+			else if (i % 9 === 0) kind = "E";
 			seats.push({ no: zone.id + "-" + String(i).padStart(2,"0"), state: state, kind: kind });
 		}
 	}
@@ -605,33 +610,49 @@ function renderAll(){
 		var cls = "bay_g";
 		if (seat.state === "taken")     cls += " taken";
 		if (seat.state === "cancelled") cls += " cancelled";
-		if (seat.kind === "disabled")   cls += " disabled_seat";
-		if (seat.kind === "ev")         cls += " ev_seat";
-
+		if (seat.kind === "D")   cls += " disabled_seat";
+		if (seat.kind === "E")         cls += " ev_seat";
 		var label = seat.no.indexOf("-") > -1 ? seat.no.split("-")[1] : seat.no;
-		if (seat.kind === "disabled")        label = "♿";
-		else if (seat.kind === "ev")         label = "⚡";
+		if (seat.kind === "D")        label = "♿";
+		else if (seat.kind === "E")   label = "⚡";
 		else if (seat.state === "cancelled") label = "✈";
 
-		svg += '<g class="' + cls + '" data-seat="' + seat.no + '" data-state="' + seat.state + '">'
-			 + '<rect class="bay" x="' + it.x.toFixed(1) + '" y="' + it.y.toFixed(1) + '" width="' + it.w.toFixed(1) + '" height="' + it.h.toFixed(1) + '" rx="1"/>'
-			 + '<text class="bay_label" x="' + (it.x + it.w/2).toFixed(1) + '" y="' + (it.y + it.h/2).toFixed(1) + '">' + label + '</text>'
-			 + '</g>';
+		svg += '<g class="' + cls + '" data-seat="' + seat.no + '" data-state="' + seat.state + '" data-kind="' + seat.kind + '">'
+		     + '<rect class="bay" x="' + it.x.toFixed(1) + '" y="' + it.y.toFixed(1) + '" width="' + it.w.toFixed(1) + '" height="' + it.h.toFixed(1) + '" rx="1"/>'
+		     + '<text class="bay_label" x="' + (it.x + it.w/2).toFixed(1) + '" y="' + (it.y + it.h/2).toFixed(1) + '">' + label + '</text>'
+		     + '</g>';
 	}
 	document.getElementById("seatGrid").innerHTML = svg;
 
 	var seatEls = document.querySelectorAll(".bay_g");
-	for (var k=0;k<seatEls.length;k++){
-		seatEls[k].addEventListener("click", function(){
-			if (this.getAttribute("data-state") !== "free") return;
-			var prev = document.querySelector(".bay_g.selected");
-			if (prev) prev.classList.remove("selected");
-			this.classList.add("selected");
-			selectedSeat = this.getAttribute("data-seat");
-			document.getElementById("selectedSeatText").innerHTML =
-				"선택한 자리 : <strong>" + selectedSeat + "</strong>";
-			document.getElementById("goPayBtn").disabled = false;
-		});
+	for (var k = 0; k < seatEls.length; k++) {
+	    seatEls[k].addEventListener("click", function(){
+	        if (this.getAttribute("data-state") !== "free") return;
+	        
+	        // 미리 심어둔 속성값을 바로 읽어오므로 지연 없이 즉시 반응합니다!
+	        var seatKind = this.getAttribute("data-kind");
+	        
+	        // 장애인 자리 체크
+	        if (seatKind === "D" && !isUserDisabled) {
+	            alert("♿ 장애인 전용 구역은 장애인 등록 회원만 선택하실 수 있습니다.");
+	            return;
+	        }
+	        
+	        // 전기차/수소차 자리 체크
+	        if (seatKind === "E" && !isUserEv) {
+	            alert("⚡ 전기차/수소차 전용 구역은 친환경차 등록 회원만 선택하실 수 있습니다.");
+	            return;
+	        }
+	        
+	        // 정상 선택 로직
+	        var prev = document.querySelector(".bay_g.selected");
+	        if (prev) prev.classList.remove("selected");
+	        this.classList.add("selected");
+	        selectedSeat = this.getAttribute("data-seat");
+	        document.getElementById("selectedSeatText").innerHTML =
+	        	"선택한 자리 : <strong>" + selectedSeat + "</strong>";
+	        document.getElementById("goPayBtn").disabled = false;
+	    });
 	}
 
 	document.getElementById("selectedSeatText").textContent = "선택된 자리가 없습니다.";
