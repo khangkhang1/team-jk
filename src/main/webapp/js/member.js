@@ -212,6 +212,42 @@ function goUpdate() {
 	mem.submit();
 }
 
+function goPasswordUpdate() {
+	var currentPassword = mem.t_current_password.value;
+	var newPassword = mem.t_new_password.value;
+	var newPasswordConfirm = mem.t_new_password_confirm.value;
+
+	if (currentPassword == "") {
+		alert("현재 비밀번호를 입력하세요.");
+		mem.t_current_password.focus();
+		return;
+	}
+
+	var passwordPattern = /^(?=.*[a-z])[A-Za-z0-9!@#$%^&*_+?.-]{6,16}$/;
+	if (!passwordPattern.test(newPassword)) {
+		alert("새 비밀번호는 영문 소문자를 최소 1자 포함하여 6~16자로 입력해주세요.");
+		mem.t_new_password.focus();
+		return;
+	}
+
+	if (newPassword != newPasswordConfirm) {
+		alert("새 비밀번호가 일치하지 않습니다.");
+		mem.t_new_password_confirm.focus();
+		return;
+	}
+
+	if (currentPassword == newPassword) {
+		alert("현재 비밀번호와 다른 비밀번호를 입력하세요.");
+		mem.t_new_password.focus();
+		return;
+	}
+
+	mem.t_gubun.value = "passwordUpdate";
+	mem.method = "post";
+	mem.action = "Member";
+	mem.submit();
+}
+
 $(function() {
 	$("#email").on("input", function() {
 		$("#email_code").val("");

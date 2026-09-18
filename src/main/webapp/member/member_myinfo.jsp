@@ -221,6 +221,9 @@
 									<button type="button" class="withdraw_btn" onclick="exitId()">회원
 										탈퇴</button>
 
+									<button type="button" class="withdraw_btn"
+										onclick="movePage('Member','passwordUpdateForm')">비밀번호 변경</button>
+
 									<button type="button" class="join_btn" onclick="goUpdate()">
 										정보 수정</button>
 

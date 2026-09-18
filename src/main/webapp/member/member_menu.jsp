@@ -28,12 +28,12 @@
 		<!-- 로그인 상태 -->
 		<c:if test="${not empty sessionId}">
 
-			<li class="${(apple_gubun eq 'myinfo' or apple_gubun eq 'memberUpdateForm') ? 'active' : ''}">
+			<li class="${(apple_gubun eq 'myinfo' or apple_gubun eq 'memberUpdateForm' or apple_gubun eq 'passwordUpdateForm') ? 'active' : ''}">
 				<a href="javascript:movePage('Member','myinfo')">MY INFORMATION</a>
 			</li>
 
-			<li class="${apple_gubun eq 'myorder' ? 'active' : ''}">
-				<a href="javascript:goOrder('myorder')">MY RESERVATION</a>
+			<li class="${apple_gubun eq 'myreservation' ? 'active' : ''}">
+				<a href="javascript:movePage('Member','myreservation')">MY RESERVATION</a>
 			</li>
 
 		</c:if>
