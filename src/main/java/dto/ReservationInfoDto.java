@@ -19,7 +19,7 @@ public class ReservationInfoDto {
 	private String reservation_id, flight_no, reservation_status, reservation_start_date, reservation_start_time,
 					reservation_end_date, reservation_end_time,
 					reservation_out_time, reservation_type, member_id, seat_no, reservation_parking_start_time,
-					reservation_date;
+					reservation_date, reservation_arrive_datetime;
 	
 	
 	//예약 생성자(왕복 고려X / 2유형 장기주차)
@@ -38,12 +38,13 @@ public class ReservationInfoDto {
 	}
 	
 	//예약 생성자(왕복 고려O / 1유형 단기주차)
-	public ReservationInfoDto(String reservation_id, String flight_no, String reservation_status, String reservation_start_date,
+	public ReservationInfoDto(String reservation_id, String flight_no, String reservation_arrive_datetime, String reservation_status, String reservation_start_date,
 			String reservation_start_time, String reservation_end_date, String reservation_end_time,
 			String reservation_type, String member_id, String seat_no, int reservation_estimate_amount, int reservation_deposit_amount,
 			String reservation_date) {
 		this.reservation_id = reservation_id;
 		this.flight_no = flight_no;
+		this.reservation_arrive_datetime = reservation_arrive_datetime;
 		this.reservation_status = reservation_status;
 		this.reservation_start_date = reservation_start_date;
 		this.reservation_start_time = reservation_start_time;
@@ -62,6 +63,9 @@ public class ReservationInfoDto {
 	}
 	public String getFlight_no() {
 		return flight_no;
+	}
+	public String getReservation_arrive_datetime() {
+		return reservation_arrive_datetime;
 	}
 	public String getReservation_status() {
 		return reservation_status;

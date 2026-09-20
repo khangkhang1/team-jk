@@ -23,6 +23,9 @@ public class Payment implements CommonExecute {
 		String end_date = request.getParameter("t_reservation_end_date");
 		String end_time = request.getParameter("t_reservation_end_time");
 		String flight_no = request.getParameter("t_reservation_flight_no");
+		String arrive_date = request.getParameter("t_reservation_flight_arrive_date");
+		String arrive_time = request.getParameter("t_reservation_flight_arrive_time");
+		String arrive_datetime = arrive_date +" "+ arrive_time;
 		String payment_method = request.getParameter("t_reservation_pay_method");
 		int estimate_amount = Integer.parseInt(request.getParameter("t_reservation_estimate_amount"));
 		int deposit_amount = 
@@ -39,7 +42,7 @@ public class Payment implements CommonExecute {
 			
 			//1유형 2유형 구분하여 예약 dto생성, dao에 넘김(예약 저장)
 			if(plan.equals("1")) {
-				r_dto = new ReservationInfoDto(reservation_id, flight_no, "1", start_date, start_time, end_date, end_time, plan, member_id, seat,
+				r_dto = new ReservationInfoDto(reservation_id, flight_no, arrive_datetime, "1", start_date, start_time, end_date, end_time, plan, member_id, seat,
 												estimate_amount, deposit_amount, CommonUtil.getTodayTime());
 			} else {
 				r_dto = new ReservationInfoDto(reservation_id, "1", start_date, start_time, plan, member_id, seat, deposit_amount, CommonUtil.getTodayTime());
