@@ -19,6 +19,49 @@
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/payment.css">
 
 <script>
+
+//부모 창의 항공편 검색 버튼 클릭 함수
+function goFlightSearch() {
+    var ctx = "${pageContext.request.contextPath}";
+    // 팝업 창으로 띄워야 window.opener 가 정상 연결됩니다.
+    window.open(ctx + '/flight/flight_search.jsp', 'flightSearchWin', 'width=1000,height=760,scrollbars=yes');
+}
+
+//팝업 창에서 선택 완료 시 부모 창으로 데이터가 넘어오는 콜백 함수
+function onFlightSelected(f) {
+    console.log("전달받은 항공편 정보:", f);
+
+    // 1. 항공편명 입력란에 값 채우기
+    var flightNoInput = document.getElementById("flightNoInput") 
+                     || document.querySelector("input[name='t_reservation_flight_no']");
+    if (flightNoInput) {
+        flightNoInput.value = f.flightNo;
+    }
+
+    // 2. 귀국/도착 예정 시각 입력란에 시간 채우기 (YYYYMMDDhhmm -> hh:mm)
+    if (f.scheduleDateTime && f.scheduleDateTime.length >= 12) {
+        var hh = f.scheduleDateTime.substr(8, 2);
+        var mm = f.scheduleDateTime.substr(10, 2);
+        var arriveInput = document.getElementById("flightArriveInput") 
+                       || document.querySelector("input[name='t_reservation_flight_arrive']");
+        if (arriveInput) {
+            arriveInput.value = hh + ":" + mm;
+        }
+    }
+
+    alert("항공편(" + f.flightNo + ")이 선택되었습니다.");
+}
+
+//검색 버튼 클릭 시 실행할 함수
+function openFlightSearch() {
+    var ctx = "${pageContext.request.contextPath}";
+    window.open(
+        ctx + '/flight/flight_search.jsp', 
+        'flightSearchWindow', 
+        'width=1000,height=760,scrollbars=yes'
+    );
+}
+
 //1. Document가 준비된 후 식별코드 초기화
 $(document).ready(function() {
     var IMP = window.IMP;
@@ -113,14 +156,6 @@ function handleResponse(rsp) {
         alert("결제에 실패했거나 취소되었습니다.\n사유: " + rsp.error_msg);
         return;
     }
-}
-
-//항공편 검색 창으로 이동
-function goFlightSearch(){
-	pay.t_gubun.value = "flightSearch";
-	pay.method = "post";
-	pay.action = "Reservation";
-	pay.submit();
 }
 </script>
 </head>
@@ -374,14 +409,14 @@ function goFlightSearch(){
 <!-- 예약 유형 선택 후 결제창 진입: 왕복 여부 선택 불필요 판단 / 이후 수정 필요할 것 같음 -->
 				<div class="formRow">
 					<label data-i18n="res_flightRoundtrip">왕복 여부</label>
-					<select id="flightRoundtripInput">
+					<select id="flightRoundtripInput" disabled>
 						<option value="round">왕복</option>
 					</select>
 				</div>
 <!-- 귀국 도착 예정 시간은 name으로 넘길 필요가 있는가? -->
 				<div class="formRow">
 					<label data-i18n="res_flightArriveTime">귀국 도착 예정</label>
-					<input type="time" id="flightArriveInput">
+					<input type="time" id="flightArriveInput" disabled>
 				</div>
 			</fieldset>
 
