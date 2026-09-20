@@ -397,12 +397,12 @@ function handleResponse(rsp) {
 				<label data-i18n="res_startTimeLabel">주차 시각</label>
 				<select id="startTimeInput" name="t_reservation_start_time"></select>
 			</div>
-			<div class="formRow">
+			<div class="formRow plan1Only hidden">
 				<label data-i18n="res_dateLabel">예상 출차 날짜</label>
 				<input type="date" id="endDateInput" name="t_reservation_end_date">
 			</div>
 			<div class="formRow plan1Only hidden" id="durationRow">
-				<label data-i18n="res_durationLabel">이용 시간</label>
+				<label data-i18n="res_durationLabel">예상 출차 시각</label>
 				<select id="endTimeInput" name="t_reservation_end_time"></select>
 			</div>
 
@@ -414,7 +414,7 @@ function handleResponse(rsp) {
     <legend data-i18n="res_flightSectionTitle">✈️ 항공권 정보 (필수)</legend>
     <div class="formRow">
         <label data-i18n="res_flightNo">항공편명</label>
-        <input type="text" id="flightNoInput" name="t_reservation_flight_no" readonly>
+        <input type="text" id="flightNoInput" name="t_reservation_flight_no" disabled>
         <button type="button" onclick="goFlightSearch()" style="height:37.5px; width:50px;">검색</button>
     </div>
     <div class="formRow">

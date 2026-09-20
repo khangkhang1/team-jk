@@ -100,7 +100,8 @@ public class DBConnection {
 	//   계정 문제가 아니므로 아이디를 바꿔봐야 소용없습니다.
 	//   집에서 작업해야 한다면 이 줄을 공인 IP로 바꾸면 됩니다(학원/집 양쪽 다 됨).
 	//   다만 공인 IP는 바뀔 수 있으니 평소에는 jsl-704로 두는 걸 권합니다.
-	private static final String DB_URL = "jdbc:oracle:thin:@jsl-704:1523/xe";
+//	private static final String DB_URL = "jdbc:oracle:thin:@jsl-704:1523/xe";
+	private static final String DB_URL = "jdbc:oracle:thin:@1.245.91.227:1523/xe";
 	private static final String DB_USER = "icn_parking";
 	private static final String DB_PASSWORD = "1234";
 
