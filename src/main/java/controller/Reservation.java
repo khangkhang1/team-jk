@@ -58,6 +58,8 @@ public class Reservation extends HttpServlet {
 			mem.execute(request);
 			viewPage = "common_alert.jsp";
 			
+		}else if(gubun.equals("flightSearch")) {
+			viewPage = "flight/flight_search.jsp";
 		}
 
 		RequestDispatcher rd = request.getRequestDispatcher(viewPage);

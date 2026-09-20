@@ -104,6 +104,7 @@ function handleResponse(rsp) {
 
         // 결제 성공 시에만 최종적으로 Servlet으로 Form Submit 전송!
         var form = document.pay;
+        form.t_gubun.value = "payment"
         form.method = "post";
         form.action = "Reservation"; // Reservation Servlet으로 전송
         form.submit();
@@ -112,6 +113,14 @@ function handleResponse(rsp) {
         alert("결제에 실패했거나 취소되었습니다.\n사유: " + rsp.error_msg);
         return;
     }
+}
+
+//항공편 검색 창으로 이동
+function goFlightSearch(){
+	pay.t_gubun.value = "flightSearch";
+	pay.method = "post";
+	pay.action = "Reservation";
+	pay.submit();
 }
 </script>
 </head>
@@ -321,7 +330,7 @@ function handleResponse(rsp) {
 <!-- 내용/기능은 원본 그대로. 완성되면 이 자리에 통째로 교체하면 됨.        -->
 <!-- ============================================================ -->
 <form name="pay">
-<input type="hidden" name="t_gubun" value="payment">
+<input type="hidden" name="t_gubun">
 	<div id="paymentModal" class="hidden">
 		<div id="paymentModalInner">
 			<button id="paymentCloseBtn" type="button">&times;</button>
@@ -359,14 +368,14 @@ function handleResponse(rsp) {
 				<legend data-i18n="res_flightSectionTitle">✈️ 항공권 정보 (필수)</legend>
 				<div class="formRow">
 					<label data-i18n="res_flightNo">항공편명</label>
-					<input type="text" id="flightNoInput" placeholder="1 입력 필요(test단계)" name="t_reservation_flight_no">
+					<input type="text" id="flightNoInput" name="t_reservation_flight_no" disabled>
+					<button type="button" onclick="goFlightSearch()" style="height:37.5px; width:50px;">검색</button>
 				</div>
 <!-- 예약 유형 선택 후 결제창 진입: 왕복 여부 선택 불필요 판단 / 이후 수정 필요할 것 같음 -->
 				<div class="formRow">
 					<label data-i18n="res_flightRoundtrip">왕복 여부</label>
 					<select id="flightRoundtripInput">
 						<option value="round">왕복</option>
-						<option value="oneway">편도 (이용 불가)</option>
 					</select>
 				</div>
 <!-- 귀국 도착 예정 시간은 name으로 넘길 필요가 있는가? -->
@@ -378,7 +387,7 @@ function handleResponse(rsp) {
 
 			<div id="estimatedPriceBox"><span data-i18n="res_estimated">예상 금액</span>: <strong id="estimatedPrice">-</strong></div>
 <!-- Servlet으로 예상 금액 넘기기 위한 input(payment.js수정) / 예약 목록 확인 시 예상 금액 노출-->
-			<input type="text" name="t_reservation_estimate_amount" id="estimatedPriceInput">
+			<input type="hidden" name="t_reservation_estimate_amount" id="estimatedPriceInput">
 			<div id="payMethodArea">
 				<label class="payOption"><input type="radio" name="t_reservation_pay_method" value="kakaoPay"> 카카오페이</label>
 				<label class="payOption"><input type="radio" name="t_reservation_pay_method" value="naverPay"> 네이버페이</label>
@@ -389,7 +398,7 @@ function handleResponse(rsp) {
 			<div id="paymentFooter">
 				<div id="payBarPrice"><span data-i18n="res_depositLabel">예약금</span> <strong id="payBarAmount">-</strong>원</div>
 <!-- Servlet으로 예약금 넘기기 위한 input / 예약 목록 확인 시 예약금 노출 / 필요 없는 경우 삭제 예정 -->
-				<input type="text" id="depositAmount" name="t_reservation_deposit_amount" value="5000">
+				<input type="hidden" id="depositAmount" name="t_reservation_deposit_amount" value="5000">
 <!-- 포트원 결제 검증 및 DB 저장을 위한 hidden input 추가 -->
 				<input type="hidden" name="t_imp_uid" id="impUidInput">
 				<input type="hidden" name="t_merchant_uid" id="merchantUidInput">
