@@ -235,3 +235,32 @@ a.seat:hover{filter:brightness(.92)}
 	font-size:13px;font-family:inherit;line-height:1.6;color:#22293a;resize:vertical
 }
 .adm_area:focus{outline:none;border-color:#1769d2}
+
+/* ---------- FAQ / 공지사항 관리 ---------- */
+.adm_btn_sm{padding:5px 11px;font-size:12px}
+.adm_btn_red{background:#d9534f;border-color:#d9534f}
+.adm_btn_red:hover{background:#c0392b;border-color:#c0392b}
+
+.row_btns{white-space:nowrap}
+.row_btns form{margin-left:4px}
+.row_sub{display:block;margin-top:4px;color:#8c96a3;font-size:12px;line-height:1.5;
+	overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.row_off td{background:#fafbfc;color:#98a1ad}          /* 숨김 처리된 FAQ */
+.row_link{color:#22293a;font-weight:600}
+.row_link:hover{color:#1769d2;text-decoration:underline}
+.card_head .dim{margin-left:6px;font-weight:400}
+
+/* 입력 폼 (등록·수정 겸용 화면) */
+.form_card{max-width:900px}
+.form_tbl{margin-bottom:0}
+.form_tbl th{width:110px;vertical-align:top;padding-top:14px}
+.form_tbl td{padding:10px 12px}
+.adm_input{
+	width:100%;padding:9px 12px;border:1px solid #cfd6df;border-radius:6px;
+	font-size:13px;font-family:inherit;color:#22293a;background:#fff
+}
+.adm_input_sm{width:110px;margin-right:8px}
+.adm_sel{padding:8px 11px;border:1px solid #cfd6df;border-radius:6px;font-size:13px;font-family:inherit;background:#fff}
+.adm_input:focus,.adm_sel:focus{outline:none;border-color:#1769d2}
+.chk{display:inline-flex;align-items:center;gap:8px;font-size:13px;cursor:pointer}
+.form_foot{display:flex;gap:8px;margin-top:20px;padding-top:18px;border-top:1px solid #eef1f5}

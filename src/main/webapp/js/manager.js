@@ -65,3 +65,38 @@ function checkReportAnswer(form) {
 	}
 	return confirm("이 내용으로 저장하시겠습니까?");
 }
+
+// FAQ 등록/수정 폼 검사 (faq_form.jsp). 서버 command.faq.FaqSave / FaqUpdate 에서도 같은 검사를 한다.
+function checkFaqForm(form) {
+	if (isBlank(form.t_question.value)) {
+		alert("질문을 입력하세요.");
+		form.t_question.focus();
+		return false;
+	}
+	if (isBlank(form.t_answer.value)) {
+		alert("답변을 입력하세요.");
+		form.t_answer.focus();
+		return false;
+	}
+	return true;
+}
+
+// 공지사항 등록/수정 폼 검사 (notice_form.jsp)
+function checkNoticeForm(form) {
+	if (isBlank(form.t_title.value)) {
+		alert("제목을 입력하세요.");
+		form.t_title.focus();
+		return false;
+	}
+	if (isBlank(form.t_content.value)) {
+		alert("내용을 입력하세요.");
+		form.t_content.focus();
+		return false;
+	}
+	return true;
+}
+
+// 공백만 있는지
+function isBlank(value) {
+	return value.replace(/^\s+|\s+$/g, "") === "";
+}

@@ -45,11 +45,11 @@
 		</a>
 
 		<p class="adm_nav_group">콘텐츠</p>
-		<a href="${ctx}/Faq" class="${activeMenu == 'faq' ? 'on' : ''}">
+		<a href="${ctx}/Manager?t_gubun=faq" class="${activeMenu == 'faq' ? 'on' : ''}">
 			<i>?</i> FAQ 관리
 		</a>
 		<a href="${ctx}/Manager?t_gubun=notice" class="${activeMenu == 'notice' ? 'on' : ''}">
-			<i>!</i> 공지사항 관리 <em>준비 중</em>
+			<i>!</i> 공지사항 관리
 		</a>
 
 		<p class="adm_nav_group">도구</p>

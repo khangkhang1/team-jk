@@ -16,14 +16,24 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import command.faq.FaqDelete;
+import command.faq.FaqSave;
+import command.faq.FaqUpdate;
 import command.manager.GateIn;
 import command.manager.GateOut;
+import command.manager.NoticeDelete;
+import command.manager.NoticeSave;
+import command.manager.NoticeUpdate;
 import command.manager.ReportAnswer;
 import common.CommonExecute;
 import common.CommonUtil;
 import common.FeeRule;
+import dao.FaqDao;
 import dao.ManagerDao;
+import dao.NoticeDao;
 import dao.ReportDao;
+import dto.FaqDto;
+import dto.NoticeDto;
 import dto.ReportDto;
 
 /**
@@ -49,10 +59,9 @@ public class Manager extends HttpServlet {
 
 	private static final int LIST_PER_PAGE = 15;
 
-	// 아직 화면이 없는 메뉴 (공지사항은 정규 파트, AI 는 보류)
+	// 아직 화면이 없는 메뉴 (AI 는 팀 상담 후로 보류)
 	private static final Map<String, String> COMING_SOON = new LinkedHashMap<>();
 	static {
-		COMING_SOON.put("notice", "공지사항 관리");
 		COMING_SOON.put("ai", "AI 어시스턴트");
 	}
 
@@ -112,6 +121,46 @@ public class Manager extends HttpServlet {
 
 		} else if (gubun.equals("reportAnswer")) {
 			CommonExecute cmd = new ReportAnswer();
+			cmd.execute(request);
+			forward(request, response, "common_alert.jsp");
+
+		} else if (gubun.equals("faq")) {
+			faqList(request);
+			forward(request, response, "manager/faq_list.jsp");
+
+		} else if (gubun.equals("faqForm")) {
+			faqForm(request);
+			forward(request, response, "manager/faq_form.jsp");
+
+		} else if (gubun.equals("faqSave") || gubun.equals("faqUpdate") || gubun.equals("faqDelete")) {
+			// 저장/수정/삭제 자체는 이용자 화면과 하는 일이 같아서 command.faq.* 를 그대로 쓴다.
+			// 다만 끝난 뒤 돌아갈 곳만 관리자 목록으로 바꾼다 (기존 커맨드는 이용자 FAQ 로 보낸다).
+			CommonExecute cmd = gubun.equals("faqSave") ? new FaqSave()
+					: gubun.equals("faqUpdate") ? new FaqUpdate() : new FaqDelete();
+			cmd.execute(request);
+			backToManager(request, "faq", "faqForm", "t_faq_id");
+			forward(request, response, "common_alert.jsp");
+
+		} else if (gubun.equals("notice")) {
+			noticeList(request);
+			forward(request, response, "manager/notice_list.jsp");
+
+		} else if (gubun.equals("noticeForm")) {
+			noticeForm(request);
+			forward(request, response, "manager/notice_form.jsp");
+
+		} else if (gubun.equals("noticeSave")) {
+			CommonExecute cmd = new NoticeSave();
+			cmd.execute(request);
+			forward(request, response, "common_alert.jsp");
+
+		} else if (gubun.equals("noticeUpdate")) {
+			CommonExecute cmd = new NoticeUpdate();
+			cmd.execute(request);
+			forward(request, response, "common_alert.jsp");
+
+		} else if (gubun.equals("noticeDelete")) {
+			CommonExecute cmd = new NoticeDelete();
 			cmd.execute(request);
 			forward(request, response, "common_alert.jsp");
 
@@ -280,6 +329,94 @@ public class Manager extends HttpServlet {
 			}
 		}
 		return sb.toString();
+	}
+
+	// ---------------------------------------------------------------- FAQ 관리
+	// 이용자 화면(/Faq)과 같은 DAO 를 쓰되, 목록·등록·수정을 관리자 레이아웃 안에서 끝낸다.
+	// 관리 중에 이용자 화면으로 튕겨 나갔다 돌아오면 흐름이 끊긴다 (画面遷移を減らす).
+
+	// FaqDao 는 카테고리를 SQL 문자열에 그대로 붙이므로, 화면에서 온 값을 그대로 넘기지 않고
+	// 정해둔 목록에 있는 것만 통과시킨다 (SQL 인젝션 방지).
+	private static final String[] FAQ_CATEGORIES = { "예약", "요금·결제", "입·출차", "항공편" };
+
+	private String faqCategory(HttpServletRequest request) {
+		String category = CommonUtil.getCheckNull(request.getParameter("t_category")).trim();
+		for (String c : FAQ_CATEGORIES) {
+			if (c.equals(category)) return category;
+		}
+		return "";
+	}
+
+	private void faqList(HttpServletRequest request) {
+		String category = faqCategory(request);
+		ArrayList<FaqDto> dtos = new FaqDao().getFaqList(category, true);   // true : 숨김(use_yn=N) 글도 본다
+
+		int hidden = 0;
+		for (FaqDto d : dtos) {
+			if ("N".equals(d.getUse_yn())) hidden++;
+		}
+
+		request.setAttribute("dtos", dtos);
+		request.setAttribute("category", category);
+		request.setAttribute("categories", FAQ_CATEGORIES);
+		request.setAttribute("totalCount", dtos.size());
+		request.setAttribute("hiddenCount", hidden);
+		request.setAttribute("activeMenu", "faq");
+		request.setAttribute("pageTitle", "FAQ 관리");
+	}
+
+	// 등록·수정 겸용 화면. t_faq_id 가 있으면 수정.
+	private void faqForm(HttpServletRequest request) {
+		int faqId = Faq.parseId(request.getParameter("t_faq_id"));
+		if (faqId > 0) {
+			FaqDto dto = new FaqDao().getFaqView(faqId);
+			if (dto != null) request.setAttribute("dto", dto);
+		}
+		request.setAttribute("categories", FAQ_CATEGORIES);
+		request.setAttribute("activeMenu", "faq");
+		request.setAttribute("pageTitle", "FAQ 관리");
+	}
+
+	// 재사용한 command.faq.* 가 정해둔 이동 주소(이용자 FAQ)를 관리자 콘솔 주소로 바꿔준다
+	private void backToManager(HttpServletRequest request, String listGubun, String formGubun, String idParam) {
+		String url = CommonUtil.getCheckNull((String) request.getAttribute("t_url"));
+		String id  = CommonUtil.getCheckNull(request.getParameter(idParam)).trim();
+
+		if (url.contains("Form")) {          // 입력이 잘못돼 폼으로 되돌리는 경우
+			request.setAttribute("t_url", "Manager?t_gubun=" + formGubun
+					+ (id.equals("") ? "" : "&" + idParam + "=" + id));
+		} else {
+			request.setAttribute("t_url", "Manager?t_gubun=" + listGubun);
+		}
+	}
+
+	// ---------------------------------------------------------------- 공지사항 관리
+	private void noticeList(HttpServletRequest request) {
+		String search = CommonUtil.getCheckNull(request.getParameter("t_search")).trim();
+		ArrayList<NoticeDto> dtos = new NoticeDao().getNoticeList(search);
+
+		int important = 0;
+		for (NoticeDto d : dtos) {
+			if ("Y".equals(d.getImportant())) important++;
+		}
+
+		request.setAttribute("dtos", dtos);
+		request.setAttribute("search", search);
+		request.setAttribute("totalCount", dtos.size());
+		request.setAttribute("importantCount", important);
+		request.setAttribute("activeMenu", "notice");
+		request.setAttribute("pageTitle", "공지사항 관리");
+	}
+
+	// 등록·수정 겸용 화면. t_no 가 있으면 수정.
+	private void noticeForm(HttpServletRequest request) {
+		String no = CommonUtil.getCheckNull(request.getParameter("t_no")).trim();
+		if (!no.equals("")) {
+			NoticeDto dto = new NoticeDao().getNoticeView(no);
+			if (dto != null) request.setAttribute("dto", dto);
+		}
+		request.setAttribute("activeMenu", "notice");
+		request.setAttribute("pageTitle", "공지사항 관리");
 	}
 
 	// ---------------------------------------------------------------- 좌석·구역 현황
