@@ -69,4 +69,25 @@ public class NoticeDto {
 		this.reg_date = reg_date;
 	}
 
+	// ── 아래 두 생성자는 정규상 공지 게시판(notice/*.jsp)에서 쓰는 것. 2026-09-21 병합 때 합침.
+	//    NoticeDao.getNoticeList(select,search,start,end) 가 이 8개짜리를 쓴다.
+	public NoticeDto(String no, String title, String content,
+	                 String important, String attach, int hit,
+	                 String reg_id, String reg_date) {
+		this.no = no;
+		this.title = title;
+		this.content = content;
+		this.important = important;
+		this.attach = attach;
+		this.hit = hit;
+		this.reg_id = reg_id;
+		this.reg_date = reg_date;
+	}
+
+	// 인덱스 화면의 공지 요약용 (번호/제목/날짜만)
+	public NoticeDto(String no, String title, String reg_date) {
+		this.no = no;
+		this.title = title;
+		this.reg_date = reg_date;
+	}
 }

@@ -3,7 +3,9 @@ package dao;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.List;
 
 import common.DBConnection;
 import dto.NoticeDto;
@@ -175,4 +177,86 @@ public class NoticeDao {
 		return result;
 	}
 
+	// ================================================================
+	// 아래 3개는 정규상 공지 게시판(command/notice/*, notice/*.jsp)용.
+	// 2026-09-21 병합 때 ijg 에서 그대로 가져왔다.
+	// 위쪽 관리자 콘솔용 메서드와 이름이 겹치지 않아(인자 수가 다름) 함께 둘 수 있다.
+	// ※ select/search 를 SQL 에 문자열로 붙이고 있어 검색어에 작은따옴표가 들어오면 깨진다.
+	//   위쪽 관리자용처럼 ? 바인딩으로 바꾸는 게 맞다(정규상 확인 필요).
+	// ================================================================
+
+	public int getTotalCount(String select, String search) {
+		int count = 0;
+		String sql = "select count(*) as count from icn_notice where " + select + " like '%" + search + "%'";
+		Connection con = null; PreparedStatement ps = null; ResultSet rs = null;
+		try {
+			con = DBConnection.getConnection();
+			ps = con.prepareStatement(sql);
+			rs = ps.executeQuery();
+			if (rs.next()) count = rs.getInt("count");
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("getTotalCount() 오류 : " + sql);
+		} finally {
+			DBConnection.closeDB(con, ps, rs);
+		}
+		return count;
+	}
+
+	/** 페이지 단위 목록. 작성자 이름을 icn_member 와 조인해서 가져온다. */
+	public List<NoticeDto> getNoticeList(String select, String search, int start, int end) {
+		List<NoticeDto> dtos = new ArrayList<>();
+		String sql =
+			  "select * from ( "
+			+ "  select rownum as rnum, tbl.* from ( "
+			+ "    select n.no, n.title, n.attach, n.important, m.name, "
+			+ "           to_char(n.reg_date,'yyyy-MM-dd') as reg_date, n.hit "
+			+ "    from icn_notice n, icn_member m "
+			+ "    where n.reg_id = m.member_id "
+			+ "    and n." + select + " like '%" + search + "%' "
+			+ "    order by case when n.important = 'Y' then 0 else 1 end, n.no desc "
+			+ "  ) tbl "
+			+ ") where rnum >= " + start + " and rnum <= " + end;
+
+		Connection con = null; PreparedStatement ps = null; ResultSet rs = null;
+		try {
+			con = DBConnection.getConnection();
+			ps = con.prepareStatement(sql);
+			rs = ps.executeQuery();
+			while (rs.next()) {
+				dtos.add(new NoticeDto(
+					rs.getString("no"), rs.getString("title"), "",
+					rs.getString("important"), rs.getString("attach"), rs.getInt("hit"),
+					rs.getString("name"), rs.getString("reg_date")));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("getNoticeList(paged) 오류 : " + sql);
+		} finally {
+			DBConnection.closeDB(con, ps, rs);
+		}
+		return dtos;
+	}
+
+	/** 다음 번호를 'N001' 형태로. 위 nextNo(con) 와 같은 일을 하지만 커넥션을 스스로 연다. */
+	public String getNoticeNo() {
+		String no = "";
+		String sql = "select nvl(max(no),'N000') as no from icn_notice";
+		Connection con = null; PreparedStatement ps = null; ResultSet rs = null;
+		try {
+			con = DBConnection.getConnection();
+			ps = con.prepareStatement(sql);
+			rs = ps.executeQuery();
+			if (rs.next()) {
+				no = rs.getString("no").substring(1);
+				no = new DecimalFormat("N000").format(Integer.parseInt(no) + 1);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("getNoticeNo() 오류 : " + sql);
+		} finally {
+			DBConnection.closeDB(con, ps, rs);
+		}
+		return no;
+	}
 }
