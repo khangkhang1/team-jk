@@ -333,6 +333,17 @@
 	fill:#dcf6e8;
 	stroke:#4fb684;
 }
+/* 장애인석 마우스 호버 (기존 배경 #dbe8ff -> 약간 더 진한 연파랑 #b8d4ff) */
+.bay_g.disabled_seat:not(.selected):not(.taken):hover .bay {
+	fill: #b8d4ff;
+	transition: fill 0.12s ease;
+}
+
+/* 전기차 / 수소차석 마우스 호버 (기존 배경 #dcf6e8 -> 약간 더 진한 연초록 #b7ebd0) */
+.bay_g.ev_seat:not(.selected):not(.taken):hover .bay {
+	fill: #b7ebd0;
+	transition: fill 0.12s ease;
+}
 .bay_g.cancelled .bay{
 	fill:#ffdede;
 	stroke:#dd7b7b;
@@ -340,6 +351,20 @@
 }
 .bay_g.cancelled:hover .bay{
 	fill:#ffdede;
+}
+
+/* ★ [중요] 선택된 상태 (.selected)가 최우선 적용되도록 맨 아래에배치 ★ */
+.bay_g.selected .bay,
+.bay_g.disabled_seat.selected .bay,
+.bay_g.ev_seat.selected .bay {
+	fill:#1769d2 !important;
+	stroke:#0d57b3 !important;
+}
+
+.bay_g.selected .bay_label,
+.bay_g.disabled_seat.selected .bay_label,
+.bay_g.ev_seat.selected .bay_label {
+	fill:#fff !important;
 }
 /* 주행로 표시 */
 .lot_lane {
