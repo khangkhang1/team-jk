@@ -53,9 +53,19 @@
 		</ul>
 
 		<div class="header_right">
-			<a href="${pageContext.request.contextPath}/login.html">로그인</a>
-			<span>|</span>
-			<a href="${pageContext.request.contextPath}/login.html">회원가입</a>
+
+			<c:if test="${not empty sessionName }">
+				<a href="javascript:movePage('Member','myinfo')">${sessionName }님.</a>
+				<span>|</span>
+				<a href="javascript:movePage('Member','logout')">Logout</a>
+
+			</c:if>
+
+			<c:if test="${empty sessionName }">
+				<a href="javascript:movePage('Member','join')">Join</a>
+				<span>|</span>
+				<a href="javascript:movePage('Member','login')">Login</a>
+			</c:if>
 		</div>
 
 		<button class="menu_btn" aria-label="메뉴">☰</button>
@@ -63,5 +73,8 @@
 	</div>
 
 </header>
+
+
+
 
 

@@ -74,7 +74,7 @@
         </nav>
 
         <div class="header_right">
-            <a href="#">로그인</a>
+            <a href="Member">로그인</a>
             <span>|</span>
             <a href="#">회원가입</a>
         </div>
