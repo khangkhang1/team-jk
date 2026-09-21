@@ -58,7 +58,6 @@
 	
     <!-- 기존 팀프로젝트 공통 헤더 삽입 위치 -->
     <%@include file="/common_header.jsp" %>
-    <!-- 공통 헤더는 별도 파일에서 불러올 예정 -->
 
 
 
@@ -246,10 +245,11 @@
 			    </div>
 			
 			    <!-- 글쓰기 버튼 -->
+			    <c:if  test="${sessionLevel eq 'top'}">
 			    <a href="javascript:goWrite('noticeWriteForm')" class="writeBtn">
 			        글쓰기
 			    </a>
-			
+				</c:if>
 			</div>
 
         </section>

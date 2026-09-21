@@ -3,6 +3,11 @@
 <%@ page import="java.util.List" %>
 <%@ page import="dto.LongTermParkingDto" %>
 <%@ page import="dto.ShortTermParkingDto" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>  
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+
+
 
 <!DOCTYPE html>
 <html lang="ko">
@@ -14,10 +19,14 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>인천공항 주차예약</title>
+<script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery-1.8.1.min.js"></script>
+<script src="${pageContext.request.contextPath}/js/common.js"></script>
 
-<style>
 
-</style>
+<form name="go">
+	<input type=hidden name="t_gubun">
+</form>
+
 
 </head>
 
@@ -31,7 +40,7 @@
 
     <div class="header_inner">
 
-        <a href="#" class="logo">
+        <a href="ParkingStatus" class="logo">
             인천공항 주차예약
             <small>INCHEON AIRPORT PARKING</small>
         </a>
@@ -67,7 +76,7 @@
 
                 <div class="header_dropdown">
                     <a href="Notice">공지 사항</a>
-                    <a href="#notice">자주 하는 질문</a>
+                    <a href="faq/faq.jsp">자주 하는 질문</a>
                 </div>
             </li>
 
@@ -78,18 +87,18 @@
 
 		
         <div class="header_right">
-		<c:if test="${not empty sessionName}">
-			<a>${sessionName}님.</a>
-			<a href="javascript:movePage('Member','myinfo')">Myinfo</a>
-			<a href="javascript:movePage('Member','logout')">Logout</a>
-		</c:if>
+			<c:if test="${not empty sessionName}">
+				<a>${sessionName}님.</a>
+				<a href="javascript:movePage('Member','myinfo')">Myinfo</a>
+				<a href="javascript:movePage('Member','logout')">로그아웃</a>
+			</c:if>
 		
 		
-		<c:if test="${empty sessionName}">
-            <a href="Member">로그인</a>
-            <span>|</span>
-            <a href="javascript:movePage('Member','join')">회원가입</a>
-        </c:if>
+			<c:if test="${empty sessionName}">
+	            <a href="Member">로그인</a>
+	            <span>|</span>
+	            <a href="javascript:movePage('Member','join')">회원가입</a>
+	        </c:if>
         </div>
 
         <button class="menu_btn" aria-label="메뉴">☰</button>

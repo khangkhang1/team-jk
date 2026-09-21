@@ -7,6 +7,11 @@
 <link href="${pageContext.request.contextPath}/css/common/common_header.css" rel="stylesheet">
 <script src="${pageContext.request.contextPath}/js/common.js"></script>
 
+<form name="go">
+	<input type="hidden" name="t_gubun">
+</form>
+
+
 <header class="header">
 
 	<div class="header_inner">
@@ -58,7 +63,7 @@
 			<c:if test="${not empty sessionName }">
 				<a href="javascript:movePage('Member','myinfo')">${sessionName }님.</a>
 				<span>|</span>
-				<a href="javascript:movePage('Member','logout')">Logout</a>
+				<a href="javascript:movePage('Member','logout')">로그아웃</a>
 
 			</c:if>
 
