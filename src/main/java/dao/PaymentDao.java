@@ -72,7 +72,7 @@ public class PaymentDao {
 			sql = "insert into icn_reservation\r\n"
 					+ "(reservation_id, reservation_status, reservation_start_time, reservation_end_time,\r\n"
 					+ "reservation_type, flight_no, member_id, seat_no,\r\n"
-					+ "reservation_estimate_amount, reservation_deposit_amount, reservation_date, reservation_arrive_datetime)\r\n"
+					+ "reservation_estimate_amount, reservation_deposit_amount, reservation_date, reservation_arrive_time)\r\n"
 					+ "values\r\n"
 					+ "(?, ?, to_date(?,'yyyy-MM-dd hh24:mi:ss'),\r\n"
 					+ "to_date(?,'yyyy-MM-dd hh24:mi:ss'),\r\n"
