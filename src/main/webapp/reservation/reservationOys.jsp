@@ -128,6 +128,19 @@ function payment(method) {
             buyer_email: "test@example.com"
         }, handleResponse);
 
+     // 네이버페이 결제
+    } else if (method === "naverPay") {
+        IMP.request_pay({
+            pg: "naverpay",               // 방금 등록하신 네이버페이 채널
+            pay_method: "card",           // 카드(card) 또는 포인트(point)
+            merchant_uid: "ORD_" + new Date().getTime(),
+            name: "인천공항 주차장 예약",
+            amount: price,
+            buyer_name: "홍길동",
+            buyer_email: "test@example.com",
+            naverPopupMode: true         // false면 현재 화면 위에 레이어로 띄움
+        }, handleResponse);
+        
     } else {
         alert("선택하신 결제 수단은 현재 미지원입니다.");
         return;
