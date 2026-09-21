@@ -38,7 +38,7 @@ public class ReservationMap implements CommonExecute {
             
             // String -> LocalDateTime 변환 후 3시간(+)
             LocalDateTime dt = LocalDateTime.parse(endTime, formatter);
-            dt = dt.minusHours(3); 
+            dt = dt.plusHours(3); 
             
             // 다시 String으로 변환
             endTime = dt.format(formatter);
@@ -50,7 +50,7 @@ public class ReservationMap implements CommonExecute {
         ReservationMapDao dao = ReservationMapDao.getDao();
         
         // ★ [핵심 추가] 맵 데이터를 화면에 그리기 직전에, 결항으로 묶인 예약건들을 빈자리로 자동 재배정합니다.
-        dao.autoReassignCancelledVictims();
+        dao.autoChange();
 
         // 재배정이 끝난 최신 상태의 맵 데이터를 가져옵니다.
         List<ReservationMapDto> dtos = dao.getPakingMap(parkingLotId.toUpperCase(), startTime, endTime);
