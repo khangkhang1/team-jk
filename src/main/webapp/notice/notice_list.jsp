@@ -15,11 +15,12 @@
 
 
 <script>
-	function goView(gubun){
-		noti.t_gubun.value = gubun;
-		noti.method="post";
-		noti.action="Notice";
-		noti.submit();
+	function goView(no){
+		view.t_gubun.value = "noticeView";
+		view.t_no.value = no;
+		view.method="post";
+		view.action="Notice";
+		view.submit();
 	}
 	function goWrite(gubun){
 		noti.t_gubun.value = gubun;
@@ -104,11 +105,20 @@
 				</form>
                 <!-- 공지사항 목록 -->
                 <table class="noticeTable">
-
+					
+					<colgroup>
+						<col width="10%">
+						<col width="*%">
+						<col width="10%">
+						<col width="10%">
+						<col width="10%">
+					</colgroup>
+					
                     <thead>
                         <tr>
                             <th class="noticeNum">번호</th>
                             <th class="noticeSubject">제목</th>
+                            <th class="noticeAttach">첨부</th>
                             <th class="noticeDate">작성일</th>
                             <th class="noticeViews">조회수</th>
                         </tr>
@@ -118,11 +128,8 @@
 						<c:set var="seq" value="${order}"> </c:set>
 						<c:forEach items="${t_dtos}" var="dto">
                         <!-- 공지사항 상단 고정 예시 -->
-                        
                         <c:choose>
-                        
                         <c:when test="${dto.getImportant() eq 'Y'}">
-                        
                         <tr class="noticeFixed">
 
                             <td>
@@ -136,23 +143,25 @@
 
                             <td>${seq}</td>
 							<c:set var="seq" value="${seq - 1}"></c:set>
-							
                         </c:otherwise>
                             
                             
                         </c:choose>
 
                             <td class="noticeSubjectText">
-                                <a href="javascript:goView('noticeView')">
+                                <a href="javascript:goView('${dto.getNo()}')">
                                     ${dto.getTitle()}
                                 </a>
                             </td>
-
+							<td>
+	                            <c:if test="${not empty dto.getAttach()}">
+									<img src="images/clip.png">
+								</c:if>
+                             </td>
                             <td>${dto.getReg_date()}</td>
 
                             <td>${dto.getHit()}</td>
-
-                        </tr>
+						</tr>
                         </c:forEach>
 						<!-- 
                         <tr class="noticeFixed">

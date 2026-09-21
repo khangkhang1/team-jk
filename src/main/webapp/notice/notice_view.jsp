@@ -58,9 +58,10 @@
             <div class="viewHeader">
 
                 <div class="titleArea">
-					
-                    <span class="importantBadge">중요공지</span>
-
+                
+                	<c:if test="${dto.getImportant() eq 'Y'}">
+                    	<span class="importantBadge">중요공지</span>
+					</c:if>
                     <h2>
                         ${dto.getTitle()}
                     </h2>

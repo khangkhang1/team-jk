@@ -1635,7 +1635,7 @@ const parkingData={
 	     * 현재 시간 상태라면
 	     * 서버에서 최신 API 데이터를 가져온다.
 	     */
-	    fetch("parkingStatus?refresh=true")
+	    fetch("ParkingStatus?refresh=true")
 
 	        .then(function(response){
 
