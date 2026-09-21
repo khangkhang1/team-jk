@@ -3,8 +3,9 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>  
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<link href="${pageContext.request.contextPath}/css/common/common_header.css" rel="stylesheet">
 
+<link href="${pageContext.request.contextPath}/css/common/common_header.css" rel="stylesheet">
+<script src="${pageContext.request.contextPath}/js/common.js"></script>
 
 <header class="header">
 
@@ -62,9 +63,9 @@
 			</c:if>
 
 			<c:if test="${empty sessionName }">
-				<a href="javascript:movePage('Member','join')">Join</a>
+				<a href="javascript:movePage('Member','login')">로그인</a>
 				<span>|</span>
-				<a href="javascript:movePage('Member','login')">Login</a>
+				<a href="javascript:movePage('Member','join')">회원가입</a>
 			</c:if>
 		</div>
 
