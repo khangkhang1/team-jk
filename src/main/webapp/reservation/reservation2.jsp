@@ -685,17 +685,41 @@ function renderAll(){
 	document.getElementById("seatGrid").innerHTML = svg;
 
 	var seatEls = document.querySelectorAll(".bay_g");
-	for (var k=0;k<seatEls.length;k++){
-		seatEls[k].addEventListener("click", function(){
-			if (this.getAttribute("data-state") !== "free") return;
-			var prev = document.querySelector(".bay_g.selected");
-			if (prev) prev.classList.remove("selected");
-			this.classList.add("selected");
-			selectedSeat = this.getAttribute("data-seat");
-			document.getElementById("selectedSeatText").innerHTML =
-				"선택한 자리 : <strong>" + selectedSeat + "</strong>";
-			document.getElementById("goPayBtn").disabled = false;
-		});
+	for (var k = 0; k < seatEls.length; k++) {
+	    seatEls[k].addEventListener("click", function(){
+	        if (this.getAttribute("data-state") !== "free") return;
+	        
+	        var seatKind = this.getAttribute("data-kind");
+	        
+	        // ★ 정의되지 않은 변수 에러 방지용 안전장치 (기본값 설정)
+	        var manager = (typeof isManager !== 'undefined') ? isManager : false;
+	        var userDisabled = (typeof isUserDisabled !== 'undefined') ? isUserDisabled : false;
+	        var userEv = (typeof isUserEv !== 'undefined') ? isUserEv : false;
+	        
+	        // 관리자가 아닐 때만 제한 조건 체크
+	        if (!manager) {
+	            // 장애인 자리 체크
+	            if (seatKind === "D" && !userDisabled) {
+	                alert("♿ 장애인 전용 구역은 장애인 등록 회원만 선택하실 수 있습니다.");
+	                return;
+	            }
+	            
+	            // 전기차/수소차 자리 체크
+	            if (seatKind === "E" && !userEv) {
+	                alert("⚡ 전기차/수소차 전용 구역은 친환경차 등록 회원만 선택하실 수 있습니다.");
+	                return;
+	            }
+	        }
+	        
+	        // 정상 선택 로직
+	        var prev = document.querySelector(".bay_g.selected");
+	        if (prev) prev.classList.remove("selected");
+	        this.classList.add("selected");
+	        selectedSeat = this.getAttribute("data-seat");
+	        document.getElementById("selectedSeatText").innerHTML =
+	        	"선택한 자리 : <strong>" + selectedSeat + "</strong>";
+	        document.getElementById("goPayBtn").disabled = false;
+	    });
 	}
 
 	document.getElementById("selectedSeatText").textContent = "선택된 자리가 없습니다.";
