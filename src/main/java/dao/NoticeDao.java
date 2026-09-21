@@ -7,6 +7,7 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import common.CommonUtil;
 import common.DBConnection;
 import dto.NoticeDto;
 
@@ -147,7 +148,71 @@ public class NoticeDao {
       }
       return result;
    }
-	
+
+
+
+
+	//조회수 증가
+		public int setHitCount(String no) {
+			int result = 0;
+			String sql = "update icn_notice\r\n"
+		            + "set hit = hit + 1\r\n"
+		            + "where no = '"+no+"'";;
+			
+		            try {
+		                con = DBConnection.getConnection();
+		                ps = con.prepareStatement(sql);
+		                result = ps.executeUpdate();
+		             }catch(Exception e){
+		                e.printStackTrace();
+		                System.out.println("setHitCount 오류:"+sql);
+		             }finally {
+		                DBConnection.closeDB(con, ps, rs);
+		             }
+			
+			
+
+			return result;
+		}
+
+
+
+
+		//상세조회
+	public NoticeDto noticeView(String no) {
+		NoticeDto dto = null;
+		String sql = "select no, title, content, important, attach, reg_id,to_char(reg_date,'yyyy-MM-dd') as reg_date,hit\r\n"
+				+ "from icn_notice\r\n"
+				+ "where no = '"+no+"'";
+		try {
+	         con=DBConnection.getConnection();
+	         ps=con.prepareStatement(sql);
+	         rs=ps.executeQuery();
+	         if(rs.next()){
+	             String title = rs.getString(CommonUtil.getCheckNull("title"));
+	             //CommonUtil.getDoubleQuot(title); //큰 따옴표 html특수기호 문자표로 나오게
+	             String content = rs.getString("content");
+	             String important = rs.getString("important");
+	             String attach = rs.getString("attach");
+	             String reg_id = rs.getString("reg_id");
+	             String reg_date = rs.getString("reg_date");
+	            // String update_date = rs.getString("update_date");
+	             int hit = rs.getInt("hit");
+	        	 
+	             dto = new NoticeDto(no, title, content, important, attach, hit, reg_id, reg_date);
+	        	 
+	         }
+	         
+	      }catch(Exception e) {
+	         e.printStackTrace();
+	         System.out.println("noticeView 오류 : "+sql);
+	      }finally {
+	         DBConnection.closeDB(con, ps, rs);
+	      }
+		
+		
+		return dto;
+	}
 	
 	
 	

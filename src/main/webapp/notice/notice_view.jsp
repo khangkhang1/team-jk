@@ -27,8 +27,12 @@
     
     
 </head>
-<form name ="noti">
-<input type="hidden" name="t_gubun">
+	<form name ="noti">
+		<input type="hidden" name="t_gubun">
+		<input type="hidden" name="t_no" value="${dto.getNo()}">
+		<input type="hidden" name="t_ori_attach" value="${dto.getAttach()}">
+	</form>
+
 <body>
 
     <!-- 공통 헤더 -->
@@ -54,11 +58,11 @@
             <div class="viewHeader">
 
                 <div class="titleArea">
-
+					
                     <span class="importantBadge">중요공지</span>
 
                     <h2>
-                        인천공항 주차예약 서비스 이용 안내
+                        ${dto.getTitle()}
                     </h2>
 
                 </div>
@@ -67,15 +71,15 @@
                 <div class="viewInfo">
 
                     <span>
-                        작성자 : 관리자
+                        작성자 : ${dto.getReg_id()}
                     </span>
 
                     <span>
-                        작성일 : 2026-09-15
+                        작성일 : ${dto.getReg_date()}
                     </span>
 
                     <span>
-                        조회수 : 128
+                        조회수 : ${dto.getHit()}
                     </span>
 
                 </div>
@@ -89,15 +93,16 @@
                     첨부파일
                 </span>
 
-                <a href="#" class="fileName">
-                    인천공항 주차예약 이용안내.pdf
+                <a href="FileDownServlet?t_fileDir=notice&t_fileName=${dto.getAttach()}" class="fileName">
+                    ${dto.getAttach()}
                 </a>
 
             </div>
 
             <!-- 본문 -->
-            <div class="viewContent">
+            <div class="viewContent"> ${dto.getContent()}
 
+<!--
                 <p>
                     안녕하세요. 인천공항 주차예약 서비스입니다.
                 </p>
@@ -120,7 +125,7 @@
                 <p>
                     감사합니다.
                 </p>
-
+-->
             </div>
 
         </div>
@@ -174,5 +179,4 @@
     
 
 </body>
-</form>
 </html>

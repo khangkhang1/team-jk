@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import command.notice.NoticeList;
 import command.notice.NoticeSave;
+import command.notice.NoticeView;
 import common.CommonExecute;
 import common.CommonUtil;
 
@@ -56,7 +57,8 @@ public class Notice extends HttpServlet {
 			viewPage ="common_alert.jsp";
 		
 		} else if(gubun.equals("noticeView")) {
-			
+			CommonExecute noti = new NoticeView();
+			noti.execute(request);
 			viewPage = "notice/notice_view.jsp";
 		} else if(gubun.equals("noticeUpdateForm")) {
 			
