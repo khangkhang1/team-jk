@@ -1,0 +1,152 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>인천공항 주차예약 - 로그인</title>
+
+<script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery-1.8.1.min.js"></script>
+<script src="${pageContext.request.contextPath}/js/member.js"></script>
+
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/member_login.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/member_menu.css">
+<link href="${pageContext.request.contextPath}/css/index1.css"
+	rel="stylesheet">
+</head>
+
+<body>
+
+
+	<!-- HEADER -->
+	<header class="header">
+
+		<%@include file="../common_header.jsp"%>
+	</header>
+
+
+	<!-- MAIN -->
+	<main class="login_page">
+
+		<div class="member_page_layout">
+
+			<aside class="member_menu_sidebar">
+				<%@ include file="member_menu.jsp" %>
+			</aside>
+
+			<div class="login_container">
+
+			<!-- PAGE TITLE -->
+			<div class="page_title">
+
+				<span class="title_eng">MEMBER LOGIN</span>
+
+				<h1>로그인</h1>
+
+				<p>
+					인천공항 주차예약 서비스를 이용하시려면<br> 로그인해주세요.
+				</p>
+
+			</div>
+
+
+			<!-- LOGIN CARD -->
+			<section class="login_card">
+
+				<h2>회원 로그인</h2>
+
+				<form id="loginForm" name="mem">
+					<input type="hidden" name="t_gubun">
+
+					<!-- ID -->
+					<div class="input_group">
+
+						<label for="member_id"> 아이디 </label> <input type="text"
+							id="member_id" name="t_id" maxlength="20" onkeypress="checkEnter()"
+							placeholder="아이디를 입력해주세요" autocomplete="username" autofocus>
+
+						<p class="error_message" id="idError"></p>
+
+					</div>
+
+
+					<!-- PASSWORD -->
+					<div class="input_group">
+
+						<label for="password"> 비밀번호 </label> <input type="password"
+							id="password" name="t_password" maxlength="70" onkeypress="checkEnterPassword()"
+							placeholder="비밀번호를 입력해주세요" autocomplete="current-password">
+
+						<p class="error_message" id="passwordError"></p>
+
+					</div>
+
+
+					<!-- LOGIN BUTTON -->
+					<input type="button" onclick="memberLogin()" class="login_btn"
+						value="로그인">
+
+
+					<!-- LOGIN MENU -->
+					<div class="login_menu">
+
+						<a href="#">아이디 찾기</a> <span>|</span> <a href="#">비밀번호 찾기</a> <span>|</span>
+
+						<a href="javascript:movePage('Member','join')">회원가입</a>
+
+					</div>
+
+				</form>
+
+			</section>
+
+
+			<!-- INFO -->
+			<div class="login_info">
+
+				<div class="info_icon">!</div>
+
+				<div class="info_text">
+					<strong>안내</strong>
+					<p>
+						주차 예약 및 예약 조회 서비스는<br> 로그인 후 이용하실 수 있습니다.
+					</p>
+				</div>
+
+			</div>
+
+			</div>
+		</div>
+
+	</main>
+
+
+	<!-- FOOTER -->
+	<footer class="footer">
+
+		<div class="footer_inner">
+
+			<div class="footer_logo">
+				<span class="logo_main">인천공항 주차예약</span> <span class="logo_sub">INCHEON
+					AIRPORT PARKING</span>
+			</div>
+
+			<div class="footer_info">
+
+				<p>인천국제공항 주차예약 서비스</p>
+
+				<p class="copyright">© INCHEON AIRPORT PARKING. All Rights
+					Reserved.</p>
+
+			</div>
+
+		</div>
+
+	</footer>
+
+
+</body>
+</html>
+
