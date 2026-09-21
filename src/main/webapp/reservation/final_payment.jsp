@@ -232,7 +232,7 @@
 	<!-- 메인 영역 -->
 	<main class="pay_page_container">
 		<form name="pay">
-			<input type="hidden" name="t_gubun" value="payment">
+			<input type="hidden" name="t_gubun" value="finalPayment">
 			
 			<div class="pay_card">
 				<h1 id="paymentSeatTitle" class="pay_title">P1 구역 - 선택 좌석</h1>

@@ -8,6 +8,7 @@ import java.text.DecimalFormat;
 import common.CommonUtil;
 import common.DBConnection;
 import dto.PaymentDto;
+import dto.ReservationDto;
 import dto.ReservationInfoDto;
 
 public class PaymentDao {
@@ -217,5 +218,29 @@ public class PaymentDao {
 			DBConnection.closeDB(con, ps, rs);
 		}
 		return result;
+	}
+
+	public ReservationInfoDto getReservationDto(String reservation_id) {
+		ReservationInfoDto dto = null;
+		String sql = "select reservation_start_time, seat_no\r\n"
+				+ "from icn_reservation\r\n"
+				+ "where reservation_id = ?";
+		try {
+			con    = DBConnection.getConnection();
+			LogPreparedStatement ps = new LogPreparedStatement(con, sql);
+			ps.setString(1, reservation_id);
+			rs 	   = ps.executeQuery();
+			if(rs.next()) {
+				String reservation_start_time = rs.getString("reservation_start_time");
+				String reservation_seat_no = rs.getString("seat_no");
+				dto = new ReservationInfoDto(reservation_start_time, reservation_seat_no);
+			}
+		}catch(Exception e) {
+			System.out.println("getReservationDto()오류 :"+sql);
+			e.printStackTrace();
+		}finally {
+			DBConnection.closeDB(con, ps, rs);
+		}	
+		return dto;
 	}
 }

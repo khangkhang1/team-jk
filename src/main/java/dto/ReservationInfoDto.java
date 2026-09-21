@@ -58,6 +58,11 @@ public class ReservationInfoDto {
 		this.reservation_date = reservation_date;
 	}
 	
+	public ReservationInfoDto(String reservation_start_time, String reservation_seat_no) {
+		this.reservation_start_time = reservation_start_time;
+		this.seat_no = reservation_seat_no;
+	}
+
 	public String getReservation_id() {
 		return reservation_id;
 	}
