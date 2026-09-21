@@ -92,7 +92,7 @@
 			</c:if>
 
 			<c:if test="${not empty sessionName }">
-				<a>${sessionName }님.</a>
+				<a href="javascript:movePage('Member','myinfo')">${sessionName }님.</a>
 				<span>|</span>
 				<a href="javascript:movePage('Member','logout')">Logout</a>
 
