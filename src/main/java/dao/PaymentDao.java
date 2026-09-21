@@ -89,7 +89,7 @@ public class PaymentDao {
 				ps.setString(5, r_dto.getReservation_type());
 				ps.setString(6, r_dto.getFlight_no());
 //				ps.setString(7, r_dto.getMember_id());
-				ps.setString(7, "manager");
+				ps.setString(7, r_dto.getMember_id());
 				ps.setString(8, r_dto.getSeat_no());
 				ps.setInt(9, r_dto.getReservation_estimate_amount());
 				ps.setInt(10, r_dto.getReservation_deposit_amount());
@@ -118,8 +118,7 @@ public class PaymentDao {
 				ps.setString(2, r_dto.getReservation_status());
 				ps.setString(3, start_datetime);
 				ps.setString(4, r_dto.getReservation_type());
-//				ps.setString(5, r_dto.getMember_id());
-				ps.setString(5, "manager");
+				ps.setString(5, r_dto.getMember_id());
 				ps.setString(6, r_dto.getSeat_no());
 				ps.setInt(7, r_dto.getReservation_deposit_amount());
 				ps.setString(8, r_dto.getReservation_date());

@@ -32,6 +32,7 @@ public class Payment implements CommonExecute {
 				plan.equals("1") ? 0 : Integer.parseInt(request.getParameter("t_reservation_deposit_amount"));
 		int pay_amount = plan.equals("1") ? estimate_amount : deposit_amount;
 		String member_id = (String)request.getSession().getAttribute("sessionId");
+		if(member_id == null) member_id = "test";
 		ReservationInfoDto r_dto = null;
 		
 		//dao 비정상인 경우를 기본값으로 설정
