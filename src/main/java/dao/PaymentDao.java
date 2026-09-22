@@ -158,6 +158,32 @@ public class PaymentDao {
 		}	
 		return result;
 	}
+	
+	//예약 정보 조회(최종 결제 시 input값 받아오기)
+	public ReservationInfoDto getReservationDto(String reservation_id) {
+		ReservationInfoDto dto = null;
+		String sql = "select reservation_start_time, seat_no\r\n"
+				+ "from icn_reservation\r\n"
+				+ "where reservation_id = ?";
+		try {
+			con    = DBConnection.getConnection();
+			LogPreparedStatement ps = new LogPreparedStatement(con, sql);
+			ps.setString(1, reservation_id);
+			rs 	   = ps.executeQuery();
+			if(rs.next()) {
+				String reservation_start_time = rs.getString("reservation_start_time");
+				String reservation_seat_no = rs.getString("seat_no");
+				dto = new ReservationInfoDto(reservation_id, reservation_start_time, reservation_seat_no);
+			}
+		}catch(Exception e) {
+			System.out.println("getReservationDto()오류 :"+sql);
+			e.printStackTrace();
+		}finally {
+			DBConnection.closeDB(con, ps, rs);
+		}	
+		return dto;
+	}
+	
 //=================================이후로 결제 method=================================
 
 //결제 번호 생성
@@ -220,27 +246,4 @@ public class PaymentDao {
 		return result;
 	}
 
-	public ReservationInfoDto getReservationDto(String reservation_id) {
-		ReservationInfoDto dto = null;
-		String sql = "select reservation_start_time, seat_no\r\n"
-				+ "from icn_reservation\r\n"
-				+ "where reservation_id = ?";
-		try {
-			con    = DBConnection.getConnection();
-			LogPreparedStatement ps = new LogPreparedStatement(con, sql);
-			ps.setString(1, reservation_id);
-			rs 	   = ps.executeQuery();
-			if(rs.next()) {
-				String reservation_start_time = rs.getString("reservation_start_time");
-				String reservation_seat_no = rs.getString("seat_no");
-				dto = new ReservationInfoDto(reservation_start_time, reservation_seat_no);
-			}
-		}catch(Exception e) {
-			System.out.println("getReservationDto()오류 :"+sql);
-			e.printStackTrace();
-		}finally {
-			DBConnection.closeDB(con, ps, rs);
-		}	
-		return dto;
-	}
 }

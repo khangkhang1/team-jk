@@ -235,28 +235,20 @@
 			<input type="hidden" name="t_gubun" value="finalPayment">
 			
 			<div class="pay_card">
-				<h1 id="paymentSeatTitle" class="pay_title">P1 구역 - 선택 좌석</h1>
+				<h1 id="paymentSeatTitle" class="pay_title">P1 구역 - ${dto.getSeat_no()}</h1>
 				<p id="paymentLotInfo" class="pay_sub_info">장기주차장 · 시간당 4,500원</p>
 
 				<!-- 예약 데이터 히든 파라미터 -->
 				<input type="hidden" id="reservationPlan" name="t_reservation_plan" value="2">
-				<input type="hidden" id="reservationSeat" name="t_reservation_seat" value="P1-01">
+				<input type="hidden" id="reservationSeat" name="t_reservation_seat" value="${dto.getSeat_no()}">
 
 				<div class="formRow">
 					<label>주차 일자</label>
-					<input type="date" id="startDateInput" name="t_reservation_start_date" disabled>
-				</div>
-				<div class="formRow">
-					<label>주차 시각</label>
-					<input id="startTimeInput" name="t_reservation_start_time" disabled>
+					<input type="text" id="startDateInput" name="t_reservation_parking_start_time" value="${dto.getReservation_parking_start_time()}" readonly>
 				</div>
 				<div class="formRow">
 					<label>출차 일자</label>
-					<input type="date" id="endDateInput" name="t_reservation_end_date" disabled>
-				</div>
-				<div class="formRow" id="durationRow">
-					<label>출차 시각</label>
-					<input id="endTimeInput" name="t_reservation_end_time" disabled>
+					<input type="text" id="endDateInput" name="t_reservation_out_time" value="${paymentTime}" readonly>
 				</div>
 
 				<!-- 결제 수단 선택 (세로형 추가 및 변경) -->
@@ -278,7 +270,7 @@
 
 				<div id="paymentFooter">
 					<div id="payBarPrice" style="font-size: 15px; text-align: right;">
-						<span>결제액:</span> <strong id="payBarAmount" style="font-size: 20px; color: #e53935;">12000</strong> 원
+						<span>결제액:</span> <strong id="payBarAmount" style="font-size: 20px; color: #e53935;">${totalPrice}</strong> 원
 					</div>
 					<input type="hidden" name="t_final_amount">
 					<input type="hidden" name="t_imp_uid" id="impUidInput">
