@@ -42,7 +42,9 @@ public class ReservationMapDao {
 				+ "   AND p.RESERVATION_START_TIME < TO_DATE(?, 'YYYY-MM-DD HH24:MI') " // 첫 번째 ? -> endTime
 				+ "   AND NVL(p.RESERVATION_END_TIME, TO_DATE('9999-12-31 23:59', 'YYYY-MM-DD HH24:MI')) > TO_DATE(?, 'YYYY-MM-DD HH24:MI') " // 두 번째 ? -> startTime
 				+ "LEFT JOIN "
-				+ "    ICN_FLIGHT f ON p.FLIGHT_ID = f.FLIGHT_ID "
+				+ "    ICN_FLIGHT f"
+				+ " ON p.FLIGHT_no = f.FLIGHT_NO \r\n"
+				+ " "
 				+ "WHERE "
 				+ "    s.LOT_ID = ? " // 세 번째 ? -> map
 				+ "ORDER BY "
@@ -143,9 +145,9 @@ public class ReservationMapDao {
 	 * 3. [업그레이드 버전] 결항된 비행기(f.UPDATED_AT IS NOT NULL)와 연결된 좌석을 찾고,
 	 *    해당 좌석의 '미래 예약건(피해자)'들을 자동으로 찾아 빈자리로 옮겨줍니다.
 	 */
-	public void autoReassignCancelledVictims() {
+	public void autoChange() {
 		// ICN_FLIGHT 테이블을 조인하여 결항된 비행기를 물고 있는 자리의 미래 예약건만 추출!
-		String selectSql = "SELECT "
+		String Sql = "SELECT "
 				         + "    r.RESERVATION_ID, "
 				         + "    r.SEAT_NO AS CANCELLED_SEAT_NO, "
 				         + "    TO_CHAR(r.RESERVATION_START_TIME, 'YYYY-MM-DD HH24:MI') AS START_TIME, "
@@ -156,7 +158,7 @@ public class ReservationMapDao {
 				         + "      -- 2. 현재 주차 중인데 비행기가 결항(UPDATED_AT IS NOT NULL)된 좌석 번호 찾기 "
 				         + "      SELECT p.SEAT_NO "
 				         + "      FROM ICN_RESERVATION p "
-				         + "      JOIN ICN_FLIGHT f ON p.FLIGHT_ID = f.FLIGHT_ID "
+				         + " 	  JOIN ICN_FLIGHT f ON p.FLIGHT_no = f.FLIGHT_no  "
 				         + "      WHERE p.RESERVATION_START_TIME <= SYSDATE "
 				         + "        AND NVL(p.RESERVATION_END_TIME, SYSDATE + 1) >= SYSDATE "
 				         + "        AND f.UPDATED_AT IS NOT NULL " 
@@ -166,7 +168,7 @@ public class ReservationMapDao {
 		
 		try {
 			con = DBConnection.getConnection();
-			ps = con.prepareStatement(selectSql);
+			ps = con.prepareStatement(Sql);
 			rs = ps.executeQuery();
 			
 			while (rs.next()) {
@@ -206,5 +208,27 @@ public class ReservationMapDao {
 				System.out.println("예약 [" + resId + "] 님의 시간대에 P6~P9 구역 빈자리가 없어 재배정 실패!");
 			}
 		}
+	}
+//회원 타입 가져오기
+	public String getMemberType(String id) {
+		String type =null; 
+		String sql="SELECT VEHICLE_TYPE\r\n"
+				+ "from ICN_MEMBER\r\n"
+				+ "where member_id=?\r\n"
+				+ ""; 
+		try {
+			con = DBConnection.getConnection();
+			ps = con.prepareStatement(sql);
+			ps.setString(1, id);
+			rs = ps.executeQuery();
+			type = rs.getString("VEHICLE_TYPE");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}finally {
+			DBConnection.closeDB(con, ps, rs);
+
+		}
+		
+		return type;
 	}
 }

@@ -3,11 +3,9 @@
 <%@ page import="java.util.List" %>
 <%@ page import="dto.LongTermParkingDto" %>
 <%@ page import="dto.ShortTermParkingDto" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
-
-
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>  
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 
 
@@ -21,27 +19,20 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>인천공항 주차예약</title>
+<script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery-1.8.1.min.js"></script>
+<script src="${pageContext.request.contextPath}/js/common.js"></script>
 
-<style>
 
-</style>
+<form name="go">
+	<input type=hidden name="t_gubun">
+</form>
+
 
 </head>
 
 
 <body>
-<script>
-function movePage(servlet, gubun) {
-	go.t_gubun.value = gubun;
-	go.method = "post";
-	go.action = servlet;
-	go.submit();
-}
-</script>
 
-<form name="go">
-	<input type="hidden" name="t_gubun">
-</form>
 <div class="wrap">
 
 <!-- HEADER -->
@@ -49,7 +40,7 @@ function movePage(servlet, gubun) {
 
     <div class="header_inner">
 
-        <a href="#" class="logo">
+        <a href="ParkingStatus" class="logo">
             인천공항 주차예약
             <small>INCHEON AIRPORT PARKING</small>
         </a>
@@ -81,30 +72,33 @@ function movePage(servlet, gubun) {
 
             <!-- 공지 사항 -->
             <li>
-                <a href="#notice">공지 사항</a>
+                <a href="Notice">공지 사항</a>
 
                 <div class="header_dropdown">
-                    <a href="#notice">공지 사항</a>
-                    <a href="#notice">자주 하는 질문</a>
+                    <a href="Notice">공지 사항</a>
+                    <a href="faq/faq.jsp">자주 하는 질문</a>
                 </div>
             </li>
 
         </nav>
+
+
+
+
 		
         <div class="header_right">
-			<c:if test="${not empty sessionName }">
-				<a>${sessionName }님.</a>
-				<span>|</span>
-				<a href="javascript:movePage('Member','logout')">Logout</a>
-
+			<c:if test="${not empty sessionName}">
+				<a>${sessionName}님.</a>
+				<a href="javascript:movePage('Member','myinfo')">Myinfo</a>
+				<a href="javascript:movePage('Member','logout')">로그아웃</a>
 			</c:if>
-
-			<c:if test="${empty sessionName }">
-				<a href="javascript:movePage('Member','join')">Join</a>
-				<span>|</span>
-				<a href="javascript:movePage('Member','login')">Login</a>
-			</c:if>
-            
+		
+		
+			<c:if test="${empty sessionName}">
+	            <a href="Member">로그인</a>
+	            <span>|</span>
+	            <a href="javascript:movePage('Member','join')">회원가입</a>
+	        </c:if>
         </div>
 
         <button class="menu_btn" aria-label="메뉴">☰</button>
@@ -1641,7 +1635,7 @@ const parkingData={
 	     * 현재 시간 상태라면
 	     * 서버에서 최신 API 데이터를 가져온다.
 	     */
-	    fetch("parkingStatus?refresh=true")
+	    fetch("ParkingStatus?refresh=true")
 
 	        .then(function(response){
 
@@ -2892,7 +2886,7 @@ let realtimeMode=true;
 	        zone+
 	        " 주차구역 예약 페이지로 이동합니다."
 	    );
-	    location.href = "reservation/reservationOys.jsp";
+	    //location.href = "index1.html"; 파일 넘기기
 	    
 	}
 
