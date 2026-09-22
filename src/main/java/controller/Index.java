@@ -30,7 +30,7 @@ public class Index extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		request.setCharacterEncoding("utf-8");
 		RequestDispatcher rd =
-						request.getRequestDispatcher("index.jsp");
+						request.getRequestDispatcher("index3.html");
 		rd.forward(request, response);
 	
 	}

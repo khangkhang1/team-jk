@@ -36,6 +36,7 @@ import java.sql.SQLException;
  * ─────────────────────────────────────────────────────────────────────
  */
 public class DBConnection {
+
 	  
 //오라클에 접속 하기 위해 만드는 클래스 Connection 이것이 들어가야한다
 	public static Connection getConnenction(){
@@ -84,11 +85,22 @@ public class DBConnection {
 		}
 		if(null!=con) {
 			try {
+
 			con.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
+		
 		}
 		}
+		
+	try {
+		con.close();
+	} catch (SQLException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+	
+	
 		
 		}
 
@@ -100,8 +112,7 @@ public class DBConnection {
 	//   계정 문제가 아니므로 아이디를 바꿔봐야 소용없습니다.
 	//   집에서 작업해야 한다면 이 줄을 공인 IP로 바꾸면 됩니다(학원/집 양쪽 다 됨).
 	//   다만 공인 IP는 바뀔 수 있으니 평소에는 jsl-704로 두는 걸 권합니다.
-	private static final String DB_URL = "jdbc:oracle:thin:@jsl-704:1523/xe"; //학원용
-//	private static final String DB_URL = "jdbc:oracle:thin:@1.245.91.227:1523/xe"; //개인용
+	private static final String DB_URL = "jdbc:oracle:thin:@jsl-704:1523/xe";
 	private static final String DB_USER = "icn_parking";
 	private static final String DB_PASSWORD = "1234";
 
@@ -115,7 +126,11 @@ public class DBConnection {
 			e.printStackTrace();
 		}
 
-		try {
+		String db_url = "jdbc:oracle:thin:@jsl-704:1523/xe";
+		String db_user = "icn_parking";      // TODO: 팀 DB 계정 확정되면 교체
+		String db_passward = "1234";       // TODO: 팀 DB 비밀번호 확정되면 교체
+
+	try {
 			con = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
 		} catch (SQLException e) {
 			System.out.println("DB 접속 오류 (ORA-" + e.getErrorCode() + ") : " + e.getMessage());
@@ -148,6 +163,12 @@ public class DBConnection {
 				e.printStackTrace();
 			}
 		}
-	}
+
+	
+
 }
+
+	
+
+	}
 
