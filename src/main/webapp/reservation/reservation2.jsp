@@ -1257,39 +1257,28 @@ var seatKind = this.getAttribute("data-kind");
 
 // ★ 정의되지 않은 변수 에러 방지용 안전장치 (기본값 설정)
 
-var manager = (typeof isManager !== 'undefined') ? isManager : false;
+var memberType = "${memberType}"; // "장애인", "전기차", "일반" 등
 
-var userDisabled = (typeof isUserDisabled !== 'undefined') ? isUserDisabled : false;
-
-var userEv = (typeof isUserEv !== 'undefined') ? isUserEv : false;
-
-
+// 장애인 회원 여부 확인 (DB 반환값 조건에 맞게 설정)
+var isUserDisabled = (memberType === "장애인" || memberType === "D" || memberType === "장애인차");
+var isUserEv = (memberType === "전기차" || memberType === "수소차" || memberType === "E");
+var isManager = ("${sessionScope.m_level}" === "TOP"); // 관리자 권한
 // 관리자가 아닐 때만 제한 조건 체크
 
-if (!manager) {
+ 
 
-// 장애인 자리 체크
-
-if (seatKind === "D" && !userDisabled) {
-
-alert("♿ 장애인 전용 구역은 장애인 등록 회원만 선택하실 수 있습니다.");
-
-return;
-
-}
-
-
-// 전기차/수소차 자리 체크
-
-if (seatKind === "E" && !userEv) {
-
-alert("⚡ 전기차/수소차 전용 구역은 친환경차 등록 회원만 선택하실 수 있습니다.");
-
-return;
-
-}
-
-}
+if (!isManager) {
+	//장애인인지 체크
+            if (seatKind === "D" && !isUserDisabled) {
+                alert("♿ 장애인 전용 구역은 장애인 등록 회원만 선택하실 수 있습니다.");
+                return; // 선택 차단
+            }
+	//아니면 수소차인지 체크
+            if (seatKind === "E" && !isUserEv) {
+                alert("⚡ 전기차/수소차 전용 구역은 친환경차 등록 회원만 선택하실 수 있습니다.");
+                return; // 선택 차단
+            }
+        }
 
 
 // 정상 선택 로직

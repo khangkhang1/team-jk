@@ -147,7 +147,7 @@ public class ReservationMapDao {
 	 */
 	public void autoChange() {
 		// ICN_FLIGHT 테이블을 조인하여 결항된 비행기를 물고 있는 자리의 미래 예약건만 추출!
-		String selectSql = "SELECT "
+		String Sql = "SELECT "
 				         + "    r.RESERVATION_ID, "
 				         + "    r.SEAT_NO AS CANCELLED_SEAT_NO, "
 				         + "    TO_CHAR(r.RESERVATION_START_TIME, 'YYYY-MM-DD HH24:MI') AS START_TIME, "
@@ -168,7 +168,7 @@ public class ReservationMapDao {
 		
 		try {
 			con = DBConnection.getConnection();
-			ps = con.prepareStatement(selectSql);
+			ps = con.prepareStatement(Sql);
 			rs = ps.executeQuery();
 			
 			while (rs.next()) {
@@ -208,5 +208,27 @@ public class ReservationMapDao {
 				System.out.println("예약 [" + resId + "] 님의 시간대에 P6~P9 구역 빈자리가 없어 재배정 실패!");
 			}
 		}
+	}
+//회원 타입 가져오기
+	public String getMemberType(String id) {
+		String type =null; 
+		String sql="SELECT VEHICLE_TYPE\r\n"
+				+ "from ICN_MEMBER\r\n"
+				+ "where member_id=?\r\n"
+				+ ""; 
+		try {
+			con = DBConnection.getConnection();
+			ps = con.prepareStatement(sql);
+			ps.setString(1, id);
+			rs = ps.executeQuery();
+			type = rs.getString("VEHICLE_TYPE");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}finally {
+			DBConnection.closeDB(con, ps, rs);
+
+		}
+		
+		return type;
 	}
 }
