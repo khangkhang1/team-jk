@@ -36,6 +36,12 @@ public class ManagerDao {
 	private static final String TYPE_LABEL =
 		"DECODE(r.reservation_type,'1','예약형','2','자유출차형',r.reservation_type)";
 
+	// 예약 테이블이 flight_id 대신 flight_no 를 갖게 바뀌었다. 같은 편명이 날짜별로 여러 줄일 수 있어 최신 1줄만 붙인다
+	private static final String FLIGHT_JOIN =
+		  "LEFT JOIN (SELECT flight_no, airport, schedule_datetime, remark,\r\n"
+		+ "                  ROW_NUMBER() OVER (PARTITION BY flight_no ORDER BY updated_at DESC NULLS LAST, flight_id DESC) AS rn\r\n"
+		+ "           FROM icn_flight) f ON f.flight_no = r.flight_no AND f.rn = 1\r\n";
+
 	// ================================================================ 대시보드
 
 	// 상단 지표 4개. 키 : today_cnt, yesterday_cnt, parking_cnt, waiting_cnt, this_month, last_month, deposit_sum, deposit_cnt
@@ -199,10 +205,10 @@ public class ManagerDao {
 			+ "           TO_CHAR(r.reservation_end_time,'MM-DD HH24:MI')   AS end_text,\r\n"
 			+ "           TO_CHAR(r.reservation_out_time,'MM-DD HH24:MI')   AS out_text,\r\n"
 			+ "           NVL(r.reservation_deposit_amount,0) AS deposit,\r\n"
-			+ "           f.flight_no, f.remark AS flight_remark\r\n"
+			+ "           r.flight_no, f.remark AS flight_remark\r\n"
 			+ "    FROM   icn_reservation r\r\n"
 			+ "    LEFT JOIN icn_member m ON m.member_id = r.member_id\r\n"
-			+ "    LEFT JOIN icn_flight f ON f.flight_id = r.flight_id\r\n"
+			+ "    " + FLIGHT_JOIN
 			+ where
 			+ "    ORDER BY r.reservation_start_time DESC, r.reservation_id DESC\r\n"
 			+ "  ) t\r\n"
@@ -223,7 +229,7 @@ public class ManagerDao {
 			+ "       TO_CHAR(r.reservation_end_time,'YYYY-MM-DD HH24:MI')   AS end_text,\r\n"
 			+ "       TO_CHAR(r.reservation_out_time,'YYYY-MM-DD HH24:MI')   AS out_text,\r\n"
 			+ "       NVL(r.reservation_estimate_amount,0) AS estimate, NVL(r.reservation_deposit_amount,0) AS deposit,\r\n"
-			+ "       f.flight_no, f.airport, TO_CHAR(f.schedule_datetime,'MM-DD HH24:MI') AS flight_sched, f.remark AS flight_remark,\r\n"
+			+ "       r.flight_no, f.airport, TO_CHAR(f.schedule_datetime,'MM-DD HH24:MI') AS flight_sched, f.remark AS flight_remark,\r\n"
 			+ "       ROUND((SYSDATE - r.reservation_start_time) * 24, 2) AS hours_now,\r\n"
 			+ "       ROUND((NVL(r.reservation_out_time, SYSDATE) - r.reservation_start_time) * 24, 2) AS hours_used,\r\n"
 			+ "       (SELECT NVL(SUM(CASE WHEN p.payment_type = '3' THEN -p.payment_amount ELSE p.payment_amount END),0)\r\n"
@@ -233,7 +239,7 @@ public class ManagerDao {
 			+ "FROM   icn_reservation r\r\n"
 			+ "LEFT JOIN icn_member m ON m.member_id = r.member_id\r\n"
 			+ "LEFT JOIN icn_seat   s ON s.seat_no   = r.seat_no\r\n"
-			+ "LEFT JOIN icn_flight f ON f.flight_id = r.flight_id\r\n"
+			+ FLIGHT_JOIN
 			+ "WHERE  r.reservation_id = ?";
 		return selectOne(sql, reservationId);
 	}
