@@ -557,15 +557,15 @@ HEADER
 
 var dbSeatList = [
 
-<c:forEach var="dto" items="${seatList}" varStatus="status">
+<c:forEach var="mapDto" items="${seatList}" varStatus="status">
 
 {
 
-seatNo: "${dto.seatId}",
+seatNo: "${mapDto.seatId}",
 
-typeNm: "${dto.type}",
+typeNm: "${mapDto.type}",
 
-status: "${dto.isReserved}"
+status: "${mapDto.isReserved}"
 
 }<c:if test="${!status.last}">,</c:if>
 
