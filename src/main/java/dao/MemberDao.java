@@ -5,9 +5,12 @@ import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 
 import common.DBConnection;
 import dto.MemberDto;
+import dto.ReservationInfoDto;
 
 /** 회원 가입과 인증에 필요한 DB 접근을 담당한다. */
 public class MemberDao {
@@ -209,6 +212,38 @@ public class MemberDao {
 			DBConnection.closeDB(con, ps, rs);
 		}
 		return result;
+	}
+
+	public List<ReservationInfoDto> getReservationInfo(String member_id) {
+		List<ReservationInfoDto> dtos=new ArrayList<>();
+		String sql="select r.reservation_estimate_amount, r.reservation_deposit_amount\r\n"
+				+ "	r.reservation_id, r.flight_no, r.reservation_status, r.reservation_start_date, r.reservation_start_time,\r\n"
+				+ "	r.reservation_end_date, r.reservation_end_time,\r\n"
+				+ "	r.reservation_out_time, r.reservation_type, r.seat_no from icn_reservation r,icn_member m where r.member_id=m.member_id and r.member_id=?";
+		try {
+			con = DBConnection.getConnection();
+			ps = new LogPreparedStatement(con, sql);
+			ps.setString(1, member_id);
+			rs = ps.executeQuery();
+			while (rs.next()) {
+				
+				dto.setPhone_number(rs.getString("phone_number"));
+				dto.setEmail(rs.getString("email"));
+				dto.setVehicle_number(rs.getString("vehicle_number"));
+				dto.setVehicle_type(rs.getString("vehicle_type"));
+				dto.setReg_date(rs.getTimestamp("reg_date"));
+				Timestamp update_date = rs.getTimestamp("update_date");
+				Timestamp exit_date = rs.getTimestamp("exit_date");
+				dto.setUpdate_date(update_date);
+				dto.setExit_date(exit_date);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("Error: " + ps.toString());
+		} finally {
+			DBConnection.closeDB(con, ps, rs);
+		}
+		return dtos;
 	}
 
 }

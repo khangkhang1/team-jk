@@ -22,7 +22,7 @@ public class MemberExit implements CommonExecute {
 		String msg = result == 1 ? "회원 탈퇴 성공!" : "회원 탈퇴 실패!";
 		request.getSession().invalidate();
 		request.setAttribute("t_msg", msg);
-		request.setAttribute("t_url", "Index");
+		request.setAttribute("t_url", "ParkingStatus");
 
 	}
 
