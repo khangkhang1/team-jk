@@ -8,8 +8,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>문의하기 | 인천공항 주차예약</title>
 <link href="${pageContext.request.contextPath}/css/index1.css" rel="stylesheet">
-<link href="${pageContext.request.contextPath}/css/report.css" rel="stylesheet">
-<script src="${pageContext.request.contextPath}/js/report.js"></script>
+<link href="${pageContext.request.contextPath}/css/report.css?v=20260922" rel="stylesheet">
+<script src="${pageContext.request.contextPath}/js/report.js?v=20260922"></script>
 </head>
 
 <body>
