@@ -11,7 +11,7 @@ import dto.MemberDto;
 public class DummyMemberInsert {
 
 	private static final int    COUNT    = 100;
-	private static final String PASSWORD = "test1234";
+	private static final String PASSWORD = "1234";
 
 	private static final String ID_PATTERN    = "^(?=.*[a-z])[a-zA-Z0-9!@#$%^&*_.-]{4,20}$";
 	private static final String PHONE_PATTERN = "^010-?\\d{4}-?\\d{4}$";
@@ -33,6 +33,10 @@ public class DummyMemberInsert {
 	public static void main(String[] args) throws Exception {
 		if (args.length > 0 && args[0].equals("delete")) {
 			delete();
+			return;
+		}
+		if (args.length > 0 && args[0].equals("password")) {
+			resetPassword();
 			return;
 		}
 
@@ -88,6 +92,14 @@ public class DummyMemberInsert {
 			ps.setInt(2, minutes);
 			ps.setString(3, id);
 			ps.executeUpdate();
+		}
+	}
+
+	private static void resetPassword() throws Exception {
+		String sql = "UPDATE icn_member SET password = ? WHERE email LIKE '%@example.com'";
+		try (Connection con = DBConnection.getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
+			ps.setString(1, MemberDao.getdao().encryptSHA256(PASSWORD));
+			System.out.println("더미 회원 " + ps.executeUpdate() + "명 비밀번호를 " + PASSWORD + " 로 변경");
 		}
 	}
 
