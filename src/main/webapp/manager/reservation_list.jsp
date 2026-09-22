@@ -46,7 +46,7 @@
 			<table class="tbl tbl_click">
 				<thead><tr>
 					<th>No</th><th>예약번호</th><th>회원</th><th>좌석</th><th>유형</th><th>상태</th>
-					<th>이용 시작</th><th>종료 예정</th><th>실제 출차</th><th>항공편</th><th class="r">예약금</th>
+					<th>이용 시작</th><th>종료 예정</th><th>실제 출차</th><th>항공편</th><th class="r">선결제</th>
 				</tr></thead>
 				<tbody>
 				<c:forEach var="r" items="${dtos}" varStatus="s">

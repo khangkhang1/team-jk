@@ -210,19 +210,14 @@ public class Manager extends HttpServlet {
 				request.setAttribute("view", view);
 				request.setAttribute("payments", dao.getPaymentList(rid));
 
+				request.setAttribute("hourlyPrice", FeeRule.hourlyPrice(String.valueOf(view.get("lot_id"))));
 				if ("2".equals(String.valueOf(view.get("status")))) {
-					String type  = String.valueOf(view.get("reservation_type"));
-					double hours = ((Number) view.get("hours_now")).doubleValue();
-					int deposit  = ((Number) view.get("paid_deposit")).intValue();
-					int total    = FeeRule.totalFee(type, hours);
-					request.setAttribute("feeHours",   FeeRule.billableHours(hours));
-					request.setAttribute("feeRate",    FeeRule.hourlyRate(type));
-					request.setAttribute("feeTotal",   total);
-					request.setAttribute("feeDeposit", deposit);
-					request.setAttribute("feeDue",     total - deposit);
+					request.setAttribute("fee", FeeRule.settle(view));
 				}
 			}
 		}
+		request.setAttribute("unitPrice", FeeRule.UNIT_PRICE);
+		request.setAttribute("deposit", FeeRule.DEPOSIT);
 		request.setAttribute("activeMenu", "gate");
 		request.setAttribute("pageTitle", "입·출차 처리");
 	}

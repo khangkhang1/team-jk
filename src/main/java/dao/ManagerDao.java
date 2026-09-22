@@ -137,7 +137,7 @@ public class ManagerDao {
 			+ "           " + TYPE_LABEL + " AS type_label,\r\n"
 			+ "           r.reservation_status AS status, " + STATUS_LABEL + " AS status_label,\r\n"
 			+ "           TO_CHAR(r.reservation_start_time,'MM-DD HH24:MI') AS start_text,\r\n"
-			+ "           NVL(r.reservation_deposit_amount,0) AS deposit\r\n"
+			+ "           (SELECT NVL(SUM(p.payment_amount),0) FROM icn_payment p WHERE p.reservation_id = r.reservation_id AND p.payment_type = '1') AS deposit\r\n"
 			+ "    FROM   icn_reservation r\r\n"
 			+ "    LEFT JOIN icn_member m ON m.member_id = r.member_id\r\n"
 			+ "    ORDER BY r.reservation_start_time DESC, r.reservation_id DESC\r\n"
@@ -204,7 +204,7 @@ public class ManagerDao {
 			+ "           TO_CHAR(r.reservation_start_time,'MM-DD HH24:MI') AS start_text,\r\n"
 			+ "           TO_CHAR(r.reservation_end_time,'MM-DD HH24:MI')   AS end_text,\r\n"
 			+ "           TO_CHAR(r.reservation_out_time,'MM-DD HH24:MI')   AS out_text,\r\n"
-			+ "           NVL(r.reservation_deposit_amount,0) AS deposit,\r\n"
+			+ "           (SELECT NVL(SUM(p.payment_amount),0) FROM icn_payment p WHERE p.reservation_id = r.reservation_id AND p.payment_type = '1') AS deposit,\r\n"
 			+ "           r.flight_no, f.remark AS flight_remark\r\n"
 			+ "    FROM   icn_reservation r\r\n"
 			+ "    LEFT JOIN icn_member m ON m.member_id = r.member_id\r\n"
@@ -216,9 +216,10 @@ public class ManagerDao {
 		return selectRows(sql, params.toArray());
 	}
 
-	// 예약 한 건 상세 (회원·좌석·항공편·결제 합계·이용 시간까지 한 번에). 없으면 빈 Map
-	//   hours_now  : 지금 출차하면 몇 시간 썼는지 (요금 계산용)
-	//   paid_deposit : 낸 예약금 합계, paid_total : 이 예약의 결제 합계(환불 차감)
+	// 예약 한 건 상세. 없으면 빈 Map
+	//   parked_minutes : 실제 입차 시각(없으면 예약 시작)부터 출차(없으면 지금)까지 분
+	//   over_minutes   : 예약형이 종료 예정 시각을 넘긴 분
+	//   paid_prepay    : 예약 때 낸 금액(payment_type 1), paid_total : 결제 합계(환불 차감)
 	public HashMap<String, Object> getReservationView(String reservationId) {
 		String sql =
 			  "SELECT r.reservation_id, r.member_id, NVL(m.name, r.member_id) AS member_name, m.phone_number, m.vehicle_number,\r\n"
@@ -230,12 +231,15 @@ public class ManagerDao {
 			+ "       TO_CHAR(r.reservation_out_time,'YYYY-MM-DD HH24:MI')   AS out_text,\r\n"
 			+ "       NVL(r.reservation_estimate_amount,0) AS estimate, NVL(r.reservation_deposit_amount,0) AS deposit,\r\n"
 			+ "       r.flight_no, f.airport, TO_CHAR(f.schedule_datetime,'MM-DD HH24:MI') AS flight_sched, f.remark AS flight_remark,\r\n"
-			+ "       ROUND((SYSDATE - r.reservation_start_time) * 24, 2) AS hours_now,\r\n"
-			+ "       ROUND((NVL(r.reservation_out_time, SYSDATE) - r.reservation_start_time) * 24, 2) AS hours_used,\r\n"
+			+ "       TO_CHAR(r.reservation_parking_start_time,'YYYY-MM-DD HH24:MI') AS parking_start_text,\r\n"
+			+ "       NVL(r.reservation_final_amount,0) AS final_amount,\r\n"
+			+ "       ROUND((NVL(r.reservation_out_time, SYSDATE) - NVL(r.reservation_parking_start_time, r.reservation_start_time)) * 1440) AS parked_minutes,\r\n"
+			+ "       CASE WHEN r.reservation_end_time IS NULL THEN 0\r\n"
+			+ "            ELSE GREATEST(0, ROUND((NVL(r.reservation_out_time, SYSDATE) - r.reservation_end_time) * 1440)) END AS over_minutes,\r\n"
 			+ "       (SELECT NVL(SUM(CASE WHEN p.payment_type = '3' THEN -p.payment_amount ELSE p.payment_amount END),0)\r\n"
 			+ "        FROM icn_payment p WHERE p.reservation_id = r.reservation_id) AS paid_total,\r\n"
 			+ "       (SELECT NVL(SUM(p.payment_amount),0)\r\n"
-			+ "        FROM icn_payment p WHERE p.reservation_id = r.reservation_id AND p.payment_type = '1') AS paid_deposit\r\n"
+			+ "        FROM icn_payment p WHERE p.reservation_id = r.reservation_id AND p.payment_type = '1') AS paid_prepay\r\n"
 			+ "FROM   icn_reservation r\r\n"
 			+ "LEFT JOIN icn_member m ON m.member_id = r.member_id\r\n"
 			+ "LEFT JOIN icn_seat   s ON s.seat_no   = r.seat_no\r\n"
@@ -276,25 +280,26 @@ public class ManagerDao {
 		return selectRows(sql);
 	}
 
-	// 입차 : 예약완료(1) → 주차 중(2). 상태 조건을 WHERE 에 넣어서 두 번 눌러도 두 번 처리되지 않게 한다.
+	// 입차 : 예약완료(1) → 주차 중(2) + 실제 입차 시각 기록 (자율출차형 출차 요금이 이 시각부터 계산된다)
+	// 상태 조건을 WHERE 에 넣어서 두 번 눌러도 두 번 처리되지 않게 한다.
 	public int gateIn(String reservationId) {
 		String sql =
 			  "UPDATE icn_reservation\r\n"
-			+ "SET    reservation_status = '2'\r\n"
+			+ "SET    reservation_status = '2', reservation_parking_start_time = SYSDATE\r\n"
 			+ "WHERE  reservation_id = ? AND reservation_status = '1'";
 		return executeUpdate(sql, reservationId);
 	}
 
-	// 출차 + 정산 : 주차 중(2) → 출차 완료(3) + 출차 시각 기록 + 결제 한 줄(추가 결제 2 / 환불 3).
+	// 출차 + 정산 : 주차 중(2) → 출차 완료(3) + 출차 시각·최종 요금 기록 + 추가 결제 한 줄(payment_type 2).
 	// 예약 갱신과 결제 저장 중 하나만 성공하면 돈 기록이 어긋나므로 하나의 트랜잭션으로 묶는다.
-	//   amount > 0 : 추가 결제,  amount < 0 : 환불,  amount == 0 : 결제 행 없음
-	public int gateOut(String reservationId, String paymentId, int amount, String method) {
+	//   due > 0 : 추가 결제 저장,  due == 0 : 결제 행 없음 (선결제로 끝)
+	public int gateOut(String reservationId, String paymentId, int finalAmount, int due, String method) {
 		int result = 0;
 		Connection con = null;
 		PreparedStatement ps = null;
 		String sqlResv =
 			  "UPDATE icn_reservation\r\n"
-			+ "SET    reservation_status = '3', reservation_out_time = SYSDATE\r\n"
+			+ "SET    reservation_status = '3', reservation_out_time = SYSDATE, reservation_final_amount = ?\r\n"
 			+ "WHERE  reservation_id = ? AND reservation_status = '2'";
 		String sqlPay =
 			  "INSERT INTO icn_payment\r\n"
@@ -305,7 +310,8 @@ public class ManagerDao {
 			con.setAutoCommit(false);                 // 여기부터 commit 전까지는 한 묶음
 
 			ps = con.prepareStatement(sqlResv);
-			ps.setString(1, reservationId);
+			ps.setInt(1, finalAmount);
+			ps.setString(2, reservationId);
 			int updated = ps.executeUpdate();
 			ps.close();
 			if (updated != 1) {                       // 주차 중이 아니었다 → 아무것도 바꾸지 않고 종료
@@ -313,12 +319,12 @@ public class ManagerDao {
 				return 0;
 			}
 
-			if (amount != 0) {
+			if (due > 0) {
 				ps = con.prepareStatement(sqlPay);
 				ps.setString(1, paymentId);
-				ps.setInt(2, Math.abs(amount));
+				ps.setInt(2, due);
 				ps.setString(3, method);
-				ps.setString(4, amount > 0 ? "2" : "3");
+				ps.setString(4, "2");
 				ps.setString(5, reservationId);
 				if (ps.executeUpdate() != 1) {
 					con.rollback();

@@ -74,8 +74,15 @@
 					<table class="dl">
 						<tr><th>회원</th><td>${view.member_name} <span class="dim">(${view.member_id})</span> · ${view.phone_number} · 차량 ${view.vehicle_number}</td></tr>
 						<tr><th>좌석</th><td><strong>${view.seat_no}</strong> · ${view.lot_id} 구역 · ${view.seat_type_label}</td></tr>
-						<tr><th>이용 방식</th><td>${view.type_label} <span class="dim">(시간당 <fmt:formatNumber value="${view.reservation_type == '2' ? 4500 : 3000}" pattern="#,##0"/>원)</span></td></tr>
+						<tr><th>이용 방식</th><td>${view.type_label}
+							<span class="dim">
+								<c:choose>
+									<c:when test="${view.reservation_type == '2'}">(예약금 <fmt:formatNumber value="${deposit}" pattern="#,##0"/>원 + 출차 때 30분당 <fmt:formatNumber value="${unitPrice}" pattern="#,##0"/>원)</c:when>
+									<c:otherwise>(시간당 <fmt:formatNumber value="${hourlyPrice}" pattern="#,##0"/>원 · 예약 때 전액 결제 · 초과 30분당 <fmt:formatNumber value="${unitPrice}" pattern="#,##0"/>원)</c:otherwise>
+								</c:choose>
+							</span></td></tr>
 						<tr><th>이용 시간</th><td>${view.start_text} ~ <c:out value="${empty view.end_text ? '(자유출차)' : view.end_text}"/>
+							<c:if test="${not empty view.parking_start_text}"> · 실제 입차 ${view.parking_start_text}</c:if>
 							<c:if test="${not empty view.out_text}"> · <strong>실제 출차 ${view.out_text}</strong></c:if></td></tr>
 						<tr><th>항공편</th><td>
 							<c:if test="${empty view.flight_no}"><span class="dim">없음</span></c:if>
@@ -84,7 +91,7 @@
 								<span class="badge ${view.flight_remark == '결항' ? 'st4' : 'ok'}">${view.flight_remark}</span>
 							</c:if>
 						</td></tr>
-						<tr><th>결제 합계</th><td><fmt:formatNumber value="${view.paid_total}" pattern="#,##0"/>원 <span class="dim">(예약금 <fmt:formatNumber value="${view.paid_deposit}" pattern="#,##0"/>원)</span></td></tr>
+						<tr><th>결제 합계</th><td><fmt:formatNumber value="${view.paid_total}" pattern="#,##0"/>원 <span class="dim">(선결제 <fmt:formatNumber value="${view.paid_prepay}" pattern="#,##0"/>원<c:if test="${view.final_amount > 0}"> · 최종 요금 <fmt:formatNumber value="${view.final_amount}" pattern="#,##0"/>원</c:if>)</span></td></tr>
 					</table>
 
 					<h3 class="sub_h">결제 내역</h3>
@@ -123,10 +130,18 @@
 							<div class="action_box">
 								<p><strong>지금 출차하면</strong></p>
 								<table class="dl compact">
-									<tr><th>이용 시간</th><td><fmt:formatNumber value="${feeHours}" pattern="0.0"/>시간 × <fmt:formatNumber value="${feeRate}" pattern="#,##0"/>원</td></tr>
-									<tr><th>총 요금</th><td><fmt:formatNumber value="${feeTotal}" pattern="#,##0"/>원</td></tr>
-									<tr><th>예약금 차감</th><td>- <fmt:formatNumber value="${feeDeposit}" pattern="#,##0"/>원</td></tr>
-									<tr class="total"><th>${feeDue >= 0 ? '추가 결제' : '환불'}</th><td><strong><fmt:formatNumber value="${feeDue < 0 ? -feeDue : feeDue}" pattern="#,##0"/>원</strong></td></tr>
+									<c:choose>
+										<c:when test="${fee.planFree}">
+											<tr><th>주차 요금</th><td>${fee.minutes}분 → 30분 × ${fee.units} = <fmt:formatNumber value="${fee.extra}" pattern="#,##0"/>원</td></tr>
+										</c:when>
+										<c:otherwise>
+											<tr><th>예약 요금</th><td><fmt:formatNumber value="${fee.base}" pattern="#,##0"/>원</td></tr>
+											<tr><th>초과 이용</th><td>${fee.minutes}분 → 30분 × ${fee.units} = <fmt:formatNumber value="${fee.extra}" pattern="#,##0"/>원</td></tr>
+										</c:otherwise>
+									</c:choose>
+									<tr><th>총 요금</th><td><fmt:formatNumber value="${fee.total}" pattern="#,##0"/>원</td></tr>
+									<tr><th>선결제 차감</th><td>- <fmt:formatNumber value="${fee.prepaid}" pattern="#,##0"/>원</td></tr>
+									<tr class="total"><th>추가 결제</th><td><strong><fmt:formatNumber value="${fee.due}" pattern="#,##0"/>원</strong></td></tr>
 								</table>
 								<form method="post" action="${ctx}/Manager" class="adm_form" onsubmit="return confirm('${view.reservation_id} 출차 처리하고 정산하시겠습니까?')">
 									<input type="hidden" name="t_gubun" value="gateOut">

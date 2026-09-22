@@ -39,9 +39,9 @@
 				<p class="kpi_sub">지난달 <fmt:formatNumber value="${kpi.last_month}" pattern="#,##0" />원 · 출차 완료 기준</p>
 			</div>
 			<div class="kpi kpi_amber">
-				<p class="kpi_label">받아둔 예약금</p>
+				<p class="kpi_label">선결제 (출차 전)</p>
 				<p class="kpi_value"><fmt:formatNumber value="${kpi.deposit_sum}" pattern="#,##0" />원</p>
-				<p class="kpi_sub"><fmt:formatNumber value="${kpi.deposit_cnt}" pattern="#,##0" />건 · 출차 전이라 매출 아님</p>
+				<p class="kpi_sub"><fmt:formatNumber value="${kpi.deposit_cnt}" pattern="#,##0" />건 · 아직 매출 아님</p>
 			</div>
 		</section>
 
@@ -125,7 +125,7 @@
 				</c:if>
 				<c:if test="${not empty recent}">
 				<table class="tbl">
-					<thead><tr><th>예약번호</th><th>회원</th><th>좌석</th><th>유형</th><th>상태</th><th>이용 시작</th><th class="r">예약금</th></tr></thead>
+					<thead><tr><th>예약번호</th><th>회원</th><th>좌석</th><th>유형</th><th>상태</th><th>이용 시작</th><th class="r">선결제</th></tr></thead>
 					<tbody>
 					<c:forEach var="r" items="${recent}">
 						<tr>
