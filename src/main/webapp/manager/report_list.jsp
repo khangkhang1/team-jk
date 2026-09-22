@@ -8,7 +8,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>신고 내역 | 관리자 콘솔</title>
+<title>문의 내역 | 관리자 콘솔</title>
 <link href="${pageContext.request.contextPath}/css/manager.css" rel="stylesheet">
 </head>
 
@@ -23,7 +23,7 @@
 				<input type="hidden" name="t_gubun" value="report">
 				<select name="t_select">
 					<option value="title"     ${select == 'title'     ? 'selected' : ''}>제목</option>
-					<option value="member_id" ${select == 'member_id' ? 'selected' : ''}>신고자 ID</option>
+					<option value="member_id" ${select == 'member_id' ? 'selected' : ''}>작성자 ID</option>
 					<option value="seat_no"   ${select == 'seat_no'   ? 'selected' : ''}>좌석</option>
 				</select>
 				<input type="text" name="t_search" value="<c:out value='${search}'/>" placeholder="검색어">
@@ -40,7 +40,7 @@
 					<option value="2" ${type == '2' ? 'selected' : ''}>시설 파손·고장</option>
 					<option value="3" ${type == '3' ? 'selected' : ''}>차량 훼손</option>
 					<option value="4" ${type == '4' ? 'selected' : ''}>불법 주차</option>
-					<option value="5" ${type == '5' ? 'selected' : ''}>기타</option>
+					<option value="5" ${type == '5' ? 'selected' : ''}>기타 문의</option>
 				</select>
 				<button type="submit" class="adm_btn">검색</button>
 				<a href="${ctx}/Manager?t_gubun=report" class="adm_btn adm_btn_ghost">초기화</a>
@@ -51,11 +51,11 @@
 		</section>
 
 		<section class="card">
-			<c:if test="${empty dtos}"><p class="empty">조건에 맞는 신고가 없습니다.</p></c:if>
+			<c:if test="${empty dtos}"><p class="empty">조건에 맞는 문의가 없습니다.</p></c:if>
 			<c:if test="${not empty dtos}">
 			<table class="tbl tbl_click">
 				<thead><tr>
-					<th>No</th><th>상태</th><th>유형</th><th>제목</th><th>신고자</th><th>좌석</th>
+					<th>No</th><th>상태</th><th>유형</th><th>제목</th><th>작성자</th><th>좌석</th>
 					<th>접수 일시</th><th>경과</th><th>처리자</th>
 				</tr></thead>
 				<tbody>

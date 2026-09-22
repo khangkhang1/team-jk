@@ -11,7 +11,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>신고 상세 | 관리자 콘솔</title>
+<title>문의 상세 | 관리자 콘솔</title>
 <link href="${pageContext.request.contextPath}/css/manager.css" rel="stylesheet">
 <script src="${pageContext.request.contextPath}/js/manager.js"></script>
 </head>
@@ -25,10 +25,10 @@
 		<c:if test="${empty dto}">
 			<section class="card">
 				<div class="card_head">
-					<h2>신고 상세</h2>
+					<h2>문의 상세</h2>
 					<a class="card_link" href="${ctx}/${listUrl}">목록으로</a>
 				</div>
-				<p class="empty">"<c:out value="${rid}"/>" 번 신고를 찾을 수 없습니다.</p>
+				<p class="empty">"<c:out value="${rid}"/>" 번 문의를 찾을 수 없습니다.</p>
 			</section>
 		</c:if>
 
@@ -38,14 +38,14 @@
 			<%-- 왼쪽 : 신고 내용 --%>
 			<div class="card">
 				<div class="card_head">
-					<h2>신고 ${dto.report_id}번 <span class="badge rp${dto.report_status}">${dto.status_label}</span></h2>
+					<h2>문의 ${dto.report_id}번 <span class="badge rp${dto.report_status}">${dto.status_label}</span></h2>
 					<a class="card_link" href="${ctx}/${listUrl}">목록으로</a>
 				</div>
 
 				<table class="dl">
 					<tr><th>유형</th><td>${dto.type_label}</td></tr>
 					<tr><th>제목</th><td><strong><c:out value="${dto.title}"/></strong></td></tr>
-					<tr><th>신고자</th><td>
+					<tr><th>작성자</th><td>
 						${dto.member_name}
 						<c:if test="${not empty dto.member_id}"><span class="dim">(${dto.member_id})</span></c:if>
 						<c:if test="${not empty dto.phone_number}"> · ${dto.phone_number}</c:if>
@@ -76,7 +76,7 @@
 					</td></tr>
 				</table>
 
-				<h3 class="sub_h">신고 내용</h3>
+				<h3 class="sub_h">문의 내용</h3>
 				<div class="doc"><c:out value="${dto.content}"/></div>
 			</div>
 

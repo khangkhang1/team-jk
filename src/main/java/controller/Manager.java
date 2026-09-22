@@ -297,7 +297,7 @@ public class Manager extends HttpServlet {
 		request.setAttribute("nowPage", current_page);
 		request.setAttribute("startNo", start);
 		request.setAttribute("activeMenu", "report");
-		request.setAttribute("pageTitle", "신고 내역");
+		request.setAttribute("pageTitle", "문의 내역");
 	}
 
 	private void reportView(HttpServletRequest request) {
@@ -310,7 +310,7 @@ public class Manager extends HttpServlet {
 		request.setAttribute("rid", rid);
 		request.setAttribute("listUrl", listQuery(request));
 		request.setAttribute("activeMenu", "report");
-		request.setAttribute("pageTitle", "신고 상세");
+		request.setAttribute("pageTitle", "문의 상세");
 	}
 
 	// 상세에서 "목록으로" 를 눌렀을 때 보던 검색 조건·페이지로 돌아가게 주소를 만들어 둔다.

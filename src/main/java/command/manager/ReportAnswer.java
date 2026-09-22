@@ -48,7 +48,7 @@ public class ReportAnswer implements CommonExecute {
 		int result = new ReportDao().updateAnswer(Integer.parseInt(reportId), status, answer, adminId);
 
 		String msg = result == 1
-				? "신고 " + reportId + "번을 '" + statusLabel(status) + "' 로 처리했습니다."
+				? "문의 " + reportId + "번을 '" + statusLabel(status) + "' 로 처리했습니다."
 				: "저장하지 못했습니다. 신고번호를 확인하세요.";
 		request.setAttribute("t_msg", msg);
 		request.setAttribute("t_url", viewUrl);

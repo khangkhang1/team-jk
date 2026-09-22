@@ -34,7 +34,7 @@
 			<i>▣</i> 좌석·구역 현황
 		</a>
 		<a href="${ctx}/Manager?t_gubun=report" class="${activeMenu == 'report' ? 'on' : ''}">
-			<i>⚑</i> 신고 내역
+			<i>⚑</i> 문의 내역
 			<%-- 아직 안 끝난 신고(접수 + 처리 중) 건수. 다른 화면을 보고 있어도 밀린 게 보이게 --%>
 			<c:if test="${reportWaiting > 0}"><em class="nav_new">${reportWaiting}</em></c:if>
 		</a>
