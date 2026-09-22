@@ -40,6 +40,12 @@ public class NoticeDto {
 		this.reg_date = reg_date;
 	}
 
+//이전글 다음글
+	public NoticeDto(String no, String title) {
+		this.no = no;
+		this.title = title;
+	}
+
 
 	public String getNo() {
         return no;

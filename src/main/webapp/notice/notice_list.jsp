@@ -35,6 +35,14 @@
 		
 	}
 	
+	function goPageList(pageNum){
+		search.t_nowPage.value = pageNum;
+		search.method="post";
+		search.action="Notice";
+		search.submit();
+		
+	}
+	
 	
 
 </script>
@@ -130,25 +138,23 @@
                         <!-- 공지사항 상단 고정 예시 -->
                         <c:choose>
                         <c:when test="${dto.getImportant() eq 'Y'}">
-                        <tr class="noticeFixed">
-
-                            <td>
-                               <span class="noticeBadge">공지</span>
-                            </td>
+                    	   	 <tr class="noticeFixed">
                         </c:when>
                         
-                        
                         <c:otherwise>
-                        <tr>
-
-                            <td>${seq}</td>
-							<c:set var="seq" value="${seq - 1}"></c:set>
+                     	     <tr>
                         </c:otherwise>
                             
                             
                         </c:choose>
-
+                        	
+							<td>${seq}</td>
+							<c:set var="seq" value="${seq - 1}"></c:set>
+							
                             <td class="noticeSubjectText">
+                            	<c:if test="${dto.getImportant() eq 'Y'}">
+                        			<span class="noticeBadge">공지</span>
+								</c:if>
                                 <a href="javascript:goView('${dto.getNo()}')">
                                     ${dto.getTitle()}
                                 </a>

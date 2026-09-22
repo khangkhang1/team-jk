@@ -198,7 +198,8 @@ a{
 }
 
 .listBtn,
-.editBtn{
+.editBtn,
+.deleteBtn{
     display:inline-block;
     min-width:100px;
     padding:13px 25px;
@@ -209,6 +210,9 @@ a{
     cursor:pointer;
     transition:background 0.2s,border-color 0.2s;
 }
+
+
+
 
 /* 목록 버튼 */
 .listBtn{
@@ -225,6 +229,13 @@ a{
 .editBtn{
     border:1px solid #2563eb;
     background:#2563eb;
+    color:#fff;
+}
+
+/* 삭제 버튼 */
+.deleteBtn{
+	border:1px solid #ef4444;
+    background:#ef4444;
     color:#fff;
 }
 

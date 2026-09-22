@@ -21,6 +21,25 @@
 		noti.submit();
 		
 	}
+	
+	function goDelete(){
+		if(confirm("삭제 하시겠습니까?")){
+			noti.t_gubun.value="noticeDelete";
+			noti.method="post";
+			noti.action="Notice";
+			noti.submit();
+	   }
+	}
+	
+	function goView(no){
+	      noti.t_gubun.value="noticeView";
+	      noti.t_no.value=no;
+	      noti.method="post";
+	      noti.action="Notice";
+	      noti.submit();
+	   }
+	
+	
     
     </script>
     
@@ -135,27 +154,41 @@
         <div class="noticeNavigation">
 
             <div class="navRow">
-
+			<c:if test="${not empty preDto.getNo()}">
                 <span class="navLabel">
                     이전글
                 </span>
 
-                <a href="#" class="navTitle">
-                    주차예약 시스템 점검 안내
+                <a href="javascript:goView('${preDto.getNo()}')" class="navTitle">
+                    <c:choose>
+                        <c:when test="${fn:length(preDto.getTitle()) > 10}">
+                           ${fn:substring(preDto.getTitle(),0,10)}...
+                        </c:when>
+                        <c:otherwise>
+                           ${preDto.getTitle()}
+                        </c:otherwise>
+                     </c:choose>
                 </a>
-
+			</c:if>
             </div>
 
             <div class="navRow">
-
+			<c:if test="${not empty nextDto.getNo()}">
                 <span class="navLabel">
                     다음글
                 </span>
 
-                <a href="#" class="navTitle">
-                    주차장 이용 요금 안내
+                <a href="javascript:goView('${nextDto.getNo()}')" class="navTitle">
+                    <c:choose>
+                        <c:when test="${fn:length(nextDto.getTitle()) > 10}">
+                           ${fn:substring(nextDto.getTitle(),0,10)}...
+                        </c:when>
+                        <c:otherwise>
+                           ${nextDto.getTitle()}
+                        </c:otherwise>
+                     </c:choose>
                 </a>
-
+			</c:if>
             </div>
 
         </div>
@@ -166,11 +199,14 @@
             <a href="Notice" class="listBtn">
                 목록
             </a>
-
-            <a href="javascript:goUpdateForm('noticeUpdateForm')" class="editBtn">
-                수정
-            </a>
-
+			<c:if  test="${sessionLevel eq 'top'}">
+	            <a href="javascript:goUpdateForm('noticeUpdateForm')" class="editBtn">
+	                수정
+	            </a>
+	            <a href="javascript:goDelete('noticeDelete')" class="deleteBtn">
+	                삭제
+	            </a>
+			</c:if>
         </div>
 
     </main>

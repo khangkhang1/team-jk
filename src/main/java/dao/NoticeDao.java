@@ -213,6 +213,73 @@ public class NoticeDao {
 		
 		return dto;
 	}
+
+
+
+
+	//게시글 삭제
+	public int noticeDelete(String no) {
+		int result = 0;
+		String sql = "delete from icn_notice\r\n"
+				+ "			where no = '"+no+"'";
+		
+		try {
+            con = DBConnection.getConnection();
+            ps = con.prepareStatement(sql);
+            result = ps.executeUpdate();
+         }catch(Exception e){
+            e.printStackTrace();
+            System.out.println("noticeDelete 오류:"+sql);
+         }finally {
+            DBConnection.closeDB(con, ps, rs);
+         }
+		
+		return result;
+	}
+
+
+
+
+	//이전글,다음글 (이전글 '+' 다음글 '-')
+		public NoticeDto getPreNextNotice(String no, String gubun) {
+			NoticeDto dto = null;
+			String sql = "select n1.*, n2.no, n2.title from(\r\n"
+					+ "select rnum "+gubun+" 1 as rnum\r\n"
+					+ "from(\r\n"
+					+ "    select rownum rnum, n.no\r\n"
+					+ "    from(\r\n"
+					+ "        select no\r\n"
+					+ "        from icn_notice\r\n"
+					+ "        order by important, no desc) n \r\n"
+					+ ") where no ='"+no+"') n1,\r\n"
+					+ "(select rownum rnum, no, title\r\n"
+					+ "    from(\r\n"
+					+ "        select no, title\r\n"
+					+ "        from icn_notice\r\n"
+					+ "        order by important, no desc)) n2\r\n"
+					+ "where n1.rnum = n2.rnum        \r\n"
+					+ "";
+			
+			try {
+				con = DBConnection.getConnection();
+				ps  = con.prepareStatement(sql);
+				rs  = ps.executeQuery();	
+				if(rs.next()){
+					String title = rs.getString("title"); 
+					String n_no = rs.getString("no"); 
+					
+					dto = new NoticeDto(n_no, title);
+				}
+			}catch(Exception e) {
+				System.out.println("getPreNextNotice() 오류:"+sql);
+				e.printStackTrace();
+			}finally {
+				DBConnection.closeDB(con, ps, rs);
+			}
+			
+			return dto;
+		
+	}
 	
 	
 	
