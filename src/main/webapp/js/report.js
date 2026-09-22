@@ -1,10 +1,7 @@
 function checkReportForm(form) {
-	var checked = false;
-	for (var i = 0; i < form.t_report_type.length; i++) {
-		if (form.t_report_type[i].checked) checked = true;
-	}
-	if (!checked) {
+	if (form.t_report_type.value === "") {
 		alert("문의 종류를 선택하세요.");
+		form.t_report_type.focus();
 		return false;
 	}
 	if (trim(form.t_title.value) === "") {

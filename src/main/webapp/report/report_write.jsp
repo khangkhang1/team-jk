@@ -37,15 +37,12 @@
 					<tr>
 						<th>문의 종류 <em>*</em></th>
 						<td>
-							<div class="rp_types">
-								<c:forEach var="t" items="${types}" varStatus="s">
-									<label class="rp_type">
-										<input type="radio" name="t_report_type" value="${t.key}"
-											${type == t.key || (empty type && s.last) ? 'checked' : ''}>
-										<span>${t.value}</span>
-									</label>
+							<select name="t_report_type" class="rp_select">
+								<option value="">문의 종류를 선택하세요</option>
+								<c:forEach var="t" items="${types}">
+									<option value="${t.key}" ${type == t.key ? 'selected' : ''}>${t.value}</option>
 								</c:forEach>
-							</div>
+							</select>
 						</td>
 					</tr>
 					<tr>
