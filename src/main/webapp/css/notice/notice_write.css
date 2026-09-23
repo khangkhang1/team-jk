@@ -1,0 +1,296 @@
+
+/* 기본 초기화 */
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family:"Noto Sans KR","Malgun Gothic",sans-serif;
+    color:#222;
+    background:#f5f7fa;
+}
+
+a{
+    color:inherit;
+    text-decoration:none;
+}
+
+button,
+input,
+textarea{
+    font:inherit;
+}
+
+/* 공지사항 작성 전체 */
+.noticeWrite{
+    width:90%;
+    max-width:1100px;
+    margin:0 auto;
+    padding:70px 0 100px;
+}
+
+/* 제목 영역 */
+.noticeTitle{
+    text-align:center;
+    margin-bottom:45px;
+}
+
+.noticeTitle h1{
+    font-size:36px;
+    font-weight:700;
+    color:#1e293b;
+    margin-bottom:15px;
+}
+
+.noticeTitle p{
+    font-size:16px;
+    color:#64748b;
+}
+
+/* 작성 폼 */
+.writeTable{
+    background:#fff;
+    border-top:3px solid #fff;
+    border-bottom:1px solid #dbe2ea;
+    box-shadow:0 4px 15px rgba(15,23,42,0.04);
+}
+
+/* 입력 행 */
+.writeRow{
+    display:flex;
+    align-items:center;
+    min-height:75px;
+    border-bottom:1px solid #e5e7eb;
+}
+
+.writeRow:last-child{
+    border-bottom:none;
+}
+
+/* 항목명 */
+.writeRow > label:first-child{
+    flex:0 0 150px;
+    align-self:stretch;
+    display:flex;
+    align-items:center;
+    padding:20px 25px;
+    background:#f8fafc;
+    border-right:1px solid #e5e7eb;
+    font-size:15px;
+    font-weight:600;
+    color:#334155;
+}
+
+/* 입력 영역 */
+.writeRow > input[type="text"]{
+    flex:1;
+    min-width:0;
+    height:45px;
+    margin:0 25px;
+    padding:0 15px;
+    border:1px solid #d1d5db;
+    border-radius:5px;
+    outline:none;
+    font-size:14px;
+    color:#334155;
+    transition:border-color 0.2s;
+}
+
+.writeRow > input[type="text"]:focus{
+    border-color:#2563eb;
+}
+
+.writeRow > input[readonly]{
+    background:#f8fafc;
+    color:#64748b;
+}
+
+/* 중요공지 체크박스 */
+.checkArea{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    margin:0 25px;
+}
+
+.checkArea input[type="checkbox"]{
+    width:18px;
+    height:18px;
+    cursor:pointer;
+    accent-color:#2563eb;
+}
+
+.checkLabel{
+    font-size:14px;
+    color:#475569;
+    cursor:pointer;
+}
+
+/* 내용 영역 */
+.contentRow{
+    align-items:stretch;
+}
+
+.contentRow > label:first-child{
+    align-items:flex-start;
+    padding-top:25px;
+}
+
+.contentRow textarea{
+    flex:1;
+    min-width:0;
+    min-height:280px;
+    margin:20px 25px;
+    padding:15px;
+    border:1px solid #d1d5db;
+    border-radius:5px;
+    outline:none;
+    resize:vertical;
+    font-size:14px;
+    line-height:1.7;
+    color:#334155;
+}
+
+.contentRow textarea:focus{
+    border-color:#2563eb;
+}
+
+/* 첨부파일 영역 */
+.fileArea{
+    flex:1;
+    min-width:0;
+    margin:0 25px;
+    padding:15px 0;
+}
+
+.fileArea input[type="file"]{
+    width:100%;
+    font-size:14px;
+    color:#475569;
+    cursor:pointer;
+}
+
+.fileInfo{
+    margin-top:8px;
+    font-size:12px;
+    color:#94a3b8;
+    line-height:1.5;
+}
+
+/* 버튼 영역 */
+.writeBtn{
+    display:flex;
+    justify-content:flex-end;
+    align-items:center;
+    gap:10px;
+    margin-top:30px;
+}
+
+/* 취소 버튼 */
+.cancelBtn,
+.submitBtn{
+    display:inline-block;
+    min-width:100px;
+    padding:13px 25px;
+    border-radius:5px;
+    font-size:14px;
+    font-weight:600;
+    text-align:center;
+    cursor:pointer;
+    transition:background 0.2s,border-color 0.2s;
+}
+
+.cancelBtn{
+    border:1px solid #cbd5e1;
+    background:#fff;
+    color:#475569;
+}
+
+.cancelBtn:hover{
+    background:#f1f5f9;
+}
+
+/* 등록 버튼 */
+.submitBtn{
+    border:1px solid #2563eb;
+    background:#2563eb;
+    color:#fff;
+}
+
+.submitBtn:hover{
+    background:#1d4ed8;
+    border-color:#1d4ed8;
+}
+
+/* 반응형 */
+@media screen and (max-width:768px){
+
+    .noticeWrite{
+        width:92%;
+        padding:45px 0 70px;
+    }
+
+    .noticeTitle{
+        margin-bottom:30px;
+    }
+
+    .noticeTitle h1{
+        font-size:28px;
+    }
+
+    .noticeTitle p{
+        font-size:14px;
+    }
+
+    .writeRow{
+        display:block;
+        padding:0;
+    }
+
+    .writeRow > label:first-child{
+        display:block;
+        padding:14px 18px;
+        border-right:none;
+        border-bottom:1px solid #e5e7eb;
+        font-size:14px;
+    }
+
+    .writeRow > input[type="text"]{
+        display:block;
+        width:calc(100% - 36px);
+        margin:15px 18px;
+    }
+
+    .checkArea{
+        margin:15px 18px;
+    }
+
+    .contentRow textarea{
+        display:block;
+        width:calc(100% - 36px);
+        margin:15px 18px;
+        min-height:220px;
+    }
+
+    .contentRow > label:first-child{
+        padding-top:14px;
+    }
+
+    .fileArea{
+        margin:0 18px;
+        padding:15px 0;
+    }
+
+    .writeBtn{
+        margin-top:25px;
+    }
+
+    .cancelBtn,
+    .submitBtn{
+        min-width:85px;
+        padding:12px 18px;
+    }
+
+}
