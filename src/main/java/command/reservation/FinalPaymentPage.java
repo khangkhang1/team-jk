@@ -58,6 +58,7 @@ public class FinalPaymentPage implements CommonExecute {
             request.setAttribute("paymentTime", paymentTime);
             request.setAttribute("totalPrice", totalPrice);
             request.setAttribute("t_url", "Reservation");
+            request.setAttribute("t_gubun", "finalPayment");
 
         } catch (Exception e) {
             e.printStackTrace();
