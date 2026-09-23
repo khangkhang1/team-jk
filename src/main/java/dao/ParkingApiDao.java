@@ -1,5 +1,7 @@
 package dao;
 
+
+import common.SecretConfig;
 import java.io.StringReader;
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -28,7 +30,8 @@ public class ParkingApiDao {
 	// 공공데이터포털(data.go.kr)에서 활용신청 후 발급받은 서비스키(Encoding 버전).
 	// 주의: 이 키는 이미 URL 인코딩된 값이라 그대로 붙여야 함. URLEncoder로 한 번 더 인코딩하면
 	// "이중 인코딩"이 되어 401(Unauthorized)/Forbidden 에러가 난다 - data.go.kr에서 흔한 실수.
-	private static final String SERVICE_KEY = "8A6C6Mp2ylWbir47yE6IJtBplIUUhhvbxRr3CbDEGe4URfJZBRmcEoT5SdFTxhrK%2Bdk8bO1MQY%2BOV7guUPsrDw%3D%3D";
+	// 서비스키는 secret.properties 의 api.serviceKey 에서 읽는다 (저장소가 public 이라 소스에 두지 않음).
+	private static final String SERVICE_KEY = SecretConfig.get("api.serviceKey");
 
 	// 주차면 현황 조회. terminalId는 현재 "T1"만 제공됨(API 문서 기준, 2터미널 없음).
 	public List<ParkingSeatDto> getParkingStatus(String terminalId, int numOfRows, int pageNo) {

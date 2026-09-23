@@ -27,6 +27,9 @@
 	<input type=hidden name="t_gubun">
 </form>
 
+<style>
+
+</style>
 
 </head>
 
@@ -76,7 +79,8 @@
 
                 <div class="header_dropdown">
                     <a href="Notice">공지 사항</a>
-                    <a href="faq/faq.jsp">자주 하는 질문</a>
+                    <a href="${pageContext.request.contextPath}/Faq">자주 하는 질문</a>
+                    <a href="${pageContext.request.contextPath}/Report">문의하기</a>
                 </div>
             </li>
 
@@ -87,6 +91,11 @@
 
 		
         <div class="header_right">
+			<%-- [임시] 관리자(sessionLevel = top)로 로그인했을 때만 보이는 관리자 콘솔 버튼 (common_header.jsp 와 동일) --%>
+			<c:if test="${sessionLevel eq 'top'}">
+				<a href="${pageContext.request.contextPath}/Manager" class="header_admin">관리자 콘솔</a>
+			</c:if>
+
 			<c:if test="${not empty sessionName}">
 				<a>${sessionName}님.</a>
 				<a href="javascript:movePage('Member','myinfo')">Myinfo</a>
