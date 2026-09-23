@@ -2888,6 +2888,11 @@ let realtimeMode=true;
 	    );
 	    //location.href = "index1.html"; 파일 넘기기
 	    
+	    go.t_gubun.value = "ReservationMap";
+	    go.method = "post";
+	    go.action = "Reservation";
+	    go.submit();
+	    
 	    
 	    
 	}
