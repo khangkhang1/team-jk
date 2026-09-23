@@ -37,7 +37,7 @@ public class MemberDao {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			System.out.println("Error: " + ps.toString());
+			System.out.println("Error: " + (ps == null ? "(prepareStatement 이전 단계 실패 - DB 접속을 먼저 확인) " + sql : ps.toString()));
 		} finally {
 			DBConnection.closeDB(con, ps, rs);
 		}
@@ -71,7 +71,7 @@ public class MemberDao {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			System.out.println("Error: " + ps.toString());
+			System.out.println("Error: " + (ps == null ? "(prepareStatement 이전 단계 실패 - DB 접속을 먼저 확인) " + sql : ps.toString()));
 		} finally {
 			DBConnection.closeDB(con, ps, rs);
 		}
@@ -92,7 +92,7 @@ public class MemberDao {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			System.out.println("Error: " + ps.toString());
+			System.out.println("Error: " + (ps == null ? "(prepareStatement 이전 단계 실패 - DB 접속을 먼저 확인) " + sql : ps.toString()));
 		} finally {
 			DBConnection.closeDB(con, ps, rs);
 		}
@@ -124,7 +124,7 @@ public class MemberDao {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			System.out.println("Error: " + ps.toString());
+			System.out.println("Error: " + (ps == null ? "(prepareStatement 이전 단계 실패 - DB 접속을 먼저 확인) " + sql : ps.toString()));
 		} finally {
 			DBConnection.closeDB(con, ps, rs);
 		}
@@ -142,7 +142,7 @@ public class MemberDao {
 			result = ps.executeUpdate();
 		} catch (Exception e) {
 			e.printStackTrace();
-			System.out.println("Error: " + ps.toString());
+			System.out.println("Error: " + (ps == null ? "(prepareStatement 이전 단계 실패 - DB 접속을 먼저 확인) " + sql : ps.toString()));
 		} finally {
 			DBConnection.closeDB(con, ps, rs);
 		}
@@ -165,7 +165,7 @@ public class MemberDao {
 			result = ps.executeUpdate();
 		} catch (Exception e) {
 			e.printStackTrace();
-			System.out.println("Error: " + ps.toString());
+			System.out.println("Error: " + (ps == null ? "(prepareStatement 이전 단계 실패 - DB 접속을 먼저 확인) " + sql : ps.toString()));
 		} finally {
 			DBConnection.closeDB(con, ps, rs);
 		}
@@ -187,7 +187,7 @@ public class MemberDao {
 			result=ps.executeUpdate();
 		}catch(Exception e) {
 			e.printStackTrace();
-			System.out.println("Error: "+ps.toString());
+			System.out.println("Error: " + (ps == null ? "(prepareStatement 이전 단계 실패 - DB 접속을 먼저 확인) " + sql : ps.toString()));
 		}finally {
 			DBConnection.closeDB(con, ps, rs);
 		}
@@ -204,7 +204,7 @@ public class MemberDao {
 			result=ps.executeUpdate();
 		}catch(Exception e) {
 			e.printStackTrace();
-			System.out.println("Error: "+ps.toString());
+			System.out.println("Error: " + (ps == null ? "(prepareStatement 이전 단계 실패 - DB 접속을 먼저 확인) " + sql : ps.toString()));
 		}finally {
 			DBConnection.closeDB(con, ps, rs);
 		}
