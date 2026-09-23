@@ -2888,6 +2888,8 @@ let realtimeMode=true;
 	    );
 	    //location.href = "index1.html"; 파일 넘기기
 	    
+	    
+	    
 	}
 
 
