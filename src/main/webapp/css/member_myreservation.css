@@ -1,0 +1,68 @@
+/* 공통 회원 레이아웃은 member_myinfo.css와 member_menu.css를 사용합니다. */
+.reservation_list_head {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 16px;
+	margin-bottom: 16px;
+}
+.reservation_list_head h2 { font-size: 20px; }
+.reservation_list_head > span { font-size: 13px; color: #758193; }
+.reservation_list { display: grid; gap: 14px; }
+.reservation_item {
+	background: #fff;
+	border: 1px solid #e1e7ef;
+	border-radius: 14px;
+	overflow: hidden;
+}
+.reservation_item[open] { border-color: #a9c9f2; }
+.reservation_summary {
+	display: flex;
+	align-items: center;
+	gap: 18px;
+	padding: 24px;
+	list-style: none;
+	cursor: pointer;
+}
+.reservation_summary::-webkit-details-marker { display: none; }
+.reservation_summary:hover { background: #f8faff; }
+.reservation_summary:focus-visible { outline: 2px solid #1769d2; outline-offset: -4px; }
+.reservation_status {
+	flex-shrink: 0;
+	padding: 7px 12px;
+	border-radius: 20px;
+	background: #edf4ff;
+	color: #1769d2;
+	font-size: 12px;
+	font-weight: 700;
+}
+.reservation_status.is_using { background: #eaf8f0; color: #218253; }
+.reservation_status.is_done { background: #f0f2f5; color: #667181; }
+.reservation_status.is_cancelled { background: #fff0f0; color: #c34d4d; }
+.reservation_overview { display: grid; gap: 8px; flex: 1; min-width: 0; }
+.reservation_overview strong { font-size: 16px; overflow-wrap: anywhere; }
+.reservation_overview > span { font-size: 13px; color: #758193; }
+.reservation_number { font-size: 12px; color: #758193; overflow-wrap: anywhere; }
+.reservation_arrow {
+	width: 9px;
+	height: 9px;
+	flex-shrink: 0;
+	border-right: 2px solid #758193;
+	border-bottom: 2px solid #758193;
+	transform: rotate(45deg);
+}
+.reservation_item[open] .reservation_arrow { transform: rotate(225deg); }
+.reservation_detail { padding: 24px; border-top: 1px solid #edf0f5; }
+.reservation_info { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px 32px; }
+.reservation_info > div { display: grid; grid-template-columns: 90px minmax(0, 1fr); gap: 12px; }
+.reservation_info dt { font-size: 13px; color: #758193; }
+.reservation_info dd { margin: 0; font-size: 14px; font-weight: 500; overflow-wrap: anywhere; }
+.reservation_placeholder { font-size: 14px; color: #758193; }
+.reservation_empty { padding: 60px 20px; text-align: center; background: #fff; border: 1px solid #e1e7ef; border-radius: 14px; color: #758193; }
+@media (max-width: 768px) {
+	.reservation_summary { flex-wrap: wrap; padding: 20px; gap: 12px; }
+	.reservation_overview { flex-basis: calc(100% - 110px); }
+	.reservation_number { flex: 1; }
+	.reservation_detail { padding: 20px; }
+	.reservation_info { grid-template-columns: 1fr; gap: 18px; }
+}

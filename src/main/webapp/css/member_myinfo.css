@@ -180,21 +180,26 @@ ul {
    MAIN
 ========================================================= */
 .main {
-	min-height: 720px;
+    min-height: 720px;
 }
 
-/* =========================================================
-   JOIN SECTION
-========================================================= */
-.join_section {
-	padding: 70px 20px 90px;
+.member_section {
+    width: 100%;
 }
 
-.join_container {
-	width: 100%;
-	max-width: 760px;
-	margin: 0 auto;
+.member_container {
+    width: 1100px;
+    margin: 50px auto;
+
+    display: flex;
+    gap: 50px;
 }
+
+.member_right {
+    flex: 1;
+}
+
+
 
 /* =========================================================
    PAGE TITLE
@@ -613,14 +618,14 @@ ul {
 	font-weight: 700;
 }
 
-.cancel_btn {
+.withdraw_btn {
 	width: 140px;
 	border: 1px solid #d7dee7;
 	background: #fff;
 	color: #687585;
 }
 
-.cancel_btn:hover {
+.withdraw_btn:hover {
 	border-color: #aeb8c5;
 	background: #f7f9fc;
 }

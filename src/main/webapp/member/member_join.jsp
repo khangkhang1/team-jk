@@ -9,9 +9,13 @@
 
 <title>회원가입 | 인천공항 주차예약</title>
 
-<script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery-1.8.1.min.js"></script>
+<script type="text/javascript"
+	src="${pageContext.request.contextPath}/js/jquery-1.8.1.min.js"></script>
 <script src="${pageContext.request.contextPath}/js/member.js"></script>
-<link rel="stylesheet" href="${pageContext.request.contextPath}/css/member_join.css">
+<link rel="stylesheet"
+	href="${pageContext.request.contextPath}/css/member_join.css">
+<link rel="stylesheet"
+	href="${pageContext.request.contextPath}/css/member_menu.css">
 
 </head>
 
@@ -29,7 +33,13 @@
 
 			<section class="join_section">
 
-				<div class="join_container">
+				<div class="member_page_layout">
+
+					<aside class="member_menu_sidebar">
+						<%@ include file="member_menu.jsp" %>
+					</aside>
+
+					<div class="join_container">
 
 					<!-- PAGE TITLE -->
 					<div class="page_title">
@@ -64,25 +74,29 @@
 
 							<!-- 아이디 -->
 							<div class="form_row">
-
 								<label for="member_id"> 아이디 <em>*</em>
 								</label>
 
 								<div class="input_area">
-
 									<div class="input_button">
+										<input type="text" id="member_id" name="t_id" maxlength="20"
+											placeholder="아이디를 입력해주세요" oninput="setEmpty()"> <input
+											type="button" onclick="checkId()" id="idCheckBtn"
+											value="중복확인">
 
-										<input type="text" id="member_id" oninput="setEmpty()"
-											name="t_id" maxlength="20" placeholder="아이디를 입력해주세요">
-										<input type="button" onclick="checkId()" value="중복확인"
-											id="idCheckBtn"> <input type="text" name="t_id_check">
 									</div>
 
-									<span class="form_hint"> 영문 소문자, 숫자를 포함하여 4~20자로 입력해주세요.
+									<!-- 중복확인 결과 -->
+									<div id="idCheckResult" class="verify_result">아이디 중복확인이
+										필요합니다.</div>
+
+									<span class="form_hint"> 영문 소문자를 최소 1자 이상 포함하여 4~20자로
+										입력해주세요.<br> 특수문자는 !@#$%^&*_-만 가능합니다.
 									</span>
 
+									<!-- 서버/JS에서 상태 저장용 -->
+									<input type="hidden" name="t_id_check" id="id_check">
 								</div>
-
 							</div>
 
 
@@ -96,7 +110,8 @@
 
 									<input type="password" id="password" name="t_password"
 										maxlength="70" placeholder="비밀번호를 입력해주세요"> <span
-										class="form_hint"> 안전한 비밀번호를 입력해주세요. </span>
+										class="form_hint">6~16자로 입력해주세요.특수문자는 !@#$%^&*_+?.-만
+										사용할 수 있습니다.</span>
 
 								</div>
 
@@ -154,17 +169,33 @@
 
 							<!-- 이메일 -->
 							<div class="form_row">
-
 								<label for="email"> 이메일 <em>*</em>
 								</label>
 
-								<div class="input_area">
+								<div class="input_area email_verify">
 
-									<input type="email" id="email" name="t_email" maxlength="100"
-										placeholder="이메일을 입력해주세요">
+									<!-- 이메일 입력 -->
+									<div class="verify_input_row">
+										<input type="email" id="email" name="t_email" maxlength="100"
+											placeholder="이메일을 입력해주세요"> <input type="button"
+											id="sendEmailBtn" onclick="sendEmailCode()" value="인증번호 발송">
+									</div>
+
+									<!-- 인증번호 입력 -->
+									<div class="verify_code_row">
+										<input type="text" name="t_email_code" id="email_code"
+											maxlength="6" placeholder="인증번호 6자리 입력"> <input
+											type="button" id="emailCheckBtn" onclick="checkEmailCode()"
+											value="인증 확인">
+									</div>
+
+									<!-- 인증 상태 -->
+									<div id="emailVerifyResult" class="verify_result">이메일 인증이
+										필요합니다.</div>
+
+									<span class="form_hint"> 이메일 인증을 완료해야 회원가입이 가능합니다. </span>
 
 								</div>
-
 							</div>
 
 
@@ -207,6 +238,7 @@
 
 
 							<!-- 약관 -->
+							<!-- 
 							<div class="agree_area">
 
 								<div class="agree_all">
@@ -241,7 +273,7 @@
 								</div>
 
 							</div>
-
+							-->
 
 							<!-- BUTTON -->
 							<div class="form_buttons">
@@ -268,6 +300,7 @@
 
 					</div>
 
+					</div>
 				</div>
 
 			</section>
@@ -315,8 +348,6 @@
 
 	</div>
 
-
-	<script src="${pageContext.request.contextPath}/js/member.js"></script>
 
 </body>
 

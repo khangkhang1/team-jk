@@ -15,7 +15,7 @@ public class MemberMyInfo implements CommonExecute {
 		String id= (String)request.getSession().getAttribute("sessionId");
 		
 		MemberDto dto = dao.getMemberInfo(id);
-		request.setAttribute("t_dto", dto);
+		request.setAttribute("dto", dto);
 	}
 
 }
