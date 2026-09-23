@@ -39,7 +39,7 @@ public class ReportSave implements CommonExecute {
 		request.setAttribute("t_msg", result == 1
 				? "문의가 접수되었습니다. 담당자가 확인 후 연락드리겠습니다."
 				: "접수하지 못했습니다. 잠시 후 다시 시도해 주세요.");
-		request.setAttribute("t_url", result == 1 ? "Index" : "Report");
+		request.setAttribute("t_url", result == 1 ? "ParkingStatus" : "Report");
 	}
 
 	private String check(String type, String title, String content, String seatNo, String reservationId) {

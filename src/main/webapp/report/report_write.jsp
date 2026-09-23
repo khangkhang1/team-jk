@@ -74,7 +74,7 @@
 
 				<div class="rp_btns">
 					<button type="submit" class="rp_btn rp_btn_primary">문의 접수</button>
-					<a href="${pageContext.request.contextPath}/Index" class="rp_btn">취소</a>
+					<a href="${pageContext.request.contextPath}/ParkingStatus" class="rp_btn">취소</a>
 				</div>
 			</form>
 

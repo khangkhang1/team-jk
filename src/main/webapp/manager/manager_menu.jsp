@@ -62,7 +62,7 @@
 	</nav>
 
 	<div class="adm_side_foot">
-		<a href="${ctx}/Index">이용자 사이트</a>
+		<a href="${ctx}/ParkingStatus">이용자 사이트</a>
 		<a href="${ctx}/Member?t_gubun=logout">로그아웃</a>
 	</div>
 </aside>
