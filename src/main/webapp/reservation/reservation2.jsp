@@ -18,13 +18,13 @@
 
 <!-- 인덱스 디자인 시스템 CSS -->
 
-<link rel="stylesheet" href="css/index1.css">
+<link rel="stylesheet" href="../css/index1.css">
 
-<link rel="stylesheet" href="css/c.css">
+<link rel="stylesheet" href="../css/c.css">
 
-<link rel="stylesheet" href="css/reservation.css">
+<link rel="stylesheet" href="../css/reservation.css">
 
-<link rel="stylesheet" href="css/payment.css">
+<link rel="stylesheet" href="../css/payment.css">
 
 </head>
 

@@ -24,7 +24,10 @@
 
 
 <form name="go">
-	<input type=hidden name="t_gubun">
+	<input type="hidden" name="t_gubun">
+	<input type="hidden" name="zone">
+	<input type="hidden" name="reqStartTime">
+	<input type="hidden" name="reqEndTime">
 </form>
 
 <style>
@@ -2898,6 +2901,12 @@ let realtimeMode=true;
 	    //location.href = "index1.html"; 파일 넘기기
 	    
 	    go.t_gubun.value = "ReservationMap";
+	    go.zone.value = zone;
+	    var sd = document.getElementById("startDate").value;
+	    var st = document.getElementById("entryTime").value || "00:00";
+	    var ed = document.getElementById("endDate").value;
+	    go.reqStartTime.value = sd ? sd + " " + st : "";
+	    go.reqEndTime.value   = sd ? (ed || sd) + " " + (ed ? st : "23:59") : "";
 	    go.method = "post";
 	    go.action = "Reservation";
 	    go.submit();
