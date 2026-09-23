@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import command.reservation.FinalPaymentView;
 import command.reservation.Payment;
 import command.reservationMap.ReservationMap;
 import command.stepPay.StepPay;
@@ -40,22 +41,13 @@ public class Reservation extends HttpServlet {
 		if(gubun == null) gubun ="ReservationMap";
 		String viewPage ="";
 		
-		if(gubun.equals("ReservationMap")) {
+		if(gubun.equals("ReservationMap") || gubun.equals("stepPay")) {
 			CommonExecute memMap = new ReservationMap();
 			CommonExecute memPay = new StepPay();
 			memMap.execute(request);
 			memPay.execute(request);
-			viewPage ="/reservation/reservation2.jsp";
-			viewPage ="reservation/reservationOys.jsp";
+			viewPage = "reservation/reservation합본.jsp";
 
-		}else if(gubun.equals("stepPay")) {
-			CommonExecute mem = new StepPay();
-			mem.execute(request);
-			viewPage ="/reservation/reservation2.jsp";
-
-		
-			viewPage ="reservation/reservationOys.jsp";
-			
 		}else if(gubun.equals("payment")){
 			CommonExecute mem = new Payment();
 			mem.execute(request);
@@ -63,6 +55,11 @@ public class Reservation extends HttpServlet {
 			
 		}else if(gubun.equals("flightSearch")) {
 			viewPage = "flight/flight_search.jsp";
+			
+		}else if(gubun.equals("finalPaymentView")) {
+			CommonExecute mem = new FinalPaymentView();
+			mem.execute(request);
+			viewPage = "reservation/final_payment.jsp";
 		}
 
 		RequestDispatcher rd = request.getRequestDispatcher(viewPage);

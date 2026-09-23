@@ -1,5 +1,7 @@
 package mail;
 
+
+import common.SecretConfig;
 import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -26,8 +28,8 @@ public class MailTest extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		 String fromUserEmail = "ct09md@gmail.com"; // 보내는 사람 주소
-	     String fromUserPassword = "gubi wpfw zhty evjr"; // 구글 계정 앱 비밀번호
+		 String fromUserEmail = SecretConfig.get("mail.from"); // 보내는 사람 주소 - secret.properties
+	     String fromUserPassword = SecretConfig.get("mail.appPassword"); // 구글 앱 비밀번호 - secret.properties
 		
 		
 	    String toUserEmail = "ct09md@naver.com";

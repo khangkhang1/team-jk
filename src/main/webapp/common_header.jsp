@@ -1,10 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>  
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
-<<<<<<< HEAD
+
 <link href="${pageContext.request.contextPath}/css/common/common_header.css" rel="stylesheet">
 <script src="${pageContext.request.contextPath}/js/common.js"></script>
 
@@ -17,7 +17,7 @@
 
 	<div class="header_inner">
 
-		<a href="ParkingStatus" class="logo">
+		<a href="${pageContext.request.contextPath}/ParkingStatus" class="logo">
 			인천공항 주차예약
 
 			<small>INCHEON AIRPORT PARKING</small>
@@ -50,17 +50,23 @@
 
 			<!-- 공지 사항 -->
 			<li>
-				<a href="Notice">공지 사항</a>
+				<a href="${pageContext.request.contextPath}/Notice">공지 사항</a>
 
 				<div class="header_dropdown">
-					<a href="Notice">공지 사항</a>
-					<a href="${pageContext.request.contextPath}/faq/faq.jsp">자주 하는 질문</a>
+					<a href="${pageContext.request.contextPath}/Notice">공지 사항</a>
+					<a href="${pageContext.request.contextPath}/Faq">자주 하는 질문</a>
+					<a href="${pageContext.request.contextPath}/Report">문의하기</a>
 				</div>
 			</li>
 
 		</ul>
 
 		<div class="header_right">
+
+			<%-- 관리자(sessionLevel = top)로 로그인했을 때만 관리자 콘솔 버튼 --%>
+			<c:if test="${sessionLevel eq 'top'}">
+				<a href="${pageContext.request.contextPath}/Manager" class="header_admin">관리자 콘솔</a>
+			</c:if>
 
 			<c:if test="${not empty sessionName }">
 				<a href="javascript:movePage('Member','myinfo')">${sessionName }님.</a>
@@ -81,8 +87,3 @@
 	</div>
 
 </header>
-
-
-
-
-

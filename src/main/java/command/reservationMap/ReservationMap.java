@@ -26,12 +26,12 @@ public class ReservationMap implements CommonExecute {
         if (parkingLotId == null || parkingLotId.trim().isEmpty()) {
             parkingLotId = "P1";
         }
+        String today = java.time.LocalDate.now().toString();
         if (startTime == null || startTime.trim().isEmpty()) {
-            startTime = "2026-09-20 00:00"; // 해당 일자 시작점
+            startTime = today + " 00:00";
         }
         if (endTime == null || endTime.trim().isEmpty()) {
-            endTime = "2026-09-20 23:59";   // 해당 일자 종료점 (2099년 대신 해당 날짜 전체 조회)
-            
+            endTime = today + " 23:59";
         }
         
         try {
