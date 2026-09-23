@@ -69,12 +69,15 @@ public class Manager extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		request.setCharacterEncoding("UTF-8");
 
-		if (!"top".equals(request.getSession().getAttribute("sessionLevel"))) {
-			request.setAttribute("t_msg", "관리자만 접근할 수 있는 화면입니다.");
-			request.setAttribute("t_url", "Member");
-			forward(request, response, "common_alert.jsp");
-			return;
-		}
+		// [임시 해제] 발표 때 로그인 없이 화면만 보여주려고 관리자 확인을 잠시 꺼둡니다.
+		//   커밋에는 살아 있는 상태로 들어가 있고, 지금 작업본에서만 꺼져 있습니다.
+		//   발표 끝나면 git checkout -- src/main/java/controller/Manager.java 로 되돌리면 됩니다.
+//		if (!"top".equals(request.getSession().getAttribute("sessionLevel"))) {
+//			request.setAttribute("t_msg", "관리자만 접근할 수 있는 화면입니다.");
+//			request.setAttribute("t_url", "Member");
+//			forward(request, response, "common_alert.jsp");
+//			return;
+//		}
 
 		String gubun = request.getParameter("t_gubun");
 		if (gubun == null) gubun = "dashboard";
