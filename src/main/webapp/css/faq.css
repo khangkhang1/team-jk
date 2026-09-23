@@ -1,5 +1,5 @@
 /* FAQ 페이지 전용 (faq/faq_list.jsp, faq_write.jsp, faq_update.jsp) */
-.faq_page{padding-top:120px}
+.faq_page{padding-top:36px}
 
 /* 카테고리 필터 버튼 */
 .faq_cate{display:flex;gap:8px;margin-bottom:22px;flex-wrap:wrap}

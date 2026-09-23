@@ -129,7 +129,7 @@ function handleResponse(rsp) {
 </head>
 
 <body>
-<div class="wrap detail_body_top">
+<div class="wrap">
 
 	<%@ include file="../common_header.jsp" %>
 
