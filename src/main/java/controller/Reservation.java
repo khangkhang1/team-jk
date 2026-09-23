@@ -45,12 +45,12 @@ public class Reservation extends HttpServlet {
 			CommonExecute memPay = new StepPay();
 			memMap.execute(request);
 			memPay.execute(request);
-			viewPage ="/reservation/reservationOys.jsp";
+			viewPage ="reservation/reservationOys.jsp";
 
 		}else if(gubun.equals("stepPay")) {
 			CommonExecute mem = new StepPay();
 			mem.execute(request);
-			viewPage ="/reservation/reservationOys.jsp";
+			viewPage ="reservation/reservationOys.jsp";
 
 			
 		}else if(gubun.equals("payment")){
@@ -58,6 +58,8 @@ public class Reservation extends HttpServlet {
 			mem.execute(request);
 			viewPage = "common_alert.jsp";
 			
+		}else if(gubun.equals("flightSearch")) {
+			viewPage = "flight/flight_search.jsp";
 		}
 
 		RequestDispatcher rd = request.getRequestDispatcher(viewPage);

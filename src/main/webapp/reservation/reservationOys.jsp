@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -18,6 +19,60 @@
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/payment.css">
 
 <script>
+
+//부모 창의 항공편 검색 버튼 클릭 함수
+function goFlightSearch() {
+    var ctx = "${pageContext.request.contextPath}";
+    // 팝업 창으로 띄워야 window.opener 가 정상 연결됩니다.
+    window.open(ctx + '/flight/flight_search.jsp', 'flightSearchWin', 'width=1000,height=760,scrollbars=yes');
+}
+
+//팝업 창에서 선택 완료 시 부모 창으로 데이터가 넘어오는 콜백 함수
+function onFlightSelected(f) {
+    console.log("전달받은 항공편 정보:", f);
+
+    // 1. 항공편명 입력란에 값 채우기
+    var flightNoInput = document.getElementById("flightNoInput") 
+                     || document.querySelector("input[name='t_reservation_flight_no']");
+    if (flightNoInput) {
+        flightNoInput.value = f.flightNo;
+    }
+
+    // 2. 귀국/도착 예정 날짜 및 시간 채우기 (YYYYMMDDhhmm 형식을 분해)
+    if (f.scheduleDateTime && f.scheduleDateTime.length >= 12) {
+        var yyyy = f.scheduleDateTime.substr(0, 4);
+        var MM   = f.scheduleDateTime.substr(4, 2);
+        var dd   = f.scheduleDateTime.substr(6, 2);
+        var hh   = f.scheduleDateTime.substr(8, 2);
+        var mm   = f.scheduleDateTime.substr(10, 2);
+
+        var formattedDate = yyyy + "-" + MM + "-" + dd;
+        var formattedTime = hh + ":" + mm;
+
+        // 귀국 도착 날짜 입력란 채우기
+        var arriveDateInput = document.getElementById("flightArriveDateInput")
+                           || document.querySelector("input[name='t_reservation_flight_arrive_date']");
+        if (arriveDateInput) {
+            arriveDateInput.value = formattedDate;
+        }
+
+        // 예상 출차 날짜에도 동일하게 적용 (선택 사항)
+        var endDateInput = document.getElementById("endDateInput");
+        if (endDateInput) {
+            endDateInput.value = formattedDate;
+        }
+
+        // 귀국 도착 시간 입력란 채우기
+        var arriveInput = document.getElementById("flightArriveInput") 
+                       || document.querySelector("input[name='t_reservation_flight_arrive']");
+        if (arriveInput) {
+            arriveInput.value = formattedTime;
+        }
+    }
+
+    alert("항공편(" + f.flightNo + ")이 선택되었습니다.");
+}
+
 //1. Document가 준비된 후 식별코드 초기화
 $(document).ready(function() {
     var IMP = window.IMP;
@@ -45,7 +100,9 @@ function payment(method) {
     // 모달창 등에 입력된 예상 금액 가져오기 (없으면 기본값 설정)
 //    var amountVal = document.getElementById("estimatedPriceInput").value;
 //    var price = amountVal ? parseInt(amountVal) : document.pay.t_reservation_deposit_amount; 
-	 var price = document.getElementById("depositAmount").value;
+	var plan = document.getElementById("reservationPlan").value;
+	var plan1_price = document.getElementById("estimatedPriceInput").value;
+	var price = plan === '1' ? plan1_price : 5000;
 
     // 카카오페이 결제
     if (method === "kakaoPay") {
@@ -71,6 +128,19 @@ function payment(method) {
             buyer_email: "test@example.com"
         }, handleResponse);
 
+     // 네이버페이 결제
+    } else if (method === "naverPay") {
+        IMP.request_pay({
+            pg: "naverpay",               // 방금 등록하신 네이버페이 채널
+            pay_method: "card",           // 카드(card) 또는 포인트(point)
+            merchant_uid: "ORD_" + new Date().getTime(),
+            name: "인천공항 주차장 예약",
+            amount: price,
+            buyer_name: "홍길동",
+            buyer_email: "test@example.com",
+            naverPopupMode: true         // false면 현재 화면 위에 레이어로 띄움
+        }, handleResponse);
+        
     } else {
         alert("선택하신 결제 수단은 현재 미지원입니다.");
         return;
@@ -80,7 +150,8 @@ function payment(method) {
 // 4. 포트원 결제 완료 응답 처리 함수
 function handleResponse(rsp) {
     if (rsp.success) {
-    	var seat = document.pay.t_reservation_seat.value;
+/*    	
+		var seat = document.pay.t_reservation_seat.value;
     	var plan = document.pay.t_reservation_plan.value;
     	if(plan === '1') plan = "예약형"
         	else plan = "자율출차형"
@@ -92,6 +163,7 @@ function handleResponse(rsp) {
     			'예약금: ' + deposit_amount + '원 결제\n\n' +
     			'(실제 결제/서버 저장 및 항공편 결항 감지 API 연동은 다음 단계에서 연결됩니다)'
     		);
+*/
 
         // 서버(Servlet)로 보낼 hidden input에 포트원 번호 등록
         document.getElementById("impUidInput").value = rsp.imp_uid;
@@ -99,6 +171,7 @@ function handleResponse(rsp) {
 
         // 결제 성공 시에만 최종적으로 Servlet으로 Form Submit 전송!
         var form = document.pay;
+        form.t_gubun.value = "payment"
         form.method = "post";
         form.action = "Reservation"; // Reservation Servlet으로 전송
         form.submit();
@@ -316,7 +389,7 @@ function handleResponse(rsp) {
 <!-- 내용/기능은 원본 그대로. 완성되면 이 자리에 통째로 교체하면 됨.        -->
 <!-- ============================================================ -->
 <form name="pay">
-<input type="hidden" name="t_gubun" value="payment">
+<input type="hidden" name="t_gubun">
 	<div id="paymentModal" class="hidden">
 		<div id="paymentModalInner">
 			<button id="paymentCloseBtn" type="button">&times;</button>
@@ -337,12 +410,12 @@ function handleResponse(rsp) {
 				<label data-i18n="res_startTimeLabel">주차 시각</label>
 				<select id="startTimeInput" name="t_reservation_start_time"></select>
 			</div>
-			<div class="formRow">
+			<div class="formRow plan1Only hidden">
 				<label data-i18n="res_dateLabel">예상 출차 날짜</label>
 				<input type="date" id="endDateInput" name="t_reservation_end_date">
 			</div>
 			<div class="formRow plan1Only hidden" id="durationRow">
-				<label data-i18n="res_durationLabel">이용 시간</label>
+				<label data-i18n="res_durationLabel">예상 출차 시각</label>
 				<select id="endTimeInput" name="t_reservation_end_time"></select>
 			</div>
 
@@ -351,26 +424,30 @@ function handleResponse(rsp) {
 			</div>
 
 			<fieldset class="plan1Only hidden" id="flightFieldset">
-				<legend data-i18n="res_flightSectionTitle">✈️ 항공권 정보 (필수)</legend>
-				<div class="formRow">
-					<label data-i18n="res_flightNo">항공편명</label>
-					<input type="text" id="flightNoInput" placeholder="1 입력 필요(test단계)" name="t_reservation_flight_no">
-				</div>
-<!-- 예약 유형 선택 후 결제창 진입: 왕복 여부 선택 불필요 판단 / 이후 수정 필요할 것 같음 -->
-				<div class="formRow">
-					<label data-i18n="res_flightRoundtrip">왕복 여부</label>
-					<select id="flightRoundtripInput">
-						<option value="round">왕복</option>
-						<option value="oneway">편도 (이용 불가)</option>
-					</select>
-				</div>
-<!-- 귀국 도착 예정 시간은 name으로 넘길 필요가 있는가? -->
-				<div class="formRow">
-					<label data-i18n="res_flightArriveTime">귀국 도착 예정</label>
-					<input type="time" id="flightArriveInput">
-				</div>
-			</fieldset>
+    <legend data-i18n="res_flightSectionTitle">✈️ 항공권 정보 (필수)</legend>
+    <div class="formRow">
+        <label data-i18n="res_flightNo">항공편명</label>
+        <input type="text" id="flightNoInput" name="t_reservation_flight_no" disabled>
+        <button type="button" onclick="goFlightSearch()" style="height:37.5px; width:50px;">검색</button>
+    </div>
+    <div class="formRow">
+        <label data-i18n="res_flightRoundtrip">왕복 여부</label>
+        <select id="flightRoundtripInput" disabled>
+            <option value="round">왕복</option>
+        </select>
+    </div>
+    
+    <!-- 추가: 귀국 도착 날짜 입력란 -->
+    <div class="formRow">
+        <label>귀국 도착 날짜</label>
+        <input type="date" id="flightArriveDateInput" name="t_reservation_flight_arrive_date" readonly>
+    </div>
 
+    <div class="formRow">
+        <label data-i18n="res_flightArriveTime">귀국 도착 예정 시각</label>
+        <input type="time" id="flightArriveInput" name="t_reservation_flight_arrive_time" readonly>
+    </div>
+</fieldset>
 			<div id="estimatedPriceBox"><span data-i18n="res_estimated">예상 금액</span>: <strong id="estimatedPrice">-</strong></div>
 <!-- Servlet으로 예상 금액 넘기기 위한 input(payment.js수정) / 예약 목록 확인 시 예상 금액 노출-->
 			<input type="hidden" name="t_reservation_estimate_amount" id="estimatedPriceInput">
@@ -384,7 +461,7 @@ function handleResponse(rsp) {
 			<div id="paymentFooter">
 				<div id="payBarPrice"><span data-i18n="res_depositLabel">예약금</span> <strong id="payBarAmount">-</strong>원</div>
 <!-- Servlet으로 예약금 넘기기 위한 input / 예약 목록 확인 시 예약금 노출 / 필요 없는 경우 삭제 예정 -->
-				<input type="text" id="depositAmount" name="t_reservation_deposit_amount" value="5000">
+				<input type="hidden" id="depositAmount" name="t_reservation_deposit_amount" value="5000">
 <!-- 포트원 결제 검증 및 DB 저장을 위한 hidden input 추가 -->
 				<input type="hidden" name="t_imp_uid" id="impUidInput">
 				<input type="hidden" name="t_merchant_uid" id="merchantUidInput">
