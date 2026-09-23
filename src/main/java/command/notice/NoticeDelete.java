@@ -29,6 +29,8 @@ public class NoticeDelete implements CommonExecute {
 		request.setAttribute("t_msg", msg);
 		request.setAttribute("t_url", "Notice");
 		
+		
+		
 
 	}
 

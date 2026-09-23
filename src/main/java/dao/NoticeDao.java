@@ -280,6 +280,34 @@ public class NoticeDao {
 			return dto;
 		
 	}
+
+
+
+
+		//수정
+	public int noticeUpdate(NoticeDto dto) {
+		int result = 0;
+		String sql = "update icn_notice\r\n"
+				+ "set title='"+dto.getTitle()+"',\r\n"
+				+ "    content='"+dto.getContent()+"',\r\n"
+				+ "    important = '"+dto.getImportant()+"',\r\n"
+				+ "    attach='"+dto.getAttach()+"'\r\n"
+				+ "    where no = '"+dto.getNo()+"'";
+		
+		 try {
+                con = DBConnection.getConnection();
+                ps = con.prepareStatement(sql);
+                result = ps.executeUpdate();
+             }catch(Exception e){
+                e.printStackTrace();
+                System.out.println("noticeUpdate 오류:"+sql);
+             }finally {
+                DBConnection.closeDB(con, ps, rs);
+             }
+		
+		
+		return result;
+	}
 	
 	
 	

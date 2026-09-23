@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import command.notice.NoticeDelete;
 import command.notice.NoticeList;
 import command.notice.NoticeSave;
+import command.notice.NoticeUpdate;
 import command.notice.NoticeView;
 import common.CommonExecute;
 import common.CommonUtil;
@@ -61,11 +62,18 @@ public class Notice extends HttpServlet {
 			CommonExecute noti = new NoticeView();
 			noti.execute(request);
 			viewPage = "notice/notice_view.jsp";
+		//수정폼
 		} else if(gubun.equals("noticeUpdateForm")) {
-			
+			CommonExecute noti = new NoticeView();
+			noti.execute(request);
 			viewPage = "notice/notice_update.jsp";
-		//삭제
-		} else if(gubun.equals("noticeDelete")) {
+		//수정
+		} else if(gubun.equals("noticeUpdate")) {
+			CommonExecute noti = new NoticeUpdate();
+			noti.execute(request);
+			viewPage = "common_alert_noticeView.jsp";
+			//삭제
+		}else if(gubun.equals("noticeDelete")) {
 			CommonExecute noti = new NoticeDelete();
 			noti.execute(request);
 			viewPage = "common_alert.jsp";

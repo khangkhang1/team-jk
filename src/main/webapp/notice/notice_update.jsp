@@ -11,6 +11,57 @@
     <title>공지사항 수정 | 인천공항 주차예약</title>
 
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/notice/notice_update.css">
+    
+    <script type="text/javascript">
+   function goUpdate(){
+      if(checkEmpty(noti.t_title,"제목 입력!")) return;
+      if(checkEmpty(noti.t_content,"내용 입력!")) return;
+      
+      // 1.확장자 검사
+      /*      var fileName = noti.t_attach.value;
+            if(fileName != ""){ //  C:\fakepath\img_1.png
+               var pathFileName = fileName.lastIndexOf(".")+1;    //확장자 제외한 경로+파일명
+               var extension = (fileName.substr(pathFileName)).toLowerCase();   //확장자명
+               //파일명.확장자
+//               if(extension != "pdf" && extension != "hwp" && extension != "png"){
+               if(extension != "pdf"{
+                  alert(extension +" 형식 파일은 업로드 안됩니다. 한글, PDF, PNG 파일만 가능!");
+                  return;
+               }      
+            }
+      */         
+            // 2.첨부 용량 체크   
+            var file = noti.t_attach;
+            var fileMaxSize  = 10; // 첨부 최대 용량 설정
+            if(file.value !=""){
+               // 사이즈체크
+               var maxSize  = 1024 * 1024 * fileMaxSize;
+               var fileSize = 0;
+               // 브라우저 확인
+               var browser=navigator.appName;
+               // 익스플로러일 경우
+               if (browser=="Microsoft Internet Explorer"){
+                  var oas = new ActiveXObject("Scripting.FileSystemObject");
+                  fileSize = oas.getFile(file.value).size;
+               }else {
+               // 익스플로러가 아닐경우
+                  fileSize = file.files[0].size;
+               }
+
+               if(fileSize > maxSize){
+                  alert(" 첨부파일 사이즈는 "+fileMaxSize+"MB 이내로 등록 가능합니다. ");
+                  return;
+               }   
+            }      
+      
+      noti.method = "post";
+      noti.action = "Notice?t_gubun=noticeUpdate";
+//      noti.action="NoticeSaveServlet";
+      noti.submit();
+   }   
+</script>
+    
+    
 </head>
 
 <body>
@@ -32,38 +83,31 @@
         </div>
 
         <!-- 수정 폼 -->
-        <form action="#" method="post" enctype="multipart/form-data">
-
+        <form name="noti" enctype="multipart/form-data">
+		<input type="hidden" name="t_gubun">
+		<input type="hidden" name="t_no" value="${dto.getNo()}">
+		<input type="hidden" name="t_ori_attach" value="${dto.getAttach()}">
+		
+		
             <div class="writeTable">
 
                 <!-- 제목 -->
                 <div class="writeRow">
 
                     <label for="noticeTitle">제목</label>
+                    <input type="text" id="noticeTitle" name="t_title"
+						value="${dto.getTitle()}" placeholder="공지사항 제목을 입력하세요." required>
 
-                    <input
-                        type="text"
-                        id="noticeTitle"
-                        name="noticeTitle"
-                        value="인천공항 주차예약 서비스 이용 안내"
-                        placeholder="공지사항 제목을 입력하세요."
-                        required>
-
-                </div>
+				</div>
 
                 <!-- 작성자 -->
                 <div class="writeRow">
 
-                    <label for="writer">작성자</label>
+					<label for="writer">작성자</label>
+					<input type="text" id="writer"
+						name="t_reg_id" value="${dto.getReg_id()}" readonly>
 
-                    <input
-                        type="text"
-                        id="writer"
-                        name="writer"
-                        value="관리자"
-                        readonly>
-
-                </div>
+				</div>
 
                 <!-- 중요공지 -->
                 <div class="writeRow">
@@ -72,14 +116,10 @@
 
                     <div class="checkArea">
 
-                        <input
-                            type="checkbox"
-                            id="important"
-                            name="important"
-                            value="Y"
-                            checked>
-
-                        <label for="important" class="checkLabel">
+						<input type="hidden" id="important" name="t_important" value="N">
+						<input type="checkbox" id="important" name="t_important" value="Y" <c:if test="${dto.getImportant() eq 'Y'}">checked</c:if>>
+							
+						<label for="important" class="checkLabel">
                             중요공지로 등록
                         </label>
 
@@ -92,21 +132,10 @@
 
                     <label for="noticeContent">내용</label>
 
-                    <textarea
-                        id="noticeContent"
-                        name="noticeContent"
-                        placeholder="공지사항 내용을 입력하세요."
-                        required>안녕하세요. 인천공항 주차예약 서비스입니다.
+					<textarea id="noticeContent" name="t_content"
+						placeholder="공지사항 내용을 입력하세요." required>${dto.getContent()}</textarea>
 
-인천공항 제1여객터미널 주차예약 서비스를
-이용해 주셔서 감사합니다.
-
-주차장 이용 전 실시간 주차 현황과 예약 가능 여부를
-확인해 주시기 바랍니다.
-
-감사합니다.</textarea>
-
-                </div>
+				</div>
 
                 <!-- 기존 첨부파일 -->
                 <div class="writeRow">
@@ -116,12 +145,13 @@
                     <div class="fileArea">
 
                         <div class="oldFile">
-                            <span>인천공항 주차예약 이용안내.pdf</span>
+                            <span>${dto.getAttach()}</span>
 
-                            <button type="button" class="deleteFileBtn">
+<!--                        <button type="button" name="t_delete_checkbox" class="deleteFileBtn">
                                 삭제
                             </button>
-                        </div>
+-->                        
+                            </div>
 
                     </div>
 
@@ -134,13 +164,10 @@
 
                     <div class="fileArea">
 
-                        <input
-                            type="file"
-                            id="attachFile"
-                            name="attachFile"
-                            accept=".pdf,.hwp,.hwpx,.png,.jpg,.jpeg">
+						<input type="file" id="attachFile" name="t_attach"
+							accept=".pdf,.hwp,.hwpx,.png,.jpg,.jpeg">
 
-                        <p class="fileInfo">
+						<p class="fileInfo">
                             새 파일을 선택하면 기존 첨부파일을 변경할 수 있습니다.
                             (최대 10MB)
                         </p>
@@ -150,6 +177,7 @@
                 </div>
 
             </div>
+        </form>
 
             <!-- 버튼 영역 -->
             <div class="writeBtn">
@@ -158,13 +186,12 @@
                     취소
                 </a>
 
-                <button type="submit" class="submitBtn">
+                <button type="button" onclick="goUpdate()" class="submitBtn">
                     수정 완료
                 </button>
 
             </div>
 
-        </form>
 
     </main>
 
