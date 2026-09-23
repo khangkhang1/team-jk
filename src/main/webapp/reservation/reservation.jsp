@@ -490,7 +490,7 @@ function layoutBays(zone, outlineEl, svgEl){
 
 /* ============================================================
    실시간 구역 주차 현황 (공공데이터 StatusOfParking)
-   - 서버(/parkingStatus)를 통해 받는다. 프론트에서 data.go.kr을 직접 부르지 않음
+   - 서버(/ParkingStatus)를 통해 받는다. 프론트에서 data.go.kr을 직접 부르지 않음
      (서비스키 노출 방지 - 노션 '시스템 아키텍처'의 외부 API 처리 원칙).
    - 실데이터가 있는 구역: P1, P2, P3, P5
      (P4는 2026-07 폐지, P6~P9는 실제 인천공항에 없는 구역이라 임의 데이터 유지)
@@ -498,7 +498,7 @@ function layoutBays(zone, outlineEl, svgEl){
    ============================================================ */
 var LIVE_ZONE_STATUS = null;   // 한 번 받아서 캐시 (구역 탭 전환마다 재호출하지 않음)
 
-/* /parkingStatus 는 서버 사정에 맞춘 모양으로 준다.
+/* /ParkingStatus 는 서버 사정에 맞춘 모양으로 준다.
    { longTerm:[{parkLotNo,totalCount,availableCount,congestion,floor,datetm}...],
      shortTerm:[{parkZoneNo, ...}...] }
    화면 쪽 코드는 { P1:{remain,total,status,floor,datetm}, ... } 를 기대하므로 여기서 바꿔준다.
@@ -525,7 +525,7 @@ function loadLiveZoneStatus(cb){
 	if (LIVE_ZONE_STATUS !== null) { cb && cb(); return; }
 	try {
 		var xhr = new XMLHttpRequest();
-		xhr.open("GET", "${pageContext.request.contextPath}/parkingStatus?refresh=true", true);
+		xhr.open("GET", "${pageContext.request.contextPath}/ParkingStatus?refresh=true", true);
 		xhr.onreadystatechange = function(){
 			if (xhr.readyState !== 4) return;
 			if (xhr.status === 200){

@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>공지사항 수정 | 인천공항 주차예약</title>
+
+    <link rel="stylesheet" href="../css/notice/notice_update.css">
+</head>
+
+<body>
+
+    <!-- 공통 헤더 -->
+    <div id="header"></div>
+
+    <!-- 메인 영역 -->
+    <main class="noticeUpdate">
+
+        <!-- 제목 영역 -->
+        <div class="noticeTitle">
+
+            <h1>공지사항 수정</h1>
+
+            <p>
+                기존 공지사항의 내용을 수정할 수 있습니다.
+            </p>
+
+        </div>
+
+        <!-- 수정 폼 -->
+        <form action="#" method="post" enctype="multipart/form-data">
+
+            <div class="writeTable">
+
+                <!-- 제목 -->
+                <div class="writeRow">
+
+                    <label for="noticeTitle">제목</label>
+
+                    <input
+                        type="text"
+                        id="noticeTitle"
+                        name="noticeTitle"
+                        value="인천공항 주차예약 서비스 이용 안내"
+                        placeholder="공지사항 제목을 입력하세요."
+                        required>
+
+                </div>
+
+                <!-- 작성자 -->
+                <div class="writeRow">
+
+                    <label for="writer">작성자</label>
+
+                    <input
+                        type="text"
+                        id="writer"
+                        name="writer"
+                        value="관리자"
+                        readonly>
+
+                </div>
+
+                <!-- 중요공지 -->
+                <div class="writeRow">
+
+                    <label for="important">중요공지</label>
+
+                    <div class="checkArea">
+
+                        <input
+                            type="checkbox"
+                            id="important"
+                            name="important"
+                            value="Y"
+                            checked>
+
+                        <label for="important" class="checkLabel">
+                            중요공지로 등록
+                        </label>
+
+                    </div>
+
+                </div>
+
+                <!-- 내용 -->
+                <div class="writeRow contentRow">
+
+                    <label for="noticeContent">내용</label>
+
+                    <textarea
+                        id="noticeContent"
+                        name="noticeContent"
+                        placeholder="공지사항 내용을 입력하세요."
+                        required>안녕하세요. 인천공항 주차예약 서비스입니다.
+
+인천공항 제1여객터미널 주차예약 서비스를
+이용해 주셔서 감사합니다.
+
+주차장 이용 전 실시간 주차 현황과 예약 가능 여부를
+확인해 주시기 바랍니다.
+
+감사합니다.</textarea>
+
+                </div>
+
+                <!-- 기존 첨부파일 -->
+                <div class="writeRow">
+
+                    <label>기존 첨부파일</label>
+
+                    <div class="fileArea">
+
+                        <div class="oldFile">
+                            <span>인천공항 주차예약 이용안내.pdf</span>
+
+                            <button type="button" class="deleteFileBtn">
+                                삭제
+                            </button>
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <!-- 새 첨부파일 -->
+                <div class="writeRow">
+
+                    <label for="attachFile">첨부파일 변경</label>
+
+                    <div class="fileArea">
+
+                        <input
+                            type="file"
+                            id="attachFile"
+                            name="attachFile"
+                            accept=".pdf,.hwp,.hwpx,.png,.jpg,.jpeg">
+
+                        <p class="fileInfo">
+                            새 파일을 선택하면 기존 첨부파일을 변경할 수 있습니다.
+                            (최대 10MB)
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- 버튼 영역 -->
+            <div class="writeBtn">
+
+                <a href="notice_view.html" class="cancelBtn">
+                    취소
+                </a>
+
+                <button type="submit" class="submitBtn">
+                    수정 완료
+                </button>
+
+            </div>
+
+        </form>
+
+    </main>
+
+    <!-- 공통 푸터 -->
+    <div id="footer"></div>
+
+    
+
+</body>
+</html>

@@ -155,7 +155,9 @@ public class ReservationMapDao {
 				         + "FROM ICN_RESERVATION r "
 				         + "WHERE r.RESERVATION_START_TIME > SYSDATE " // 1. 미래의 예약건 중에서
 				         + "  AND r.SEAT_NO IN ( "
-				         + "      -- 2. 현재 주차 중인데 비행기가 결항(UPDATED_AT IS NOT NULL)된 좌석 번호 찾기 "
+				         // 2. 현재 주차 중인데 비행기가 결항(UPDATED_AT IS NOT NULL)된 좌석 번호 찾기
+				         //    ※ 이 설명을 SQL 문자열 안에 "--" 로 넣으면 안 된다. 문자열을 줄바꿈 없이 이어 붙이므로
+				         //      오라클이 "--" 뒤를 문장 끝까지 주석으로 봐서 IN ( ) 안이 비어 ORA-00936 이 났다.
 				         + "      SELECT p.SEAT_NO "
 				         + "      FROM ICN_RESERVATION p "
 				         + " 	  JOIN ICN_FLIGHT f ON p.FLIGHT_no = f.FLIGHT_no  "
@@ -221,7 +223,11 @@ public class ReservationMapDao {
 			ps = con.prepareStatement(sql);
 			ps.setString(1, id);
 			rs = ps.executeQuery();
-			type = rs.getString("VEHICLE_TYPE");
+			// rs.next() 로 커서를 첫 행으로 옮겨야 값을 읽을 수 있다. 이게 없으면 행이 있어도
+			// "ResultSet.next was not called" 예외가 나서 type 이 항상 null 이 됐다(회원타입 좌석 제한 무력화).
+			if (rs.next()) {
+				type = rs.getString("VEHICLE_TYPE");
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}finally {

@@ -24,9 +24,15 @@
 
 
 <form name="go">
-	<input type=hidden name="t_gubun">
+	<input type="hidden" name="t_gubun">
+	<input type="hidden" name="zone">
+	<input type="hidden" name="reqStartTime">
+	<input type="hidden" name="reqEndTime">
 </form>
 
+<style>
+
+</style>
 
 </head>
 
@@ -76,7 +82,8 @@
 
                 <div class="header_dropdown">
                     <a href="Notice">공지 사항</a>
-                    <a href="faq/faq.jsp">자주 하는 질문</a>
+                    <a href="${pageContext.request.contextPath}/Faq">자주 하는 질문</a>
+                    <a href="${pageContext.request.contextPath}/Report">문의하기</a>
                 </div>
             </li>
 
@@ -87,6 +94,11 @@
 
 		
         <div class="header_right">
+			<%-- [임시] 관리자(sessionLevel = top)로 로그인했을 때만 보이는 관리자 콘솔 버튼 (common_header.jsp 와 동일) --%>
+			<c:if test="${sessionLevel eq 'top'}">
+				<a href="${pageContext.request.contextPath}/Manager" class="header_admin">관리자 콘솔</a>
+			</c:if>
+
 			<c:if test="${not empty sessionName}">
 				<a>${sessionName}님.</a>
 				<a href="javascript:movePage('Member','myinfo')">Myinfo</a>
@@ -2887,6 +2899,19 @@ let realtimeMode=true;
 	        " 주차구역 예약 페이지로 이동합니다."
 	    );
 	    //location.href = "index1.html"; 파일 넘기기
+	    
+	    go.t_gubun.value = "ReservationMap";
+	    go.zone.value = zone;
+	    var sd = document.getElementById("startDate").value;
+	    var st = document.getElementById("entryTime").value || "00:00";
+	    var ed = document.getElementById("endDate").value;
+	    go.reqStartTime.value = sd ? sd + " " + st : "";
+	    go.reqEndTime.value   = sd ? (ed || sd) + " " + (ed ? st : "23:59") : "";
+	    go.method = "post";
+	    go.action = "Reservation";
+	    go.submit();
+	    
+	    
 	    
 	}
 

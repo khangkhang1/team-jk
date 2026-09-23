@@ -16,7 +16,7 @@ public class MemberLogout implements CommonExecute {
 		
 		session.invalidate();
 		request.setAttribute("t_msg", msg);
-		request.setAttribute("t_url", "Index");
+		request.setAttribute("t_url", "ParkingStatus");
 		
 	}
 

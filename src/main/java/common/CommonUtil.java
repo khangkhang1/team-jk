@@ -125,11 +125,13 @@ public class CommonUtil {
 	      return resultDate; 
 	          
 	   }
-	}			
-	
 	
 
-
-
-
-
+	// 정규상 파트(FileDownServlet)에서 쓰는 첨부파일 경로. 2026-09-21 병합 때 ijg 에서 가져옴.
+	// ※ 경로가 정규상 PC 기준으로 박혀 있어 다른 사람 PC 에서는 동작하지 않는다.
+	//   getNoticeDir 처럼 request 로 실제 배포 경로를 구하는 방식으로 바꾸는 게 맞다(정규상 확인 필요).
+	public static String getPdsDir(){
+		String dir = "C:/track27_ijg/java_jsp_project/web_jsl/src/main/webapp/attach/pds/";
+		return dir;
+	}
+}

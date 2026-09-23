@@ -29,8 +29,9 @@ public class Index extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		request.setCharacterEncoding("utf-8");
-		RequestDispatcher rd =
-						request.getRequestDispatcher("index3.html");
+		// 메인 화면은 ParkingStatus 서블릿이 실시간 주차현황(API)을 붙여 index.jsp 로 보낸다.
+		// 헤더 로고 등 옛 링크가 /Index 로 오더라도 같은 화면이 나오게 그쪽으로 넘긴다.
+		RequestDispatcher rd = request.getRequestDispatcher("/ParkingStatus");
 		rd.forward(request, response);
 	
 	}

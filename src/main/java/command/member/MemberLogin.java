@@ -23,7 +23,7 @@ public class MemberLogin implements CommonExecute {
 		String msg="",url="";
 		if(!name.equals("")) {
 			msg=name+"님 환영합니다.";
-			url="Index";
+			url="ParkingStatus";
 			HttpSession session = request.getSession();
 			session.setAttribute("sessionId", id);
 			session.setAttribute("sessionName", name);

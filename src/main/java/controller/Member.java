@@ -9,10 +9,12 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import command.member.MemberExit;
 import command.member.MemberLogin;
 import command.member.MemberLogout;
 import command.member.MemberMyInfo;
 import command.member.MemberPasswordUpdate;
+import command.member.MemberReservation;
 import command.member.MemberSave;
 import command.member.MemberSendPassword;
 import command.member.MemberUpdate;
@@ -90,21 +92,43 @@ public class Member extends HttpServlet {
 				viewPage = "member/member_update.jsp";
 			}
 		} else if (gubun.equals("memberUpdate")) {
-			MemberUpdate mem = new MemberUpdate();
-			mem.execute(request);
-			viewPage = "common_alert_view.jsp";
+			String id = (String) request.getSession().getAttribute("sessionId");
+			if (id == null) {
+				request.setAttribute("t_msg", "로그인 정보가 만료되었습니다.");
+				request.setAttribute("t_url", "Member");
+				viewPage = "common_alert.jsp";
+			} else {
+				MemberUpdate mem = new MemberUpdate();
+				mem.execute(request);
+				viewPage = "common_alert.jsp";
+			}
 		} else if (gubun.equals("passwordUpdateForm")) {
-			viewPage = "member/member_password.jsp";
+			String id = (String) request.getSession().getAttribute("sessionId");
+			if (id == null) {
+				request.setAttribute("t_msg", "로그인 정보가 만료되었습니다.");
+				request.setAttribute("t_url", "Member");
+				viewPage = "common_alert.jsp";
+			} else {
+				viewPage = "member/member_password.jsp";
+			}
 		} else if (gubun.equals("passwordUpdate")) {
 			MemberPasswordUpdate mem = new MemberPasswordUpdate();
 			mem.execute(request);
-			viewPage = "common_alert_view.jsp";
+			viewPage = "common_alert.jsp";
 		} else if (gubun.equals("findPassword")) { // 비밀번호 찾기
 			viewPage = "member/member_findPassword.jsp";
 		} else if (gubun.equals("sendPassword")) { // 비밀번호 메일 보내기
 			CommonExecute mem = new MemberSendPassword();
 			mem.execute(request);
 			viewPage = "common_alert_view.jsp";
+		} else if (gubun.equals("memberExit")) {
+			MemberExit mem = new MemberExit();
+			mem.execute(request);
+			viewPage = "common_alert.jsp";
+		} else if (gubun.equals("myreservation")) {
+			MemberReservation mem = new MemberReservation();
+			mem.execute(request);
+			viewPage = "member/member_myreservation.jsp";
 		}
 
 		RequestDispatcher rd = request.getRequestDispatcher(viewPage);
