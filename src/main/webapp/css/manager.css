@@ -1,0 +1,266 @@
+/* 관리자 콘솔 전용 (manager/*.jsp). 이용자 사이트(index1.css)와 섞이지 않게 접두어 adm_ */
+
+*{box-sizing:border-box}
+body.adm{
+	margin:0;background:#f3f5f9;color:#22293a;
+	font-family:"Noto Sans KR","Malgun Gothic",sans-serif;font-size:14px;line-height:1.5
+}
+body.adm a{text-decoration:none;color:inherit}
+body.adm h1,body.adm h2,body.adm p,body.adm ul{margin:0;padding:0}
+body.adm ul{list-style:none}
+
+/* ---------- 사이드 메뉴 ---------- */
+.adm_side{
+	position:fixed;top:0;left:0;bottom:0;width:240px;
+	background:#1c2536;color:#c5cfdd;display:flex;flex-direction:column
+}
+.adm_brand{display:block;padding:22px 22px 18px;border-bottom:1px solid rgba(255,255,255,.08)}
+.adm_brand strong{display:block;color:#fff;font-size:16px;letter-spacing:-.3px}
+.adm_brand span{display:block;margin-top:2px;font-size:11px;color:#7f8ea6;letter-spacing:1px}
+
+.adm_nav{flex:1;padding:12px 12px;overflow-y:auto}
+.adm_nav_group{padding:16px 12px 6px;font-size:11px;color:#6f7d94;letter-spacing:1px}
+.adm_nav a{
+	display:flex;align-items:center;gap:10px;
+	padding:10px 12px;border-radius:8px;font-size:14px;color:#c5cfdd;transition:.15s
+}
+.adm_nav a:hover{background:rgba(255,255,255,.06);color:#fff}
+.adm_nav a.on{background:#1769d2;color:#fff}
+.adm_nav a i{
+	flex:0 0 22px;height:22px;border-radius:6px;background:rgba(255,255,255,.08);
+	display:flex;align-items:center;justify-content:center;font-style:normal;font-size:12px
+}
+.adm_nav a.on i{background:rgba(255,255,255,.2)}
+.adm_nav a em{
+	margin-left:auto;font-style:normal;font-size:10px;padding:2px 6px;border-radius:8px;
+	background:rgba(255,255,255,.08);color:#8d9bb2
+}
+
+.adm_side_foot{padding:14px 22px;border-top:1px solid rgba(255,255,255,.08);display:flex;gap:14px;font-size:12px}
+.adm_side_foot a{color:#8d9bb2}
+.adm_side_foot a:hover{color:#fff}
+
+/* ---------- 본문 영역 ---------- */
+.adm_main{margin-left:240px;min-height:100vh;display:flex;flex-direction:column}
+
+.adm_top{
+	height:60px;padding:0 28px;background:#fff;border-bottom:1px solid #e4e8ef;
+	display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:5
+}
+.adm_top h1{font-size:18px;font-weight:700;letter-spacing:-.3px}
+.adm_top_right{display:flex;align-items:center;gap:16px;font-size:13px;color:#687585}
+.adm_user{padding:5px 12px;border-radius:14px;background:#eef3fb;color:#1769d2;font-weight:600}
+
+.adm_content{padding:24px 28px 40px;display:flex;flex-direction:column;gap:20px}
+
+/* ---------- 지표 카드 ---------- */
+.kpi_row{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.kpi{
+	background:#fff;border-radius:12px;padding:18px 20px;border-left:5px solid #1769d2;
+	box-shadow:0 1px 3px rgba(20,30,50,.06)
+}
+.kpi_blue{border-color:#1769d2}
+.kpi_green{border-color:#1fa971}
+.kpi_navy{border-color:#2b3a67}
+.kpi_amber{border-color:#e8a033}
+.kpi_label{font-size:12px;color:#687585}
+.kpi_value{margin-top:6px;font-size:26px;font-weight:700;letter-spacing:-.5px}
+.kpi_sub{margin-top:4px;font-size:12px;color:#8c96a3}
+
+/* ---------- 카드 공통 ---------- */
+.card{background:#fff;border-radius:12px;padding:20px 22px;box-shadow:0 1px 3px rgba(20,30,50,.06)}
+.card_head{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:14px}
+.card_head h2{font-size:15px;font-weight:700}
+.card_note{font-size:12px;color:#8c96a3}
+.empty{padding:30px;text-align:center;color:#999}
+
+.grid_2_1{display:grid;grid-template-columns:2fr 1fr;gap:20px}
+.grid_1_2{display:grid;grid-template-columns:1fr 1.6fr;gap:20px}
+
+.chart_box{position:relative;width:100%}
+
+/* ---------- 표 ---------- */
+.tbl{width:100%;border-collapse:collapse;font-size:13px}
+.tbl th{
+	padding:9px 10px;text-align:left;font-weight:600;color:#687585;
+	background:#f7f9fc;border-bottom:1px solid #e7ebf0;white-space:nowrap
+}
+.tbl td{padding:10px 10px;border-bottom:1px solid #eef1f5;vertical-align:middle}
+.tbl tr:last-child td{border-bottom:0}
+.tbl .r{text-align:right}
+.tbl .mono{font-family:Consolas,monospace;font-size:12px;color:#4a5568}
+
+/* ---------- 막대 ---------- */
+.bar_list li{display:flex;align-items:center;gap:10px;padding:6px 0}
+.bar_name{flex:0 0 32px;font-weight:700;font-size:13px}
+.bar_track{flex:1;height:10px;border-radius:5px;background:#eef1f5;overflow:hidden}
+.bar_fill{display:block;height:100%;border-radius:5px;background:#1769d2;transition:width .4s}
+.bar_fill.warm{background:#e8a033}
+.bar_fill.hot{background:#d9534f}
+.bar_num{flex:0 0 64px;text-align:right;font-size:12px;color:#687585}
+
+.mini_track{display:inline-block;vertical-align:middle;width:calc(100% - 46px);height:8px;border-radius:4px;background:#eef1f5;overflow:hidden}
+.mini_fill{display:block;height:100%;background:#8c96a3;border-radius:4px}
+.mini_fill.hot{background:#d9534f}
+.mini_num{display:inline-block;width:40px;text-align:right;font-size:12px;color:#687585;vertical-align:middle}
+
+/* ---------- 배지 ---------- */
+.badge{display:inline-block;padding:3px 9px;border-radius:10px;font-size:11px;font-weight:600;white-space:nowrap}
+.badge.st1{background:#eef3fb;color:#1769d2}   /* 예약완료 */
+.badge.st2{background:#e6f6ee;color:#1fa971}   /* 주차 중 */
+.badge.st3{background:#eef0f3;color:#5a6470}   /* 출차 완료 */
+.badge.st4{background:#fbe9e7;color:#c0392b}   /* 취소 */
+.badge.ok{background:#e6f6ee;color:#1fa971}
+.badge.warn{background:#fdf1dc;color:#b7791f}
+
+.check_list li{display:flex;align-items:center;gap:12px;padding:9px 0;border-bottom:1px solid #eef1f5;font-size:13px}
+.check_list li:last-child{border-bottom:0}
+.check_list .badge{min-width:44px;text-align:center}
+
+/* ---------- 준비 중 ---------- */
+.soon_card{text-align:center;padding:70px 20px}
+.soon_icon{font-size:40px}
+.soon_card h2{margin:12px 0 6px;font-size:20px}
+.soon_card p{color:#687585}
+.soon_card .adm_btn{margin-top:20px;padding:9px 20px}
+
+/* ---------- 좁은 화면 ---------- */
+@media (max-width:1100px){
+	.kpi_row{grid-template-columns:repeat(2,1fr)}
+	.grid_2_1,.grid_1_2{grid-template-columns:1fr}
+}
+@media (max-width:800px){
+	.adm_side{position:static;width:auto}
+	.adm_main{margin-left:0}
+	.adm_nav a em{display:none}
+}
+
+/* ---------- 폼 / 검색 ---------- */
+.adm_form{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.adm_form input[type=text],.adm_form input[type=date],.adm_form select{
+	padding:8px 11px;border:1px solid #cfd6df;border-radius:6px;font-size:13px;font-family:inherit;
+	color:#22293a;background:#fff;min-width:0
+}
+.adm_form input[type=text]{flex:1;min-width:160px}
+.adm_form input:focus,.adm_form select:focus{outline:none;border-color:#1769d2}
+.adm_form label{font-size:13px;color:#687585}
+.search_bar{gap:10px}
+.search_total{margin-left:auto;font-size:13px;color:#687585}
+.search_total strong{color:#1769d2}
+
+.adm_btn{
+	display:inline-block;padding:8px 16px;border-radius:6px;border:1px solid #1769d2;
+	background:#1769d2;color:#fff;font-size:13px;font-family:inherit;cursor:pointer;line-height:1.3;white-space:nowrap
+}
+.adm_btn:hover{background:#125ab8;border-color:#125ab8}
+.adm_btn_ghost{background:#fff;color:#2b3340;border-color:#cfd6df}
+.adm_btn_ghost:hover{background:#f7f9fc;color:#1769d2;border-color:#1769d2}
+.adm_btn_green{background:#1fa971;border-color:#1fa971}
+.adm_btn_green:hover{background:#178f5f;border-color:#178f5f}
+
+.card_link{margin-left:auto;font-size:12px;color:#1769d2}
+.card_link:hover{text-decoration:underline}
+.card_head .card_link + .card_note{margin-left:12px}
+
+/* ---------- 상세 표 / 표 보조 ---------- */
+.dl{width:100%;border-collapse:collapse;font-size:13px;margin-bottom:18px}
+.dl th{width:96px;padding:9px 10px;text-align:left;color:#687585;font-weight:600;background:#f7f9fc;border-bottom:1px solid #eef1f5}
+.dl td{padding:9px 12px;border-bottom:1px solid #eef1f5}
+.dl.compact{margin:10px 0 14px}
+.dl.compact th,.dl.compact td{padding:6px 10px}
+.dl tr.total th,.dl tr.total td{background:#eef3fb;color:#1769d2;font-size:14px}
+.dim{color:#8c96a3;font-size:12px}
+.minus{color:#c0392b}
+.sub_h{margin:4px 0 8px;font-size:13px;font-weight:700;color:#2b3340}
+.empty.small{padding:14px}
+.tbl_click tbody tr{cursor:pointer}
+.tbl_click tbody tr:hover td{background:#f7f9fc}
+.tbl_click tbody tr.sel td{background:#eef3fb}
+
+.action_box{margin-top:18px;padding:16px 18px;border-radius:10px;background:#f7f9fc;border:1px solid #e4e8ef}
+.action_box p{margin-bottom:10px;font-size:13px}
+.action_box.done{background:#eef0f3;color:#5a6470}
+.action_box.done p{margin:0}
+.action_box .adm_form select{width:130px}
+
+/* ---------- 페이지 번호 ---------- */
+.pager{display:flex;justify-content:center;gap:4px;margin-top:16px}
+.pager a{min-width:30px;padding:5px 8px;text-align:center;border:1px solid #e4e8ef;border-radius:6px;font-size:12px;color:#687585;background:#fff}
+.pager a:hover{border-color:#1769d2;color:#1769d2}
+.pager a.on{background:#1769d2;border-color:#1769d2;color:#fff}
+
+/* ---------- 구역 탭 + 좌석 격자 ---------- */
+.tabs{display:flex;gap:8px;flex-wrap:wrap}
+.tabs a{display:flex;flex-direction:column;align-items:center;min-width:72px;padding:9px 12px;border-radius:10px;background:#fff;border:1px solid #e4e8ef;font-size:12px;color:#687585}
+.tabs a strong{font-size:14px;color:#22293a}
+.tabs a:hover{border-color:#1769d2}
+.tabs a.on{background:#1769d2;border-color:#1769d2;color:#dbe7f8}
+.tabs a.on strong{color:#fff}
+
+.legend{display:flex;gap:14px;font-size:12px;color:#687585;align-items:center}
+.legend .sw{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:5px;vertical-align:-1px}
+.sw.parking{background:#1fa971}
+.sw.reserved{background:#e8a033}
+.sw.free{background:#e4e8ef}
+
+.seat_grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(64px,1fr));gap:8px}
+.seat{
+	position:relative;height:52px;border-radius:8px;border:1px solid #e4e8ef;background:#f3f5f9;
+	display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#8c96a3
+}
+.seat.parking{background:#1fa971;border-color:#1fa971;color:#fff}
+.seat.reserved{background:#e8a033;border-color:#e8a033;color:#fff}
+a.seat:hover{filter:brightness(.92)}
+.seat_ic{position:absolute;top:3px;right:5px;font-size:10px;font-weight:400}
+
+/* ---------- 신고 내역 ---------- */
+.badge.rp1{background:#fdf1dc;color:#b7791f}   /* 접수 - 아직 아무도 안 봄 */
+.badge.rp2{background:#eef3fb;color:#1769d2}   /* 처리 중 */
+.badge.rp3{background:#e6f6ee;color:#1fa971}   /* 처리 완료 */
+.badge.rp4{background:#eef0f3;color:#5a6470}   /* 반려 */
+
+/* 사이드 메뉴의 미처리 건수 배지. 회색 "준비 중" 과 구분되게 빨간 점처럼 */
+.adm_nav a em.nav_new{background:#d9534f;color:#fff;font-weight:700}
+
+/* 긴 제목이 표를 밀지 않게 한 줄로 자른다 (전체 내용은 상세에서 본다) */
+.ellipsis{max-width:280px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+/* 이용자가 쓴 글 / 관리자 처리 내용. 줄바꿈을 그대로 살린다 */
+.doc{
+	padding:14px 16px;border:1px solid #e4e8ef;border-radius:8px;background:#f7f9fc;
+	font-size:13px;line-height:1.7;white-space:pre-wrap;word-break:break-all
+}
+.adm_area{
+	width:100%;padding:10px 12px;border:1px solid #cfd6df;border-radius:6px;
+	font-size:13px;font-family:inherit;line-height:1.6;color:#22293a;resize:vertical
+}
+.adm_area:focus{outline:none;border-color:#1769d2}
+
+/* ---------- FAQ / 공지사항 관리 ---------- */
+.adm_btn_sm{padding:5px 11px;font-size:12px}
+.adm_btn_red{background:#d9534f;border-color:#d9534f}
+.adm_btn_red:hover{background:#c0392b;border-color:#c0392b}
+
+.row_btns{white-space:nowrap}
+.row_btns form{margin-left:4px}
+.row_sub{display:block;margin-top:4px;color:#8c96a3;font-size:12px;line-height:1.5;
+	overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.row_off td{background:#fafbfc;color:#98a1ad}          /* 숨김 처리된 FAQ */
+.row_link{color:#22293a;font-weight:600}
+.row_link:hover{color:#1769d2;text-decoration:underline}
+.card_head .dim{margin-left:6px;font-weight:400}
+
+/* 입력 폼 (등록·수정 겸용 화면) */
+.form_card{max-width:900px}
+.form_tbl{margin-bottom:0}
+.form_tbl th{width:110px;vertical-align:top;padding-top:14px}
+.form_tbl td{padding:10px 12px}
+.adm_input{
+	width:100%;padding:9px 12px;border:1px solid #cfd6df;border-radius:6px;
+	font-size:13px;font-family:inherit;color:#22293a;background:#fff
+}
+.adm_input_sm{width:110px;margin-right:8px}
+.adm_sel{padding:8px 11px;border:1px solid #cfd6df;border-radius:6px;font-size:13px;font-family:inherit;background:#fff}
+.adm_input:focus,.adm_sel:focus{outline:none;border-color:#1769d2}
+.chk{display:inline-flex;align-items:center;gap:8px;font-size:13px;cursor:pointer}
+.form_foot{display:flex;gap:8px;margin-top:20px;padding-top:18px;border-top:1px solid #eef1f5}

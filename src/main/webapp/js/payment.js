@@ -1,9 +1,5 @@
 // ============================================================
-// 결제 모듈 (담당: 오윤섭 예정) - 독립적으로 개발/교체 가능하게 분리한 파일.
-// reservation.js와의 접점은 딱 하나, window.openPaymentModal(seatLabelText, plan) 뿐.
-// 이용방식(1안/2안)은 주차맵 페이지의 필터에서 미리 정하고 넘어오므로, 이 모달은
-// 그 값을 그대로 받아서 시간/항공권/결제수단만 처리한다 (이용방식을 다시 고르지 않음).
-// 화면 초안 단계 - 전부 가상 데이터/클라이언트 로직만 존재. 서버 연동은 이후 단계.
+// 결제 모듈 (담당: 오윤섭 예정)
 // ============================================================
 
 var HOURLY_PRICE = 3000;       // 1안 시간당 요금 (원)
@@ -97,7 +93,7 @@ function initPaymentTimeInputs() {
 		startSelect.value = String(roundedHour).padStart(2, '0') + ':' + roundedMin;
 	}
 
-	// 출차 시각 초기값 설정 (URL 파라미터가 있으면 적용, 없으면 시작 시각 + 1시간)
+	// 출차 시각 초기값 설정
 	var endFromUrl = params.get('end');
 	if (endFromUrl) {
 		endSelect.value = endFromUrl;
@@ -105,7 +101,7 @@ function initPaymentTimeInputs() {
 		updateDefaultEndDateTime();
 	}
 
-	// 시작 시각 변경 시 출차 시각도 자동으로 1시간 뒤로 조정되도록 이벤트 바인딩
+	// 이벤트 바인딩
 	startSelect.addEventListener('change', function () {
 		updateDefaultEndDateTime();
 		if (typeof updatePaymentPrice === 'function') {
@@ -113,7 +109,6 @@ function initPaymentTimeInputs() {
 		}
 	});
 
-	// 출차 시각 변경 시에도 금액 재계산
 	endSelect.addEventListener('change', function () {
 		if (typeof updatePaymentPrice === 'function') {
 			updatePaymentPrice();
@@ -121,7 +116,7 @@ function initPaymentTimeInputs() {
 	});
 }
 
-//출차 시각 설정
+// 출차 시각 설정
 function updateDefaultEndDateTime() {
 	var startDateVal = document.getElementById('startDateInput').value;
 	var startTimeVal = document.getElementById('startTimeInput').value;
@@ -142,7 +137,7 @@ function updateDefaultEndDateTime() {
 	document.getElementById('endTimeInput').value = endHh + ':' + endMi;
 }
 
-// ------- 예상 금액 -------
+// ------- 예상 금액 계산 -------
 function updatePaymentPrice() {
 	var startDate = document.getElementById('startDateInput').value;
 	var startTime = document.getElementById('startTimeInput').value;
@@ -154,13 +149,10 @@ function updatePaymentPrice() {
 		document.getElementById('estimatedPrice').textContent =
 			'출차 시 정산 (시간당 ' + PLAN2_HOURLY_PRICE.toLocaleString() + '원, 페널티 요금)';
 	} else if (payState.plan === '1') {
-		// 모든 날짜 및 시간 정보가 갖춰진 경우
 		if (startDate && startTime && endDate && endTime) {
-			// "YYYY-MM-DD" + "THH:mm" 포맷으로 Date 객체 생성
 			var startDateTime = new Date(startDate + 'T' + startTime);
 			var endDateTime = new Date(endDate + 'T' + endTime);
 
-			// 출차 일시가 입차 일시보다 빠른 경우 예외 처리
 			if (endDateTime <= startDateTime) {
 				document.getElementById('estimatedPrice').textContent = '날짜/시각 확인 필요';
 				document.getElementById('estimatedPriceInput').value = 0;
@@ -169,11 +161,8 @@ function updatePaymentPrice() {
 				return;
 			}
 
-			// Milliseconds 차이를 시간 단위(소수점)로 변환
 			var diffMs = endDateTime - startDateTime;
 			var durationHours = diffMs / (1000 * 60 * 60);
-
-			// 총 금액 계산 (시간 * 시간당 금액)
 			var totalPrice = Math.round(durationHours * info.price);
 
 			document.getElementById('estimatedPrice').textContent = totalPrice.toLocaleString() + '원';
@@ -190,41 +179,81 @@ function updatePaymentPrice() {
 	refreshPaymentFooter();
 }
 
-// ------- 하단 결제 바 -------
+// ------- 하단 결제 바 갱신 및 결제 버튼 활성화 제어 -------
 function refreshPaymentFooter() {
-	document.getElementById('payBarAmount').textContent = DEPOSIT_PRICE.toLocaleString();
+    var planEl = document.getElementById("reservationPlan");
+    var plan = planEl ? planEl.value : payState.plan;
+    var payBarPrice = document.getElementById("payBarPrice");
+    var estimatedPriceInput = document.getElementById("estimatedPriceInput");
+    var depositAmountInput = document.getElementById("depositAmount");
+    var payBtn = document.getElementById("payBtn");
 
-	var flightOk = true;
-	var flightArriveInputOk = true;
-	if (payState.plan === '1') {
-		flightOk = document.getElementById('flightNoInput').value.trim() !== ''
-			&& document.getElementById('flightRoundtripInput').value === 'round';
-		var flightArriveInput = document.getElementById('flightArriveInput');
-		
-		flightArriveInputOk = flightArriveInput && flightArriveInput.value.trim() !== '';
-	}
-	var ready = payState.plan && payState.timeChosen && payState.payMethod && flightOk && flightArriveInputOk;
-	document.getElementById('payBtn').disabled = !ready;
+    var currentPrice = 0;
+
+    if (plan === "1") {
+        // [1안: 예약형] - 최종 예상 결제 금액 표시
+        currentPrice = parseInt(estimatedPriceInput ? estimatedPriceInput.value : "0", 10) || 0;
+        
+        if (payBarPrice) {
+            payBarPrice.innerHTML = '<span>최종 결제 금액</span> <strong id="payBarAmount">' + currentPrice.toLocaleString() + '</strong>원';
+        }
+        if (depositAmountInput) {
+            depositAmountInput.value = currentPrice;
+        }
+    } else {
+        // [2안: 자유출차형] - 예약금 5,000원 표시
+        currentPrice = 5000;
+        
+        if (payBarPrice) {
+            payBarPrice.innerHTML = '<span>예약금</span> <strong id="payBarAmount">' + currentPrice.toLocaleString() + '</strong>원';
+        }
+        if (depositAmountInput) {
+            depositAmountInput.value = currentPrice;
+        }
+    }
+
+    // ★ [핵심] 결제 버튼 활성화 조건 체크
+    var payMethodSelected = document.querySelector('input[name="t_reservation_pay_method"]:checked');
+    
+    if (payBtn) {
+        if (plan === "1") {
+            // 1안: 결제 수단이 선택되었고, 결제 금액이 0보다 큰 경우 활성화
+            payBtn.disabled = !(payMethodSelected && currentPrice > 0);
+        } else {
+            // 2안: 결제 수단만 선택되었으면 바로 활성화
+            payBtn.disabled = !payMethodSelected;
+        }
+    }
 }
 
-// ------- 모달 상태 초기화 (이용방식은 주차맵 필터에서 이미 정해져서 들어옴 - 여기서 안 건드림) -------
+// ------- 모달 상태 초기화 -------
 function resetPaymentState(plan) {
 	payState.plan = plan;
 	payState.payMethod = null;
+
+	// DOM Hidden input에도 plan 값 저장 동기화
+	var resPlanInput = document.getElementById('reservationPlan');
+	if (resPlanInput) {
+		resPlanInput.value = plan;
+	}
 
 	document.querySelectorAll('input[name="t_reservation_pay_method"]').forEach(function (r) { r.checked = false; });
 
 	var isPlan1 = plan === '1';
 	document.querySelectorAll('.plan1Only').forEach(function (el) { el.classList.toggle('hidden', !isPlan1); });
 	document.querySelectorAll('.plan2Only').forEach(function (el) { el.classList.toggle('hidden', isPlan1); });
-	document.getElementById('flightNoInput').value = '';
-	document.getElementById('flightRoundtripInput').value = 'round';
+	
+	var flightNoEl = document.getElementById('flightNoInput');
+	if (flightNoEl) flightNoEl.value = '';
+	
+	var flightRoundEl = document.getElementById('flightRoundtripInput');
+	if (flightRoundEl) flightRoundEl.value = 'round';
 
 	initPaymentTimeInputs();
 	updatePaymentPrice();
 }
-// ------- 외부(reservation.js)에서 호출하는 진입점 -------
-// plan: 주차맵 페이지의 "이용 방식" 필터에서 이미 선택된 값('1' 또는 '2')을 그대로 넘겨받음.
+
+// ------- 외부 진입점 -------
 window.openPaymentModal = function (seatLabelText, plan) {
 	payState.seatLabel = seatLabelText;
 	var info = getCurrentLotInfo();
@@ -244,12 +273,12 @@ function closePaymentModal() {
 
 document.getElementById('paymentCloseBtn').addEventListener('click', closePaymentModal);
 
-// 오버레이(모달 바깥) 클릭 시 닫기 - Index 화면 상세팝업과 동일한 UX
+// 오버레이 클릭 시 닫기
 paymentModalEl.addEventListener('click', function (e) {
 	if (e.target === paymentModalEl) closePaymentModal();
 });
 
-// 입차 날짜/시각 변경 시: 출차 일시 +1시간 자동 세팅 및 금액 계산
+// 입차 날짜/시각 변경 시
 ['startDateInput', 'startTimeInput'].forEach(function (id) {
 	var el = document.getElementById(id);
 	if (el) {
@@ -260,7 +289,7 @@ paymentModalEl.addEventListener('click', function (e) {
 	}
 });
 
-// 출차 날짜/시각 변경 시: 금액 계산
+// 출차 날짜/시각 변경 시
 ['endDateInput', 'endTimeInput'].forEach(function (id) {
 	var el = document.getElementById(id);
 	if (el) {
@@ -268,15 +297,22 @@ paymentModalEl.addEventListener('click', function (e) {
 	}
 });
 
-document.getElementById('flightRoundtripInput').addEventListener('change', function () {
-	if (this.value === 'oneway') {
-		alert('편도 항공권은 이 시스템을 이용하실 수 없습니다 (현장 이용을 안내해드립니다).');
-	}
-	refreshPaymentFooter();
-});
-document.getElementById('flightNoInput').addEventListener('input', refreshPaymentFooter);
+var flightRoundtripEl = document.getElementById('flightRoundtripInput');
+if (flightRoundtripEl) {
+	flightRoundtripEl.addEventListener('change', function () {
+		if (this.value === 'oneway') {
+			alert('편도 항공권은 이 시스템을 이용하실 수 없습니다 (현장 이용을 안내해드립니다).');
+		}
+		refreshPaymentFooter();
+	});
+}
 
-// ------- 결제 수단 -------
+var flightNoEl = document.getElementById('flightNoInput');
+if (flightNoEl) {
+	flightNoEl.addEventListener('input', refreshPaymentFooter);
+}
+
+// ------- 결제 수단 선택 시 즉시 결제바 및 버튼 활성화 갱신 -------
 document.querySelectorAll('input[name="t_reservation_pay_method"]').forEach(function (radio) {
 	radio.addEventListener('change', function () {
 		payState.payMethod = radio.value;
@@ -284,22 +320,9 @@ document.querySelectorAll('input[name="t_reservation_pay_method"]').forEach(func
 	});
 });
 
-//도착 예정 시간 입력 시 결제 버튼 활성화 판단 로직
+// 도착 예정 시간 입력 시
 var flightArriveInputEl = document.getElementById('flightArriveInput');
 if (flightArriveInputEl) {
 	flightArriveInputEl.addEventListener('input', refreshPaymentFooter);
 	flightArriveInputEl.addEventListener('change', refreshPaymentFooter);
 }
-
-// ------- 결제하기 -------
-/*document.getElementById('payBtn').addEventListener('click', function () {
-	alert(
-		'예약이 완료되었습니다.\n\n' +
-		'좌석: ' + payState.seatLabel + '\n' +
-		'이용방식: ' + (payState.plan === '1' ? '1안 (예약형)' : '2안 (자유출차형)') + '\n' +
-		'예약금: ' + DEPOSIT_PRICE.toLocaleString() + '원 결제\n\n' +
-		'(실제 결제/서버 저장 및 항공편 결항 감지 API 연동은 다음 단계에서 연결됩니다)'
-	);
-	closePaymentModal();
-});
-*/

@@ -1,0 +1,124 @@
+/* 회원 화면 공통 사이드 메뉴 */
+.member_page_layout {
+	width: 1100px;
+	max-width: 100%;
+	margin: 0 auto;
+	display: flex;
+	align-items: flex-start;
+	gap: 50px;
+}
+
+.member_container {
+	max-width: calc(100% - 40px);
+}
+
+.member_menu_sidebar,
+.member_left {
+	width: 170px;
+	flex-shrink: 0;
+}
+
+.member_page_layout .login_container,
+.member_page_layout .join_container {
+	flex: 1;
+	min-width: 0;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.member_page_layout .login_container {
+	max-width: 500px;
+}
+
+.member_page_layout .join_container {
+	max-width: 760px;
+}
+
+.member_menu_title {
+	margin: 0 0 20px;
+	padding-bottom: 12px;
+	font-size: 18px;
+	font-weight: bold;
+	border-bottom: 2px solid #222;
+}
+
+.member_menu ul {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.member_menu li {
+	border-bottom: 1px solid #eee;
+}
+
+.member_menu li a {
+	display: block;
+	padding: 13px 5px;
+	color: #555;
+	font-size: 13px;
+	text-decoration: none;
+	transition: 0.2s;
+}
+
+.member_menu li a:hover {
+	color: #111;
+	background-color: #f7f7f7;
+}
+
+.member_menu li.active a {
+	padding-left: 16px;
+	color: #1769d2;
+	font-weight: 700;
+	background-color: #eef5ff;
+	border-left: 3px solid #1769d2;
+}
+
+@media (max-width: 767px) {
+	.member_container {
+		width: calc(100% - 28px);
+		margin: 35px auto;
+		display: block;
+	}
+
+	.member_page_layout {
+		display: block;
+	}
+
+	.member_menu_sidebar,
+	.member_left {
+		width: 100%;
+		margin-bottom: 28px;
+	}
+
+	.member_menu_title {
+		margin-bottom: 10px;
+	}
+
+	.member_menu ul {
+		display: flex;
+		border-top: 1px solid #eee;
+	}
+
+	.member_menu li {
+		flex: 1;
+		border-top: 0;
+		border-right: 1px solid #eee;
+	}
+
+	.member_menu li:last-child {
+		border-right: 0;
+	}
+
+	.member_menu li a {
+		padding: 12px 4px;
+		text-align: center;
+		font-size: 11px;
+	}
+
+	.member_menu li.active a {
+		padding: 12px 4px 9px;
+		border-left: 0;
+		border-bottom: 3px solid #1769d2;
+	}
+}

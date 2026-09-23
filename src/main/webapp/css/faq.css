@@ -1,6 +1,7 @@
-/* FAQ 페이지 전용 (faq/faq.jsp) */
-.faq_page{padding-top:120px}
+/* FAQ 페이지 전용 (faq/faq_list.jsp, faq_write.jsp, faq_update.jsp) */
+.faq_page{padding-top:36px}
 
+/* 카테고리 필터 버튼 */
 .faq_cate{display:flex;gap:8px;margin-bottom:22px;flex-wrap:wrap}
 .faq_cate a{
 	padding:8px 16px;border:1px solid #e0e5ec;border-radius:20px;
@@ -9,7 +10,9 @@
 .faq_cate a:hover{border-color:#1769d2;color:#1769d2}
 .faq_cate a.on{background:#1769d2;border-color:#1769d2;color:#fff}
 
+/* 목록 */
 .faq_list{border-top:2px solid #2b3340}
+.faq_empty{padding:50px;text-align:center;color:#999;font-size:14px}
 
 .faq_item{border-bottom:1px solid #e7ebf0;background:#fff}
 
@@ -30,6 +33,11 @@
 	margin-left:auto;flex:0 0 auto;
 	font-size:11px;color:#8c96a3;font-weight:500
 }
+/* 관리자에게만 보이는 숨김 글 표시 */
+.faq_badge_hidden{
+	flex:0 0 auto;padding:2px 8px;border-radius:10px;
+	background:#fbe9e7;color:#c0392b;font-size:11px;font-weight:600
+}
 
 .faq_body{
 	display:flex;gap:12px;
@@ -41,5 +49,49 @@
 	background:#8c96a3;color:#fff;font-size:13px;font-weight:700;
 	display:flex;align-items:center;justify-content:center
 }
+/* 관리자가 textarea 에 친 줄바꿈을 <br> 없이 그대로 보여준다 */
+.faq_answer{white-space:pre-line}
 .faq_body ul{margin:6px 0 0 0;padding-left:16px;list-style:disc}
 .faq_body li{margin-bottom:4px}
+
+/* 항목 하단 관리자 바 (수정/삭제) */
+.faq_admin{
+	display:flex;align-items:center;gap:6px;
+	padding:10px 20px;background:#f0f3f8;border-top:1px dashed #d9dfe7
+}
+.faq_meta{margin-right:auto;font-size:12px;color:#8c96a3}
+
+/* 버튼 (a 와 input 둘 다 같은 모양이 되게) */
+.faq_btn{
+	display:inline-block;padding:9px 18px;border:1px solid #cfd6df;border-radius:6px;
+	font-size:13px;font-family:inherit;color:#2b3340;background:#fff;
+	cursor:pointer;text-decoration:none;line-height:1.2;transition:.2s
+}
+.faq_btn:hover{border-color:#1769d2;color:#1769d2}
+.faq_btn_primary{background:#1769d2;border-color:#1769d2;color:#fff}
+.faq_btn_primary:hover{background:#125ab8;border-color:#125ab8;color:#fff}
+.faq_btn_danger:hover{border-color:#c0392b;color:#c0392b}
+.faq_btn_sm{padding:5px 11px;font-size:12px}
+
+/* 등록/수정 폼 */
+.faq_form{width:100%;border-collapse:collapse;border-top:2px solid #2b3340;margin-bottom:24px}
+.faq_form th,.faq_form td{
+	padding:12px 16px;border-bottom:1px solid #e7ebf0;
+	font-size:14px;text-align:left;vertical-align:middle
+}
+.faq_form th{width:140px;background:#f7f9fc;color:#2b3340;font-weight:600}
+.faq_form input[type=text],
+.faq_form input[type=number],
+.faq_form select,
+.faq_form textarea{
+	width:100%;padding:9px 12px;border:1px solid #cfd6df;border-radius:6px;
+	font-size:14px;font-family:inherit;color:#2b3340;box-sizing:border-box
+}
+.faq_form input[type=number]{width:120px}
+.faq_form select{width:200px}
+.faq_form textarea{height:220px;resize:vertical;line-height:1.6}
+.faq_form input:focus,.faq_form select:focus,.faq_form textarea:focus{outline:none;border-color:#1769d2}
+.faq_form label{margin-right:16px;font-size:14px;cursor:pointer}
+.faq_form label input{margin-right:4px}
+.faq_help{margin-left:8px;font-size:12px;color:#8c96a3}
+.faq_btns{display:flex;gap:8px;justify-content:center}

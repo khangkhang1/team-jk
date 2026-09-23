@@ -18,6 +18,7 @@ public class ReservationMap implements CommonExecute {
             parkingLotId = request.getParameter("zone");
         }
         
+    	String id =(String)request.getSession().getAttribute("sessionId");
         String startTime = request.getParameter("reqStartTime");
         String endTime = request.getParameter("reqEndTime");
 
@@ -25,12 +26,12 @@ public class ReservationMap implements CommonExecute {
         if (parkingLotId == null || parkingLotId.trim().isEmpty()) {
             parkingLotId = "P1";
         }
+        String today = java.time.LocalDate.now().toString();
         if (startTime == null || startTime.trim().isEmpty()) {
-            startTime = "2026-09-17 00:00"; // 해당 일자 시작점
+            startTime = today + " 00:00";
         }
         if (endTime == null || endTime.trim().isEmpty()) {
-            endTime = "2026-09-17 23:59";   // 해당 일자 종료점 (2099년 대신 해당 날짜 전체 조회)
-            
+            endTime = today + " 23:59";
         }
         
         try {
@@ -38,7 +39,7 @@ public class ReservationMap implements CommonExecute {
             
             // String -> LocalDateTime 변환 후 3시간(+)
             LocalDateTime dt = LocalDateTime.parse(endTime, formatter);
-            dt = dt.minusHours(3); 
+            dt = dt.plusHours(3); 
             
             // 다시 String으로 변환
             endTime = dt.format(formatter);
@@ -50,15 +51,16 @@ public class ReservationMap implements CommonExecute {
         ReservationMapDao dao = ReservationMapDao.getDao();
         
         // ★ [핵심 추가] 맵 데이터를 화면에 그리기 직전에, 결항으로 묶인 예약건들을 빈자리로 자동 재배정합니다.
-        dao.autoReassignCancelledVictims();
+        dao.autoChange();
 
         // 재배정이 끝난 최신 상태의 맵 데이터를 가져옵니다.
         List<ReservationMapDto> dtos = dao.getPakingMap(parkingLotId.toUpperCase(), startTime, endTime);
-
+        String type =dao.getMemberType(id);
         // JSP로 데이터 전달
         request.setAttribute("seatList", dtos);
         request.setAttribute("selectedLotId", parkingLotId.toUpperCase());
         request.setAttribute("reqStartTime", startTime);
         request.setAttribute("reqEndTime", endTime);
+        request.setAttribute("memberType", type);
     }
 }

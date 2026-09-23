@@ -139,7 +139,7 @@ public class PaymentDao {
 	public int checkReservation(String seat) {
 		int result = 0;
 		String sql = "select count(*) as count from icn_reservation\r\n"
-				+ "where seat_no = ? and reservation_status = ? or reservation_status = ?";
+				+ "where seat_no = ? and reservation_status in (?, ?)";
 		try {
 			con    = DBConnection.getConnection();
 			LogPreparedStatement ps = new LogPreparedStatement(con, sql);
