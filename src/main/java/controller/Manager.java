@@ -167,6 +167,14 @@ public class Manager extends HttpServlet {
 			cmd.execute(request);
 			forward(request, response, "common_alert.jsp");
 
+		} else if (gubun.equals("member")) {
+			memberList(request, dao);
+			forward(request, response, "manager/member_list.jsp");
+
+		} else if (gubun.equals("memberView")) {
+			memberView(request, dao);
+			forward(request, response, "manager/member_view.jsp");
+
 		} else if (gubun.equals("seat")) {
 			seat(request, dao);
 			forward(request, response, "manager/seat.jsp");
@@ -314,8 +322,11 @@ public class Manager extends HttpServlet {
 	// 상세에서 "목록으로" 를 눌렀을 때 보던 검색 조건·페이지로 돌아가게 주소를 만들어 둔다.
 	// 조건을 잃어버리면 관리자가 매번 다시 검색해야 한다 (한 건 처리하고 목록 → 다음 건 처리의 반복이라 체감이 크다).
 	private String listQuery(HttpServletRequest request) {
-		StringBuilder sb = new StringBuilder("Manager?t_gubun=report");
-		String[] keys = { "t_select", "t_search", "t_status", "t_type", "t_nowPage" };
+		return listQuery(request, "report", "t_select", "t_search", "t_status", "t_type", "t_nowPage");
+	}
+
+	private String listQuery(HttpServletRequest request, String gubun, String... keys) {
+		StringBuilder sb = new StringBuilder("Manager?t_gubun=" + gubun);
 		for (String key : keys) {
 			String value = CommonUtil.getCheckNull(request.getParameter(key));
 			if (!value.equals("")) {
@@ -415,6 +426,53 @@ public class Manager extends HttpServlet {
 		}
 		request.setAttribute("activeMenu", "notice");
 		request.setAttribute("pageTitle", "공지사항 관리");
+	}
+
+	// ---------------------------------------------------------------- 회원 관리
+	private void memberList(HttpServletRequest request, ManagerDao dao) {
+		String select = CommonUtil.getCheckNull(request.getParameter("t_select"));
+		String search = CommonUtil.getCheckNull(request.getParameter("t_search")).trim();
+		if (select.equals("")) select = "member_id";
+
+		String nowPage = request.getParameter("t_nowPage");
+		int current_page = (nowPage == null || !nowPage.matches("[0-9]+")) ? 1 : Integer.parseInt(nowPage);
+		if (current_page < 1) current_page = 1;
+
+		int totalCount = dao.getMemberCount(select, search);
+		int total_page = totalCount / LIST_PER_PAGE;
+		if (totalCount % LIST_PER_PAGE != 0) total_page = total_page + 1;
+		if (total_page == 0) total_page = 1;
+		if (current_page > total_page) current_page = total_page;
+
+		int start = (current_page - 1) * LIST_PER_PAGE + 1;
+		int end   = current_page * LIST_PER_PAGE;
+
+		request.setAttribute("dtos", dao.getMemberList(select, search, start, end));
+		request.setAttribute("select", select);
+		request.setAttribute("search", search);
+		request.setAttribute("totalCount", totalCount);
+		request.setAttribute("totalPage", total_page);
+		request.setAttribute("nowPage", current_page);
+		request.setAttribute("startNo", start);
+		request.setAttribute("activeMenu", "member");
+		request.setAttribute("pageTitle", "회원 관리");
+	}
+
+	private void memberView(HttpServletRequest request, ManagerDao dao) {
+		String memberId = CommonUtil.getCheckNull(request.getParameter("t_member_id")).trim();
+
+		if (!memberId.equals("")) {
+			HashMap<String, Object> view = dao.getMemberView(memberId);
+			if (!view.isEmpty()) {
+				request.setAttribute("view", view);
+				request.setAttribute("reservations", dao.getMemberReservations(memberId, 50));
+				request.setAttribute("reports", dao.getMemberReports(memberId, 10));
+			}
+		}
+		request.setAttribute("memberId", memberId);
+		request.setAttribute("listUrl", listQuery(request, "member", "t_select", "t_search", "t_nowPage"));
+		request.setAttribute("activeMenu", "member");
+		request.setAttribute("pageTitle", "회원 상세");
 	}
 
 	// ---------------------------------------------------------------- 좌석·구역 현황

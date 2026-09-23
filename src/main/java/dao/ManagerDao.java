@@ -345,6 +345,103 @@ public class ManagerDao {
 		return result;
 	}
 
+	// ================================================================ 회원 관리
+
+	// 회원 목록의 검색 컬럼. 바인딩이 안 되므로 화이트리스트에서 고른다.
+	private String memberColumn(String select) {
+		if ("name".equals(select))           return "m.name";
+		if ("phone_number".equals(select))   return "m.phone_number";
+		if ("vehicle_number".equals(select)) return "m.vehicle_number";
+		return "m.member_id";
+	}
+
+	// 회원 한 명당 예약 건수·이용 금액을 같이 뽑는다. 목록에서 한 명씩 다시 조회하면 화면당 쿼리가 수십 번 나간다.
+	private static final String MEMBER_COLS =
+		  "m.member_id, m.name, m.phone_number, m.email, m.vehicle_number,\r\n"
+		+ "       DECODE(m.vehicle_type,'N','일반','D','장애인','E','전기차',m.vehicle_type) AS vehicle_type_label,\r\n"
+		+ "       TO_CHAR(m.reg_date,'YYYY-MM-DD') AS reg_date,\r\n"
+		+ "       TO_CHAR(m.exit_date,'YYYY-MM-DD') AS exit_date,\r\n"
+		+ "       NVL(r.resv_cnt,0) AS resv_cnt, NVL(r.done_cnt,0) AS done_cnt, NVL(r.cancel_cnt,0) AS cancel_cnt,\r\n"
+		+ "       NVL(r.parking_cnt,0) AS parking_cnt, TO_CHAR(r.last_start,'YYYY-MM-DD') AS last_use,\r\n"
+		+ "       NVL(p.paid,0) AS paid";
+
+	private static final String MEMBER_FROM =
+		  "FROM   icn_member m\r\n"
+		+ "LEFT JOIN (SELECT member_id, COUNT(*) AS resv_cnt,\r\n"
+		+ "                  SUM(CASE WHEN reservation_status = '3' THEN 1 ELSE 0 END) AS done_cnt,\r\n"
+		+ "                  SUM(CASE WHEN reservation_status = '4' THEN 1 ELSE 0 END) AS cancel_cnt,\r\n"
+		+ "                  SUM(CASE WHEN reservation_status = '2' THEN 1 ELSE 0 END) AS parking_cnt,\r\n"
+		+ "                  MAX(reservation_start_time) AS last_start\r\n"
+		+ "           FROM   icn_reservation GROUP BY member_id) r ON r.member_id = m.member_id\r\n"
+		+ "LEFT JOIN (SELECT r2.member_id,\r\n"
+		+ "                  SUM(CASE WHEN p2.payment_type = '3' THEN -p2.payment_amount ELSE p2.payment_amount END) AS paid\r\n"
+		+ "           FROM   icn_payment p2\r\n"
+		+ "           JOIN   icn_reservation r2 ON r2.reservation_id = p2.reservation_id\r\n"
+		+ "           GROUP BY r2.member_id) p ON p.member_id = m.member_id\r\n";
+
+	public int getMemberCount(String select, String search) {
+		String sql = "SELECT COUNT(*) AS cnt FROM icn_member m\r\n"
+				+ "WHERE UPPER(" + memberColumn(select) + ") LIKE UPPER('%' || ? || '%')";
+		HashMap<String, Object> row = selectOne(sql, search == null ? "" : search);
+		return row.isEmpty() ? 0 : ((Number) row.get("cnt")).intValue();
+	}
+
+	public ArrayList<HashMap<String, Object>> getMemberList(String select, String search, int start, int end) {
+		String sql =
+			  "SELECT * FROM (\r\n"
+			+ "  SELECT ROWNUM AS rnum, t.* FROM (\r\n"
+			+ "    SELECT " + MEMBER_COLS + "\r\n"
+			+ "    " + MEMBER_FROM
+			+ "    WHERE UPPER(" + memberColumn(select) + ") LIKE UPPER('%' || ? || '%')\r\n"
+			+ "    ORDER BY m.reg_date DESC, m.member_id\r\n"
+			+ "  ) t\r\n"
+			+ ") WHERE rnum BETWEEN ? AND ?";
+		return selectRows(sql, search == null ? "" : search, start, end);
+	}
+
+	public HashMap<String, Object> getMemberView(String memberId) {
+		String sql = "SELECT " + MEMBER_COLS + "\r\n" + MEMBER_FROM + "WHERE  m.member_id = ?";
+		return selectOne(sql, memberId);
+	}
+
+	// 회원 한 명의 예약 내역 (최근 순). 키는 예약 관리 목록과 같게 맞춰 화면에서 같은 식으로 꺼내 쓴다.
+	public ArrayList<HashMap<String, Object>> getMemberReservations(String memberId, int limit) {
+		String sql =
+			  "SELECT * FROM (\r\n"
+			+ "    SELECT r.reservation_id, r.seat_no, s.lot_id,\r\n"
+			+ "           " + TYPE_LABEL + " AS type_label,\r\n"
+			+ "           r.reservation_status AS status, " + STATUS_LABEL + " AS status_label,\r\n"
+			+ "           TO_CHAR(r.reservation_start_time,'YYYY-MM-DD HH24:MI') AS start_text,\r\n"
+			+ "           TO_CHAR(r.reservation_end_time,'MM-DD HH24:MI') AS end_text,\r\n"
+			+ "           TO_CHAR(r.reservation_out_time,'MM-DD HH24:MI') AS out_text,\r\n"
+			+ "           r.flight_no, NVL(r.reservation_final_amount,0) AS final_amount,\r\n"
+			+ "           (SELECT NVL(SUM(p.payment_amount),0) FROM icn_payment p\r\n"
+			+ "            WHERE p.reservation_id = r.reservation_id AND p.payment_type = '1') AS prepaid,\r\n"
+			+ "           (SELECT NVL(SUM(CASE WHEN p.payment_type = '3' THEN -p.payment_amount ELSE p.payment_amount END),0)\r\n"
+			+ "            FROM icn_payment p WHERE p.reservation_id = r.reservation_id) AS paid_total\r\n"
+			+ "    FROM   icn_reservation r\r\n"
+			+ "    LEFT JOIN icn_seat s ON s.seat_no = r.seat_no\r\n"
+			+ "    WHERE  r.member_id = ?\r\n"
+			+ "    ORDER BY r.reservation_start_time DESC, r.reservation_id DESC\r\n"
+			+ ") WHERE ROWNUM <= ?";
+		return selectRows(sql, memberId, limit);
+	}
+
+	// 회원이 남긴 문의 (관리자 문의 내역 화면으로 이어진다)
+	public ArrayList<HashMap<String, Object>> getMemberReports(String memberId, int limit) {
+		String sql =
+			  "SELECT * FROM (\r\n"
+			+ "    SELECT r.report_id, r.title,\r\n"
+			+ "           DECODE(r.report_type,'1','자리 무단점유','2','시설 파손·고장','3','차량 훼손','4','불법 주차','5','기타 문의',r.report_type) AS type_label,\r\n"
+			+ "           r.report_status, DECODE(r.report_status,'1','접수','2','처리 중','3','처리 완료','4','반려',r.report_status) AS status_label,\r\n"
+			+ "           TO_CHAR(r.reg_date,'YYYY-MM-DD') AS reg_date\r\n"
+			+ "    FROM   icn_report r\r\n"
+			+ "    WHERE  r.member_id = ?\r\n"
+			+ "    ORDER BY r.reg_date DESC, r.report_id DESC\r\n"
+			+ ") WHERE ROWNUM <= ?";
+		return selectRows(sql, memberId, limit);
+	}
+
 	// ================================================================ 좌석·구역 현황
 
 	// 한 구역의 좌석 전부 + 지금 걸려 있는 예약. 키 : seat_no, seat_type, seat_type_label, state(parking/reserved/free),

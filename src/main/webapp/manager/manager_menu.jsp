@@ -30,6 +30,9 @@
 		<a href="${ctx}/Manager?t_gubun=reservation" class="${activeMenu == 'reservation' ? 'on' : ''}">
 			<i>▤</i> 예약 관리
 		</a>
+		<a href="${ctx}/Manager?t_gubun=member" class="${activeMenu == 'member' ? 'on' : ''}">
+			<i>◍</i> 회원 관리
+		</a>
 		<a href="${ctx}/Manager?t_gubun=seat" class="${activeMenu == 'seat' ? 'on' : ''}">
 			<i>▣</i> 좌석·구역 현황
 		</a>
