@@ -7,10 +7,11 @@ import java.sql.ResultSet;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.LinkedHashMap;
 
 import common.DBConnection;
 import dto.MemberDto;
-import dto.ReservationInfoDto;
 
 /** 회원 가입과 인증에 필요한 DB 접근을 담당한다. */
 public class MemberDao {
@@ -214,36 +215,62 @@ public class MemberDao {
 		return result;
 	}
 
-	public List<ReservationInfoDto> getReservationInfo(String member_id) {
-		List<ReservationInfoDto> dtos=new ArrayList<>();
-		String sql="select r.reservation_estimate_amount, r.reservation_deposit_amount\r\n"
-				+ "	r.reservation_id, r.flight_no, r.reservation_status, r.reservation_start_date, r.reservation_start_time,\r\n"
-				+ "	r.reservation_end_date, r.reservation_end_time,\r\n"
-				+ "	r.reservation_out_time, r.reservation_type, r.seat_no from icn_reservation r,icn_member m where r.member_id=m.member_id and r.member_id=?";
-		try {
-			con = DBConnection.getConnection();
-			ps = new LogPreparedStatement(con, sql);
-			ps.setString(1, member_id);
-			rs = ps.executeQuery();
-			while (rs.next()) {
-				
-				dto.setPhone_number(rs.getString("phone_number"));
-				dto.setEmail(rs.getString("email"));
-				dto.setVehicle_number(rs.getString("vehicle_number"));
-				dto.setVehicle_type(rs.getString("vehicle_type"));
-				dto.setReg_date(rs.getTimestamp("reg_date"));
-				Timestamp update_date = rs.getTimestamp("update_date");
-				Timestamp exit_date = rs.getTimestamp("exit_date");
-				dto.setUpdate_date(update_date);
-				dto.setExit_date(exit_date);
+	public List<Map<String, Object>> getReservationInfo(String memberId) {
+		List<Map<String, Object>> reservations = new ArrayList<>();
+		String sql = "select r.reservation_id, r.reservation_status, r.reservation_type, r.seat_no, r.flight_no, "
+				+ "to_char(r.reservation_start_time, 'YYYY-MM-DD HH24:MI') as start_at, "
+				+ "to_char(r.reservation_end_time, 'YYYY-MM-DD HH24:MI') as end_at, "
+				+ "to_char(r.reservation_out_time, 'YYYY-MM-DD HH24:MI') as out_at, "
+				+ "to_char(r.reservation_parking_start_time, 'YYYY-MM-DD HH24:MI') as parking_start_at, "
+				+ "to_char(r.reservation_arrive_time, 'YYYY-MM-DD HH24:MI') as arrive_at, "
+				+ "to_char(r.reservation_date, 'YYYY-MM-DD HH24:MI') as reserved_at, "
+				+ "case when r.reservation_status = '1' and r.reservation_start_time > sysdate "
+				+ "then 1 else 0 end as can_cancel, "
+				+ "r.reservation_estimate_amount, r.reservation_deposit_amount, r.reservation_final_amount "
+				+ "from icn_reservation r where r.member_id = ? "
+				+ "order by r.reservation_date desc, r.reservation_id desc";
+		try (Connection connection = DBConnection.getConnection();
+				LogPreparedStatement statement = new LogPreparedStatement(connection, sql)) {
+			statement.setString(1, memberId);
+			try (ResultSet result = statement.executeQuery()) {
+				while (result.next()) {
+					Map<String, Object> reservation = new LinkedHashMap<>();
+					reservation.put("reservation_id", result.getString("reservation_id"));
+					reservation.put("reservation_status", result.getString("reservation_status"));
+					reservation.put("reservation_type", result.getString("reservation_type"));
+					reservation.put("seat_no", result.getString("seat_no"));
+					reservation.put("flight_no", result.getString("flight_no"));
+					reservation.put("start_at", result.getString("start_at"));
+					reservation.put("end_at", result.getString("end_at"));
+					reservation.put("out_at", result.getString("out_at"));
+					reservation.put("parking_start_at", result.getString("parking_start_at"));
+					reservation.put("arrive_at", result.getString("arrive_at"));
+					reservation.put("reserved_at", result.getString("reserved_at"));
+					reservation.put("can_cancel", result.getInt("can_cancel"));
+					reservation.put("reservation_estimate_amount", result.getObject("reservation_estimate_amount"));
+					reservation.put("reservation_deposit_amount", result.getObject("reservation_deposit_amount"));
+					reservation.put("reservation_final_amount", result.getObject("reservation_final_amount"));
+					reservations.add(reservation);
+				}
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
-			System.out.println("Error: " + ps.toString());
-		} finally {
-			DBConnection.closeDB(con, ps, rs);
+			throw new IllegalStateException("예약 내역 조회에 실패했습니다.", e);
 		}
-		return dtos;
+		return reservations;
+	}
+
+	public int cancelReservation(String memberId, String reservationId) {
+		String sql = "update icn_reservation set reservation_status = '4' "
+				+ "where reservation_id = ? and member_id = ? "
+				+ "and reservation_status = '1' and reservation_start_time > sysdate";
+		try (Connection connection = DBConnection.getConnection();
+				LogPreparedStatement statement = new LogPreparedStatement(connection, sql)) {
+			statement.setString(1, reservationId);
+			statement.setString(2, memberId);
+			return statement.executeUpdate();
+		} catch (Exception e) {
+			throw new IllegalStateException("예약 취소에 실패했습니다.", e);
+		}
 	}
 
 }

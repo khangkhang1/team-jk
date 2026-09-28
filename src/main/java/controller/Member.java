@@ -15,6 +15,7 @@ import command.member.MemberLogout;
 import command.member.MemberMyInfo;
 import command.member.MemberPasswordUpdate;
 import command.member.MemberReservation;
+import command.member.MemberReservationCancel;
 import command.member.MemberSave;
 import command.member.MemberSendPassword;
 import command.member.MemberUpdate;
@@ -126,9 +127,26 @@ public class Member extends HttpServlet {
 			mem.execute(request);
 			viewPage = "common_alert.jsp";
 		} else if (gubun.equals("myreservation")) {
-			MemberReservation mem = new MemberReservation();
-			mem.execute(request);
-			viewPage = "member/member_myreservation.jsp";
+			String id = (String) request.getSession().getAttribute("sessionId");
+			if (id == null) {
+				request.setAttribute("t_msg", "로그인 정보가 만료되었습니다.");
+				request.setAttribute("t_url", "Member");
+				viewPage = "common_alert.jsp";
+			} else {
+				MemberReservation mem = new MemberReservation();
+				mem.execute(request);
+				viewPage = "member/member_myreservation.jsp";
+			}
+		} else if (gubun.equals("reservationCancel")) {
+			String id = (String) request.getSession().getAttribute("sessionId");
+			if (id == null) {
+				request.setAttribute("t_msg", "로그인 정보가 만료되었습니다.");
+				request.setAttribute("t_url", "Member");
+			} else {
+				MemberReservationCancel mem = new MemberReservationCancel();
+				mem.execute(request);
+			}
+			viewPage = "common_alert.jsp";
 		}
 
 		RequestDispatcher rd = request.getRequestDispatcher(viewPage);
