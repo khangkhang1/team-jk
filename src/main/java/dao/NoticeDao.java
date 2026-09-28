@@ -250,13 +250,13 @@ public class NoticeDao {
 					+ "    from(\r\n"
 					+ "        select no\r\n"
 					+ "        from icn_notice\r\n"
-					+ "        order by important, no desc) n \r\n"
+					+ "        order by important, no asc) n \r\n"
 					+ ") where no ='"+no+"') n1,\r\n"
 					+ "(select rownum rnum, no, title\r\n"
 					+ "    from(\r\n"
 					+ "        select no, title\r\n"
 					+ "        from icn_notice\r\n"
-					+ "        order by important, no desc)) n2\r\n"
+					+ "        order by important, no asc)) n2\r\n"
 					+ "where n1.rnum = n2.rnum        \r\n"
 					+ "";
 			

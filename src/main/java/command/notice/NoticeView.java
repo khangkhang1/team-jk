@@ -19,8 +19,8 @@ public class NoticeView implements CommonExecute {
 		      if(result != 1) System.out.println("공지사항 조회수 증가 오류.");
 		    
 		      //이전글 '+' 다음글 '-'
-		      NoticeDto preDto = dao.getPreNextNotice(no,"+");
-		      NoticeDto nextDto = dao.getPreNextNotice(no,"-");
+		      NoticeDto preDto = dao.getPreNextNotice(no,"-");
+		      NoticeDto nextDto = dao.getPreNextNotice(no,"+");
 		      request.setAttribute("preDto", preDto);
 		      request.setAttribute("nextDto", nextDto);
 		     
