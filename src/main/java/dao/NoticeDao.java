@@ -308,6 +308,56 @@ public class NoticeDao {
 		
 		return result;
 	}
+
+
+
+
+	public List<NoticeDto> indexNotice() {
+		List<NoticeDto> dtos = new ArrayList<>();
+		String sql = "select no, title, to_char(reg_date,'yyyy-MM-dd') as reg_date,important\r\n"
+				+ "from icn_notice\r\n"
+				+ "order by important desc,no desc";
+		
+		try {
+	         con=DBConnection.getConnection();
+	         ps=con.prepareStatement(sql);
+	         rs=ps.executeQuery();
+	         
+	         
+	         while(rs.next()) {
+	        	 String no = rs.getString("no");
+	        	 String title = rs.getString("title");
+	        	 String reg_date = rs.getString("reg_date");
+	        	 
+	        	 NoticeDto dto = new NoticeDto(no, title, reg_date);
+	        	 
+	        	 dtos.add(dto);
+	        	 
+	         }
+	         
+//	         if(rs.next()){
+//	             String no = rs.getString("no");
+//	             String title = rs.getString("title");
+//	             String reg_date = rs.getString("reg_date");
+//	        	 
+//	             dto = new NoticeDto(no, title, reg_date);
+//	             
+//	             
+//	         }
+	         
+	      }catch(Exception e) {
+	         e.printStackTrace();
+	         System.out.println("indexNotice 오류 : "+sql);
+	      }finally {
+	         DBConnection.closeDB(con, ps, rs);
+	      }
+		
+		
+		
+		
+		
+		return dtos;
+	}
 	
 	
 	

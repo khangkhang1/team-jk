@@ -3,12 +3,15 @@ package controller;
 import java.io.IOException;
 import java.util.List;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import command.index.indexNotice;
+import common.CommonExecute;
 import dto.LongTermParkingDto;
 import dto.ShortTermParkingDto;
 import service.ParkingService;
@@ -195,6 +198,10 @@ public class ParkingStatus extends HttpServlet {
                 shortTermList
         );
 
+        
+        //인덱스 공지사항 리스트 출력? 서블릿 파일 새로 만들어서 해볼 것
+        CommonExecute mem = new indexNotice();
+        mem.execute(request);
 
         // ================================
         // 메인 화면으로 이동
@@ -206,6 +213,11 @@ public class ParkingStatus extends HttpServlet {
                 request,
                 response
         );
+        
+        
+		
+        
+        
     }
 
 

@@ -21,7 +21,22 @@
 <title>인천공항 주차예약</title>
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery-1.8.1.min.js"></script>
 <script src="${pageContext.request.contextPath}/js/common.js"></script>
+<script>
+	function goView(no){
+		view.t_gubun.value = "noticeView";
+		view.t_no.value = no;
+		view.method="post";
+		view.action="Notice";
+		view.submit();
+	}
+</script>
 
+
+<form name="view">
+	<input type="hidden" name="t_gubun">
+	<input type="hidden" name="t_no">
+	
+</form>
 
 <form name="go">
 	<input type="hidden" name="t_gubun">
@@ -1178,7 +1193,7 @@ onclick="refreshParking()">
 
 </div>
 
-<a href="#" class="more">
+<a href="Notice" class="more">
 더보기 →
 </a>
 
@@ -1188,23 +1203,25 @@ onclick="refreshParking()">
 <ul class="notice_list">
 
 
+<c:forEach items="${t_dtos}" end="4" var="dto">
 <li>
 
 <span class="notice_tag">
 공지
 </span>
-
+<a href="javascript:goView('${dto.getNo()}')">
 <strong>
-주차예약 서비스 이용 안내
+${dto.getTitle()}
 </strong>
-
+</a>
 <span class="notice_date">
-2026.09.02
+${dto.getReg_date()}
+<!-- 2026.09.02  -->
 </span>
-
 </li>
+</c:forEach>
 
-
+<!-- 
 <li>
 
 <span class="notice_tag">
@@ -1255,7 +1272,7 @@ onclick="refreshParking()">
 
 </li>
 
-
+ -->
 </ul>
 
 </div>
