@@ -3,12 +3,15 @@ package controller;
 import java.io.IOException;
 import java.util.List;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import command.index.indexNotice;
+import common.CommonExecute;
 import dto.LongTermParkingDto;
 import dto.ShortTermParkingDto;
 import service.ParkingService;
@@ -108,16 +111,6 @@ public class ParkingStatus extends HttpServlet {
 
                 json.append("\"congestion\":\"")
                     .append(dto.getCongestion())
-                    .append("\",");
-
-                // 화면 "실시간 배지"용 - 실제 구역명 / 집계시각.
-                // 값이 없을 수도 있으므로 null이면 빈 문자열로 내보낸다.
-                json.append("\"floor\":\"")
-                    .append(escapeJson(dto.getFloor()))
-                    .append("\",");
-
-                json.append("\"datetm\":\"")
-                    .append(escapeJson(dto.getDateTm()))
                     .append("\"");
 
                 json.append("}");
@@ -169,16 +162,6 @@ public class ParkingStatus extends HttpServlet {
 
                 json.append("\"congestion\":\"")
                     .append(dto.getCongestion())
-                    .append("\",");
-
-                // 화면 "실시간 배지"용 - 실제 구역명 / 집계시각.
-                // 값이 없을 수도 있으므로 null이면 빈 문자열로 내보낸다.
-                json.append("\"floor\":\"")
-                    .append(escapeJson(dto.getFloor()))
-                    .append("\",");
-
-                json.append("\"datetm\":\"")
-                    .append(escapeJson(dto.getDateTm()))
                     .append("\"");
 
                 json.append("}");
@@ -215,6 +198,10 @@ public class ParkingStatus extends HttpServlet {
                 shortTermList
         );
 
+        
+        //인덱스 공지사항 리스트 출력? 서블릿 파일 새로 만들어서 해볼 것
+        CommonExecute mem = new indexNotice();
+        mem.execute(request);
 
         // ================================
         // 메인 화면으로 이동
@@ -226,6 +213,11 @@ public class ParkingStatus extends HttpServlet {
                 request,
                 response
         );
+        
+        
+		
+        
+        
     }
 
 
@@ -236,14 +228,5 @@ public class ParkingStatus extends HttpServlet {
             throws ServletException, IOException {
 
         doGet(request, response);
-    }
-
-    // JSON 라이브러리를 안 쓰므로 직접 이스케이프한다.
-    // 구역명에 따옴표가 들어올 일은 없지만, 문자열을 직접 조립하는 이상 빠뜨리면 안 되는 처리다.
-    private String escapeJson(String s) {
-        if (s == null) {
-            return "";
-        }
-        return s.replace("\\", "\\\\").replace("\"", "\\\"");
     }
 }
