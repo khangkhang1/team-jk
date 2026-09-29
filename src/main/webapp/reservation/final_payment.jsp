@@ -3,10 +3,87 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html lang="ko">
+
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>인천공항 주차예약 - 결제</title>
+
+<script>
+//---------- 포트원 결제 (오윤섭) ----------
+$(document).ready(function() {
+    window.IMP.init("imp43028000");
+});
+
+function goPayment() {
+    var method = document.pay.t_reservation_pay_method.value;
+    if (!method) {
+        alert("결제 수단을 선택해 주세요.");
+        return;
+    }
+    if (confirm("예약 및 결제를 진행하시겠습니까?")) {
+        payment(method);
+    }
+}
+
+function payment(method) {
+    var IMP = window.IMP;
+    var plan = document.getElementById("reservationPlan").value;
+    var price = document.getElementById("finalAmountInput").value;
+
+    if (method === "kakaoPay") {
+        IMP.request_pay({
+            pg: "kakaopay",
+            pay_method: "card",
+            merchant_uid: "ORD_" + new Date().getTime(),
+            name: "인천공항 주차장 예약",
+            amount: price,
+            buyer_name: "${empty sessionName ? '이용자' : sessionName}",
+            buyer_email: "test@example.com"
+        }, handleResponse);
+
+    } else if (method === "creditCard") {
+        IMP.request_pay({
+            pg: "html5_inicis.INIpayTest",
+            pay_method: "card",
+            merchant_uid: "ORD_" + new Date().getTime(),
+            name: "인천공항 주차장 예약",
+            amount: price,
+            buyer_name: "${empty sessionName ? '이용자' : sessionName}",
+            buyer_email: "test@example.com"
+        }, handleResponse);
+
+    } else if (method === "naverPay") {
+        IMP.request_pay({
+            pg: "naverpay",
+            pay_method: "card",
+            merchant_uid: "ORD_" + new Date().getTime(),
+            name: "인천공항 주차장 예약",
+            amount: price,
+            buyer_name: "${empty sessionName ? '이용자' : sessionName}",
+            buyer_email: "test@example.com",
+            naverPopupMode: true
+        }, handleResponse);
+
+    } else {
+        alert("선택하신 결제 수단은 현재 미지원입니다.");
+    }
+}
+
+function handleResponse(rsp) {
+    if (rsp.success) {
+        document.getElementById("impUidInput").value = rsp.imp_uid;
+        document.getElementById("merchantUidInput").value = rsp.merchant_uid;
+        var form = document.pay;
+        form.t_gubun.value = "finalPayment";
+        form.method = "post";
+        form.action = "${pageContext.request.contextPath}/Reservation";
+        form.submit();
+    } else {
+        alert("결제에 실패했거나 취소되었습니다.\n사유: " + rsp.error_msg);
+    }
+}
+</script>
 
 <!-- 1. jQuery 및 포트원 v1 SDK 로드 -->
 <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
@@ -206,9 +283,6 @@
   }
 </style>
 
-<script>
-//결제 method 추가 필요
-</script>
 </head>
 
 <body>
@@ -233,6 +307,7 @@
 	<main class="pay_page_container">
 		<form name="pay">
 			<input type="hidden" name="t_gubun" value="finalPayment">
+			<input type="hidden" name="t_reservation_id" value="${dto.getReservation_id()}">
 			
 			<div class="pay_card">
 				<h1 id="paymentSeatTitle" class="pay_title">P1 구역 - ${dto.getSeat_no()}</h1>
@@ -272,7 +347,7 @@
 					<div id="payBarPrice" style="font-size: 15px; text-align: right;">
 						<span>결제액:</span> <strong id="payBarAmount" style="font-size: 20px; color: #e53935;">${totalPrice}</strong> 원
 					</div>
-					<input type="hidden" name="t_final_amount">
+					<input type="hidden" name="t_final_amount" id="finalAmountInput" value="${totalPrice}">
 					<input type="hidden" name="t_imp_uid" id="impUidInput">
 					<input type="hidden" name="t_merchant_uid" id="merchantUidInput">
 					

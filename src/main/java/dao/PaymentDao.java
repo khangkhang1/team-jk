@@ -246,4 +246,53 @@ public class PaymentDao {
 		return result;
 	}
 
+	public int finalPaymentR(String reservation_id, long totalPrice, String todayTime) {
+		int result = 0;
+		String sql = "update icn_reservation\r\n"
+				+ "set reservation_status = ?,\r\n"
+				+ "    reservation_out_time = to_date(?, 'yyyy-MM-dd hh24:mi:ss'),\r\n"
+				+ "    reservation_final_amount = ?\r\n"
+				+ "where reservation_id = ?";
+		try {
+			con = DBConnection.getConnection();
+			LogPreparedStatement ps = new LogPreparedStatement(con, sql);
+			ps.setString(1, "3");
+			ps.setString(2, todayTime);
+			ps.setLong(3, totalPrice);
+			ps.setString(4, reservation_id);
+			result = ps.executeUpdate();
+		}catch(Exception e) {
+			System.out.println("finalPaymentR() 오류:" + ps.toString());
+			e.printStackTrace();
+		}finally {
+			DBConnection.closeDB(con, ps, rs);
+		}
+		return result;
+	}
+
+	public int finalPaymentP(String payment_id, String reservation_id, long totalPrice, String todayTime, String reservation_pay_method) {
+		int result = 0;
+		String sql = "insert into icn_payment\r\n"
+				+ "(payment_id, payment_amount, payment_method, payment_type, payment_date, reservation_id)\r\n"
+				+ "values\r\n"
+				+ "(?, ?, ?, ?, to_date(?, 'yyyy-MM-dd hh24:mi:ss'), ?)";
+		try {
+			con = DBConnection.getConnection();
+			LogPreparedStatement ps = new LogPreparedStatement(con, sql);
+			ps.setString(1, payment_id);
+			ps.setLong(2, totalPrice);
+			ps.setString(3, reservation_pay_method);
+			ps.setString(4, "2");
+			ps.setString(5, todayTime);
+			ps.setString(6, reservation_id);
+			result = ps.executeUpdate();
+		}catch(Exception e) {
+			System.out.println("finalPaymentP() 오류:" + ps.toString());
+			e.printStackTrace();
+		}finally {
+			DBConnection.closeDB(con, ps, rs);
+		}
+		return result;
+	}
+
 }
