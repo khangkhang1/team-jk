@@ -332,34 +332,77 @@ var isManager  = "${sessionScope.sessionLevel}" === "top";
 
 // 인덱스(index.jsp) SVG 와 같은 도면 좌표 (viewBox 1600x900)
 var ZONES = [
-	{ id:"P1", type:"장기주차장", price:2000, total:50, rows:4,
-	  box:{x:810,y:350,w:368,h:165},
-	  path:"M810 375 Q810 350 835 350 L1010 360 Q1040 370 1065 390 L1075 420 Q1090 430 1115 445 L1150 450 Q1170 460 1178 490 L1175 510 Q1165 515 1140 515 L845 515 Q810 515 810 515 Z" },
-	{ id:"P2", type:"장기주차장", price:2000, total:50, rows:4,
-	  box:{x:390,y:355,w:375,h:160},
-	  path:"M430 445 Q490 445 500 430 L510 420 Q520 390 535 375 L545 370 Q565 360 590 355 L760 355 Q765 355 765 355 L765 455 Q765 515 765 515 L420 515 Q390 515 395 505 Z" },
-	{ id:"P3", type:"단기주차장", price:3000, total:50, rows:2,
-	  box:{x:820,y:545,w:355,h:95},
-	  path:"M820 545 L1140 545 Q1175 560 1175 580 L1170 620 Q1140 640 1130 640 L820 640 Z" },
-	{ id:"P4", type:"단기주차장", price:3000, total:50, rows:2,
-	  box:{x:400,y:550,w:370,h:85},
-	  path:"M400 575 Q435 550 435 550 L755 550 Q770 550 770 575 L770 635 Q760 635 755 635 L435 635 Q410 630 410 630 Z" },
-	{ id:"P5", type:"단기주차장", price:3000, total:50, rows:2,
-	  box:{x:440,y:690,w:315,h:90},
-	  path:"M440 690 Q460 690 475 690 L735 690 Q755 690 755 690 L755 765 Q755 780 755 780 L475 780 Q440 780 440 780 Z" },
-	{ id:"P6", type:"단기주차장", price:3000, total:50, rows:3, bayW:6.2,
-	  box:{x:840, y:255, w:140, h:65},
-	  path:"M850 282 L980 258 L968 318 L840 318 Z" },
-	{ id:"P7", type:"단기주차장", price:3000, total:50, rows:3, bayW:6.2,
-	  box:{x:600, y:255, w:140, h:65},
-	  path:"M600 258 L730 282 L740 318 L612 318 Z" },
-	{ id:"P8", type:"단기주차장", price:3000, total:50, rows:2,
-	  box:{x:860, y:195, w:125, h:45},
-	  path:"M860 195 L985 195 L985 240 L860 240 Z" },
-	{ id:"P9", type:"단기주차장", price:3000, total:50, rows:2,
-	  box:{x:600, y:195, w:125, h:45},
-	  path:"M600 195 L725 195 L725 240 L600 240 Z" }
-];
+	{ id:"P1", type:"장기주차장", price:2000, total:53, rows:4,
+
+		box:{x:810,y:350,w:368,h:165},
+
+		path:"M810 375 Q810 350 835 350 L1010 360 Q1040 370 1065 390 L1075 420 Q1090 430 1115 445 L1150 450 Q1170 460 1178 490 L1175 510 Q1165 515 1140 515 L845 515 Q810 515 810 515 Z" },
+
+
+
+		{ id:"P2", type:"장기주차장", price:2000, total:60, rows:4,
+
+		box:{x:390,y:355,w:375,h:160},
+
+		path:"M430 445 Q490 445 500 430 L510 420 Q520 390 535 375 L545 370 Q565 360 590 355 L760 355 Q765 355 765 355 L765 455 Q765 515 765 515 L420 515 Q390 515 395 505 Z" },
+
+
+
+		{ id:"P3", type:"장기주차장", price:3000, total:60, rows:2,
+
+		box:{x:820,y:545,w:355,h:95},
+
+		path:"M820 545 L1140 545 Q1175 560 1175 580 L1170 620 Q1140 640 1130 640 L820 640 Z" },
+
+
+
+		{ id:"P4", type:"장기주차장", price:3000, total:60, rows:2,
+
+		box:{x:400,y:550,w:370,h:85},
+
+		path:"M400 575 Q435 550 435 550 L755 550 Q770 550 770 575 L770 635 Q760 635 755 635 L435 635 Q410 630 410 630 Z" },
+
+
+
+		{ id:"P5", type:"장기주차장", price:3000, total:60, rows:2,
+
+		box:{x:440,y:690,w:315,h:90},
+
+		path:"M440 690 Q460 690 475 690 L735 690 Q755 690 755 690 L755 765 Q755 780 755 780 L475 780 Q440 780 440 780 Z" },
+
+
+
+		{ id:"P6", type:"단기주차장", price:3000, total:60, rows:3, bayW:6.2,
+
+		box:{x:840, y:255, w:140, h:65},
+
+		path:"M850 282 L980 258 L968 318 L840 318 Z" },
+
+
+
+		{ id:"P7", type:"단기주차장", price:3000, total:60, rows:3, bayW:6.2,
+
+		box:{x:600, y:255, w:140, h:65},
+
+		path:"M600 258 L730 282 L740 318 L612 318 Z" },
+
+
+
+		{ id:"P8", type:"단기주차장", price:3000, total:60, rows:2,
+
+		box:{x:860, y:195, w:125, h:45},
+
+		path:"M860 195 L985 195 L985 240 L860 240 Z" },
+
+
+
+		{ id:"P9", type:"단기주차장", price:3000, total:60, rows:2,
+
+		box:{x:600, y:195, w:125, h:45},
+
+		path:"M600 195 L725 195 L725 240 L600 240 Z" }
+
+		];
 
 var currentZone  = "${selectedLotId}" || getZoneFromUrl() || "P1";
 var selectedSeat = null;
@@ -588,101 +631,238 @@ function renderZoneTabs(){
 
 // ---------- 화면 그리기 ----------
 function renderAll(){
-	var zone = findZone(currentZone);
 
-	document.getElementById("zoneTitle").textContent = zone.id + " 구역";
-	document.getElementById("zoneType").textContent  = zone.type + " · 시간당 " + zone.price.toLocaleString() + "원";
-	document.getElementById("seatBoxZone").textContent = zone.id;
-	document.getElementById("lotMapZoneLabel").textContent = zone.id + " 구역 · 지상";
+var zone = findZone(currentZone);
 
-	var tabs = document.querySelectorAll(".zone_tab");
-	for (var t=0;t<tabs.length;t++){
-		tabs[t].classList.toggle("active", tabs[t].getAttribute("data-zone") === currentZone);
-	}
+var seats = makeSeats(zone);
 
-	var pad = Math.max(zone.box.w, zone.box.h) * 0.15;
-	document.getElementById("lotSvg").setAttribute("viewBox",
-		(zone.box.x - pad) + " " + (zone.box.y - pad) + " " + (zone.box.w + pad*2) + " " + (zone.box.h + pad*2));
 
-	var outlineEl = document.getElementById("lotZoneOutline");
-	outlineEl.setAttribute("d", zone.path);
 
-	var layout = layoutBays(zone, outlineEl, document.getElementById("lotSvg"));
-	var seats  = makeSeats(zone, layout.bays.length);
-	for (var q=0; q<layout.bays.length; q++){
-		if (seats[q]) layout.bays[q].seat = seats[q];
-	}
+document.getElementById("zoneTitle").textContent = zone.id + " 구역";
 
-	var remain = 0;
-	for (var rr=0; rr<seats.length; rr++){
-		if (seats[rr].state === "free") remain++;
-	}
-	document.getElementById("zoneRemain").textContent = remain + "석";
-	document.getElementById("zoneTotal").textContent  = seats.length + "석";
-	document.getElementById("seatRemainCount").textContent = remain;
-	var ratio = seats.length ? remain / seats.length : 0;
-	document.getElementById("zoneStatus").textContent = ratio > 0.5 ? "여유" : (ratio > 0.2 ? "보통" : "혼잡");
+document.getElementById("zoneType").textContent = zone.type + " · 시간당 " + zone.price.toLocaleString() + "원";
 
-	applyLiveZoneStatus(zone.id);
+document.getElementById("seatBoxZone").textContent = zone.id;
 
-	var svg = "";
-	for (var l=0; l<layout.lanes.length; l++){
-		var lane = layout.lanes[l];
-		svg += '<line class="lot_lane" x1="' + lane.x1 + '" y1="' + lane.y + '" x2="' + lane.x2 + '" y2="' + lane.y + '"/>';
-	}
-	for (var b=0; b<layout.bays.length; b++){
-		var it = layout.bays[b];
-		var seat = it.seat;
-		if (!seat) continue;
 
-		var cls = "bay_g";
-		if (seat.state === "taken")     cls += " taken";
-		if (seat.state === "cancelled") cls += " cancelled";
-		if (seat.kind === "D") cls += " disabled_seat";
-		if (seat.kind === "E") cls += " ev_seat";
 
-		var label = seat.no.indexOf("-") > -1 ? seat.no.split("-")[1] : seat.no;
-		if (seat.kind === "D") label = "♿";
-		else if (seat.kind === "E") label = "⚡";
-		else if (seat.state === "cancelled") label = "✈";
+var remain = 0;
 
-		svg += '<g class="' + cls + '" data-seat="' + seat.no + '" data-state="' + seat.state + '" data-kind="' + seat.kind + '">'
-		     + '<rect class="bay" x="' + it.x.toFixed(1) + '" y="' + it.y.toFixed(1) + '" width="' + it.w.toFixed(1) + '" height="' + it.h.toFixed(1) + '" rx="1"/>'
-		     + '<text class="bay_label" x="' + (it.x + it.w/2).toFixed(1) + '" y="' + (it.y + it.h/2).toFixed(1) + '">' + label + '</text>'
-		     + '</g>';
-	}
-	document.getElementById("seatGrid").innerHTML = svg;
+for (var i=0;i<seats.length;i++){
 
-	var seatEls = document.querySelectorAll(".bay_g");
-	for (var k=0; k<seatEls.length; k++){
-		seatEls[k].addEventListener("click", function(){
-			if (this.getAttribute("data-state") !== "free") return;
+if (seats[i].state === "free") remain++;
 
-			// 회원 차량 종류에 맞는 자리만 (관리자는 제한 없음)
-			var seatKind = this.getAttribute("data-kind");
-			if (!isManager) {
-				if (seatKind === "D" && memberType !== "D") {
-					alert("♿ 장애인 전용 구역은 장애인 등록 회원만 선택하실 수 있습니다.");
-					return;
-				}
-				if (seatKind === "E" && memberType !== "E") {
-					alert("⚡ 전기차/수소차 전용 구역은 친환경차 등록 회원만 선택하실 수 있습니다.");
-					return;
-				}
-			}
-
-			var prev = document.querySelector(".bay_g.selected");
-			if (prev) prev.classList.remove("selected");
-			this.classList.add("selected");
-			selectedSeat = this.getAttribute("data-seat");
-			document.getElementById("selectedSeatText").innerHTML = "선택한 자리 : <strong>" + selectedSeat + "</strong>";
-			document.getElementById("goPayBtn").disabled = false;
-		});
-	}
-
-	document.getElementById("selectedSeatText").textContent = "선택된 자리가 없습니다.";
-	document.getElementById("goPayBtn").disabled = true;
 }
+
+document.getElementById("zoneRemain").textContent = remain + "석";
+
+document.getElementById("zoneTotal").textContent = seats.length + "석";
+
+document.getElementById("seatRemainCount").textContent = remain;
+
+
+
+var ratio = seats.length ? remain / seats.length : 0;
+
+var statusEl = document.getElementById("zoneStatus");
+
+statusEl.textContent = ratio > 0.5 ? "여유" : (ratio > 0.2 ? "보통" : "혼잡");
+
+
+
+var tabs = document.querySelectorAll(".zone_tab");
+
+for (var t=0;t<tabs.length;t++){
+
+tabs[t].classList.toggle("active", tabs[t].getAttribute("data-zone") === currentZone);
+
+}
+
+
+
+document.getElementById("lotMapZoneLabel").textContent = zone.id + " 구역 · 지상";
+
+
+
+var pad = Math.max(zone.box.w, zone.box.h) * 0.15;
+
+document.getElementById("lotSvg").setAttribute("viewBox",
+
+(zone.box.x - pad) + " " + (zone.box.y - pad) + " " +
+
+(zone.box.w + pad*2) + " " + (zone.box.h + pad*2));
+
+
+
+var outlineEl = document.getElementById("lotZoneOutline");
+
+outlineEl.setAttribute("d", zone.path);
+
+
+var layout = layoutBays(zone, outlineEl, document.getElementById("lotSvg"));
+
+seats = makeSeats(zone, layout.bays.length);
+
+for (var q=0; q<layout.bays.length; q++){
+
+if (seats[q]) {
+
+layout.bays[q].seat = seats[q];
+
+}
+
+}
+
+
+
+remain = 0;
+
+
+for (var rr=0; rr<seats.length; rr++){
+
+if (seats[rr].state === "free") remain++;
+
+}
+
+document.getElementById("zoneRemain").textContent = remain + "석";
+
+document.getElementById("zoneTotal").textContent = seats.length + "석";
+
+document.getElementById("seatRemainCount").textContent = remain;
+
+ratio = seats.length ? remain / seats.length : 0;
+
+statusEl.textContent = ratio > 0.5 ? "여유" : (ratio > 0.2 ? "보통" : "혼잡");
+
+
+
+applyLiveZoneStatus(zone.id);
+
+
+
+var svg = "";
+
+
+
+for (var l=0; l<layout.lanes.length; l++){
+
+var lane = layout.lanes[l];
+
+svg += '<line class="lot_lane" x1="' + lane.x1 + '" y1="' + lane.y + '" x2="' + lane.x2 + '" y2="' + lane.y + '"/>';
+
+}
+
+
+
+for (var b=0; b<layout.bays.length; b++){
+
+var it = layout.bays[b];
+
+var seat = it.seat;
+
+if (!seat) continue;
+
+
+var cls = "bay_g";
+
+if (seat.state === "taken") cls += " taken";
+
+if (seat.state === "cancelled") cls += " cancelled";
+
+if (seat.kind === "D") cls += " disabled_seat";
+
+if (seat.kind === "E") cls += " ev_seat";
+
+var label = seat.no.indexOf("-") > -1 ? seat.no.split("-")[1] : seat.no;
+
+if (seat.kind === "D") label = "♿";
+
+else if (seat.kind === "E") label = "⚡";
+
+else if (seat.state === "cancelled") label = "✈";
+
+
+
+svg += '<g class="' + cls + '" data-seat="' + seat.no + '" data-state="' + seat.state + '" data-kind="' + seat.kind + '">'
+
++ '<rect class="bay" x="' + it.x.toFixed(1) + '" y="' + it.y.toFixed(1) + '" width="' + it.w.toFixed(1) + '" height="' + it.h.toFixed(1) + '" rx="1"/>'
+
++ '<text class="bay_label" x="' + (it.x + it.w/2).toFixed(1) + '" y="' + (it.y + it.h/2).toFixed(1) + '">' + label + '</text>'
+
++ '</g>';
+
+}
+
+document.getElementById("seatGrid").innerHTML = svg;
+
+
+
+var seatEls = document.querySelectorAll(".bay_g");
+
+for (var k = 0; k < seatEls.length; k++) {
+
+seatEls[k].addEventListener("click", function(){
+
+if (this.getAttribute("data-state") !== "free") return;
+
+
+var seatKind = this.getAttribute("data-kind");
+
+
+// ★ 정의되지 않은 변수 에러 방지용 안전장치 (기본값 설정)
+
+var memberType = "${memberType}"; // "장애인", "전기차", "일반" 등
+
+// 장애인 회원 여부 확인 (DB 반환값 조건에 맞게 설정)
+var isUserDisabled = (memberType === "장애인" || memberType === "D" || memberType === "장애인차");
+var isUserEv = (memberType === "전기차" || memberType === "수소차" || memberType === "E");
+var isManager = ("${sessionScope.m_level}" === "TOP"); // 관리자 권한
+// 관리자가 아닐 때만 제한 조건 체크
+
+ 
+
+if (!isManager) {
+	//장애인인지 체크
+            if (seatKind === "D" && !isUserDisabled) {
+                alert("♿ 장애인 전용 구역은 장애인 등록 회원만 선택하실 수 있습니다.");
+                return; // 선택 차단
+            }
+	//아니면 수소차인지 체크
+            if (seatKind === "E" && !isUserEv) {
+                alert("⚡ 전기차/수소차 전용 구역은 친환경차 등록 회원만 선택하실 수 있습니다.");
+                return; // 선택 차단
+            }
+        }
+
+
+// 정상 선택 로직
+
+var prev = document.querySelector(".bay_g.selected");
+
+if (prev) prev.classList.remove("selected");
+
+this.classList.add("selected");
+
+selectedSeat = this.getAttribute("data-seat");
+
+document.getElementById("selectedSeatText").innerHTML =
+
+"선택한 자리 : <strong>" + selectedSeat + "</strong>";
+
+document.getElementById("goPayBtn").disabled = false;
+
+});
+
+}
+
+
+
+document.getElementById("selectedSeatText").textContent = "선택된 자리가 없습니다.";
+
+document.getElementById("goPayBtn").disabled = true;
+
+}
+
 
 // ---------- 결제 모달 열기 (payment.js 의 openPaymentModal) ----------
 document.getElementById("goPayBtn").addEventListener("click", function() {
