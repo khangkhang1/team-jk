@@ -19,6 +19,7 @@ public class ReservationMap implements CommonExecute {
         }
         
     	String id =(String)request.getSession().getAttribute("sessionId");
+    	
         String startTime = request.getParameter("reqStartTime");
         String endTime = request.getParameter("reqEndTime");
 
@@ -55,7 +56,10 @@ public class ReservationMap implements CommonExecute {
 
         // 재배정이 끝난 최신 상태의 맵 데이터를 가져옵니다.
         List<ReservationMapDto> dtos = dao.getPakingMap(parkingLotId.toUpperCase(), startTime, endTime);
-        String type =dao.getMemberType(id);
+        String type = "N";
+        if (id != null && !id.trim().isEmpty()) {
+            type = dao.getMemberType(id);
+        }
         // JSP로 데이터 전달
         request.setAttribute("seatList", dtos);
         request.setAttribute("selectedLotId", parkingLotId.toUpperCase());

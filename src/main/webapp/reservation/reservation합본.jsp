@@ -394,7 +394,7 @@ function makeSeats(zone, count){
 
 			var kind = "N";
 			if (dbSeat.typeNm === "장애인차") kind = "D";
-			else if (dbSeat.typeNm === "수소차" || dbSeat.typeNm === "전기차") kind = "E";
+			else if (dbSeat.typeNm === "전기차") kind = "E";
 
 			seats.push({ no: dbSeat.seatNo, state: state, kind: kind });
 		}
