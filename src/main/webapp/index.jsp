@@ -188,12 +188,10 @@
                 <strong>48,000원</strong>
             </div>
 
-            <button type="button"
-                    class="reservationPaymentBtn">
-                최종 결제하기
-                <i class="fa-solid fa-angle-right"></i>
-            </button>
-        </div>
+				<button type="button" class="reservationPaymentBtn">
+					최종 결제하기 <i class="fa-solid fa-angle-right"></i>
+				</button>
+			</div>
 
     </div>
 </c:if>
