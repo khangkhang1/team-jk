@@ -145,6 +145,159 @@
 
 <section class="hero">
 
+<!-- 최종 결제 안내 박스 -->
+<c:if test="${not empty sessionName}">
+    <div class="reservationSummary">
+
+		<div class="reservationSummaryHeader dragHandle">
+		    <div class="reservationSummaryTitle">
+		        <i class="fa-solid fa-car"></i>
+		        <span>이용 중인 예약</span>
+		    </div>
+		    <!-- 주차 경과 시간 -->
+		    <div class="parkingElapsed">
+		        <i class="fa-regular fa-clock"></i>
+		        <span id="parkingElapsedTime">00:00:00</span>
+		    </div>
+		    
+		    <span class="reservationStatus">이용 중</span>
+		</div>
+
+        <div class="reservationSummaryBody">
+
+            <div class="reservationInfo">
+                <i class="fa-solid fa-location-dot"></i>
+                <span>장기주차장 P5</span>
+            </div>
+
+            <div class="reservationInfo">
+                <i class="fa-regular fa-calendar"></i>
+                <span>2026.09.28 ~ 2026.10.02</span>
+            </div>
+
+            <div class="reservationInfo">
+                <i class="fa-regular fa-user"></i>
+                <span>${sessionName}님</span>
+            </div>
+
+        </div>
+
+        <div class="reservationSummaryFooter">
+            <div class="reservationPayment">
+                <span class="paymentLabel">최종 결제 예정 금액</span>
+                <strong>48,000원</strong>
+            </div>
+
+            <button type="button"
+                    class="reservationPaymentBtn">
+                최종 결제하기
+                <i class="fa-solid fa-angle-right"></i>
+            </button>
+        </div>
+
+    </div>
+</c:if>
+
+<!-- 최종 결제 박스 드래그 해서 옮기기 -->
+<script>
+document.addEventListener("DOMContentLoaded",function(){
+
+    const box = document.querySelector(".reservationSummary");
+    const handle = document.querySelector(".dragHandle");
+
+    if(!box || !handle) return;
+
+    let dragging = false;
+    let offsetX = 0;
+    let offsetY = 0;
+
+    handle.addEventListener("pointerdown",function(e){
+
+        dragging = true;
+
+        const rect = box.getBoundingClientRect();
+
+        offsetX = e.clientX - rect.left;
+        offsetY = e.clientY - rect.top;
+
+        box.style.left = rect.left + "px";
+        box.style.top = rect.top + "px";
+        box.style.right = "auto";
+        box.style.transform = "none";
+
+        handle.setPointerCapture(e.pointerId);
+
+        e.preventDefault();
+    });
+
+    handle.addEventListener("pointermove",function(e){
+
+        if(!dragging) return;
+
+        const maxX = window.innerWidth - box.offsetWidth;
+        const maxY = window.innerHeight - box.offsetHeight;
+
+        const left = Math.max(
+            0,
+            Math.min(e.clientX - offsetX, maxX)
+        );
+
+        const top = Math.max(
+            0,
+            Math.min(e.clientY - offsetY, maxY)
+        );
+
+        box.style.left = left + "px";
+        box.style.top = top + "px";
+
+    });
+
+    function stopDragging(){
+        dragging = false;
+    }
+
+    handle.addEventListener("pointerup",stopDragging);
+    handle.addEventListener("pointercancel",stopDragging);
+
+    
+ // 주차 경과 시간 임시 구현
+    const elapsedElement = document.getElementById("parkingElapsedTime");
+
+    if(elapsedElement){
+
+        const parkingStartTime = Date.now();
+
+        function updateParkingElapsed(){
+
+            const elapsedSeconds = Math.floor(
+                (Date.now() - parkingStartTime) / 1000
+            );
+
+            const hours = Math.floor(elapsedSeconds / 3600);
+            const minutes = Math.floor((elapsedSeconds % 3600) / 60);
+            const seconds = elapsedSeconds % 60;
+
+            const formatTime = value => String(value).padStart(2,"0");
+
+            elapsedElement.textContent =
+                formatTime(hours) + ":" +
+                formatTime(minutes) + ":" +
+                formatTime(seconds);
+        }
+
+        updateParkingElapsed();
+        setInterval(updateParkingElapsed,1000);
+    }
+    
+    
+});
+
+
+</script>
+
+
+
+
 <div class="hero_inner">
 
 <div class="hero_eyebrow">
