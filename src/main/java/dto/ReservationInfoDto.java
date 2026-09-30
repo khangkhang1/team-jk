@@ -63,6 +63,27 @@ public class ReservationInfoDto {
 		this.reservation_start_time = reservation_start_time;
 		this.seat_no = reservation_seat_no;
 	}
+	
+	
+	
+	
+	
+	//최종 결제 
+	public ReservationInfoDto(int reservation_final_amount, String reservation_id, String reservation_status,
+			String reservation_start_time, String reservation_end_time, String member_id, String seat_no, String reservation_parking_start_time,
+			String reservation_date, String reservation_type) {
+		this.reservation_final_amount = reservation_final_amount;
+		this.reservation_id = reservation_id;
+		this.reservation_status = reservation_status;
+		this.reservation_start_time = reservation_start_time;
+		this.reservation_end_time = reservation_end_time;
+		this.member_id = member_id;
+		this.seat_no = seat_no;
+		this.reservation_parking_start_time = reservation_parking_start_time;
+		this.reservation_date = reservation_date;
+		this.reservation_type = reservation_type;
+		
+	}
 
 	public String getReservation_id() {
 		return reservation_id;

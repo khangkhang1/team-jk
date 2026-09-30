@@ -2137,6 +2137,7 @@ rgba(0,20,45,.25) 100%
     transition:background 0.2s;
 }
 
+
 .reservationPaymentBtn:hover{
     background:#245fa5;
 }

@@ -157,7 +157,9 @@
 		    <!-- 주차 경과 시간 -->
 		    <div class="parkingElapsed">
 		        <i class="fa-regular fa-clock"></i>
+		        <c:if test="${r_dto.getReservation_type() eq '2'}">
 		        <span id="parkingElapsedTime">00:00:00</span>
+		        </c:if>
 		    </div>
 		    
 		    <span class="reservationStatus">이용 중</span>
@@ -167,12 +169,18 @@
 
             <div class="reservationInfo">
                 <i class="fa-solid fa-location-dot"></i>
-                <span>장기주차장 P5</span>
+                <span>${r_dto.getSeat_no()}</span>
             </div>
 
             <div class="reservationInfo">
                 <i class="fa-regular fa-calendar"></i>
-                <span>2026.09.28 ~ 2026.10.02</span>
+                <c:if test="${r_dto.getReservation_type() eq '1'}">
+              	  <span>${r_dto.getReservation_start_time()} ~ ${r_dto.getReservation_end_time()}</span>
+                </c:if>
+                
+                <c:if test="${r_dto.getReservation_type() eq '2'}">
+              	  <span>${r_dto.getReservation_start_time()} ~ </span>
+                </c:if>
             </div>
 
             <div class="reservationInfo">
@@ -185,12 +193,28 @@
         <div class="reservationSummaryFooter">
             <div class="reservationPayment">
                 <span class="paymentLabel">최종 결제 예정 금액</span>
-                <strong>48,000원</strong>
+                
+                <c:if test="${r_dto.getReservation_type() eq '1'}">
+               	 <strong>0원</strong>
+                </c:if>
+                
+                <c:if test="${r_dto.getReservation_type() eq '2'}">
+              	  <strong>${r_dto.getReservation_final_amount()}원</strong>
+                </c:if>
+                
             </div>
+            
+			<c:if test="${r_dto.getReservation_type() eq '1'}">
+				<button type="button" class="reservationPaymentBtn">
+					출차하기 <i class="fa-solid fa-angle-right"></i>
+				</button>
+			</c:if>
 
+			<c:if test="${r_dto.getReservation_type() eq '2'}">
 				<button type="button" class="reservationPaymentBtn">
 					최종 결제하기 <i class="fa-solid fa-angle-right"></i>
 				</button>
+			</c:if>
 			</div>
 
     </div>
@@ -262,8 +286,13 @@ document.addEventListener("DOMContentLoaded",function(){
     const elapsedElement = document.getElementById("parkingElapsedTime");
 
     if(elapsedElement){
-
-        const parkingStartTime = Date.now();
+		
+//    	if(${r_dto.getReservation_type() eq '2'}){
+        	const parkingStartTime = new Date("${r_dto.getReservation_start_time()}").getTime(); //Date.now();
+ //   	}
+//    	if("${r_dto.getReservation_type() eq '2'}" == true){
+//       	const parkingStartTime = Date.now();
+//    	}
 
         function updateParkingElapsed(){
 
