@@ -56,7 +56,7 @@ public class ReservationMapDao {
 				+ "WHERE \r\n"
 				+ "    s.LOT_ID = ? \r\n"
 				+ "ORDER BY \r\n"
-				+ "    s.SEAT_NO ASC\r\n";
+				+ "    s.SEAT_NO ASC";
 		try {
 			con = DBConnection.getConnection();
 			ps = con.prepareStatement(sql); // LogPreparedStatement를 사용하셨다면 복구하셔도 됩니다.
