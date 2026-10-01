@@ -12,10 +12,12 @@ public class FinalPaymentPage implements CommonExecute {
     public void execute(HttpServletRequest request) {
         PaymentDao dao = PaymentDao.getDao();
         String reservation_id = request.getParameter("reservation_id");
+        request.setAttribute("reservation_id", reservation_id);
+//        ReservationInfoDto dto = dao.getReservationDto1(reservation_id);
         ReservationInfoDto dto = dao.getReservationDto(reservation_id);
         String paymentTime = CommonUtil.getTodayTime();
         
-        if (dto == null || dto.getReservation_parking_start_time() == null) {
+        if (dto == null || dto.getReservation_start_time() == null) {
             request.setAttribute("t_msg", "예약 정보 또는 입차 기록을 찾을 수 없습니다.");
             request.setAttribute("t_url", "ParkingStatus");
             return;
@@ -26,7 +28,7 @@ public class FinalPaymentPage implements CommonExecute {
             java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             
             // 2. 시간 2개 가져와서 밀리초(숫자)로 변환
-            long startMs = sdf.parse(dto.getReservation_parking_start_time()).getTime();
+            long startMs = sdf.parse(dto.getReservation_start_time()).getTime();
             long endMs = sdf.parse(paymentTime).getTime();
             
             // ================= [ 수정된 로직 위치 ] =================

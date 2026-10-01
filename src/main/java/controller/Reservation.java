@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import command.reservation.FinalPaymentView;
+import command.reservation.FinalPaymentPage;
 import command.reservation.Payment;
 import command.reservationMap.ReservationMap;
 import command.stepPay.StepPay;
@@ -57,7 +57,7 @@ public class Reservation extends HttpServlet {
 			viewPage = "flight/flight_search.jsp";
 			
 		}else if(gubun.equals("finalPaymentView")) {
-			CommonExecute mem = new FinalPaymentView();
+			CommonExecute mem = new FinalPaymentPage();
 			mem.execute(request);
 			viewPage = "reservation/final_payment.jsp";
 		}

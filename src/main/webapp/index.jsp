@@ -29,6 +29,16 @@
 		view.action="Notice";
 		view.submit();
 	}
+	
+	function goReservation(id){
+		res.t_gubun.value = "finalPaymentView";
+		res.reservation_id.value = id;
+		alert("최종 결제 페이지로 넘어갑니다.");
+		res.method="post";
+		res.action="Reservation";
+		res.submit();
+	}
+	
 </script>
 
 
@@ -36,6 +46,11 @@
 	<input type="hidden" name="t_gubun">
 	<input type="hidden" name="t_no">
 	
+</form>
+
+<form name="res">
+	<input type="hidden" name="t_gubun">
+	<input type="hidden" name="reservation_id">
 </form>
 
 <form name="go">
@@ -158,7 +173,7 @@
 		    <div class="parkingElapsed">
 		        <i class="fa-regular fa-clock"></i>
 		        <c:if test="${r_dto.getReservation_type() eq '2'}">
-		        <span id="parkingElapsedTime">00:00:00</span>
+		        	<span id="parkingElapsedTime">00:00:00</span>
 		        </c:if>
 		    </div>
 		    
@@ -205,13 +220,13 @@
             </div>
             
 			<c:if test="${r_dto.getReservation_type() eq '1'}">
-				<button type="button" class="reservationPaymentBtn">
+				<button type="button" onclick="goReservation('${r_dto.getReservation_id()}')" class="reservationPaymentBtn">
 					출차하기 <i class="fa-solid fa-angle-right"></i>
 				</button>
 			</c:if>
 
 			<c:if test="${r_dto.getReservation_type() eq '2'}">
-				<button type="button" class="reservationPaymentBtn">
+				<button type="button" onclick="goReservation('${r_dto.getReservation_id()}')" class="reservationPaymentBtn">
 					최종 결제하기 <i class="fa-solid fa-angle-right"></i>
 				</button>
 			</c:if>
@@ -290,7 +305,7 @@ document.addEventListener("DOMContentLoaded",function(){
 //    	if(${r_dto.getReservation_type() eq '2'}){
         	const parkingStartTime = new Date("${r_dto.getReservation_start_time()}").getTime(); //Date.now();
  //   	}
-//    	if("${r_dto.getReservation_type() eq '2'}" == true){
+//    	if("${r_dto.getReservation_type() eq '2'}"){
 //       	const parkingStartTime = Date.now();
 //    	}
 

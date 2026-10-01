@@ -215,6 +215,8 @@
 <div class="wrap">
 
 	<!-- 헤더 -->
+	<%@include file="/common_header.jsp" %>
+	<!-- 
 	<header class="header scrolled">
 		<div class="header_inner">
 			<a href="${pageContext.request.contextPath}/index.jsp" class="logo">
@@ -228,12 +230,12 @@
 			</div>
 		</div>
 	</header>
-
+ 	-->
 	<!-- 메인 영역 -->
 	<main class="pay_page_container">
 		<form name="pay">
 			<input type="hidden" name="t_gubun" value="finalPayment">
-			
+			<input type="hidden" name="reservation_id" value="${reservation_id}">
 			<div class="pay_card">
 				<h1 id="paymentSeatTitle" class="pay_title">P1 구역 - ${dto.getSeat_no()}</h1>
 				<p id="paymentLotInfo" class="pay_sub_info">장기주차장 · 시간당 4,500원</p>
@@ -244,7 +246,7 @@
 
 				<div class="formRow">
 					<label>주차 일자</label>
-					<input type="text" id="startDateInput" name="t_reservation_parking_start_time" value="${dto.getReservation_parking_start_time()}" readonly>
+					<input type="text" id="startDateInput" name="t_reservation_parking_start_time" value="${dto.getReservation_start_time()}" readonly>
 				</div>
 				<div class="formRow">
 					<label>출차 일자</label>
