@@ -161,7 +161,7 @@
 <section class="hero">
 
 <!-- 최종 결제 안내 박스 -->
-<c:if test="${not empty sessionName}">
+<c:if test="${not empty sessionName and empty r_dto.getReservation_out_time()}">
     <div class="reservationSummary">
 
 		<div class="reservationSummaryHeader dragHandle">
@@ -208,11 +208,12 @@
         <div class="reservationSummaryFooter">
             <div class="reservationPayment">
                 <span class="paymentLabel">최종 결제 예정 금액</span>
-                
+                <!-- 단기 -->
                 <c:if test="${r_dto.getReservation_type() eq '1'}">
                	 <strong>0원</strong>
                 </c:if>
                 
+                <!-- 장기 -->
                 <c:if test="${r_dto.getReservation_type() eq '2'}">
               	  <strong>${r_dto.getReservation_final_amount()}원</strong>
                 </c:if>
