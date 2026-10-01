@@ -246,7 +246,7 @@ public class PaymentDao {
 		return result;
 	}
 
-	// 예약 정보 조회(최종 결제 시 input값 받아오기)
+	// 예약 정보 조회(최종 결제 시 input값 받아오기) 사용x
 	public ReservationInfoDto getReservationDto1(String reservation_id) {
 	    ReservationInfoDto dto = null;
 	    String sql = "select reservation_id, reservation_status, "
@@ -287,7 +287,7 @@ public class PaymentDao {
 	                    member_id,
 	                    seat_no,
 	                    reservation_parking_start_time,
-	                    reservation_date,
+	                    reservation_date,"",
 	                    reservation_type
 	            );
 	        }

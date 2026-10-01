@@ -21,7 +21,7 @@ public class indexReservationDao {
 		String sql = "select reservation_id, member_id, seat_no,\r\n"
 				+ "       reservation_status,reservation_start_time, reservation_end_time,\r\n"
 				+ "       reservation_parking_start_time,reservation_date,\r\n"
-				+ "       reservation_final_amount,reservation_type\r\n"
+				+ "       reservation_final_amount,reservation_out_time,reservation_type\r\n"
 				+ "from (\r\n"
 				+ "        select *\r\n"
 				+ "        from icn_reservation\r\n"
@@ -44,10 +44,11 @@ public class indexReservationDao {
 				String reservation_end_time 		= rs.getString("reservation_end_time");
 				String reservation_parking_start_time 		= rs.getString("reservation_parking_start_time");
 				String reservation_date 		= rs.getString("reservation_date");
+				String reservation_out_time = rs.getString("reservation_out_time");
 				String reservation_type 		= rs.getString("reservation_type");
 				int reservation_final_amount 		= rs.getInt("reservation_final_amount");
 				
-				dto = new ReservationInfoDto(reservation_final_amount, reservation_id, reservation_status, reservation_start_time,reservation_end_time, id, seat_no, reservation_parking_start_time, reservation_date,reservation_type);
+				dto = new ReservationInfoDto(reservation_final_amount, reservation_id, reservation_status, reservation_start_time,reservation_end_time, id, seat_no, reservation_parking_start_time, reservation_date,reservation_out_time,reservation_type);
 				
 			}
 		}catch(Exception e) {
