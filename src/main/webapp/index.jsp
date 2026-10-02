@@ -71,6 +71,8 @@
 
 <div class="wrap">
 
+<input type="hidden" name="totalPrice" value="${totalPrice}">
+
 <!-- HEADER -->
 <header class="header">
 
@@ -215,7 +217,7 @@
                 
                 <!-- 장기 -->
                 <c:if test="${r_dto.getReservation_type() eq '2'}">
-              	  <strong>${r_dto.getReservation_final_amount()}원</strong>
+              	  <strong>${totalPrice}원</strong>
                 </c:if>
                 
             </div>
