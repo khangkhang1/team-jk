@@ -44,12 +44,25 @@ public class ReservationMapDao {
 				+ "    JOIN ICN_SEAT s_sub ON res.SEAT_NO = s_sub.SEAT_NO \r\n"
 				+ "    LEFT JOIN ICN_FLIGHT f ON res.FLIGHT_NO = f.FLIGHT_NO \r\n"
 				+ "    WHERE \r\n"
-				+ "      -- 조회 종료 시간 (예: 2026-09-28 18:00)\r\n"
 				+ "      res.RESERVATION_START_TIME < TO_DATE(?, 'YYYY-MM-DD HH24:MI') \r\n"
 				+ "      AND ( \r\n"
-				+ "          res.RESERVATION_END_TIME IS NULL \r\n"
-				+ "          -- 조회 시작 시간 (예: 2026-09-28 09:00)\r\n"
-				+ "          OR (res.RESERVATION_END_TIME + (3/24)) > TO_DATE(?, 'YYYY-MM-DD HH24:MI') \r\n"
+				+ "          -- [장기주차장 P1~P5]: SUBSTR로 앞 16자리(YYYY-MM-DD HH24:MI)만 잘라서 비교 (초 무시)\r\n"
+				+ "          (\r\n"
+				+ "              s_sub.LOT_ID IN ('P1','P2','P3','P4','P5') \r\n"
+				+ "              AND (\r\n"
+				+ "                  res.RESERVATION_OUT_TIME IS NULL \r\n"
+				+ "                  OR TO_DATE(SUBSTR(res.RESERVATION_OUT_TIME, 1, 16), 'YYYY-MM-DD HH24:MI') > TO_DATE(?, 'YYYY-MM-DD HH24:MI')\r\n"
+				+ "              )\r\n"
+				+ "          )\r\n"
+				+ "          OR\r\n"
+				+ "          -- [단기주차장 P6~P9]: SUBSTR로 앞 16자리만 잘라서 3시간 유예 적용\r\n"
+				+ "          (\r\n"
+				+ "              s_sub.LOT_ID IN ('P6','P7','P8','P9') \r\n"
+				+ "              AND (\r\n"
+				+ "                  res.RESERVATION_END_TIME IS NULL \r\n"
+				+ "                  OR (TO_DATE(SUBSTR(res.RESERVATION_END_TIME, 1, 16), 'YYYY-MM-DD HH24:MI') + (3/24)) > TO_DATE(?, 'YYYY-MM-DD HH24:MI')\r\n"
+				+ "              )\r\n"
+				+ "          )\r\n"
 				+ "      ) \r\n"
 				+ "    GROUP BY res.SEAT_NO \r\n"
 				+ ") p ON s.SEAT_NO = p.SEAT_NO \r\n"
@@ -64,7 +77,8 @@ public class ReservationMapDao {
 			// ★ [중요] 바인딩 순서 세팅 확인
 			ps.setString(1, endTime);    // 첫 번째 ?에는 endTime
 			ps.setString(2, startTime);  // 두 번째 ?에는 startTime
-			ps.setString(3, map);        // 세 번째 ?에는 LOT_ID (P1)
+			ps.setString(3, startTime);  // 두 번째 ?에는 startTime
+			ps.setString(4, map);        // 세 번째 ?에는 LOT_ID (P1)
 			
 			rs = ps.executeQuery();
 			while (rs.next()) {
