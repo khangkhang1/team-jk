@@ -156,7 +156,7 @@
             <div class="navRow">
 			<c:if test="${not empty preDto.getNo()}">
                 <span class="navLabel">
-                    이전글
+                    다음글
                 </span>
 
                 <a href="javascript:goView('${preDto.getNo()}')" class="navTitle">
@@ -175,7 +175,7 @@
             <div class="navRow">
 			<c:if test="${not empty nextDto.getNo()}">
                 <span class="navLabel">
-                    다음글
+                    이전글
                 </span>
 
                 <a href="javascript:goView('${nextDto.getNo()}')" class="navTitle">

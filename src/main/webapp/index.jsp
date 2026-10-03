@@ -21,7 +21,37 @@
 <title>인천공항 주차예약</title>
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery-1.8.1.min.js"></script>
 <script src="${pageContext.request.contextPath}/js/common.js"></script>
+<script>
+	function goView(no){
+		view.t_gubun.value = "noticeView";
+		view.t_no.value = no;
+		view.method="post";
+		view.action="Notice";
+		view.submit();
+	}
+	
+	function goReservation(id){
+		res.t_gubun.value = "finalPaymentView";
+		res.reservation_id.value = id;
+		alert("최종 결제 페이지로 넘어갑니다.");
+		res.method="post";
+		res.action="Reservation";
+		res.submit();
+	}
+	
+</script>
 
+
+<form name="view">
+	<input type="hidden" name="t_gubun">
+	<input type="hidden" name="t_no">
+	
+</form>
+
+<form name="res">
+	<input type="hidden" name="t_gubun">
+	<input type="hidden" name="reservation_id">
+</form>
 
 <form name="go">
 	<input type="hidden" name="t_gubun">
@@ -40,6 +70,8 @@
 <body>
 
 <div class="wrap">
+
+<input type="hidden" name="totalPrice" value="${totalPrice}">
 
 <!-- HEADER -->
 <header class="header">
@@ -129,6 +161,187 @@
 <!-- HERO -->
 
 <section class="hero">
+
+<!-- 최종 결제 안내 박스 -->
+<c:if test="${not empty sessionName and empty r_dto.getReservation_out_time()}">
+    <div class="reservationSummary">
+
+		<div class="reservationSummaryHeader dragHandle">
+		    <div class="reservationSummaryTitle">
+		        <i class="fa-solid fa-car"></i>
+		        <span>이용 중인 예약</span>
+		    </div>
+		    <!-- 주차 경과 시간 -->
+		    <div class="parkingElapsed">
+		        <i class="fa-regular fa-clock"></i>
+		        <c:if test="${r_dto.getReservation_type() eq '2'}">
+		        	<span id="parkingElapsedTime">00:00:00</span>
+		        </c:if>
+		    </div>
+		    
+		    <span class="reservationStatus">이용 중</span>
+		</div>
+
+        <div class="reservationSummaryBody">
+
+            <div class="reservationInfo">
+                <i class="fa-solid fa-location-dot"></i>
+                <span>${r_dto.getSeat_no()}</span>
+            </div>
+
+            <div class="reservationInfo">
+                <i class="fa-regular fa-calendar"></i>
+                <c:if test="${r_dto.getReservation_type() eq '1'}">
+              	  <span>${r_dto.getReservation_start_time()} ~ ${r_dto.getReservation_end_time()}</span>
+                </c:if>
+                
+                <c:if test="${r_dto.getReservation_type() eq '2'}">
+              	  <span>${r_dto.getReservation_start_time()} ~ </span>
+                </c:if>
+            </div>
+
+            <div class="reservationInfo">
+                <i class="fa-regular fa-user"></i>
+                <span>${sessionName}님</span>
+            </div>
+
+        </div>
+
+        <div class="reservationSummaryFooter">
+            <div class="reservationPayment">
+                <span class="paymentLabel">최종 결제 예정 금액</span>
+                <!-- 단기 -->
+                <c:if test="${r_dto.getReservation_type() eq '1'}">
+               	 <strong>0원</strong>
+                </c:if>
+                
+                <!-- 장기 -->
+                <c:if test="${r_dto.getReservation_type() eq '2'}">
+              	  <strong>${totalPrice}원</strong>
+                </c:if>
+                
+            </div>
+            
+			<c:if test="${r_dto.getReservation_type() eq '1'}">
+				<button type="button" onclick="goReservation('${r_dto.getReservation_id()}')" class="reservationPaymentBtn">
+					출차하기 <i class="fa-solid fa-angle-right"></i>
+				</button>
+			</c:if>
+
+			<c:if test="${r_dto.getReservation_type() eq '2'}">
+				<button type="button" onclick="goReservation('${r_dto.getReservation_id()}')" class="reservationPaymentBtn">
+					최종 결제하기 <i class="fa-solid fa-angle-right"></i>
+				</button>
+			</c:if>
+			</div>
+
+    </div>
+</c:if>
+
+<!-- 최종 결제 박스 드래그 해서 옮기기 -->
+<script>
+document.addEventListener("DOMContentLoaded",function(){
+
+    const box = document.querySelector(".reservationSummary");
+    const handle = document.querySelector(".dragHandle");
+
+    if(!box || !handle) return;
+
+    let dragging = false;
+    let offsetX = 0;
+    let offsetY = 0;
+
+    handle.addEventListener("pointerdown",function(e){
+
+        dragging = true;
+
+        const rect = box.getBoundingClientRect();
+
+        offsetX = e.clientX - rect.left;
+        offsetY = e.clientY - rect.top;
+
+        box.style.left = rect.left + "px";
+        box.style.top = rect.top + "px";
+        box.style.right = "auto";
+        box.style.transform = "none";
+
+        handle.setPointerCapture(e.pointerId);
+
+        e.preventDefault();
+    });
+
+    handle.addEventListener("pointermove",function(e){
+
+        if(!dragging) return;
+
+        const maxX = window.innerWidth - box.offsetWidth;
+        const maxY = window.innerHeight - box.offsetHeight;
+
+        const left = Math.max(
+            0,
+            Math.min(e.clientX - offsetX, maxX)
+        );
+
+        const top = Math.max(
+            0,
+            Math.min(e.clientY - offsetY, maxY)
+        );
+
+        box.style.left = left + "px";
+        box.style.top = top + "px";
+
+    });
+
+    function stopDragging(){
+        dragging = false;
+    }
+
+    handle.addEventListener("pointerup",stopDragging);
+    handle.addEventListener("pointercancel",stopDragging);
+
+    
+ // 주차 경과 시간 임시 구현
+    const elapsedElement = document.getElementById("parkingElapsedTime");
+
+    if(elapsedElement){
+		
+//    	if(${r_dto.getReservation_type() eq '2'}){
+        	const parkingStartTime = new Date("${r_dto.getReservation_start_time()}").getTime(); //Date.now();
+ //   	}
+//    	if("${r_dto.getReservation_type() eq '2'}"){
+//       	const parkingStartTime = Date.now();
+//    	}
+
+        function updateParkingElapsed(){
+
+            const elapsedSeconds = Math.floor(
+                (Date.now() - parkingStartTime) / 1000
+            );
+
+            const hours = Math.floor(elapsedSeconds / 3600);
+            const minutes = Math.floor((elapsedSeconds % 3600) / 60);
+            const seconds = elapsedSeconds % 60;
+
+            const formatTime = value => String(value).padStart(2,"0");
+
+            elapsedElement.textContent =
+                formatTime(hours) + ":" +
+                formatTime(minutes) + ":" +
+                formatTime(seconds);
+        }
+
+        updateParkingElapsed();
+        setInterval(updateParkingElapsed,1000);
+    }
+    
+    
+});
+
+
+</script>
+
+
+
 
 <div class="hero_inner">
 
@@ -1178,7 +1391,7 @@ onclick="refreshParking()">
 
 </div>
 
-<a href="#" class="more">
+<a href="Notice" class="more">
 더보기 →
 </a>
 
@@ -1188,23 +1401,25 @@ onclick="refreshParking()">
 <ul class="notice_list">
 
 
+<c:forEach items="${t_dtos}" end="4" var="dto">
 <li>
 
 <span class="notice_tag">
 공지
 </span>
-
+<a href="javascript:goView('${dto.getNo()}')">
 <strong>
-주차예약 서비스 이용 안내
+${dto.getTitle()}
 </strong>
-
+</a>
 <span class="notice_date">
-2026.09.02
+${dto.getReg_date()}
+<!-- 2026.09.02  -->
 </span>
-
 </li>
+</c:forEach>
 
-
+<!-- 
 <li>
 
 <span class="notice_tag">
@@ -1255,7 +1470,7 @@ onclick="refreshParking()">
 
 </li>
 
-
+ -->
 </ul>
 
 </div>

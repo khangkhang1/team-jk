@@ -2017,24 +2017,212 @@ rgba(0,20,45,.25) 100%
 }
 
 
-/* ================================================= */
-/* [임시] 관리자 콘솔 버튼 (헤더 오른쪽)               */
-/* 관리자로 로그인했을 때만 JSP 가 그려준다.           */
-/* 글자색을 currentColor 로 두어 투명 헤더(흰 글씨)와   */
-/* 불투명 헤더(검은 글씨) 양쪽에서 다 보이게 한다.      */
-/* ================================================= */
-.header_right .header_admin{
-    padding:5px 11px;
-    border:1px solid currentColor;
-    border-radius:14px;
+
+/* 최종 결제 안내 박스 */
+.reservationSummary{
+    position:fixed;
+    top:180px;
+    right:5%;
+    transform:none;
+    width:345px;
+    box-sizing:border-box;
+    padding:18px;
+    background:rgba(255,255,255,0.97);
+    border:1px solid #d6e4f0;
+    border-radius:12px;
+    box-shadow:0 6px 20px rgba(0,0,0,0.15);
+    z-index:1000;
+}
+
+/* 상단 제목 */
+.reservationSummaryHeader{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:8px;
+    padding-bottom:14px;
+    border-bottom:1px solid #e5edf5;
+}
+
+.reservationSummaryTitle{
+    display:flex;
+    align-items:center;
+    gap:9px;
+    font-size:17px;
+    font-weight:bold;
+    color:#2078D0;
+}
+
+.reservationSummaryTitle i{
+    color:#3478c8;
+    font-size:19px;
+}
+
+.reservationStatus{
+    padding:5px 10px;
+    border-radius:20px;
+    background:#e2f7ed;
+    color:#16845b;
     font-size:12px;
-    font-weight:700;
-    letter-spacing:-.2px;
     white-space:nowrap;
-    line-height:1.2;
 }
-.header_right a.header_admin:hover{
-    background:#1769d2;
-    border-color:#1769d2;
+
+/* 예약 정보 */
+.reservationSummaryBody{
+    padding:13px 0;
+}
+
+.reservationInfo{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin-bottom:11px;
+    font-size:13px;
+    color:#52657b;
+}
+
+.reservationInfo:last-child{
+    margin-bottom:0;
+}
+
+.reservationInfo i{
+    width:16px;
+    color:#3478c8;
+    text-align:center;
+}
+
+/* 결제 영역 */
+.reservationSummaryFooter{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    padding-top:13px;
+    border-top:1px solid #e5edf5;
+}
+
+.reservationPayment{
+    display:flex;
+    flex-direction:column;
+    gap:5px;
+    min-width:0;
+}
+
+.paymentLabel{
+    font-size:11px;
+    color:#718096;
+    white-space:nowrap;
+}
+
+.reservationPayment strong{
+    font-size:22px;
+    color:#2878d0;
+    white-space:nowrap;
+}
+
+.reservationPaymentBtn{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    flex-shrink:0;
+    padding:12px 13px;
+    border:none;
+    border-radius:8px;
+    background:#3478c8;
     color:#fff;
+    font-size:13px;
+    font-weight:bold;
+    cursor:pointer;
+    transition:background 0.2s;
 }
+
+
+.reservationPaymentBtn:hover{
+    background:#245fa5;
+}
+
+/* 태블릿 및 작은 화면 */
+@media screen and (max-width:1100px){
+    .reservationSummary{
+        right:3%;
+        width:310px;
+        padding:15px;
+    }
+
+    .reservationPayment strong{
+        font-size:19px;
+    }
+
+    .reservationPaymentBtn{
+        padding:11px 10px;
+        font-size:12px;
+    }
+}
+
+/* 모바일 */
+@media screen and (max-width:768px){
+    .reservationSummary{
+        position:relative;
+        top:auto;
+        right:auto;
+        transform:none;
+        width:calc(100% - 32px);
+        max-width:345px;
+        margin:20px auto;
+    }
+}
+
+/* 드래그 가능한 제목 표시줄 */
+.dragHandle{
+    cursor:grab;
+    user-select:none;
+    touch-action:none;
+}
+
+.dragHandle:active{
+    cursor:grabbing;
+}
+
+/* 주차 경과 시간 */
+.parkingElapsed{
+    display:flex;
+    align-items:center;
+    gap:4px;
+    margin-left:auto;
+    margin-right:5px;
+    color:#3478c8;
+    font-size:12px;
+    font-weight:bold;
+    font-variant-numeric:tabular-nums;
+    white-space:nowrap;
+}
+
+.parkingElapsed i{
+    font-size:12px;
+}
+
+/* 작은 화면 대응 */
+@media screen and (max-width:400px){
+    .reservationSummaryHeader{
+        gap:5px;
+    }
+
+    .reservationSummaryTitle{
+        gap:5px;
+        font-size:14px;
+    }
+
+    .parkingElapsed{
+        font-size:10px;
+        margin-right:0;
+    }
+
+    .reservationStatus{
+        padding:4px 6px;
+        font-size:10px;
+    }
+}
+
+
+

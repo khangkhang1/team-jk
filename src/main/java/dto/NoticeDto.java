@@ -25,27 +25,27 @@ public class NoticeDto {
         this.reg_id = reg_id;
         this.reg_date = reg_date;
     }
+    
+    
+    
+    
+	//인덱스 공지
+	    public NoticeDto(String no, String title, String reg_date) {
+			this.no = no;
+			this.title = title;
+			this.reg_date = reg_date;
+		}
+    
+    
 
-    
-    
-    
-    
-    
-    
-    
-//인덱스 공지
-    public NoticeDto(String no, String title, String reg_date) {
-		this.no = no;
-		this.title = title;
-		this.reg_date = reg_date;
-	}
+	//이전글 다음글
+		public NoticeDto(String no, String title) {
+			this.no = no;
+			this.title = title;
+		}
 
-//이전글 다음글
-	public NoticeDto(String no, String title) {
-		this.no = no;
-		this.title = title;
-	}
-
+		
+		
 
 	public String getNo() {
         return no;

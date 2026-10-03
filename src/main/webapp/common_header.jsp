@@ -4,6 +4,7 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
+
 <link href="${pageContext.request.contextPath}/css/common/common_header.css" rel="stylesheet">
 <script src="${pageContext.request.contextPath}/js/common.js"></script>
 
@@ -18,6 +19,7 @@
 
 		<a href="${pageContext.request.contextPath}/ParkingStatus" class="logo">
 			인천공항 주차예약
+
 			<small>INCHEON AIRPORT PARKING</small>
 		</a>
 

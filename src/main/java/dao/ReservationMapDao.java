@@ -26,30 +26,37 @@ public class ReservationMapDao {
 		
 		// 오라클 교차 시간 비교 공식:
 		// RESERVATION_START_TIME < 조회종료시간(endTime) AND RESERVATION_END_TIME > 조회시작시간(startTime)
-		String sql = "SELECT "
-				+ "    s.LOT_ID, "
-				+ "    s.SEAT_NO, "
-				+ "    DECODE(s.SEAT_TYPE, 'N', '일반차', 'E', '수소차', 'D', '장애인차') AS SEAT_TYPE_NM, "
-				+ "    CASE "
-				+ "        WHEN p.SEAT_NO IS NOT NULL AND f.UPDATED_AT IS NOT NULL THEN '결항 재배정중' "
-				+ "        WHEN p.SEAT_NO IS NOT NULL THEN '예약중' "
-				+ "        ELSE '예약 가능' "
-				+ "    END AS PARK_STATUS "
-				+ "FROM "
-				+ "    ICN_SEAT s "
-				+ "LEFT JOIN "
-				+ "    ICN_RESERVATION p ON s.SEAT_NO = p.SEAT_NO "
-				+ "   AND p.RESERVATION_START_TIME < TO_DATE(?, 'YYYY-MM-DD HH24:MI') " // 첫 번째 ? -> endTime
-				+ "   AND NVL(p.RESERVATION_END_TIME, TO_DATE('9999-12-31 23:59', 'YYYY-MM-DD HH24:MI')) > TO_DATE(?, 'YYYY-MM-DD HH24:MI') " // 두 번째 ? -> startTime
-				+ "LEFT JOIN "
-				+ "    ICN_FLIGHT f"
-				+ " ON p.FLIGHT_no = f.FLIGHT_NO \r\n"
-				+ " "
-				+ "WHERE "
-				+ "    s.LOT_ID = ? " // 세 번째 ? -> map
-				+ "ORDER BY "
+		String sql = "SELECT \r\n"
+				+ "    s.LOT_ID, \r\n"
+				+ "    s.SEAT_NO, \r\n"
+				+ "    DECODE(s.SEAT_TYPE, 'N', '일반차', 'E', '수소차', 'D', '장애인차') AS SEAT_TYPE_NM, \r\n"
+				+ "    NVL(p.PARK_STATUS, '예약 가능') AS PARK_STATUS \r\n"
+				+ "FROM \r\n"
+				+ "    ICN_SEAT s \r\n"
+				+ "LEFT JOIN ( \r\n"
+				+ "    SELECT \r\n"
+				+ "        res.SEAT_NO, \r\n"
+				+ "        MAX(CASE \r\n"
+				+ "                WHEN f.UPDATED_AT IS NOT NULL AND s_sub.LOT_ID IN ('P6','P7','P8','P9') THEN '결항 재배정중' \r\n"
+				+ "                ELSE '예약중' \r\n"
+				+ "            END) AS PARK_STATUS \r\n"
+				+ "    FROM ICN_RESERVATION res \r\n"
+				+ "    JOIN ICN_SEAT s_sub ON res.SEAT_NO = s_sub.SEAT_NO \r\n"
+				+ "    LEFT JOIN ICN_FLIGHT f ON res.FLIGHT_NO = f.FLIGHT_NO \r\n"
+				+ "    WHERE \r\n"
+				+ "      -- 조회 종료 시간 (예: 2026-09-28 18:00)\r\n"
+				+ "      res.RESERVATION_START_TIME < TO_DATE(?, 'YYYY-MM-DD HH24:MI') \r\n"
+				+ "      AND ( \r\n"
+				+ "          res.RESERVATION_END_TIME IS NULL \r\n"
+				+ "          -- 조회 시작 시간 (예: 2026-09-28 09:00)\r\n"
+				+ "          OR (res.RESERVATION_END_TIME + (3/24)) > TO_DATE(?, 'YYYY-MM-DD HH24:MI') \r\n"
+				+ "      ) \r\n"
+				+ "    GROUP BY res.SEAT_NO \r\n"
+				+ ") p ON s.SEAT_NO = p.SEAT_NO \r\n"
+				+ "WHERE \r\n"
+				+ "    s.LOT_ID = ? \r\n"
+				+ "ORDER BY \r\n"
 				+ "    s.SEAT_NO ASC";
-		
 		try {
 			con = DBConnection.getConnection();
 			ps = con.prepareStatement(sql); // LogPreparedStatement를 사용하셨다면 복구하셔도 됩니다.

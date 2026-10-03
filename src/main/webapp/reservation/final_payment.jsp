@@ -289,6 +289,8 @@ function handleResponse(rsp) {
 <div class="wrap">
 
 	<!-- 헤더 -->
+	<%@include file="/common_header.jsp" %>
+	<!-- 
 	<header class="header scrolled">
 		<div class="header_inner">
 			<a href="${pageContext.request.contextPath}/index.jsp" class="logo">
@@ -302,7 +304,7 @@ function handleResponse(rsp) {
 			</div>
 		</div>
 	</header>
-
+ 	-->
 	<!-- 메인 영역 -->
 	<main class="pay_page_container">
 		<form name="pay">
@@ -319,7 +321,7 @@ function handleResponse(rsp) {
 
 				<div class="formRow">
 					<label>주차 일자</label>
-					<input type="text" id="startDateInput" name="t_reservation_parking_start_time" value="${dto.getReservation_parking_start_time()}" readonly>
+					<input type="text" id="startDateInput" name="t_reservation_parking_start_time" value="${dto.getReservation_start_time()}" readonly>
 				</div>
 				<div class="formRow">
 					<label>출차 일자</label>

@@ -1,5 +1,6 @@
 package command.reservationMap;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -17,45 +18,62 @@ public class ReservationMap implements CommonExecute {
         if (parkingLotId == null || parkingLotId.trim().isEmpty()) {
             parkingLotId = request.getParameter("zone");
         }
-        
-    	String id =(String)request.getSession().getAttribute("sessionId");
-        String startTime = request.getParameter("reqStartTime");
-        String endTime = request.getParameter("reqEndTime");
-
-        // [수정] 기본값 설정: 테스트 날짜(2026-09-11) 데이터가 조회되도록 범위 지정
         if (parkingLotId == null || parkingLotId.trim().isEmpty()) {
             parkingLotId = "P1";
         }
-        String today = java.time.LocalDate.now().toString();
-        if (startTime == null || startTime.trim().isEmpty()) {
+        
+        String id = (String) request.getSession().getAttribute("sessionId");
+        
+        String startTime = request.getParameter("reqStartTime");
+        String endTime = request.getParameter("reqEndTime");
+        
+        String today = LocalDate.now().toString();
+
+        // 1. 파라미터 정제 (T 제거 및 'yyyy-MM-dd'만 들어온 경우 시:분 보완)
+        if (startTime != null && !startTime.trim().isEmpty()) {
+            startTime = startTime.replace("T", " ");
+            if (startTime.length() == 10) startTime += " 00:00";
+        } else {
             startTime = today + " 00:00";
         }
-        if (endTime == null || endTime.trim().isEmpty()) {
+
+        if (endTime != null && !endTime.trim().isEmpty()) {
+            endTime = endTime.replace("T", " ");
+            if (endTime.length() == 10) endTime += " 23:59";
+        } else {
             endTime = today + " 23:59";
         }
-        
+       
+        // 2. 안전한 파싱 및 3시간 더하기
         try {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-            
-            // String -> LocalDateTime 변환 후 3시간(+)
             LocalDateTime dt = LocalDateTime.parse(endTime, formatter);
             dt = dt.plusHours(3); 
-            
-            // 다시 String으로 변환
             endTime = dt.format(formatter);
         } catch (Exception e) {
-            // 포맷 에러 예외 처리 (필요시 로깅)
+            System.out.println("날짜 포맷 파싱 오류 발생, 기본값으로 대체합니다.");
             e.printStackTrace();
+            // 에러 발생 시 안전하게 오늘 날짜 기반으로 재설정
+            endTime = today + " 23:59";
         }
 
         ReservationMapDao dao = ReservationMapDao.getDao();
         
-        // ★ [핵심 추가] 맵 데이터를 화면에 그리기 직전에, 결항으로 묶인 예약건들을 빈자리로 자동 재배정합니다.
-        dao.autoChange();
+        // 결항 자동 재배정 실행
+        try {
+            dao.autoChange();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-        // 재배정이 끝난 최신 상태의 맵 데이터를 가져옵니다.
-        List<ReservationMapDto> dtos = dao.getPakingMap(parkingLotId.toUpperCase(), startTime, endTime);
-        String type =dao.getMemberType(id);
+        // DB 맵 데이터 조회
+        List dtos = dao.getPakingMap(parkingLotId.toUpperCase(), startTime, endTime);
+        
+        String type = "N";
+        if (id != null && !id.trim().isEmpty()) {
+            type = dao.getMemberType(id);
+        }
+        
         // JSP로 데이터 전달
         request.setAttribute("seatList", dtos);
         request.setAttribute("selectedLotId", parkingLotId.toUpperCase());

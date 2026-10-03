@@ -338,13 +338,13 @@ var ZONES = [
 	{ id:"P2", type:"장기주차장", price:2000, total:50, rows:4,
 	  box:{x:390,y:355,w:375,h:160},
 	  path:"M430 445 Q490 445 500 430 L510 420 Q520 390 535 375 L545 370 Q565 360 590 355 L760 355 Q765 355 765 355 L765 455 Q765 515 765 515 L420 515 Q390 515 395 505 Z" },
-	{ id:"P3", type:"단기주차장", price:3000, total:50, rows:2,
+	{ id:"P3", type:"장기주차장", price:3000, total:50, rows:2,
 	  box:{x:820,y:545,w:355,h:95},
 	  path:"M820 545 L1140 545 Q1175 560 1175 580 L1170 620 Q1140 640 1130 640 L820 640 Z" },
-	{ id:"P4", type:"단기주차장", price:3000, total:50, rows:2,
+	{ id:"P4", type:"장기주차장", price:3000, total:50, rows:2,
 	  box:{x:400,y:550,w:370,h:85},
 	  path:"M400 575 Q435 550 435 550 L755 550 Q770 550 770 575 L770 635 Q760 635 755 635 L435 635 Q410 630 410 630 Z" },
-	{ id:"P5", type:"단기주차장", price:3000, total:50, rows:2,
+	{ id:"P5", type:"장기주차장", price:3000, total:50, rows:2,
 	  box:{x:440,y:690,w:315,h:90},
 	  path:"M440 690 Q460 690 475 690 L735 690 Q755 690 755 690 L755 765 Q755 780 755 780 L475 780 Q440 780 440 780 Z" },
 	{ id:"P6", type:"단기주차장", price:3000, total:50, rows:3, bayW:6.2,
@@ -385,22 +385,24 @@ function makeSeats(zone, count){
 			var dbSeat = dbSeatList[i];
 
 			var state = "free";
-			if (dbSeat.status === "예약중") {
-				state = "taken";
-			} else if (dbSeat.status === "결항 재배정중") {
-				// 결항 재배정은 예약형 구역(P6~P9)에서만 표시. 자유출차형 구역은 그냥 이용 중으로 본다
-				state = (zone.id === "P6" || zone.id === "P7" || zone.id === "P8" || zone.id === "P9") ? "cancelled" : "taken";
+			
+			// ★ [수정] P1~P5 구역은 절대 '결항 재배정중' 상태가 될 수 없도록 원천 차단
+			var isTargetZone = (zone.id === "P6" || zone.id === "P7" || zone.id === "P8" || zone.id === "P9");
+			
+			if (dbSeat.status === "결항 재배정중" && isTargetZone) {
+				state = "cancelled"; // P6~P9 구역일 때만 결항 상태 허용
+			} else if (dbSeat.status === "예약중" || dbSeat.status === "결항 재배정중") {
+				state = "taken";     // P1~P5 구역에서 결항 데이터가 넘어와도 무조건 일반 예약(taken)으로 처리!
 			}
 
 			var kind = "N";
 			if (dbSeat.typeNm === "장애인차") kind = "D";
-			else if (dbSeat.typeNm === "수소차" || dbSeat.typeNm === "전기차") kind = "E";
+			else if (dbSeat.typeNm === "전기차") kind = "E";
 
 			seats.push({ no: dbSeat.seatNo, state: state, kind: kind });
 		}
 		return seats;
 	}
-
 	var seed = zone.id.charCodeAt(1);
 	var n_total = count || zone.total;
 	for (var j=1; j<=n_total; j++){
@@ -710,7 +712,7 @@ document.getElementById("goPayBtn").addEventListener("click", function() {
 
 renderZoneTabs();
 renderAll();
-loadLiveZoneStatus(function(){ applyLiveZoneStatus(currentZone); });
+//loadLiveZoneStatus(function(){ applyLiveZoneStatus(currentZone); });
 </script>
 <script src="${pageContext.request.contextPath}/js/payment.js"></script>
 <script>
