@@ -9,6 +9,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>인천공항 주차예약 - 결제</title>
 
+
+<!-- 1. jQuery 및 포트원 v1 SDK 로드 -->
+<script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+<script src="https://cdn.iamport.kr/v1/iamport.js"></script>
+
 <script>
 //---------- 포트원 결제 (오윤섭) ----------
 $(document).ready(function() {
@@ -84,10 +89,6 @@ function handleResponse(rsp) {
     }
 }
 </script>
-
-<!-- 1. jQuery 및 포트원 v1 SDK 로드 -->
-<script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
-<script src="https://cdn.iamport.kr/v1/iamport.js"></script>
 
 <!-- 헤더/푸터용 공통 CSS -->
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/index1.css">
