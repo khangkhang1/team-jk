@@ -29,7 +29,7 @@ public class ReservationMapDao {
 		String sql = "SELECT \r\n"
 				+ "    s.LOT_ID, \r\n"
 				+ "    s.SEAT_NO, \r\n"
-				+ "    DECODE(s.SEAT_TYPE, 'N', '일반차', 'E', '수소차', 'D', '장애인차') AS SEAT_TYPE_NM, \r\n"
+				+ "    DECODE(s.SEAT_TYPE, 'N', '일반차', 'E', '전기차', 'D', '장애인차') AS SEAT_TYPE_NM, \r\n"
 				+ "    NVL(p.PARK_STATUS, '예약 가능') AS PARK_STATUS \r\n"
 				+ "FROM \r\n"
 				+ "    ICN_SEAT s \r\n"
