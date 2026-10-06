@@ -113,7 +113,7 @@ function sendEmailCode() {
 					.removeClass("error")
 					.addClass("success")
 					.show()
-					.text("✓ 인증번호가 이메일로 발송되었습니다.");
+					.text("✓ 인증번호가 이메일로 발송되었습니다. 인증번호는 5분 동안 유효합니다.");
 			} else {
 				$("#emailVerifyResult")
 					.removeClass("success")

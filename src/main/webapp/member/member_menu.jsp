@@ -18,6 +18,10 @@
 				<a href="javascript:movePage('Member','join')">JOIN</a>
 			</li>
 
+			<li class="${apple_gubun eq 'findId' ? 'active' : ''}">
+				<a href="javascript:movePage('Member','findId')">FIND ID</a>
+			</li>
+
 			<li class="${apple_gubun eq 'findPassword' ? 'active' : ''}">
 				<a href="javascript:movePage('Member','findPassword')">FIND PASSWORD</a>
 			</li>

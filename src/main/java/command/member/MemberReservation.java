@@ -1,12 +1,12 @@
 package command.member;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
 import common.CommonExecute;
 import dao.MemberDao;
-import dto.ReservationInfoDto;
 
 public class MemberReservation implements CommonExecute {
 
@@ -14,6 +14,9 @@ public class MemberReservation implements CommonExecute {
 	public void execute(HttpServletRequest request) {
 		MemberDao dao = MemberDao.getdao();
 		String id=(String)request.getSession().getAttribute("sessionId");
+
+		List<Map<String, Object>> reservations = dao.getReservationInfo(id);
+		request.setAttribute("reservationList", reservations);
 
 		// [2026-09-29] 빌드 복구용으로 잠시 막아둠 - 황희원
 		//   MemberDao.getReservationInfo() 가 9/23 에 주석 처리됐는데(작성 중이던 상태)

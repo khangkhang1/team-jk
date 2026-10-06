@@ -29,6 +29,7 @@ public class MemberEmailCheck extends HttpServlet {
                 (String) session.getAttribute("emailVerifyEmail");
         Long expire =
                 (Long) session.getAttribute("emailVerifyExpire");
+        Integer attempts = (Integer) session.getAttribute("emailVerifyAttempts");
 
         if (savedCode == null || savedEmail == null || expire == null) {
             response.getWriter().print(
@@ -36,20 +37,39 @@ public class MemberEmailCheck extends HttpServlet {
             return;
         }
 
-        // 3분 경과
+        // 5분 경과
         if (System.currentTimeMillis() > expire) {
             session.removeAttribute("emailVerifyCode");
             session.removeAttribute("emailVerifyEmail");
             session.removeAttribute("emailVerifyExpire");
+            session.removeAttribute("emailVerifyAttempts");
 
             response.getWriter().print(
                     "인증번호가 만료되었습니다. 다시 발송해주세요.");
             return;
         }
 
+        if (attempts != null && attempts >= 5) {
+            session.removeAttribute("emailVerifyCode");
+            session.removeAttribute("emailVerifyEmail");
+            session.removeAttribute("emailVerifyExpire");
+            session.removeAttribute("emailVerifyAttempts");
+            response.getWriter().print("인증 횟수를 초과했습니다. 인증번호를 다시 발송해주세요.");
+            return;
+        }
+
         if (inputCode == null || !savedCode.equals(inputCode.trim())) {
-            response.getWriter().print(
-                    "인증번호가 일치하지 않습니다.");
+            int nextAttempts = attempts == null ? 1 : attempts + 1;
+            if (nextAttempts >= 5) {
+                session.removeAttribute("emailVerifyCode");
+                session.removeAttribute("emailVerifyEmail");
+                session.removeAttribute("emailVerifyExpire");
+                session.removeAttribute("emailVerifyAttempts");
+                response.getWriter().print("인증 횟수를 초과했습니다. 인증번호를 다시 발송해주세요.");
+            } else {
+                session.setAttribute("emailVerifyAttempts", nextAttempts);
+                response.getWriter().print("인증번호가 일치하지 않습니다.");
+            }
             return;
         }
 
@@ -60,6 +80,7 @@ public class MemberEmailCheck extends HttpServlet {
         session.removeAttribute("emailVerifyCode");
         session.removeAttribute("emailVerifyEmail");
         session.removeAttribute("emailVerifyExpire");
+        session.removeAttribute("emailVerifyAttempts");
 
         response.getWriter().print("success");
     }
@@ -68,6 +89,6 @@ public class MemberEmailCheck extends HttpServlet {
     protected void doGet(HttpServletRequest request,
                          HttpServletResponse response)
             throws IOException {
-        doPost(request, response);
+        response.sendError(HttpServletResponse.SC_METHOD_NOT_ALLOWED);
     }
 }

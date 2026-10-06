@@ -308,6 +308,45 @@ input {
 
 
 /* =========================================
+   REMEMBER ID
+========================================= */
+
+.login_card .login_remember {
+    margin: 0 0 12px;
+}
+
+.login_card .remember_id_label {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #444;
+    cursor: pointer;
+}
+
+.login_card .remember_id_label input {
+    width: 17px;
+    height: 17px;
+    flex-shrink: 0;
+    accent-color: #1769d2;
+    cursor: pointer;
+}
+
+.login_card .remember_id_label input:focus-visible {
+    outline: 2px solid #1769d2;
+    outline-offset: 3px;
+}
+
+.login_card .remember_id_hint {
+    margin-top: 6px;
+    font-size: 12px;
+    color: #7b8490;
+    line-height: 1.6;
+}
+
+
+/* =========================================
    LOGIN BUTTON
 ========================================= */
 
@@ -605,4 +644,3 @@ input {
         margin: 0 7px;
     }
 }
-```

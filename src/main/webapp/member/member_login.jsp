@@ -65,6 +65,7 @@
 
 						<label for="member_id"> 아이디 </label> <input type="text"
 							id="member_id" name="t_id" maxlength="20" onkeypress="checkEnter()"
+							value="<c:out value='${rememberedId}'/>"
 							placeholder="아이디를 입력해주세요" autocomplete="username" autofocus>
 
 						<p class="error_message" id="idError"></p>
@@ -84,6 +85,17 @@
 					</div>
 
 
+					<!-- 아이디 저장 -->
+					<div class="login_remember">
+						<label class="remember_id_label" for="rememberId">
+							<input type="checkbox" id="rememberId" name="t_rememberId" value="Y"
+								aria-describedby="rememberIdHint"
+								<c:if test="${not empty rememberedId}">checked</c:if>>
+							<span>아이디 저장</span>
+						</label>
+						<p class="remember_id_hint" id="rememberIdHint">이 브라우저에 아이디를 30일 동안 저장합니다.</p>
+					</div>
+
 					<!-- LOGIN BUTTON -->
 					<input type="button" onclick="memberLogin()" class="login_btn"
 						value="로그인">
@@ -92,7 +104,7 @@
 					<!-- LOGIN MENU -->
 					<div class="login_menu">
 
-						<a href="#">아이디 찾기</a> <span>|</span> <a href="#">비밀번호 찾기</a> <span>|</span>
+						<a href="${pageContext.request.contextPath}/Member?t_gubun=findId">아이디 찾기</a> <span>|</span> <a href="${pageContext.request.contextPath}/Member?t_gubun=findPassword">비밀번호 찾기</a> <span>|</span>
 
 						<a href="javascript:movePage('Member','join')">회원가입</a>
 

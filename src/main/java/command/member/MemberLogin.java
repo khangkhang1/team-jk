@@ -10,9 +10,16 @@ public class MemberLogin implements CommonExecute {
 
 	@Override
 	public void execute(HttpServletRequest request) {
+		request.setAttribute("loginSuccess", false);
 		MemberDao dao = MemberDao.getdao();
 		String id = request.getParameter("t_id");
 		String password = request.getParameter("t_password");
+		if (id == null || id.trim().isEmpty() || id.length() > 20
+				|| password == null || password.isEmpty() || password.length() > 70) {
+			request.setAttribute("t_msg", "ID나 비밀번호가 일치하지 않습니다.");
+			request.setAttribute("t_url", "Member");
+			return;
+		}
 		try {
 			password=dao.encryptSHA256(password);
 		}catch(Exception e) {
@@ -31,6 +38,7 @@ public class MemberLogin implements CommonExecute {
 				session.setAttribute("sessionLevel", "top");
 			}
 			session.setMaxInactiveInterval(60*60*4);
+			request.setAttribute("loginSuccess", true);
 		}else {
 			msg="ID나 비밀번호가 일치하지 않습니다.";
 			url="Member";
