@@ -54,8 +54,8 @@ public class MemberSave implements CommonExecute {
 			return;
 		}
 
-		if (isEmpty(name)) {
-			alert(request, "성명을 입력하세요.");
+		if (isEmpty(name) || name.trim().length() > 20) {
+			alert(request, "성명은 20자 이내로 입력해주세요.");
 			return;
 		}
 
@@ -69,7 +69,7 @@ public class MemberSave implements CommonExecute {
 
 		String emailPattern = "^[a-zA-Z0-9!@#$%^&*_.-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$";
 
-		if (isEmpty(email) || !email.matches(emailPattern)) {
+		if (isEmpty(email) || email.trim().length() > 100 || !email.matches(emailPattern)) {
 			alert(request, "올바른 이메일 형식을 입력해주세요.");
 			return;
 		}
@@ -80,8 +80,8 @@ public class MemberSave implements CommonExecute {
 			return;
 		}
 
-		if (isEmpty(vehicleNumber)) {
-			alert(request, "차량 번호를 입력하세요.");
+		if (isEmpty(vehicleNumber) || vehicleNumber.trim().length() > 20) {
+			alert(request, "차량 번호는 20자 이내로 입력해주세요.");
 			return;
 		}
 
@@ -119,6 +119,7 @@ public class MemberSave implements CommonExecute {
 			request.getSession().removeAttribute("emailVerifyCode");
 			request.getSession().removeAttribute("emailVerifyEmail");
 			request.getSession().removeAttribute("emailVerifyExpire");
+			request.getSession().removeAttribute("emailVerifyAttempts");
 			request.getSession().removeAttribute("emailVerifyLastSent");
 			request.getSession().removeAttribute("verifiedEmail");
 		}

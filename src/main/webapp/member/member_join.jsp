@@ -193,7 +193,7 @@
 									<div id="emailVerifyResult" class="verify_result">이메일 인증이
 										필요합니다.</div>
 
-									<span class="form_hint"> 이메일 인증을 완료해야 회원가입이 가능합니다. </span>
+									<span class="form_hint">이메일 인증을 완료해야 회원가입이 가능합니다. 인증번호는 5분 동안 유효하며, 재발송은 30초 후 가능합니다.</span>
 
 								</div>
 							</div>

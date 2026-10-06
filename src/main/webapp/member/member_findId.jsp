@@ -1,0 +1,56 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>아이디 찾기 | 인천공항 주차예약</title>
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/member_login.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/member_menu.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/index1.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/member_recovery.css">
+<script src="${pageContext.request.contextPath}/js/member_recovery.js" defer></script>
+</head>
+<body>
+<div class="wrap">
+	<%@ include file="../common_header.jsp"%>
+	<main class="login_page" id="recoveryPage" data-mode="id"
+		data-endpoint="${pageContext.request.contextPath}/MemberRecovery">
+		<div class="member_page_layout">
+			<aside class="member_menu_sidebar"><%@ include file="member_menu.jsp"%></aside>
+			<div class="login_container">
+				<div class="page_title">
+					<span class="title_eng">FIND ID</span>
+					<h1>아이디 찾기</h1>
+					<p>가입한 이메일로 인증번호를 받아 아이디를 확인하세요.</p>
+				</div>
+				<section class="login_card recovery_card">
+					<h2>이메일 인증</h2>
+					<form id="recoveryForm" autocomplete="off">
+						<div class="input_group">
+							<label for="recoveryEmail">가입 이메일</label>
+							<input id="recoveryEmail" name="email" type="email" maxlength="100" required autocomplete="email">
+						</div>
+						<button type="button" id="sendRecoveryCode" class="recovery_button">인증번호 발송</button>
+						<p class="recovery_hint">인증번호는 5분 동안 유효하며, 재발송은 30초 후 가능합니다.</p>
+						<div id="recoveryCodeArea" hidden>
+							<div class="input_group">
+								<label for="recoveryCode">인증번호</label>
+								<input id="recoveryCode" name="code" type="text" maxlength="6" inputmode="numeric" autocomplete="one-time-code">
+							</div>
+							<button type="button" id="verifyRecoveryCode" class="recovery_button">인증 확인</button>
+						</div>
+						<div id="recoveryResult" class="recovery_result" role="status" aria-live="polite"></div>
+					</form>
+					<div class="login_menu recovery_links">
+						<a href="${pageContext.request.contextPath}/Member?t_gubun=login">로그인</a>
+						<span>|</span>
+						<a href="${pageContext.request.contextPath}/Member?t_gubun=findPassword">비밀번호 찾기</a>
+					</div>
+				</section>
+			</div>
+		</div>
+	</main>
+</div>
+</body>
+</html>

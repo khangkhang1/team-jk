@@ -14,7 +14,14 @@ public class MemberReservationCancel implements CommonExecute {
 		int result = 0;
 
 		if (memberId != null && reservationId != null && !reservationId.trim().isEmpty()) {
-			result = MemberDao.getdao().cancelReservation(memberId, reservationId);
+			try {
+				result = MemberDao.getdao().cancelReservation(memberId, reservationId);
+			} catch (IllegalStateException e) {
+				e.printStackTrace();
+				request.setAttribute("t_msg", "예약 취소 중 오류가 발생했습니다. 다시 시도해주세요.");
+				request.setAttribute("t_url", "Member?t_gubun=myreservation");
+				return;
+			}
 		}
 
 		if (result == 1) {

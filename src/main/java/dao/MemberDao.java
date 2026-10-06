@@ -28,7 +28,7 @@ public class MemberDao {
 	LogPreparedStatement ps = null;
 	ResultSet rs = null;
 
-	public int checkId(String member_id) {
+	public synchronized int checkId(String member_id) {
 		int count = 0;
 		String sql = "select count(*) as count from icn_member where member_id=?";
 		try {
@@ -61,7 +61,7 @@ public class MemberDao {
 		return encryptData;
 	}
 
-	public int getCheckPassword(String member_id, String password) {
+	public synchronized int getCheckPassword(String member_id, String password) {
 		int count = 0;
 		String sql = "select count(*) as count from icn_member where member_id=? and  password=?";
 		try {
@@ -82,7 +82,7 @@ public class MemberDao {
 		return count;
 	}
 
-	public String getLoginName(String member_id, String password) {
+	public synchronized String getLoginName(String member_id, String password) {
 		String name = "";
 		String sql = "select name from icn_member where member_id=? and password=? and exit_date is null";
 		try {
@@ -103,7 +103,7 @@ public class MemberDao {
 		return name;
 	}
 
-	public MemberDto getMemberInfo(String member_id) {
+	public synchronized MemberDto getMemberInfo(String member_id) {
 		MemberDto dto = null;
 		String sql = "select name,password,phone_number,email,vehicle_number,vehicle_type,reg_date,update_date,exit_date from icn_member where member_id=?";
 		try {
@@ -112,7 +112,7 @@ public class MemberDao {
 			ps.setString(1, member_id);
 			rs = ps.executeQuery();
 			if (rs.next()) {
-				dto=new MemberDto();
+				dto = new MemberDto();
 				dto.setMember_id(member_id);
 				dto.setName(rs.getString("name"));
 				// dto.setPassword(rs.getString("password"));
@@ -135,7 +135,7 @@ public class MemberDao {
 		return dto;
 	}
 
-	public int memberPasswordUpdate(String member_id, String password) {
+	public synchronized int memberPasswordUpdate(String member_id, String password) {
 		int result = 0;
 		String sql = "update icn_member set password=? where member_id=?";
 		try {
@@ -153,7 +153,70 @@ public class MemberDao {
 		return result;
 	}
 
-	public int memberSave(MemberDto dto) {
+	public synchronized String findActiveIdByEmail(String email) {
+		String id = null;
+		String sql = "select member_id from icn_member where email=? "
+				+ "and exit_date is null";
+		try {
+			con = DBConnection.getConnection();
+			ps = new LogPreparedStatement(con, sql);
+			ps.setString(1, email);
+			rs = ps.executeQuery();
+			if (rs.next()) {
+				id = rs.getString("member_id");
+				if (rs.next()) throw new IllegalStateException("이메일에 연결된 활성 계정이 여러 개입니다.");
+			}
+		} catch (Exception e) {
+			throw new IllegalStateException("아이디 조회에 실패했습니다.", e);
+		} finally {
+			DBConnection.closeDB(con, ps, rs);
+			con = null;
+			ps = null;
+			rs = null;
+		}
+		return id;
+	}
+
+	public synchronized boolean hasActiveAccount(String memberId, String email) {
+		String sql = "select 1 from icn_member where member_id=? and email=? and exit_date is null";
+		try {
+			con = DBConnection.getConnection();
+			ps = new LogPreparedStatement(con, sql);
+			ps.setString(1, memberId);
+			ps.setString(2, email);
+			rs = ps.executeQuery();
+			return rs.next();
+		} catch (Exception e) {
+			throw new IllegalStateException("계정 확인에 실패했습니다.", e);
+		} finally {
+			DBConnection.closeDB(con, ps, rs);
+			con = null;
+			ps = null;
+			rs = null;
+		}
+	}
+
+	public synchronized int resetPasswordForEmail(String memberId, String email, String encryptedPassword) {
+		String sql = "update icn_member set password=?, update_date=sysdate "
+				+ "where member_id=? and email=? and exit_date is null";
+		try {
+			con = DBConnection.getConnection();
+			ps = new LogPreparedStatement(con, sql);
+			ps.setString(1, encryptedPassword);
+			ps.setString(2, memberId);
+			ps.setString(3, email);
+			return ps.executeUpdate();
+		} catch (Exception e) {
+			throw new IllegalStateException("비밀번호 재설정에 실패했습니다.", e);
+		} finally {
+			DBConnection.closeDB(con, ps, rs);
+			con = null;
+			ps = null;
+			rs = null;
+		}
+	}
+
+	public synchronized int memberSave(MemberDto dto) {
 		int result = 0;
 		String sql = "insert into icn_member (member_id,name,password,phone_number,email,vehicle_number,vehicle_type) values (?,?,?,?,?,?,?)";
 		try {
@@ -176,46 +239,46 @@ public class MemberDao {
 		return result;
 	}
 
-	public int memberUpdate(MemberDto dto) {
-		int result=0;
-		String sql="update icn_member set name=?,phone_number=?,email=?,vehicle_number=?,vehicle_type=?,update_date=sysdate where member_id=? ";
+	public synchronized int memberUpdate(MemberDto dto) {
+		int result = 0;
+		String sql = "update icn_member set name=?,phone_number=?,email=?,vehicle_number=?,vehicle_type=?,update_date=sysdate where member_id=? ";
 		try {
-			con=DBConnection.getConnection();
-			ps=new LogPreparedStatement(con, sql);
-			ps.setString(1,dto.getName());
-			ps.setString(2,dto.getPhone_number());
-			ps.setString(3,dto.getEmail());
-			ps.setString(4,dto.getVehicle_number());
-			ps.setString(5,dto.getVehicle_type());
-			ps.setString(6,dto.getMember_id());
-			result=ps.executeUpdate();
-		}catch(Exception e) {
+			con = DBConnection.getConnection();
+			ps = new LogPreparedStatement(con, sql);
+			ps.setString(1, dto.getName());
+			ps.setString(2, dto.getPhone_number());
+			ps.setString(3, dto.getEmail());
+			ps.setString(4, dto.getVehicle_number());
+			ps.setString(5, dto.getVehicle_type());
+			ps.setString(6, dto.getMember_id());
+			result = ps.executeUpdate();
+		} catch (Exception e) {
 			e.printStackTrace();
-			System.out.println("Error: "+ps.toString());
-		}finally {
+			System.out.println("Error: " + ps.toString());
+		} finally {
 			DBConnection.closeDB(con, ps, rs);
 		}
 		return result;
 	}
 
-	public int memberExit(String id) {
-		int result=0;
-		String sql="update icn_member set exit_date=sysdate where member_id=?";
+	public synchronized int memberExit(String id) {
+		int result = 0;
+		String sql = "update icn_member set exit_date=sysdate where member_id=?";
 		try {
-			con=DBConnection.getConnection();
-			ps=new LogPreparedStatement(con, sql);
-			ps.setString(1,id);
-			result=ps.executeUpdate();
-		}catch(Exception e) {
+			con = DBConnection.getConnection();
+			ps = new LogPreparedStatement(con, sql);
+			ps.setString(1, id);
+			result = ps.executeUpdate();
+		} catch (Exception e) {
 			e.printStackTrace();
-			System.out.println("Error: "+ps.toString());
-		}finally {
+			System.out.println("Error: " + ps.toString());
+		} finally {
 			DBConnection.closeDB(con, ps, rs);
 		}
 		return result;
 	}
 
-	public List<Map<String, Object>> getReservationInfo(String memberId) {
+	public synchronized List<Map<String, Object>> getReservationInfo(String memberId) {
 		List<Map<String, Object>> reservations = new ArrayList<>();
 		String sql = "select r.reservation_id, r.reservation_status, r.reservation_type, r.seat_no, r.flight_no, "
 				+ "to_char(r.reservation_start_time, 'YYYY-MM-DD HH24:MI') as start_at, "
@@ -229,47 +292,85 @@ public class MemberDao {
 				+ "r.reservation_estimate_amount, r.reservation_deposit_amount, r.reservation_final_amount "
 				+ "from icn_reservation r where r.member_id = ? "
 				+ "order by r.reservation_date desc, r.reservation_id desc";
-		try (Connection connection = DBConnection.getConnection();
-				LogPreparedStatement statement = new LogPreparedStatement(connection, sql)) {
-			statement.setString(1, memberId);
-			try (ResultSet result = statement.executeQuery()) {
-				while (result.next()) {
+		try {
+			con = DBConnection.getConnection();
+			ps = new LogPreparedStatement(con, sql);
+			ps.setString(1, memberId);
+			rs = ps.executeQuery();
+			while (rs.next()) {
 					Map<String, Object> reservation = new LinkedHashMap<>();
-					reservation.put("reservation_id", result.getString("reservation_id"));
-					reservation.put("reservation_status", result.getString("reservation_status"));
-					reservation.put("reservation_type", result.getString("reservation_type"));
-					reservation.put("seat_no", result.getString("seat_no"));
-					reservation.put("flight_no", result.getString("flight_no"));
-					reservation.put("start_at", result.getString("start_at"));
-					reservation.put("end_at", result.getString("end_at"));
-					reservation.put("out_at", result.getString("out_at"));
-					reservation.put("parking_start_at", result.getString("parking_start_at"));
-					reservation.put("arrive_at", result.getString("arrive_at"));
-					reservation.put("reserved_at", result.getString("reserved_at"));
-					reservation.put("can_cancel", result.getInt("can_cancel"));
-					reservation.put("reservation_estimate_amount", result.getObject("reservation_estimate_amount"));
-					reservation.put("reservation_deposit_amount", result.getObject("reservation_deposit_amount"));
-					reservation.put("reservation_final_amount", result.getObject("reservation_final_amount"));
+					reservation.put("reservation_id", rs.getString("reservation_id"));
+					reservation.put("reservation_status", rs.getString("reservation_status"));
+					reservation.put("reservation_type", rs.getString("reservation_type"));
+					reservation.put("seat_no", rs.getString("seat_no"));
+					reservation.put("flight_no", rs.getString("flight_no"));
+					reservation.put("start_at", rs.getString("start_at"));
+					reservation.put("end_at", rs.getString("end_at"));
+					reservation.put("out_at", rs.getString("out_at"));
+					reservation.put("parking_start_at", rs.getString("parking_start_at"));
+					reservation.put("arrive_at", rs.getString("arrive_at"));
+					reservation.put("reserved_at", rs.getString("reserved_at"));
+					reservation.put("can_cancel", rs.getInt("can_cancel"));
+					reservation.put("reservation_estimate_amount", rs.getObject("reservation_estimate_amount"));
+					reservation.put("reservation_deposit_amount", rs.getObject("reservation_deposit_amount"));
+					reservation.put("reservation_final_amount", rs.getObject("reservation_final_amount"));
 					reservations.add(reservation);
-				}
 			}
 		} catch (Exception e) {
 			throw new IllegalStateException("예약 내역 조회에 실패했습니다.", e);
+		} finally {
+			DBConnection.closeDB(con, ps, rs);
+			con = null;
+			ps = null;
+			rs = null;
 		}
 		return reservations;
 	}
 
-	public int cancelReservation(String memberId, String reservationId) {
+	public synchronized int cancelReservation(String memberId, String reservationId) {
 		String sql = "update icn_reservation set reservation_status = '4' "
 				+ "where reservation_id = ? and member_id = ? "
 				+ "and reservation_status = '1' and reservation_start_time > sysdate";
-		try (Connection connection = DBConnection.getConnection();
-				LogPreparedStatement statement = new LogPreparedStatement(connection, sql)) {
-			statement.setString(1, reservationId);
-			statement.setString(2, memberId);
-			return statement.executeUpdate();
+		try {
+			con = DBConnection.getConnection();
+			con.setAutoCommit(false);
+			ps = new LogPreparedStatement(con, sql);
+			ps.setString(1, reservationId);
+			ps.setString(2, memberId);
+			int result = ps.executeUpdate();
+			ps.close();
+			ps = null;
+			if (result != 1) {
+				con.rollback();
+				return 0;
+			}
+
+			sql = "update icn_payment set payment_type = '3', payment_amount = 0 "
+					+ "where reservation_id = ? and payment_type = '1'";
+			ps = new LogPreparedStatement(con, sql);
+			ps.setString(1, reservationId);
+			result = ps.executeUpdate();
+			if (result != 1) {
+				con.rollback();
+				return 0;
+			}
+
+			con.commit();
+			return 1;
 		} catch (Exception e) {
+			if (con != null) {
+				try {
+					con.rollback();
+				} catch (Exception rollbackError) {
+					e.addSuppressed(rollbackError);
+				}
+			}
 			throw new IllegalStateException("예약 취소에 실패했습니다.", e);
+		} finally {
+			DBConnection.closeDB(con, ps, rs);
+			con = null;
+			ps = null;
+			rs = null;
 		}
 	}
 

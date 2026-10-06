@@ -14,6 +14,8 @@ import mail.SendMail;
 @WebServlet("/MemberEmailSend")
 public class MemberEmailSend extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	private static final long CODE_LIFETIME = 300_000L;
+	private static final long RESEND_DELAY = 30_000L;
 
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -29,20 +31,20 @@ public class MemberEmailSend extends HttpServlet {
 
 		String emailPattern = "^[a-zA-Z0-9!@#$%^&*_.-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$";
 
-		if (email == null || !email.matches(emailPattern)) {
+		if (email == null || email.length() > 100 || !email.matches(emailPattern)) {
 			response.getWriter().print("올바른 이메일 형식을 입력해주세요.");
 			return;
 		}
 
 		HttpSession session = request.getSession();
 
-		// 1분 재발송 제한
+		// 30초 재발송 제한
 		Long lastSent = (Long) session.getAttribute("emailVerifyLastSent");
 
 		long now = System.currentTimeMillis();
 
-		if (lastSent != null && now - lastSent < 60_000) {
-			long remainSecond = (60_000 - (now - lastSent)) / 1000 + 1;
+		if (lastSent != null && now - lastSent < RESEND_DELAY) {
+			long remainSecond = (RESEND_DELAY - (now - lastSent) + 999) / 1000;
 
 			response.getWriter().print("인증번호 재발송은 " + remainSecond + "초 후 가능합니다.");
 			return;
@@ -64,7 +66,7 @@ public class MemberEmailSend extends HttpServlet {
 		SendMail sendMail = new SendMail(fromUserEmail, fromUserPassword);
 
 		boolean success = sendMail.sendPassword(email, "[인천공항 주차예약] 이메일 인증번호",
-				"인증번호는 " + verifyCode + "입니다. 3분 안에 입력해주세요.");
+				"인증번호는 " + verifyCode + "입니다. 5분 안에 입력해주세요.");
 
 		if (!success) {
 			response.getWriter().print("인증번호 발송에 실패했습니다. 잠시 후 다시 시도해주세요.");
@@ -76,7 +78,8 @@ public class MemberEmailSend extends HttpServlet {
 		 */
 		session.setAttribute("emailVerifyCode", verifyCode);
 		session.setAttribute("emailVerifyEmail", email);
-		session.setAttribute("emailVerifyExpire", now + 180_000); // 3분
+		session.setAttribute("emailVerifyExpire", now + CODE_LIFETIME); // 5분
+		session.setAttribute("emailVerifyAttempts", 0);
 		session.setAttribute("emailVerifyLastSent", now);
 
 		// 이메일을 바꿔 재발송한 경우 기존 인증 완료 상태도 제거
@@ -87,6 +90,6 @@ public class MemberEmailSend extends HttpServlet {
 
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-		doPost(request, response);
+		response.sendError(HttpServletResponse.SC_METHOD_NOT_ALLOWED);
 	}
 }

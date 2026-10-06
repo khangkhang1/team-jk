@@ -1,0 +1,24 @@
+.recovery_card { padding-bottom: 28px; }
+.recovery_card form { padding: 0; }
+.recovery_card .input_group { margin: 20px 0; }
+.recovery_card .input_group input { width: 100%; }
+.recovery_button {
+	display: block;
+	width: 100%;
+	margin-top: 16px;
+	padding: 13px 18px;
+	border: 0;
+	border-radius: 8px;
+	background: #1769d2;
+	color: #fff;
+	font-size: 14px;
+	font-weight: 700;
+	cursor: pointer;
+}
+.recovery_button:disabled { opacity: .6; cursor: wait; }
+.recovery_button:focus-visible { outline: 2px solid #173e79; outline-offset: 2px; }
+.recovery_result { margin-top: 18px; color: #b34343; font-size: 13px; line-height: 1.6; overflow-wrap: anywhere; }
+.recovery_result.success { color: #1769d2; }
+.recovery_hint { margin-top: 10px; color: #758193; font-size: 12px; }
+.recovery_links { margin-top: 28px; }
+[hidden] { display: none !important; }
