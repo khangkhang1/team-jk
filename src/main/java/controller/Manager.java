@@ -142,7 +142,7 @@ public class Manager extends HttpServlet {
 			forward(request, response, "common_alert.jsp");
 
 		} else if (gubun.equals("notice")) {
-			noticeList(request);
+			noticeList(request, dao);
 			forward(request, response, "manager/notice_list.jsp");
 
 		} else if (gubun.equals("noticeForm")) {
@@ -397,19 +397,31 @@ public class Manager extends HttpServlet {
 	}
 
 	// ---------------------------------------------------------------- 공지사항 관리
-	private void noticeList(HttpServletRequest request) {
+	// 조회는 정규상 NoticeDao 를 그대로 쓴다. 그쪽은 값을 SQL 문자열에 바로 붙이므로 검색어의 ' 는 미리 바꿔서 넘긴다
+	private void noticeList(HttpServletRequest request, ManagerDao managerDao) {
 		String search = CommonUtil.getCheckNull(request.getParameter("t_search")).trim();
-		ArrayList<NoticeDto> dtos = new NoticeDao().getNoticeList(search);
+		String nowPage = request.getParameter("t_nowPage");
+		int current_page = (nowPage == null || !nowPage.matches("[0-9]+")) ? 1 : Integer.parseInt(nowPage);
+		if (current_page < 1) current_page = 1;
 
-		int important = 0;
-		for (NoticeDto d : dtos) {
-			if ("Y".equals(d.getImportant())) important++;
-		}
+		NoticeDao dao = new NoticeDao();
+		String keyword = CommonUtil.getSingleQuot(search);
 
-		request.setAttribute("dtos", dtos);
+		int totalCount = dao.getTotalCount("title", keyword);
+		int total_page = totalCount / LIST_PER_PAGE;
+		if (totalCount % LIST_PER_PAGE != 0) total_page = total_page + 1;
+		if (total_page == 0) total_page = 1;
+		if (current_page > total_page) current_page = total_page;
+
+		int start = (current_page - 1) * LIST_PER_PAGE + 1;
+		int end   = current_page * LIST_PER_PAGE;
+
+		request.setAttribute("dtos", dao.getNoticeList("title", keyword, start, end));
 		request.setAttribute("search", search);
-		request.setAttribute("totalCount", dtos.size());
-		request.setAttribute("importantCount", important);
+		request.setAttribute("totalCount", totalCount);
+		request.setAttribute("importantCount", managerDao.getNoticeImportantCount());
+		request.setAttribute("totalPage", total_page);
+		request.setAttribute("nowPage", current_page);
 		request.setAttribute("activeMenu", "notice");
 		request.setAttribute("pageTitle", "공지사항 관리");
 	}
@@ -418,7 +430,7 @@ public class Manager extends HttpServlet {
 	private void noticeForm(HttpServletRequest request) {
 		String no = CommonUtil.getCheckNull(request.getParameter("t_no")).trim();
 		if (!no.equals("")) {
-			NoticeDto dto = new NoticeDao().getNoticeView(no);
+			NoticeDto dto = new NoticeDao().noticeView(no);
 			if (dto != null) request.setAttribute("dto", dto);
 		}
 		request.setAttribute("activeMenu", "notice");

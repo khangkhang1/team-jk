@@ -27,7 +27,16 @@ public class Payment implements CommonExecute {
 		String arrive_time = request.getParameter("t_reservation_flight_arrive_time");
 		String arrive_datetime = arrive_date +" "+ arrive_time;
 		String payment_method = request.getParameter("t_reservation_pay_method");
-		int estimate_amount = Integer.parseInt(request.getParameter("t_reservation_estimate_amount"));
+		String estimateAmountStr = request.getParameter("t_reservation_estimate_amount");
+		int estimate_amount = 0;
+
+		if (estimateAmountStr != null && !estimateAmountStr.trim().isEmpty()) {
+		    try {
+		        estimate_amount = Integer.parseInt(estimateAmountStr);
+		    } catch (NumberFormatException e) {
+		        estimate_amount = 0;
+		    }
+		}
 		int deposit_amount = 
 				plan.equals("1") ? 0 : Integer.parseInt(request.getParameter("t_reservation_deposit_amount"));
 		int pay_amount = plan.equals("1") ? estimate_amount : deposit_amount;

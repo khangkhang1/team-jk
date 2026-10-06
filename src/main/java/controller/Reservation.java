@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import command.reservation.FinalPayment;
 import command.reservation.FinalPaymentPage;
 import command.reservation.Payment;
 import command.reservationMap.ReservationMap;
@@ -59,6 +60,11 @@ public class Reservation extends HttpServlet {
 			CommonExecute mem = new FinalPaymentPage();
 			mem.execute(request);
 			viewPage = "reservation/final_payment.jsp";
+			
+		}else if(gubun.equals("finalPayment")) {
+			CommonExecute mem = new FinalPayment();
+			mem.execute(request);
+			viewPage = "common_alert.jsp";
 		}
 
 		RequestDispatcher rd = request.getRequestDispatcher(viewPage);

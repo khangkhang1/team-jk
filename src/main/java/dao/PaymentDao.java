@@ -246,61 +246,53 @@ public class PaymentDao {
 		return result;
 	}
 
-	// 예약 정보 조회(최종 결제 시 input값 받아오기) 사용x
-	public ReservationInfoDto getReservationDto1(String reservation_id) {
-	    ReservationInfoDto dto = null;
-	    String sql = "select reservation_id, reservation_status, "
-	            + "reservation_start_time, reservation_end_time, "
-	            + "member_id, seat_no, reservation_parking_start_time, "
-	            + "reservation_date, reservation_type "
-	            + "from icn_reservation "
-	            + "where reservation_id = ?";
+	public int finalPaymentR(String reservation_id, long totalPrice, String todayTime) {
+		int result = 0;
+		String sql = "update icn_reservation\r\n"
+				+ "set reservation_status = ?,\r\n"
+				+ "    reservation_out_time = to_date(?, 'yyyy-MM-dd hh24:mi:ss'),\r\n"
+				+ "    reservation_final_amount = ?\r\n"
+				+ "where reservation_id = ?";
+		try {
+			con = DBConnection.getConnection();
+			LogPreparedStatement ps = new LogPreparedStatement(con, sql);
+			ps.setString(1, "3");
+			ps.setString(2, todayTime);
+			ps.setLong(3, totalPrice);
+			ps.setString(4, reservation_id);
+			result = ps.executeUpdate();
+		}catch(Exception e) {
+			System.out.println("finalPaymentR() 오류:" + ps.toString());
+			e.printStackTrace();
+		}finally {
+			DBConnection.closeDB(con, ps, rs);
+		}
+		return result;
+	}
 
-	    try {
-	        con = DBConnection.getConnection();
-
-	        LogPreparedStatement ps = new LogPreparedStatement(con, sql);
-	        ps.setString(1, reservation_id);
-
-	        rs = ps.executeQuery();
-
-	        if (rs.next()) {
-	            int reservation_final_amount = 0;
-
-	            String reservation_id_db = rs.getString("reservation_id");
-	            String reservation_status = rs.getString("reservation_status");
-	            String reservation_start_time = rs.getString("reservation_start_time");
-	            String reservation_end_time = rs.getString("reservation_end_time");
-	            String member_id = rs.getString("member_id");
-	            String seat_no = rs.getString("seat_no");
-	            String reservation_parking_start_time =
-	                    rs.getString("reservation_parking_start_time");
-	            String reservation_date = rs.getString("reservation_date");
-	            String reservation_type = rs.getString("reservation_type");
-
-	            dto = new ReservationInfoDto(
-	                    reservation_final_amount,
-	                    reservation_id_db,
-	                    reservation_status,
-	                    reservation_start_time,
-	                    reservation_end_time,
-	                    member_id,
-	                    seat_no,
-	                    reservation_parking_start_time,
-	                    reservation_date,"",
-	                    reservation_type
-	            );
-	        }
-
-	    } catch (Exception e) {
-	        System.out.println("getReservationDto() 오류 :" + sql);
-	        e.printStackTrace();
-
-	    } finally {
-	        DBConnection.closeDB(con, ps, rs);
-	    }
-
-	    return dto;
+	public int finalPaymentP(String payment_id, String reservation_id, long totalPrice, String todayTime, String reservation_pay_method) {
+		int result = 0;
+		String sql = "insert into icn_payment\r\n"
+				+ "(payment_id, payment_amount, payment_method, payment_type, payment_date, reservation_id)\r\n"
+				+ "values\r\n"
+				+ "(?, ?, ?, ?, to_date(?, 'yyyy-MM-dd hh24:mi:ss'), ?)";
+		try {
+			con = DBConnection.getConnection();
+			LogPreparedStatement ps = new LogPreparedStatement(con, sql);
+			ps.setString(1, payment_id);
+			ps.setLong(2, totalPrice);
+			ps.setString(3, reservation_pay_method);
+			ps.setString(4, "2");
+			ps.setString(5, todayTime);
+			ps.setString(6, reservation_id);
+			result = ps.executeUpdate();
+		}catch(Exception e) {
+			System.out.println("finalPaymentP() 오류:" + ps.toString());
+			e.printStackTrace();
+		}finally {
+			DBConnection.closeDB(con, ps, rs);
+		}
+		return result;
 	}
 
 }

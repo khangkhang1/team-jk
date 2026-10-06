@@ -280,7 +280,7 @@ function handleResponse(rsp) {
 				<legend data-i18n="res_flightSectionTitle">✈️ 항공권 정보 (필수)</legend>
 				<div class="formRow">
 					<label data-i18n="res_flightNo">항공편명</label>
-					<input type="text" id="flightNoInput" name="t_reservation_flight_no" disabled>
+					<input type="text" id="flightNoInput" name="t_reservation_flight_no" readonly>
 					<button type="button" onclick="goFlightSearch()" style="height:37.5px; width:50px;">검색</button>
 				</div>
 				<div class="formRow">
@@ -299,7 +299,7 @@ function handleResponse(rsp) {
 				</div>
 			</fieldset>
 
-			<div id="estimatedPriceBox"><span data-i18n="res_estimated">예상 금액</span>: <strong id="estimatedPrice">-</strong></div>
+			<div id="estimatedPriceBox" class="hidden"><span data-i18n="res_estimated">예상 금액</span>: <strong id="estimatedPrice">-</strong></div>
 			<input type="hidden" name="t_reservation_estimate_amount" id="estimatedPriceInput">
 
 			<div id="payMethodArea">

@@ -25,13 +25,19 @@ public class NoticeSave implements CommonExecute {
 			return;
 		}
 
-		NoticeDto dto = new NoticeDto();
-		dto.setTitle(title);
-		dto.setContent(content);
-		dto.setImportant(important.equals("Y") ? "Y" : "N");
-		dto.setReg_id(reg_id);
+		NoticeDao dao = new NoticeDao();
 
-		int result = new NoticeDao().noticeSave(dto);
+		// NoticeDao 는 값을 SQL 문자열에 바로 붙이므로 따옴표는 HTML 엔티티로 바꿔 저장한다 (FAQ 와 같은 방식)
+		NoticeDto dto = new NoticeDto();
+		dto.setNo(dao.getNoticeNo());
+		dto.setTitle(CommonUtil.getDoubleQuot(CommonUtil.getSingleQuot(title)));
+		dto.setContent(CommonUtil.getDoubleQuot(CommonUtil.getSingleQuot(content)));
+		dto.setImportant(important.equals("Y") ? "Y" : "N");
+		dto.setAttach("");
+		dto.setReg_id(reg_id);
+		dto.setReg_date(CommonUtil.getTodayTime());
+
+		int result = dao.noticeSave(dto);
 		request.setAttribute("t_msg", result == 1 ? "공지사항을 등록했습니다." : "등록에 실패했습니다.");
 		request.setAttribute("t_url", "Manager?t_gubun=notice");
 	}

@@ -386,6 +386,12 @@ public class ManagerDao {
 		return row.isEmpty() ? 0 : ((Number) row.get("cnt")).intValue();
 	}
 
+	// 공지사항 관리 화면의 "중요 N건" 표시용. 목록 자체는 정규상 NoticeDao 로 가져온다
+	public int getNoticeImportantCount() {
+		HashMap<String, Object> row = selectOne("SELECT COUNT(*) AS cnt FROM icn_notice WHERE important = 'Y'");
+		return row.isEmpty() ? 0 : ((Number) row.get("cnt")).intValue();
+	}
+
 	public ArrayList<HashMap<String, Object>> getMemberList(String select, String search, int start, int end) {
 		String sql =
 			  "SELECT * FROM (\r\n"

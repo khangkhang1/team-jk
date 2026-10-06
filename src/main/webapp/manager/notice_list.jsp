@@ -53,7 +53,7 @@
 						<td class="mono">${n.no}</td>
 						<td>
 							<c:if test="${n.important == 'Y'}"><span class="badge st4">중요</span> </c:if>
-							<a href="${ctx}/Manager?t_gubun=noticeForm&t_no=${n.no}" class="row_link"><c:out value="${n.title}"/></a>
+							<a href="${ctx}/Manager?t_gubun=noticeForm&t_no=${n.no}" class="row_link">${n.title}</a>
 						</td>
 						<td class="dim">${n.hit}</td>
 						<td class="dim">${n.reg_id}</td>
@@ -71,6 +71,23 @@
 				</c:forEach>
 				</tbody>
 			</table>
+
+			<c:set var="pStart" value="${nowPage - ((nowPage - 1) mod 5)}" />
+			<c:set var="pEnd"   value="${pStart + 4 > totalPage ? totalPage : pStart + 4}" />
+			<div class="pager">
+				<c:if test="${pStart > 1}">
+					<c:url var="u" value="/Manager"><c:param name="t_gubun" value="notice"/><c:param name="t_search" value="${search}"/><c:param name="t_nowPage" value="${pStart - 1}"/></c:url>
+					<a href="${u}">&laquo;</a>
+				</c:if>
+				<c:forEach var="p" begin="${pStart}" end="${pEnd}">
+					<c:url var="u" value="/Manager"><c:param name="t_gubun" value="notice"/><c:param name="t_search" value="${search}"/><c:param name="t_nowPage" value="${p}"/></c:url>
+					<a href="${u}" class="${p == nowPage ? 'on' : ''}">${p}</a>
+				</c:forEach>
+				<c:if test="${pEnd < totalPage}">
+					<c:url var="u" value="/Manager"><c:param name="t_gubun" value="notice"/><c:param name="t_search" value="${search}"/><c:param name="t_nowPage" value="${pEnd + 1}"/></c:url>
+					<a href="${u}">&raquo;</a>
+				</c:if>
+			</div>
 			</c:if>
 		</section>
 
