@@ -163,7 +163,7 @@
 <section class="hero">
 
 <!-- 최종 결제 안내 박스 -->
-<c:if test="${not empty sessionName and empty r_dto.getReservation_out_time()}">
+<c:if test="${not empty sessionName and empty r_dto.getReservation_out_time() and reservationStarted}">
     <div class="reservationSummary">
 
 		<div class="reservationSummaryHeader dragHandle">
@@ -174,9 +174,9 @@
 		    <!-- 주차 경과 시간 -->
 		    <div class="parkingElapsed">
 		        <i class="fa-regular fa-clock"></i>
-		        <c:if test="${r_dto.getReservation_type() eq '2'}">
+		       <!--  <c:if test="${r_dto.getReservation_type() eq '2'}"> -->
 		        	<span id="parkingElapsedTime">00:00:00</span>
-		        </c:if>
+		       <!-- </c:if>-->
 		    </div>
 		    
 		    <span class="reservationStatus">이용 중</span>
