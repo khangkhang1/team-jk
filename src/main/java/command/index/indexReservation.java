@@ -1,12 +1,13 @@
 package command.index;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 import javax.servlet.http.HttpServletRequest;
 
 import common.CommonExecute;
 import common.CommonUtil;
-import dao.PaymentDao;
 import dao.indexReservationDao;
-import dto.ReservationDto;
 import dto.ReservationInfoDto;
 
 public class indexReservation implements CommonExecute {
@@ -65,6 +66,21 @@ public class indexReservation implements CommonExecute {
 	        } catch (Exception e) {
 	            e.printStackTrace();
 	        }
+	        
+	        String startTime = dto.getReservation_start_time();
+
+	        DateTimeFormatter formatter =
+	                DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+	        LocalDateTime reservationStart =
+	                LocalDateTime.parse(startTime, formatter);
+
+	        LocalDateTime now = LocalDateTime.now();
+
+	        boolean reservationStarted = !now.isBefore(reservationStart);
+
+	        request.setAttribute("reservationStarted", reservationStarted);
+	        
 		
 		request.setAttribute("r_dto", dto);
 		
