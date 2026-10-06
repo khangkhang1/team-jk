@@ -110,7 +110,7 @@
 
 									<input type="password" id="password" name="t_password"
 										maxlength="70" placeholder="비밀번호를 입력해주세요"> <span
-										class="form_hint">6~16자로 입력해주세요.특수문자는 !@#$%^&*_+?.-만
+										class="form_hint">영문 소문자를 최소 1자 이상 포함하여 6~16자로 입력해주세요.특수문자는 !@#$%^&*_+?.-만
 										사용할 수 있습니다.</span>
 
 								</div>
