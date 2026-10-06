@@ -28,13 +28,24 @@ public class NoticeUpdate implements CommonExecute {
 			return;
 		}
 
+		NoticeDao dao = new NoticeDao();
+		NoticeDto old = dao.noticeView(no);
+		if (old == null) {
+			request.setAttribute("t_msg", "없는 공지 번호입니다. 이미 삭제된 글일 수 있습니다.");
+			request.setAttribute("t_url", "Manager?t_gubun=notice");
+			return;
+		}
+
+		// NoticeDao 는 값을 SQL 문자열에 바로 붙이므로 따옴표는 HTML 엔티티로 바꿔 저장한다 (FAQ 와 같은 방식)
+		// 첨부파일은 이 화면에서 다루지 않으므로 정규상 공지 화면에서 올린 값을 그대로 둔다
 		NoticeDto dto = new NoticeDto();
 		dto.setNo(no);
-		dto.setTitle(title);
-		dto.setContent(content);
+		dto.setTitle(CommonUtil.getDoubleQuot(CommonUtil.getSingleQuot(title)));
+		dto.setContent(CommonUtil.getDoubleQuot(CommonUtil.getSingleQuot(content)));
 		dto.setImportant(important.equals("Y") ? "Y" : "N");
+		dto.setAttach(old.getAttach() == null ? "" : old.getAttach());
 
-		int result = new NoticeDao().noticeUpdate(dto);
+		int result = dao.noticeUpdate(dto);
 		request.setAttribute("t_msg", result == 1 ? "공지사항을 수정했습니다." : "수정에 실패했습니다.");
 		request.setAttribute("t_url", "Manager?t_gubun=notice");
 	}

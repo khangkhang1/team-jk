@@ -3,7 +3,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%--
  공지사항 등록 / 수정 (관리자 콘솔 안). dto 가 있으면 수정, 없으면 등록.
- 공지 내용은 저장할 때 손대지 않고 넣으므로 출력할 때 c:out 으로 이스케이프한다 (出力時エスケープ).
+ 따옴표는 저장할 때 HTML 엔티티로 바꿔 두므로(NoticeDao 가 SQL 문자열 결합) 여기서는 그대로 출력한다 (FAQ 관리와 동일).
 --%>
 <!DOCTYPE html>
 <html lang="ko">
@@ -39,12 +39,12 @@
 					<tr>
 						<th>제목</th>
 						<td><input type="text" name="t_title" class="adm_input" maxlength="100"
-							value="<c:out value='${dto.title}'/>" placeholder="예) 추석 연휴 주차장 혼잡 안내"></td>
+							value="${dto.title}" placeholder="예) 추석 연휴 주차장 혼잡 안내"></td>
 					</tr>
 					<tr>
 						<th>내용</th>
 						<td><textarea name="t_content" class="adm_area" rows="12"
-							placeholder="공지 내용을 적습니다. 줄바꿈은 그대로 보입니다."><c:out value="${dto.content}"/></textarea></td>
+							placeholder="공지 내용을 적습니다. 줄바꿈은 그대로 보입니다.">${dto.content}</textarea></td>
 					</tr>
 					<tr>
 						<th>중요 공지</th>
