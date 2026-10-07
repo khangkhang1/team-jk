@@ -55,10 +55,6 @@
 			<i>!</i> 공지사항 관리
 		</a>
 
-		<p class="adm_nav_group">도구</p>
-		<a href="${ctx}/Manager?t_gubun=ai" class="${activeMenu == 'ai' ? 'on' : ''}">
-			<i>✦</i> AI 어시스턴트 <em>준비 중</em>
-		</a>
 	</nav>
 
 	<div class="adm_side_foot">

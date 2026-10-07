@@ -92,7 +92,7 @@
 														<div>
 															<dt>도착 예정</dt>
 															<dd>
-																<c:out value="${reservation.arrive_at}" default="-" />
+																<c:out value="${reservation.end_at}" default="-" />
 															</dd>
 														</div>
 														<div>
@@ -132,7 +132,7 @@
 													</c:if>
 													<c:if test="${not empty reservation.out_at}">
 														<div>
-															<dt>실제 출차</dt>
+															<dt>출차 시각</dt>
 															<dd>
 																<c:out value="${reservation.out_at}" />
 															</dd>

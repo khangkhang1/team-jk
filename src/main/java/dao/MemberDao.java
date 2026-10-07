@@ -283,12 +283,16 @@ public class MemberDao {
 
 	public synchronized List<Map<String, Object>> getReservationInfo(String memberId) {
 		List<Map<String, Object>> reservations = new ArrayList<>();
+		String startParkingSql = "update icn_reservation set reservation_status = '2', "
+				+ "reservation_parking_start_time = nvl(reservation_parking_start_time, reservation_start_time) "
+				+ "where member_id = ? and reservation_type = '2' and reservation_status = '1' "
+				+ "and reservation_start_time <= sysdate";
 		String sql = "select r.reservation_id, r.reservation_status, r.reservation_type, r.seat_no, r.flight_no, "
 				+ "to_char(r.reservation_start_time, 'YYYY-MM-DD HH24:MI') as start_at, "
 				+ "to_char(r.reservation_end_time, 'YYYY-MM-DD HH24:MI') as end_at, "
 				+ "to_char(r.reservation_out_time, 'YYYY-MM-DD HH24:MI') as out_at, "
 				+ "to_char(r.reservation_parking_start_time, 'YYYY-MM-DD HH24:MI') as parking_start_at, "
-				+ "to_char(r.reservation_arrive_time, 'YYYY-MM-DD HH24:MI') as arrive_at, "
+				+ "to_char(r.RESERVATION_END_TIME, 'YYYY-MM-DD HH24:MI') as arrive_at, "
 				+ "to_char(r.reservation_date, 'YYYY-MM-DD HH24:MI') as reserved_at, "
 				+ "case when r.reservation_status = '1' and r.reservation_start_time > sysdate "
 				+ "then 1 else 0 end as can_cancel, "
@@ -297,6 +301,11 @@ public class MemberDao {
 				+ "order by r.reservation_date desc, r.reservation_id desc";
 		try {
 			con = DBConnection.getConnection();
+			// 자유출차형은 예약 시작 시간이 지나면 주차중으로 전환한 뒤 조회한다.
+			try (LogPreparedStatement startParkingPs = new LogPreparedStatement(con, startParkingSql)) {
+				startParkingPs.setString(1, memberId);
+				startParkingPs.executeUpdate();
+			}
 			ps = new LogPreparedStatement(con, sql);
 			ps.setString(1, memberId);
 			rs = ps.executeQuery();

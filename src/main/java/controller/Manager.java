@@ -62,7 +62,7 @@ public class Manager extends HttpServlet {
 	// 아직 화면이 없는 메뉴 (AI 는 팀 상담 후로 보류)
 	private static final Map<String, String> COMING_SOON = new LinkedHashMap<>();
 	static {
-		COMING_SOON.put("ai", "AI 어시스턴트");
+		// 2026-09-22 7차 회의 결정으로 AI 어시스턴트는 제외됨. 메뉴에 "준비 중" 항목을 추가할 일이 생기면 여기에 put 한다.
 	}
 
 	@Override

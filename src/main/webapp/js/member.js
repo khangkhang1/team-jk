@@ -54,11 +54,11 @@ function checkPasswordFormat() {
 
 	var password = mem.t_password.value;
 
-	// 영문 소문자 최소 1자 포함, 8~16자
+	// 영문 소문자 최소 1자 포함, 6~16자
 	var passwordPattern = /^(?=.*[a-z])[A-Za-z0-9!@#$%^&*_+?.-]{6,16}$/;
 
 	if (!passwordPattern.test(password)) {
-		alert("6~16자로 입력해주세요.특수문자는 !@#$%^&*_+?.-만 사용할 수 있습니다.");
+		alert("영문 소문자를 최소 1자 이상 포함하여 6~16자로 입력해주세요.특수문자는 !@#$%^&*_+?.-만 사용할 수 있습니다.");
 		mem.t_password.focus();
 		return false;
 	}
