@@ -57,6 +57,7 @@
 .reservation_info > div { display: grid; grid-template-columns: 90px minmax(0, 1fr); gap: 12px; }
 .reservation_info dt { font-size: 13px; color: #758193; }
 .reservation_info dd { margin: 0; font-size: 14px; font-weight: 500; overflow-wrap: anywhere; }
+.reservation_payment_note { margin: 20px 0 0; font-size: 13px; line-height: 1.6; color: #758193; }
 .reservation_placeholder { font-size: 14px; color: #758193; }
 .reservation_actions { display: flex; justify-content: flex-end; margin-top: 24px; padding-top: 20px; border-top: 1px solid #edf0f5; }
 .reservation_cancel_btn { padding: 10px 18px; border: 1px solid #d95656; border-radius: 7px; background: #fff; color: #c63f3f; font-size: 13px; font-weight: 700; cursor: pointer; }

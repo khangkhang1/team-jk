@@ -285,7 +285,7 @@ public class MemberDao {
 		List<Map<String, Object>> reservations = new ArrayList<>();
 		String startParkingSql = "update icn_reservation set reservation_status = '2', "
 				+ "reservation_parking_start_time = nvl(reservation_parking_start_time, reservation_start_time) "
-				+ "where member_id = ? and reservation_type = '2' and reservation_status = '1' "
+				+ "where member_id = ? and reservation_status = '1' "
 				+ "and reservation_start_time <= sysdate";
 		String sql = "select r.reservation_id, r.reservation_status, r.reservation_type, r.seat_no, r.flight_no, "
 				+ "to_char(r.reservation_start_time, 'YYYY-MM-DD HH24:MI') as start_at, "
@@ -296,12 +296,17 @@ public class MemberDao {
 				+ "to_char(r.reservation_date, 'YYYY-MM-DD HH24:MI') as reserved_at, "
 				+ "case when r.reservation_status = '1' and r.reservation_start_time > sysdate "
 				+ "then 1 else 0 end as can_cancel, "
+				// 출차 결제 페이지와 동일하게 예약 시작부터 30분당 4,500원(최소 1단위)으로 계산한다.
+				+ "case when r.reservation_type = '2' and r.reservation_status = '2' "
+				+ "and r.reservation_start_time <= sysdate "
+				+ "then greatest(1, ceil(round((sysdate - r.reservation_start_time) * 86400) / 1800)) * 4500 "
+				+ "end as estimated_usage_amount, "
 				+ "r.reservation_estimate_amount, r.reservation_deposit_amount, r.reservation_final_amount "
 				+ "from icn_reservation r where r.member_id = ? "
 				+ "order by r.reservation_date desc, r.reservation_id desc";
 		try {
 			con = DBConnection.getConnection();
-			// 자유출차형은 예약 시작 시간이 지나면 주차중으로 전환한 뒤 조회한다.
+			// 두 예약 유형 모두 시작 시간이 되면 주차중으로 전환한 뒤 조회한다.
 			try (LogPreparedStatement startParkingPs = new LogPreparedStatement(con, startParkingSql)) {
 				startParkingPs.setString(1, memberId);
 				startParkingPs.executeUpdate();
@@ -323,6 +328,7 @@ public class MemberDao {
 					reservation.put("arrive_at", rs.getString("arrive_at"));
 					reservation.put("reserved_at", rs.getString("reserved_at"));
 					reservation.put("can_cancel", rs.getInt("can_cancel"));
+					reservation.put("estimated_usage_amount", rs.getObject("estimated_usage_amount"));
 					reservation.put("reservation_estimate_amount", rs.getObject("reservation_estimate_amount"));
 					reservation.put("reservation_deposit_amount", rs.getObject("reservation_deposit_amount"));
 					reservation.put("reservation_final_amount", rs.getObject("reservation_final_amount"));

@@ -95,29 +95,18 @@
 																<c:out value="${reservation.end_at}" default="-" />
 															</dd>
 														</div>
-														<div>
-															<dt>예상 요금</dt>
-															<dd>
-																<c:choose>
-																	<c:when
-																		test="${empty reservation.reservation_estimate_amount}">-</c:when>
-																	<c:otherwise>
-																		<fmt:formatNumber
-																			value="${reservation.reservation_estimate_amount}"
-																			pattern="#,###" />원</c:otherwise>
-																</c:choose>
-															</dd>
-														</div>
 													</c:if>
+													<c:set var="reservationAmount"
+														value="${reservation.reservation_type eq '1' ? reservation.reservation_estimate_amount : reservation.reservation_deposit_amount}" />
 													<div>
-														<dt>예약금</dt>
+														<dt>${reservation.reservation_type eq '1' ? '결제 금액' : '예약금'}</dt>
 														<dd>
 															<c:choose>
 																<c:when
-																	test="${empty reservation.reservation_deposit_amount}">-</c:when>
+																test="${empty reservationAmount}">-</c:when>
 																<c:otherwise>
 																	<fmt:formatNumber
-																		value="${reservation.reservation_deposit_amount}"
+																		value="${reservationAmount}"
 																		pattern="#,###" />원</c:otherwise>
 															</c:choose>
 														</dd>
@@ -138,9 +127,22 @@
 															</dd>
 														</div>
 													</c:if>
-													<c:if test="${reservation.reservation_status eq '3'}">
+													<c:if test="${reservation.reservation_type eq '2' and reservation.reservation_status eq '2'}">
 														<div>
-															<dt>최종 결제</dt>
+															<dt>예상 이용 요금</dt>
+															<dd>
+																<c:choose>
+																	<c:when test="${empty reservation.estimated_usage_amount}">-</c:when>
+																	<c:otherwise>
+																		<fmt:formatNumber value="${reservation.estimated_usage_amount}" pattern="#,###" />원
+																	</c:otherwise>
+																</c:choose>
+															</dd>
+														</div>
+													</c:if>
+													<c:if test="${reservation.reservation_type eq '2' and reservation.reservation_status eq '3'}">
+														<div>
+															<dt>출차 결제 금액</dt>
 															<dd>
 																<c:choose>
 																	<c:when
@@ -154,6 +156,12 @@
 														</div>
 													</c:if>
 												</dl>
+												<c:if test="${reservation.reservation_type eq '2' and reservation.reservation_status ne '4'}">
+													<p class="reservation_payment_note">
+														<c:if test="${reservation.reservation_status eq '1'}">이용 요금은 출차 시 결제합니다.</c:if>
+														<c:if test="${reservation.reservation_status eq '2'}">예상 이용 요금은 현재 조회 시점 기준이며, 실제 출차 시 달라질 수 있습니다.</c:if>
+													</p>
+												</c:if>
 												<c:if test="${reservation.can_cancel eq 1}">
 													<div class="reservation_actions">
 														<form method="post"
