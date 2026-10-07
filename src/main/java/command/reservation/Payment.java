@@ -81,7 +81,7 @@ public class Payment implements CommonExecute {
 		
 		
 		request.setAttribute("t_msg", msg);
-		request.setAttribute("t_url", "Reservation");
+		request.setAttribute("t_url", "ParkingStatus");
 	}
 
 }
