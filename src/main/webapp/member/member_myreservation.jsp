@@ -95,29 +95,18 @@
 																<c:out value="${reservation.arrive_at}" default="-" />
 															</dd>
 														</div>
-														<div>
-															<dt>예상 요금</dt>
-															<dd>
-																<c:choose>
-																	<c:when
-																		test="${empty reservation.reservation_estimate_amount}">-</c:when>
-																	<c:otherwise>
-																		<fmt:formatNumber
-																			value="${reservation.reservation_estimate_amount}"
-																			pattern="#,###" />원</c:otherwise>
-																</c:choose>
-															</dd>
-														</div>
 													</c:if>
+													<c:set var="reservationAmount"
+														value="${reservation.reservation_type eq '1' ? reservation.reservation_estimate_amount : reservation.reservation_deposit_amount}" />
 													<div>
 														<dt>예약금</dt>
 														<dd>
 															<c:choose>
 																<c:when
-																	test="${empty reservation.reservation_deposit_amount}">-</c:when>
+																test="${empty reservationAmount}">-</c:when>
 																<c:otherwise>
 																	<fmt:formatNumber
-																		value="${reservation.reservation_deposit_amount}"
+																		value="${reservationAmount}"
 																		pattern="#,###" />원</c:otherwise>
 															</c:choose>
 														</dd>
