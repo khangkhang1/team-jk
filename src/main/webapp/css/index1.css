@@ -2224,5 +2224,6 @@ rgba(0,20,45,.25) 100%
     }
 }
 
-
-
+/* 언어 전환 셀렉트 (한국어 / 日本語) */
+.header_right .lang_select{height:26px;padding:0 6px;border:1px solid currentColor;border-radius:6px;background:transparent;color:inherit;font-size:12px;cursor:pointer;margin-right:8px;}
+.header_right .lang_select option{color:#222;}
