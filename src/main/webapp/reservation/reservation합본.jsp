@@ -49,7 +49,7 @@ function onFlightSelected(f) {
         if (arriveInput) arriveInput.value = formattedTime;
     }
     if (typeof refreshPaymentFooter === "function") refreshPaymentFooter();
-    alert("항공편(" + f.flightNo + ")이 선택되었습니다.");
+    alert(jm("flightSelected", "항공편({0})이 선택되었습니다.").replace("{0}", f.flightNo));
 }
 
 // ---------- 포트원 결제 (오윤섭) ----------
@@ -60,10 +60,10 @@ $(document).ready(function() {
 function goPayment() {
     var method = document.pay.t_reservation_pay_method.value;
     if (!method) {
-        alert("결제 수단을 선택해 주세요.");
+        alert(jm("selectPayMethod", "결제 수단을 선택해 주세요."));
         return;
     }
-    if (confirm("예약 및 결제를 진행하시겠습니까?")) {
+    if (confirm(jm("confirmPay", "예약 및 결제를 진행하시겠습니까?"))) {
         payment(method);
     }
 }
@@ -109,7 +109,7 @@ function payment(method) {
         }, handleResponse);
 
     } else {
-        alert("선택하신 결제 수단은 현재 미지원입니다.");
+        alert(jm("payNotSupported", "선택하신 결제 수단은 현재 미지원입니다."));
     }
 }
 
@@ -123,7 +123,7 @@ function handleResponse(rsp) {
         form.action = "${pageContext.request.contextPath}/Reservation";
         form.submit();
     } else {
-        alert("결제에 실패했거나 취소되었습니다.\n사유: " + rsp.error_msg);
+        alert(jm("payFailed", "결제에 실패했거나 취소되었습니다. 사유: ") + rsp.error_msg);
     }
 }
 </script>
@@ -552,12 +552,12 @@ function applyLiveZoneStatus(zoneId){
 		if (badgeEl) badgeEl.style.display = "none";
 		return;
 	}
-	document.getElementById("zoneRemain").textContent = live.remain.toLocaleString() + "석";
-	document.getElementById("zoneTotal").textContent  = live.total.toLocaleString() + "석";
+	document.getElementById("zoneRemain").textContent = live.remain.toLocaleString() + jm("seatUnit", "석");
+	document.getElementById("zoneTotal").textContent  = live.total.toLocaleString() + jm("seatUnit", "석");
 	document.getElementById("zoneStatus").textContent = live.status;
 	if (badgeEl){
 		badgeEl.style.display = "";
-		badgeEl.textContent = "실시간 · " + live.floor + " (" + formatDatetm(live.datetm) + " 기준)";
+		badgeEl.textContent = jm("live", "실시간") + " · " + live.floor + " (" + formatDatetm(live.datetm) + " " + jm("asOf", "기준") + ")";
 	}
 }
 
@@ -572,7 +572,7 @@ function renderZoneTabs(){
 	for (var i=0;i<ZONES.length;i++){
 		var z = ZONES[i];
 		html += '<button type="button" class="zone_tab' + (z.id===currentZone ? ' active' : '') + '" data-zone="' + z.id + '">'
-		      + z.id + '<span class="zone_tab_sub">' + z.type.replace("주차장","") + '</span></button>';
+		      + z.id + '<span class="zone_tab_sub">' + typeShort(z.type) + '</span></button>';
 	}
 	document.getElementById("zoneTabs").innerHTML = html;
 
@@ -593,10 +593,10 @@ function renderZoneTabs(){
 function renderAll(){
 	var zone = findZone(currentZone);
 
-	document.getElementById("zoneTitle").textContent = zone.id + " 구역";
-	document.getElementById("zoneType").textContent  = zone.type + " · 시간당 " + zone.price.toLocaleString() + "원";
+	document.getElementById("zoneTitle").textContent = zone.id + " " + jm("zoneWord", "구역");
+	document.getElementById("zoneType").textContent  = typeLabel(zone.type) + " · " + jm("perHour", "시간당") + " " + zone.price.toLocaleString() + jm("won", "원");
 	document.getElementById("seatBoxZone").textContent = zone.id;
-	document.getElementById("lotMapZoneLabel").textContent = zone.id + " 구역 · 지상";
+	document.getElementById("lotMapZoneLabel").textContent = zone.id + " " + jm("zoneWord", "구역") + " · " + jm("ground", "지상");
 
 	var tabs = document.querySelectorAll(".zone_tab");
 	for (var t=0;t<tabs.length;t++){
@@ -620,11 +620,11 @@ function renderAll(){
 	for (var rr=0; rr<seats.length; rr++){
 		if (seats[rr].state === "free") remain++;
 	}
-	document.getElementById("zoneRemain").textContent = remain + "석";
-	document.getElementById("zoneTotal").textContent  = seats.length + "석";
+	document.getElementById("zoneRemain").textContent = remain + jm("seatUnit", "석");
+	document.getElementById("zoneTotal").textContent  = seats.length + jm("seatUnit", "석");
 	document.getElementById("seatRemainCount").textContent = remain;
 	var ratio = seats.length ? remain / seats.length : 0;
-	document.getElementById("zoneStatus").textContent = ratio > 0.5 ? "여유" : (ratio > 0.2 ? "보통" : "혼잡");
+	document.getElementById("zoneStatus").textContent = ratio > 0.5 ? jm("free", "여유") : (ratio > 0.2 ? jm("normal", "보통") : jm("busy", "혼잡"));
 
 	applyLiveZoneStatus(zone.id);
 
@@ -665,11 +665,11 @@ function renderAll(){
 			var seatKind = this.getAttribute("data-kind");
 			if (!isManager) {
 				if (seatKind === "D" && memberType !== "D") {
-					alert("♿ 장애인 전용 구역은 장애인 등록 회원만 선택하실 수 있습니다.");
+					alert(jm("onlyDisabled", "♿ 장애인 전용 구역은 장애인 등록 회원만 선택하실 수 있습니다."));
 					return;
 				}
 				if (seatKind === "E" && memberType !== "E") {
-					alert("⚡ 전기차/수소차 전용 구역은 친환경차 등록 회원만 선택하실 수 있습니다.");
+					alert(jm("onlyEv", "⚡ 전기차/수소차 전용 구역은 친환경차 등록 회원만 선택하실 수 있습니다."));
 					return;
 				}
 			}
@@ -678,12 +678,12 @@ function renderAll(){
 			if (prev) prev.classList.remove("selected");
 			this.classList.add("selected");
 			selectedSeat = this.getAttribute("data-seat");
-			document.getElementById("selectedSeatText").innerHTML = "선택한 자리 : <strong>" + selectedSeat + "</strong>";
+			document.getElementById("selectedSeatText").innerHTML = jm("selectedSeat", "선택한 자리 :") + " <strong>" + selectedSeat + "</strong>";
 			document.getElementById("goPayBtn").disabled = false;
 		});
 	}
 
-	document.getElementById("selectedSeatText").textContent = "선택된 자리가 없습니다.";
+	document.getElementById("selectedSeatText").textContent = jm("noSeat", "선택된 자리가 없습니다.");
 	document.getElementById("goPayBtn").disabled = true;
 }
 
@@ -691,7 +691,7 @@ function renderAll(){
 document.getElementById("goPayBtn").addEventListener("click", function() {
 	if (!selectedSeat) return;
 	<c:if test="${empty sessionScope.sessionId}">
-	if (confirm("로그인 후 예약할 수 있습니다. 로그인 화면으로 이동할까요?")) {
+	if (confirm(jm("loginToReserve", "로그인 후 예약할 수 있습니다. 로그인 화면으로 이동할까요?"))) {
 		location.href = "${pageContext.request.contextPath}/Member";
 	}
 	return;
@@ -720,7 +720,7 @@ renderAll();
 // payment.js 는 ?lot= 파라미터로 요금을 찾는데 이 화면은 zone 을 쓰므로, 현재 구역의 요금을 돌려주게 바꿔 끼운다
 window.getCurrentLotInfo = function(){
 	var z = findZone(currentZone);
-	return { name: "인천공항 1터미널 " + z.id + " 구역 · " + z.type, addr: "", price: z.price };
+	return { name: jm("t1", "인천공항 1터미널") + " " + z.id + " " + jm("zoneWord", "구역") + " · " + typeLabel(z.type), addr: "", price: z.price };
 };
 </script>
 </body>

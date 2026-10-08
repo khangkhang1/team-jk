@@ -33,7 +33,7 @@
 	function goReservation(id){
 		res.t_gubun.value = "finalPaymentView";
 		res.reservation_id.value = id;
-		alert("최종 결제 페이지로 넘어갑니다.");
+		alert(jm("goFinalPay", "최종 결제 페이지로 넘어갑니다."));
 		res.method="post";
 		res.action="Reservation";
 		res.submit();
@@ -68,6 +68,7 @@
 
 
 <body>
+<%@ include file="/common_jsmsg.jsp" %>
 
 <div class="wrap">
 
@@ -1737,7 +1738,7 @@ const parkingData={
 
 	        if(countElement){
 	            countElement.textContent=
-	                data[zone].toLocaleString()+"대";
+	                data[zone].toLocaleString()+jm("carUnit","대");
 	        }
 
 	    });
@@ -1778,7 +1779,7 @@ const parkingData={
 	    setParking(parkingData[key]);
 
 	    document.getElementById("selectedTime").textContent=
-	        "선택 시간 "+time+" 기준";
+	        jm("selectedTimeAsOf","선택 시간 {0} 기준").replace("{0}", time);
 
 	    /*
 	     * 현재 선택되어 있는 주차구역도
@@ -1805,7 +1806,7 @@ const parkingData={
 	     * 선택 시간 표시 초기화
 	     */
 	    document.getElementById("selectedTime").textContent=
-	        "현재 실시간 기준";
+	        jm("nowRealtime","현재 실시간 기준");
 
 	    /*
 	     * 최신 API 데이터 다시 조회
@@ -1875,7 +1876,7 @@ const parkingData={
 	            if(!response.ok){
 
 	                throw new Error(
-	                    "주차 정보를 불러오지 못했습니다."
+	                    jm("loadFail","주차 정보를 불러오지 못했습니다.")
 	                );
 	            }
 
@@ -1997,7 +1998,7 @@ const parkingData={
 	            );
 
 	            alert(
-	                "주차 정보를 새로고침하지 못했습니다."
+	                jm("refreshFail","주차 정보를 새로고침하지 못했습니다.")
 	            );
 
 	        })
@@ -2345,7 +2346,7 @@ let realtimeMode=true;
 	            if(!data){
 
 	                countElement.textContent="-";
-	                statusElement.textContent="정보 없음";
+	                statusElement.textContent=jm("noInfo","정보 없음");
 	                percentElement.textContent="-";
 
 	                statusElement.className=
@@ -2387,8 +2388,7 @@ let realtimeMode=true;
 	                available.toLocaleString();
 
 
-	            statusElement.textContent=
-	                status;
+	            statusElement.textContent=statusLabel(status);
 
 
 	            percentElement.textContent=
@@ -2429,7 +2429,7 @@ let realtimeMode=true;
 	        if(!currentData||currentData[zone]===undefined){
 
 	            countElement.textContent="-";
-	            statusElement.textContent="정보 없음";
+	            statusElement.textContent=jm("noInfo","정보 없음");
 	            percentElement.textContent="-";
 
 	            statusElement.className=
@@ -2485,8 +2485,7 @@ let realtimeMode=true;
 	            available.toLocaleString();
 
 
-	        statusElement.textContent=
-	            status;
+	        statusElement.textContent=statusLabel(status);
 
 
 	        percentElement.textContent=
@@ -2529,8 +2528,8 @@ let realtimeMode=true;
 	        "parkingCongestionTime"
 	    ).textContent=
 	        realtimeMode
-	            ?"현재 실시간 기준"
-	            :"선택 시간 "+time+" 기준";
+	            ?jm("nowRealtime","현재 실시간 기준")
+	            :jm("selectedTimeAsOf","선택 시간 {0} 기준").replace("{0}", time);
 	}
 
 
@@ -2838,7 +2837,7 @@ let realtimeMode=true;
 	        if(mapSelectedText){
 
 	            mapSelectedText.textContent=
-	                "주차구역을 선택해주세요.";
+	                jm("selectZone","주차구역을 선택해주세요.");
 	            
 	        }
 
@@ -2986,7 +2985,7 @@ let realtimeMode=true;
 
 	    document.getElementById(
 	        "parkingInfoType"
-	    ).textContent=data.type;
+	    ).textContent=typeLabel(data.type);
 
 
 	    /*
@@ -2996,8 +2995,7 @@ let realtimeMode=true;
 	    document.getElementById(
 	        "parkingInfoCount"
 	    ).textContent=
-	        currentCount.toLocaleString()+
-	        "대";
+	        currentCount.toLocaleString()+jm("carUnit","대");
 
 
 	    /*
@@ -3050,8 +3048,7 @@ let realtimeMode=true;
 	            "parkingInfoStatus"
 	        );
 
-	    statusElement.textContent=
-	        currentStatus;
+	    statusElement.textContent=statusLabel(currentStatus);
 
 
 	    /*
@@ -3086,9 +3083,8 @@ let realtimeMode=true;
 
 	        mapSelectedText.textContent=
 	            zone+
-	            " · 현재 주차 가능 "+
-	            currentCount.toLocaleString()+
-	            "대";
+	            " · "+jm("nowAvailable","현재 주차 가능")+" "+
+	            currentCount.toLocaleString()+jm("carUnit","대");
 
 	    }
 
@@ -3116,8 +3112,7 @@ let realtimeMode=true;
 	        );
 
 	    alert(
-	        zone+
-	        " 주차구역 예약 페이지로 이동합니다."
+	        jm("goZoneReserve","{0} 주차구역 예약 페이지로 이동합니다.").replace("{0}", zone)
 	    );
 	    //location.href = "index1.html"; 파일 넘기기
 	    

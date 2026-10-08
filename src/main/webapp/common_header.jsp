@@ -91,4 +91,5 @@
 	</div>
 
 </header>
+<%@ include file="/common_jsmsg.jsp" %>
 

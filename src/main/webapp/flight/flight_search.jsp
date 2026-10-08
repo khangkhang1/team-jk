@@ -101,6 +101,7 @@
 </style>
 </head>
 <body>
+<%@ include file="/common_jsmsg.jsp" %>
 <div class="wrap">
 
 	<header class="top">
@@ -176,9 +177,14 @@
 	function ymd(d) { return d.getFullYear() + pad(d.getMonth() + 1) + pad(d.getDate()); }
 	function parseYmd(s) { return new Date(+s.substr(0, 4), +s.substr(4, 2) - 1, +s.substr(6, 2)); }
 
+	// API 의 remark 는 한국어 값('도착','지연'…) 그대로 오므로 화면에 낼 때만 번역한다
+	function remarkLabel(r) {
+		var m = { '예정': jm('rmkPlan', r), '도착': jm('rmkArr', r), '착륙': jm('rmkLand', r), '지연': jm('rmkDelay', r), '결항': jm('rmkCancel', r), '회항': jm('rmkDivert', r), '도착 전': jm('rmkBefore', r) };
+		return m[r] || r;
+	}
 	function dayLabel(s, today) {
 		var d = parseYmd(s);
-		return (d.getMonth() + 1) + '/' + d.getDate() + ' (' + WEEK[d.getDay()] + ')' + (s === today ? ' 오늘' : '');
+		return (d.getMonth() + 1) + '/' + d.getDate() + ' (' + WEEK[d.getDay()] + ')' + (s === today ? ' ' + jm('today', '오늘') : '');
 	}
 
 	// API 데이터를 화면에 넣기 전에 반드시 이스케이프 (항공사명 등에 <, & 가 섞여도 화면이 안 깨지게)
@@ -279,11 +285,11 @@
 
 		var codeshareCount = res.rawTotal - res.total;
 		$('#summary').html(
-			'<b>' + esc(dayLabel(res.searchday, res.today)) + '</b> 도착 <b>' + res.total + '</b>편'
-			+ ' <span class="muted">(공동운항 편명 ' + codeshareCount + '건은 실제 운항편에 묶어서 표시)</span>'
-			+ ' · 표시 <b>' + res.count + '</b>편'
-			+ ' · <span class="muted">' + esc(res.fetchedAt) + ' 기준' + (res.fromCache ? ' · 캐시' : '') + '</span>'
-			+ (res.stale ? ' · <span class="warn">API 응답 실패로 이전에 받은 데이터를 표시 중</span>' : '')
+			'<b>' + esc(dayLabel(res.searchday, res.today)) + '</b> ' + jm('arrWord', '도착') + ' <b>' + res.total + '</b>' + jm('fltUnit', '편')
+			+ ' <span class="muted">(' + jm('codeshareNote', '공동운항 편명 {0}건은 실제 운항편에 묶어서 표시').replace('{0}', codeshareCount) + ')</span>'
+			+ ' · ' + jm('shown', '표시') + ' <b>' + res.count + '</b>' + jm('fltUnit', '편')
+			+ ' · <span class="muted">' + esc(res.fetchedAt) + ' ' + jm('asOf', '기준') + (res.fromCache ? ' · ' + jm('cache', '캐시') : '') + '</span>'
+			+ (res.stale ? ' · <span class="warn">' + jm('stale', 'API 응답 실패로 이전에 받은 데이터를 표시 중') + '</span>' : '')
 		);
 
 		var html = [];
@@ -311,8 +317,8 @@
 		}
 
 		var place = [];
-		if (f.exit) place.push('출구 ' + esc(f.exit));
-		if (f.carousel) place.push('수취대 ' + esc(f.carousel));
+		if (f.exit) place.push(jm('exit', '출구') + ' ' + esc(f.exit));
+		if (f.carousel) place.push(jm('carousel', '수취대') + ' ' + esc(f.carousel));
 
 		return '<tr data-idx="' + idx + '"' + (f.remark === '결항' ? ' class="row-cancel"' : '') + '>'
 			+ '<td class="time">' + hm(f.scheduleDateTime, day) + '</td>'
@@ -322,7 +328,7 @@
 			+ '<td>' + esc(f.airport) + ' <span class="code">' + esc(f.airportCode) + '</span></td>'
 			+ '<td class="nowrap">' + esc(f.terminal) + '</td>'
 			+ '<td class="muted nowrap">' + (place.join(' · ') || '-') + '</td>'
-			+ '<td><span class="badge ' + (REMARK_CLASS[f.remark] || 'plan') + '">' + esc(f.remark || '예정') + '</span></td>'
+			+ '<td><span class="badge ' + (REMARK_CLASS[f.remark] || 'plan') + '">' + esc(remarkLabel(f.remark || '예정')) + '</span></td>'
 			+ '</tr>';
 	}
 
@@ -348,10 +354,10 @@
 			searchday: state.day
 		};
 		$('#pickText').html(
-			'선택 : <b>' + esc(picked) + '</b>'
-			+ (picked !== f.flightNo ? ' <span class="muted">(실제 운항 ' + esc(f.flightNo) + ')</span>' : '')
+			jm('pick', '선택 :') + ' <b>' + esc(picked) + '</b>'
+			+ (picked !== f.flightNo ? ' <span class="muted">(' + jm('actual', '실제 운항') + ' ' + esc(f.flightNo) + ')</span>' : '')
 			+ ' · ' + esc(f.airline) + ' · ' + esc(f.airport)
-			+ ' · 예정 ' + hm(f.scheduleDateTime, state.day) + ' · ' + esc(f.remark || '도착 전')
+			+ ' · ' + jm('rmkPlan', '예정') + ' ' + hm(f.scheduleDateTime, state.day) + ' · ' + esc(remarkLabel(f.remark || '도착 전'))
 		);
 		$('#pick').prop('hidden', false);
 	});

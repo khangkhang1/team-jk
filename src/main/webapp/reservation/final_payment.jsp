@@ -24,10 +24,10 @@ $(document).ready(function() {
 function goPayment() {
     var method = document.pay.t_reservation_pay_method.value;
     if (!method) {
-        alert("결제 수단을 선택해 주세요.");
+        alert(jm("selectPayMethod", "결제 수단을 선택해 주세요."));
         return;
     }
-    if (confirm("예약 및 결제를 진행하시겠습니까?")) {
+    if (confirm(jm("confirmPay", "예약 및 결제를 진행하시겠습니까?"))) {
         payment(method);
     }
 }
@@ -72,7 +72,7 @@ function payment(method) {
         }, handleResponse);
 
     } else {
-        alert("선택하신 결제 수단은 현재 미지원입니다.");
+        alert(jm("payNotSupported", "선택하신 결제 수단은 현재 미지원입니다."));
     }
 }
 
@@ -86,7 +86,7 @@ function handleResponse(rsp) {
         form.action = "${pageContext.request.contextPath}/Reservation";
         form.submit();
     } else {
-        alert("결제에 실패했거나 취소되었습니다.\n사유: " + rsp.error_msg);
+        alert(jm("payFailed", "결제에 실패했거나 취소되었습니다. 사유: ") + rsp.error_msg);
     }
 }
 </script>
@@ -288,6 +288,7 @@ function handleResponse(rsp) {
 </head>
 
 <body>
+<%@ include file="/common_jsmsg.jsp" %>
 <div class="wrap">
 
 	<!-- 헤더 -->

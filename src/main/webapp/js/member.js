@@ -5,7 +5,7 @@ function checkIdFormat() {
 	// 영문 소문자와 숫자만 허용, 4~20자
 	var idPattern = /^(?=.*[a-z])[a-zA-Z0-9!@#$%^&*_.-]{4,20}$/;
 	if (!idPattern.test(id)) {
-		alert("영문 소문자를 최소 1자 이상 포함하여 4~20자로 입력해주세요.\n 특수문자는 !@#$%^&*_-.만 가능합니다.");
+		alert(jm("mem_id", "영문 소문자를 최소 1자 이상 포함하여 4~20자로 입력해주세요. 특수문자는 !@#$%^&*_-.만 가능합니다."));
 		mem.t_id.focus();
 		return false;
 	}
@@ -13,7 +13,7 @@ function checkIdFormat() {
 	return true;
 }
 function checkId() {
-	if (checkEmpty(mem.t_id, "아이디 입력")) return;
+	if (checkEmpty(mem.t_id, jm("mem_idEmpty", "아이디 입력"))) return;
 	if (!checkIdFormat()) return;
 	var id = mem.t_id.value;
 	$.ajax({
@@ -23,7 +23,7 @@ function checkId() {
 		data: "t_id=" + encodeURIComponent(id),
 		dataType: "text",
 		error: function() {
-			alert("통신 실패!!!!!");
+			alert(jm("mem_comm", "통신 실패!!!!!"));
 		},
 		success: function(data) {
 			var result = $.trim(data);
@@ -33,13 +33,13 @@ function checkId() {
 					.removeClass("success")
 					.addClass("error")
 					.show()
-					.text("✕ 이미 사용 중인 아이디입니다.");
+					.text(jm("mem_idTaken", "✕ 이미 사용 중인 아이디입니다."));
 			} else {
 				$("#idCheckResult")
 					.removeClass("error")
 					.addClass("success")
 					.show()
-					.text("✓ 사용 가능한 아이디입니다.");
+					.text(jm("mem_idOk", "✓ 사용 가능한 아이디입니다."));
 			}
 		}
 	});
@@ -58,7 +58,7 @@ function checkPasswordFormat() {
 	var passwordPattern = /^(?=.*[a-z])[A-Za-z0-9!@#$%^&*_+?.-]{6,16}$/;
 
 	if (!passwordPattern.test(password)) {
-		alert("영문 소문자를 최소 1자 이상 포함하여 6~16자로 입력해주세요.특수문자는 !@#$%^&*_+?.-만 사용할 수 있습니다.");
+		alert(jm("mem_pw", "영문 소문자를 최소 1자 이상 포함하여 6~16자로 입력해주세요.특수문자는 !@#$%^&*_+?.-만 사용할 수 있습니다."));
 		mem.t_password.focus();
 		return false;
 	}
@@ -73,7 +73,7 @@ function checkPhoneFormat() {
 	var phonePattern = /^010-?\d{4}-?\d{4}$/;
 
 	if (!phonePattern.test(phone_number)) {
-		alert("올바른 형식의 전화번호를 입력해주세요");
+		alert(jm("mem_phone", "올바른 형식의 전화번호를 입력해주세요"));
 		mem.t_phone_number.focus();
 		return false;
 	}
@@ -88,7 +88,7 @@ function checkEmailFormat() {
 	var emailPattern = /^[a-zA-Z0-9!@#$%^&*_.-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
 	if (!emailPattern.test(email)) {
-		alert("올바른 이메일 형식을 입력해주세요.");
+		alert(jm("mem_email", "올바른 이메일 형식을 입력해주세요."));
 		mem.t_email.focus();
 		return false;
 	}
@@ -113,7 +113,7 @@ function sendEmailCode() {
 					.removeClass("error")
 					.addClass("success")
 					.show()
-					.text("✓ 인증번호가 이메일로 발송되었습니다. 인증번호는 5분 동안 유효합니다.");
+					.text(jm("mem_codeSent", "✓ 인증번호가 이메일로 발송되었습니다. 인증번호는 5분 동안 유효합니다."));
 			} else {
 				$("#emailVerifyResult")
 					.removeClass("success")
@@ -124,12 +124,12 @@ function sendEmailCode() {
 			}
 		},
 		error: function() {
-			alert("인증번호 발송 중 통신 오류가 발생했습니다.");
+			alert(jm("mem_sendError", "인증번호 발송 중 통신 오류가 발생했습니다."));
 		}
 	});
 }
 function checkEmailCode() {
-	if (checkEmpty(mem.t_email_code, "인증번호를 입력하세요.")) return;
+	if (checkEmpty(mem.t_email_code, jm("mem_codeEmpty", "인증번호를 입력하세요."))) return;
 	$.ajax({
 		type: "POST",
 		url: "MemberEmailCheck",
