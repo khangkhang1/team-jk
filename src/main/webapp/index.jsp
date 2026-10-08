@@ -70,11 +70,11 @@
 
             <!-- 교통 · 주차 -->
             <li>
-                <a href="#parking">교통 · 주차</a>
+                <a href="Guide">교통 · 주차</a>
 
                 <div class="header_dropdown">
-                    <a href="#guide">주차장 이용 안내</a>
-                    <a href="#parking">주차 요금</a>
+                    <a href="${pageContext.request.contextPath}/Guide">주차장 이용 안내</a>
+                    <a href="javascript:movePage('Guide','fee')">주차 요금</a>
                     <a href="#parking">주차장 혼잡도</a>
                 </div>
             </li>
@@ -96,7 +96,7 @@
                 <a href="Notice">공지 사항</a>
 
                 <div class="header_dropdown">
-                    <a href="Notice">공지 사항</a>
+                    <a href="${pageContext.request.contextPath}/Notice">공지 사항</a>
                     <a href="${pageContext.request.contextPath}/Faq">자주 하는 질문</a>
                     <a href="${pageContext.request.contextPath}/Report">문의하기</a>
                 </div>

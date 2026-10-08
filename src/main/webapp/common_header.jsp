@@ -27,11 +27,11 @@
 
 			<!-- 교통 · 주차 -->
 			<li>
-				<a href="${pageContext.request.contextPath}/index2.html#parking">교통 · 주차</a>
+				<a href="${pageContext.request.contextPath}/Guide">교통 · 주차</a>
 
 				<div class="header_dropdown">
-					<a href="${pageContext.request.contextPath}/index2.html#guide">주차장 이용 안내</a>
-					<a href="${pageContext.request.contextPath}/index2.html#parking">주차 요금</a>
+					<a href="${pageContext.request.contextPath}/Guide">주차장 이용 안내</a>
+					<a href="javascript:movePage('Guide','fee')">주차 요금</a>
 					<a href="${pageContext.request.contextPath}/index2.html#parking">주차장 혼잡도</a>
 				</div>
 			</li>
