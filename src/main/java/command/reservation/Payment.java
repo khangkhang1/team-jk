@@ -1,5 +1,7 @@
 package command.reservation;
 
+import common.I18n;
+
 import javax.servlet.http.HttpServletRequest;
 
 import common.CommonExecute;
@@ -45,7 +47,7 @@ public class Payment implements CommonExecute {
 		ReservationInfoDto r_dto = null;
 		
 		//dao 비정상인 경우를 기본값으로 설정
-		String msg = "예약에 실패하였습니다. 다시 시도해주세요.";
+		String msg = I18n.msg(request, "msg.payFail");
 		
 		//예약 유형이 예약 완료 혹은 주차 중인 seat가 아닌 경우에 DB에 저장
 		if(dao.checkReservation(seat) == 0) {
@@ -66,15 +68,12 @@ public class Payment implements CommonExecute {
 			result += dao.savePayment(p_dto);
 			
 			//DB에 저장한 후, 화면에 예약 내역 출력을 위한 치환
-			if(plan.equals("1")) plan = "예약형";
-	        else plan = "자율출차형";
+			if(plan.equals("1")) plan = I18n.msg(request, "type.1");
+	        else plan = I18n.msg(request, "type.2");
 			
 			//result == 2인 경우
 			if(result == 2) {
-				msg = "예약이 완료되었습니다.\r\n"
-						+ "좌석:  "+seat+"\r\n"
-						+ "이용방식:  "+plan+"\r\n"
-						+ "결제액:  "+pay_amount+"원 결제";
+				msg = I18n.msg(request, "msg.payDone", seat, plan, pay_amount);
 			}
 		}
 		

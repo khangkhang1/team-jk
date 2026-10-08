@@ -1,4 +1,5 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%--
 =========================================================================
  항공편 도착 현황 (AJAX + 실시간 API, DB 저장 없음) - 강선구 2026-09-17
@@ -22,11 +23,11 @@
 =========================================================================
 --%>
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="${empty sessionScope.lang ? 'ko' : sessionScope.lang}">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>항공편 도착 현황</title>
+<title><fmt:message key="flt.001"/></title>
 <script src="${pageContext.request.contextPath}/js/jquery-1.8.1.min.js"></script>
 <style>
 	[hidden] { display: none !important; }
@@ -103,29 +104,29 @@
 <div class="wrap">
 
 	<header class="top">
-		<h1>항공편 도착 현황</h1>
-		<p class="sub">인천국제공항공사 여객기 운항현황 실시간 API · DB에 저장하지 않음 · 5분마다 갱신</p>
+		<h1><fmt:message key="flt.001"/></h1>
+		<p class="sub"><fmt:message key="flt.002"/></p>
 	</header>
 
 	<div class="panel">
 		<div class="row">
-			<label>도착일 <select id="day"></select></label>
-			<label>터미널
+			<label><fmt:message key="flt.003"/> <select id="day"></select></label>
+			<label><fmt:message key="flt.004"/>
 				<select id="terminal">
-					<option value="all">전체</option>
-					<option value="T1">제1터미널</option>
-					<option value="T2">제2터미널</option>
+					<option value="all"><fmt:message key="faq.004"/></option>
+					<option value="T1"><fmt:message key="flt.005"/></option>
+					<option value="T2"><fmt:message key="flt.006"/></option>
 				</select>
 			</label>
 			<input id="keyword" type="search" autocomplete="off"
-			       placeholder="편명 · 항공사 · 출발지 (예: KE704, 나리타, NRT)">
+			       placeholder="<fmt:message key='flt.020'/>">
 		</div>
 		<div class="tabs" id="tabs">
-			<button type="button" data-status="all" class="on">전체 <b data-count="all">-</b></button>
-			<button type="button" data-status="scheduled">예정 <b data-count="scheduled">-</b></button>
-			<button type="button" data-status="arrived">도착 <b data-count="arrived">-</b></button>
-			<button type="button" data-status="delayed">지연 <b data-count="delayed">-</b></button>
-			<button type="button" data-status="cancelled">결항 <b data-count="cancelled">-</b></button>
+			<button type="button" data-status="all" class="on"><fmt:message key="faq.004"/> <b data-count="all">-</b></button>
+			<button type="button" data-status="scheduled"><fmt:message key="flt.007"/> <b data-count="scheduled">-</b></button>
+			<button type="button" data-status="arrived"><fmt:message key="flt.008"/> <b data-count="arrived">-</b></button>
+			<button type="button" data-status="delayed"><fmt:message key="flt.009"/> <b data-count="delayed">-</b></button>
+			<button type="button" data-status="cancelled"><fmt:message key="flt.010"/> <b data-count="cancelled">-</b></button>
 		</div>
 	</div>
 
@@ -136,19 +137,19 @@
 		<table>
 			<thead>
 				<tr>
-					<th>예정</th><th>변경</th><th>편명</th><th>항공사</th>
-					<th>출발지</th><th>터미널</th><th>출구 · 수취대</th><th>현황</th>
+					<th><fmt:message key="flt.007"/></th><th><fmt:message key="flt.011"/></th><th><fmt:message key="flt.012"/></th><th><fmt:message key="flt.013"/></th>
+					<th><fmt:message key="flt.014"/></th><th><fmt:message key="flt.004"/></th><th><fmt:message key="flt.015"/></th><th><fmt:message key="flt.016"/></th>
 				</tr>
 			</thead>
 			<tbody id="rows"></tbody>
 		</table>
-		<div class="empty" id="empty" hidden>조건에 맞는 항공편이 없습니다.</div>
-		<div class="loading" id="loading">항공편을 불러오는 중입니다… (그날 첫 조회는 몇 초 걸립니다)</div>
+		<div class="empty" id="empty" hidden><fmt:message key="flt.017"/></div>
+		<div class="loading" id="loading"><fmt:message key="flt.018"/></div>
 	</div>
 
 	<div class="pick" id="pick" hidden>
 		<div id="pickText"></div>
-		<button type="button" id="pickBtn">이 항공편으로 선택</button>
+		<button type="button" id="pickBtn"><fmt:message key="flt.019"/></button>
 	</div>
 </div>
 

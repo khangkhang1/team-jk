@@ -1,5 +1,7 @@
 package controller;
 
+import common.I18n;
+
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -34,7 +36,7 @@ public class Faq extends HttpServlet {
 				|| gubun.equals("delete");
 
 		if (adminOnly && !isAdmin(request)) {
-			request.setAttribute("t_msg", "관리자만 이용할 수 있는 기능입니다.");
+			request.setAttribute("t_msg", I18n.msg(request, "msg.adminOnly"));
 			request.setAttribute("t_url", "Faq");
 			forward(request, response, "common_alert.jsp");
 			return;
@@ -52,7 +54,7 @@ public class Faq extends HttpServlet {
 			int faq_id = parseId(request.getParameter("t_faq_id"));
 			FaqDto dto = new FaqDao().getFaqView(faq_id);
 			if (dto == null) {
-				request.setAttribute("t_msg", "존재하지 않는 글입니다.");
+				request.setAttribute("t_msg", I18n.msg(request, "msg.notFound"));
 				request.setAttribute("t_url", "Faq");
 				forward(request, response, "common_alert.jsp");
 				return;
@@ -77,6 +79,12 @@ public class Faq extends HttpServlet {
 		boolean isAdmin = isAdmin(request);
 
 		ArrayList<FaqDto> dtos = new FaqDao().getFaqList(category, isAdmin);
+		// 일본어 모드면 content_ja.properties 에 번역이 있는 글은 번역으로 바꿔 보여준다 (없으면 원문)
+		for (FaqDto d : dtos) {
+			d.setCategory(I18n.content(request, "faq.cat." + d.getCategory(), d.getCategory()));
+			d.setQuestion(I18n.content(request, "faq." + d.getFaq_id() + ".question", d.getQuestion()));
+			d.setAnswer(I18n.content(request, "faq." + d.getFaq_id() + ".answer", d.getAnswer()));
+		}
 
 		request.setAttribute("dtos", dtos);
 		request.setAttribute("category", category);

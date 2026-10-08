@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%--
  주차맵 + 결제 합본 (안병찬 reservation2.jsp + 오윤섭 reservationOys.jsp)
@@ -8,11 +9,11 @@
  Reservation?t_gubun=ReservationMap&zone=P1 로 들어온다 (ReservationMap 커맨드가 seatList 를 채운다)
 --%>
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="${empty sessionScope.lang ? 'ko' : sessionScope.lang}">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>주차맵 - 인천공항 주차예약</title>
+<title><fmt:message key="map.001"/></title>
 <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
 <script src="https://cdn.iamport.kr/v1/iamport.js"></script>
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/index1.css">
@@ -136,18 +137,18 @@ function handleResponse(rsp) {
 	<section class="zone_hero">
 		<div class="zone_hero_inner">
 			<div>
-				<a href="${pageContext.request.contextPath}/ParkingStatus" class="zone_back">← 전체 주차맵으로</a>
+				<a href="${pageContext.request.contextPath}/ParkingStatus" class="zone_back"><fmt:message key="map.002"/></a>
 				<div class="zone_hero_eyebrow">INCHEON AIRPORT T1 PARKING</div>
 				<h1>
-					<span id="zoneTitle">${selectedLotId} 구역</span>
+					<span id="zoneTitle"><fmt:message key="map.003"><fmt:param value="${selectedLotId}"/></fmt:message></span>
 					<small id="zoneType">-</small>
 				</h1>
 				<span id="liveBadge" class="live_badge" style="display:none"></span>
 			</div>
 			<div class="zone_hero_right">
-				<div><span>이 구역 잔여</span><strong id="zoneRemain">-</strong></div>
-				<div><span>전체 좌석</span><strong id="zoneTotal">-</strong></div>
-				<div><span>혼잡도</span><strong id="zoneStatus">-</strong></div>
+				<div><span><fmt:message key="map.004"/></span><strong id="zoneRemain">-</strong></div>
+				<div><span><fmt:message key="map.005"/></span><strong id="zoneTotal">-</strong></div>
+				<div><span><fmt:message key="map.006"/></span><strong id="zoneStatus">-</strong></div>
 			</div>
 		</div>
 	</section>
@@ -164,8 +165,8 @@ function handleResponse(rsp) {
 				<div class="detail_box">
 					<div class="detail_box_head">
 						<div>
-							<h3>이용 방식</h3>
-							<p>이 구역에서 이용할 수 있는 방식입니다. 구역 탭을 바꾸면 방식도 바뀝니다.</p>
+							<h3><fmt:message key="map.007"/></h3>
+							<p><fmt:message key="map.008"/></p>
 						</div>
 					</div>
 					<div class="detail_box_body">
@@ -174,15 +175,15 @@ function handleResponse(rsp) {
 								<c:when test="${selectedLotId eq 'P6' or selectedLotId eq 'P7' or selectedLotId eq 'P8' or selectedLotId eq 'P9'}">
 									<label class="plan_card selected">
 										<input type="radio" name="planType" value="1" checked>
-										<span class="plan_card_title">예약형 (1안)</span>
-										<span class="plan_card_desc">시작·종료 시각을 미리 정합니다. 왕복 항공권 정보 입력 필수. 예약 시 전액 결제.</span>
+										<span class="plan_card_title"><fmt:message key="map.009"/></span>
+										<span class="plan_card_desc"><fmt:message key="map.010"/></span>
 									</label>
 								</c:when>
 								<c:otherwise>
 									<label class="plan_card selected">
 										<input type="radio" name="planType" value="2" checked>
-										<span class="plan_card_title">자유출차형 (2안)</span>
-										<span class="plan_card_desc">시작 시각만 정하고 종료는 자유입니다. 예약금 5,000원, 출차 때 30분당 4,500원 정산.</span>
+										<span class="plan_card_title"><fmt:message key="map.011"/></span>
+										<span class="plan_card_desc"><fmt:message key="map.012"/></span>
 									</label>
 								</c:otherwise>
 							</c:choose>
@@ -194,31 +195,31 @@ function handleResponse(rsp) {
 				<div class="detail_box">
 					<div class="detail_box_head">
 						<div>
-							<h3><span id="seatBoxZone">${selectedLotId}</span> 구역 좌석</h3>
-							<p>자리를 클릭하면 결제 창이 열립니다. 예약된 자리와 결항 재배정 중인 자리는 선택할 수 없습니다.</p>
+							<h3><span id="seatBoxZone">${selectedLotId}</span> <fmt:message key="map.013"/></h3>
+							<p><fmt:message key="map.014"/></p>
 						</div>
 						<div class="seat_toolbar" style="margin:0">
-							<div class="seat_remain">잔여 <strong id="seatRemainCount">-</strong>석</div>
+							<div class="seat_remain"><fmt:message key="map.015"/> <strong id="seatRemainCount">-</strong><fmt:message key="map.016"/></div>
 						</div>
 					</div>
 
 					<div class="detail_box_body">
 						<div class="seat_legend">
-							<span><i class="legend_box legend_free"></i> 선택 가능</span>
-							<span><i class="legend_box legend_selected"></i> 선택됨</span>
-							<span><i class="legend_box legend_taken"></i> 예약됨</span>
-							<span><i class="legend_box legend_disabled"></i> ♿ 장애인</span>
-							<span><i class="legend_box legend_ev"></i> 🔌 전기차</span>
-							<span><i class="legend_box legend_cancelled"></i> ✈️ 결항 재배정중</span>
+							<span><i class="legend_box legend_free"></i> <fmt:message key="map.017"/></span>
+							<span><i class="legend_box legend_selected"></i> <fmt:message key="map.018"/></span>
+							<span><i class="legend_box legend_taken"></i> <fmt:message key="map.019"/></span>
+							<span><i class="legend_box legend_disabled"></i> <fmt:message key="map.020"/></span>
+							<span><i class="legend_box legend_ev"></i> <fmt:message key="map.021"/></span>
+							<span><i class="legend_box legend_cancelled"></i> <fmt:message key="map.022"/></span>
 						</div>
 
 						<div class="lot_map">
 							<div class="lot_gate">
-								<span class="gate_in">▲ 터미널 방향</span>
-								<span id="lotMapZoneLabel">${selectedLotId} 구역 · 지상</span>
-								<span class="gate_out">진출입로</span>
+								<span class="gate_in"><fmt:message key="map.023"/></span>
+								<span id="lotMapZoneLabel"><fmt:message key="map.024"><fmt:param value="${selectedLotId}"/></fmt:message></span>
+								<span class="gate_out"><fmt:message key="map.025"/></span>
 							</div>
-							<svg id="lotSvg" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="구역 상세 주차맵">
+							<svg id="lotSvg" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="<fmt:message key='map.046'/>">
 								<image id="lotBaseImage" href="${pageContext.request.contextPath}/images/parking_map.png" x="0" y="0" width="1600" height="900"/>
 								<path id="lotZoneOutline" class="lot_zone_outline"/>
 								<g id="seatGrid"></g>
@@ -227,8 +228,8 @@ function handleResponse(rsp) {
 					</div>
 
 					<div class="seat_bottom">
-						<span id="selectedSeatText">선택된 자리가 없습니다.</span>
-						<button class="go_pay_btn" id="goPayBtn" type="button" disabled>결제 진행</button>
+						<span id="selectedSeatText"><fmt:message key="map.026"/></span>
+						<button class="go_pay_btn" id="goPayBtn" type="button" disabled><fmt:message key="map.027"/></button>
 					</div>
 				</div>
 
@@ -256,65 +257,65 @@ function handleResponse(rsp) {
 			<input type="hidden" id="reservationSeat" name="t_reservation_seat">
 
 			<div class="formRow">
-				<label data-i18n="res_dateLabel">주차 날짜</label>
+				<label data-i18n="res_dateLabel"><fmt:message key="map.028"/></label>
 				<input type="date" id="startDateInput" name="t_reservation_start_date">
 			</div>
 			<div class="formRow">
-				<label data-i18n="res_startTimeLabel">주차 시각</label>
+				<label data-i18n="res_startTimeLabel"><fmt:message key="map.029"/></label>
 				<select id="startTimeInput" name="t_reservation_start_time"></select>
 			</div>
 			<div class="formRow plan1Only hidden">
-				<label data-i18n="res_dateLabel">예상 출차 날짜</label>
+				<label data-i18n="res_dateLabel"><fmt:message key="map.030"/></label>
 				<input type="date" id="endDateInput" name="t_reservation_end_date">
 			</div>
 			<div class="formRow plan1Only hidden" id="durationRow">
-				<label data-i18n="res_durationLabel">예상 출차 시각</label>
+				<label data-i18n="res_durationLabel"><fmt:message key="map.031"/></label>
 				<select id="endTimeInput" name="t_reservation_end_time"></select>
 			</div>
 
 			<div class="plan2Only hidden" id="endFreeNotice">
-				<p data-i18n="res_endFreeNotice">종료 시각은 정하지 않습니다 (자유출차, 출차 시 정산)</p>
+				<p data-i18n="res_endFreeNotice"><fmt:message key="map.032"/></p>
 			</div>
 
 			<fieldset class="plan1Only hidden" id="flightFieldset">
-				<legend data-i18n="res_flightSectionTitle">✈️ 항공권 정보 (필수)</legend>
+				<legend data-i18n="res_flightSectionTitle"><fmt:message key="map.033"/></legend>
 				<div class="formRow">
-					<label data-i18n="res_flightNo">항공편명</label>
+					<label data-i18n="res_flightNo"><fmt:message key="map.034"/></label>
 					<input type="text" id="flightNoInput" name="t_reservation_flight_no" readonly>
-					<button type="button" onclick="goFlightSearch()" style="height:37.5px; width:50px;">검색</button>
+					<button type="button" onclick="goFlightSearch()" style="height:37.5px; width:50px;"><fmt:message key="ntc.007"/></button>
 				</div>
 				<div class="formRow">
-					<label data-i18n="res_flightRoundtrip">왕복 여부</label>
+					<label data-i18n="res_flightRoundtrip"><fmt:message key="map.035"/></label>
 					<select id="flightRoundtripInput" disabled>
-						<option value="round">왕복</option>
+						<option value="round"><fmt:message key="map.036"/></option>
 					</select>
 				</div>
 				<div class="formRow">
-					<label>귀국 도착 날짜</label>
+					<label><fmt:message key="map.037"/></label>
 					<input type="date" id="flightArriveDateInput" name="t_reservation_flight_arrive_date" readonly>
 				</div>
 				<div class="formRow">
-					<label data-i18n="res_flightArriveTime">귀국 도착 예정 시각</label>
+					<label data-i18n="res_flightArriveTime"><fmt:message key="map.038"/></label>
 					<input type="time" id="flightArriveInput" name="t_reservation_flight_arrive_time" readonly>
 				</div>
 			</fieldset>
 
-			<div id="estimatedPriceBox" class="hidden"><span data-i18n="res_estimated">예상 금액</span>: <strong id="estimatedPrice">-</strong></div>
+			<div id="estimatedPriceBox" class="hidden"><span data-i18n="res_estimated"><fmt:message key="map.039"/></span>: <strong id="estimatedPrice">-</strong></div>
 			<input type="hidden" name="t_reservation_estimate_amount" id="estimatedPriceInput">
 
 			<div id="payMethodArea">
-				<label class="payOption"><input type="radio" name="t_reservation_pay_method" value="kakaoPay"> 카카오페이</label>
-				<label class="payOption"><input type="radio" name="t_reservation_pay_method" value="naverPay"> 네이버페이</label>
-				<label class="payOption"><input type="radio" name="t_reservation_pay_method" value="creditCard"> 카드</label>
-				<label class="payOption"><input type="radio" name="t_reservation_pay_method" value="account"> 계좌이체</label>
+				<label class="payOption"><input type="radio" name="t_reservation_pay_method" value="kakaoPay"> <fmt:message key="map.040"/></label>
+				<label class="payOption"><input type="radio" name="t_reservation_pay_method" value="naverPay"> <fmt:message key="map.041"/></label>
+				<label class="payOption"><input type="radio" name="t_reservation_pay_method" value="creditCard"> <fmt:message key="map.042"/></label>
+				<label class="payOption"><input type="radio" name="t_reservation_pay_method" value="account"> <fmt:message key="map.043"/></label>
 			</div>
 
 			<div id="paymentFooter">
-				<div id="payBarPrice"><span data-i18n="res_depositLabel">예약금</span> <strong id="payBarAmount">-</strong>원</div>
+				<div id="payBarPrice"><span data-i18n="res_depositLabel"><fmt:message key="map.044"/></span> <strong id="payBarAmount">-</strong><fmt:message key="myresv.012"/></div>
 				<input type="hidden" id="depositAmount" name="t_reservation_deposit_amount" value="5000">
 				<input type="hidden" name="t_imp_uid" id="impUidInput">
 				<input type="hidden" name="t_merchant_uid" id="merchantUidInput">
-				<button id="payBtn" data-i18n="res_payBtn" onclick="goPayment()" disabled type="button">결제하기</button>
+				<button id="payBtn" data-i18n="res_payBtn" onclick="goPayment()" disabled type="button"><fmt:message key="map.045"/></button>
 			</div>
 		</div>
 	</div>

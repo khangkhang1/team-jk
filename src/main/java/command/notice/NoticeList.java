@@ -1,5 +1,7 @@
 package command.notice;
 
+import common.I18n;
+
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -47,6 +49,7 @@ public class NoticeList implements CommonExecute {
 		int order = totalCount - (start - 1);
 		
 		List<NoticeDto> dtos=dao.getNoticeList(select,search,start,end);
+		for (NoticeDto d : dtos) d.setTitle(I18n.content(request, "notice." + d.getNo() + ".title", d.getTitle()));   // 일본어 번역이 있으면 제목 교체
 		String pageDisplay = CommonUtil.getPageSetting(current_page, total_page, pageNumber_count);
 		
 		

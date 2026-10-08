@@ -8,6 +8,20 @@
 
 	<!-- 화면만 있는 초기 단계라 시작페이지를 정적 Index.html로 지정.
 	     나중에 서블릿(Index.java)이 생기면 그쪽으로 바꾸면 됨. -->
+	<!-- 다국어: JSTL fmt 가 쓰는 기본 리소스 번들과 기본 언어. 언어 전환은 /Lang 서블릿이 세션에 저장한다 -->
+	<context-param>
+		<param-name>javax.servlet.jsp.jstl.fmt.localizationContext</param-name>
+		<param-value>messages</param-value>
+	</context-param>
+	<context-param>
+		<param-name>javax.servlet.jsp.jstl.fmt.locale</param-name>
+		<param-value>ko</param-value>
+	</context-param>
+	<context-param>
+		<param-name>javax.servlet.jsp.jstl.fmt.fallbackLocale</param-name>
+		<param-value>ko</param-value>
+	</context-param>
+
 	<welcome-file-list>
 		<welcome-file>Index.html</welcome-file>
 	</welcome-file-list>

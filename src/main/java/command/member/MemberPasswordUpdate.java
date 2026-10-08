@@ -1,5 +1,7 @@
 package command.member;
 
+import common.I18n;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -56,7 +58,7 @@ public class MemberPasswordUpdate implements CommonExecute {
 			int result = dao.memberPasswordUpdate(id, encryptedNew);
 
 			if (result == 1) {
-				request.setAttribute("t_msg", "비밀번호가 변경되었습니다. 다시 로그인해주세요.");
+				request.setAttribute("t_msg", I18n.msg(request, "msg.pwChanged"));
 				request.setAttribute("t_url", "Member");
 				session.invalidate();
 			} else {

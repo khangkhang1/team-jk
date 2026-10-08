@@ -1,5 +1,7 @@
 package command.member;
 
+import common.I18n;
+
 import javax.servlet.http.HttpServletRequest;
 
 import common.CommonExecute;
@@ -18,16 +20,16 @@ public class MemberReservationCancel implements CommonExecute {
 				result = MemberDao.getdao().cancelReservation(memberId, reservationId);
 			} catch (IllegalStateException e) {
 				e.printStackTrace();
-				request.setAttribute("t_msg", "예약 취소 중 오류가 발생했습니다. 다시 시도해주세요.");
+				request.setAttribute("t_msg", I18n.msg(request, "msg.cancelError"));
 				request.setAttribute("t_url", "Member?t_gubun=myreservation");
 				return;
 			}
 		}
 
 		if (result == 1) {
-			request.setAttribute("t_msg", "예약이 취소되었습니다.");
+			request.setAttribute("t_msg", I18n.msg(request, "msg.cancelOk"));
 		} else {
-			request.setAttribute("t_msg", "취소할 수 없는 예약입니다. 예약 상태와 입차 예정 시각을 확인해주세요.");
+			request.setAttribute("t_msg", I18n.msg(request, "msg.cancelNotAllowed"));
 		}
 		request.setAttribute("t_url", "Member?t_gubun=myreservation");
 	}

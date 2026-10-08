@@ -1,5 +1,7 @@
 package command.member;
 
+import common.I18n;
+
 import javax.servlet.http.HttpServletRequest;
 
 import common.CommonExecute;
@@ -124,7 +126,7 @@ public class MemberSave implements CommonExecute {
 			request.getSession().removeAttribute("verifiedEmail");
 		}
 
-		String msg = result == 1 ? name.trim() + "님 회원가입 되셨습니다." : "회원가입 실패!";
+		String msg = result == 1 ? I18n.msg(request, "msg.joined", name.trim()) : I18n.msg(request, "msg.joinFail");
 
 		request.setAttribute("t_msg", msg);
 		request.setAttribute("t_url", "Member");

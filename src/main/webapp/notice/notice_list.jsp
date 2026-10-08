@@ -3,13 +3,14 @@
 
 
 
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="${empty sessionScope.lang ? 'ko' : sessionScope.lang}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>공지사항 | 인천공항 주차예약</title>
+    <title><fmt:message key="ntc.001"/></title>
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/notice/notice_list.css">
 
@@ -66,7 +67,7 @@
 	
 	
     <!-- 기존 팀프로젝트 공통 헤더 삽입 위치 -->
-    <%@include file="/common_header.jsp" %>
+    <%@include file="../common_header.jsp" %>
 
 
 
@@ -76,8 +77,8 @@
 
             <div class="noticeTitle">
             	<i class="fa-solid fa-bullhorn"></i>
-                <h1>공지사항</h1>
-                <p>인천공항 주차예약 서비스의 새로운 소식을 알려드립니다.</p>
+                <h1><fmt:message key="idx.057"/></h1>
+                <p><fmt:message key="ntc.002"/></p>
             </div>
 
             <div class="noticeContent">
@@ -90,7 +91,7 @@
                 <div class="noticeTop">
 
                     <div class="noticeCount">
-                        전체 게시글 <strong>:${totalCount}</strong>개
+                        <fmt:message key="ntc.003"/> <strong>:${totalCount}</strong><fmt:message key="ntc.004"/>
                     </div>
 
                     <div class="noticeActions">
@@ -98,14 +99,14 @@
                         <div class="noticeSearch">
 
                             <select name="t_select" id="searchType">
-                                <option value="title" <c:if test="${select eq 'title'}"> selected </c:if> >제목</option>
-                                <option value="content"<c:if test="${select eq 'content'}"> selected</c:if> >내용</option>
+                                <option value="title" <c:if test="${select eq 'title'}"> selected </c:if> ><fmt:message key="ntc.005"/></option>
+                                <option value="content"<c:if test="${select eq 'content'}"> selected</c:if> ><fmt:message key="ntc.006"/></option>
                             </select>
 
-                            <input type="text" name="t_search" value="${search}" id="searchKeyword" placeholder="검색어를 입력해주세요.">
+                            <input type="text" name="t_search" value="${search}" id="searchKeyword" placeholder="<fmt:message key='ntc.013'/>">
 
                             <button type="button" onclick="goSearch()" id="searchBtn">
-                                검색
+                                <fmt:message key="ntc.007"/>
                             </button>
                         </div>
                     </div>
@@ -124,11 +125,11 @@
 					
                     <thead>
                         <tr>
-                            <th class="noticeNum">번호</th>
-                            <th class="noticeSubject">제목</th>
-                            <th class="noticeAttach">첨부</th>
-                            <th class="noticeDate">작성일</th>
-                            <th class="noticeViews">조회수</th>
+                            <th class="noticeNum"><fmt:message key="ntc.008"/></th>
+                            <th class="noticeSubject"><fmt:message key="ntc.005"/></th>
+                            <th class="noticeAttach"><fmt:message key="ntc.009"/></th>
+                            <th class="noticeDate"><fmt:message key="ntc.010"/></th>
+                            <th class="noticeViews"><fmt:message key="ntc.011"/></th>
                         </tr>
                     </thead>
 
@@ -153,7 +154,7 @@
 							
                             <td class="noticeSubjectText">
                             	<c:if test="${dto.getImportant() eq 'Y'}">
-                        			<span class="noticeBadge">공지</span>
+                        			<span class="noticeBadge"><fmt:message key="idx.060"/></span>
 								</c:if>
                                 <a href="javascript:goView('${dto.getNo()}')">
                                     ${dto.getTitle()}
@@ -262,7 +263,7 @@
 			    <!-- 글쓰기 버튼 -->
 			    <c:if  test="${sessionLevel eq 'top'}">
 			    <a href="javascript:goWrite('noticeWriteForm')" class="writeBtn">
-			        글쓰기
+			        <fmt:message key="ntc.012"/>
 			    </a>
 				</c:if>
 			</div>

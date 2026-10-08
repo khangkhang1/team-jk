@@ -1,5 +1,7 @@
 package command.member;
 
+import common.I18n;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -19,7 +21,7 @@ public class MemberExit implements CommonExecute {
 		}
 
 		int result = dao.memberExit(id);
-		String msg = result == 1 ? "회원 탈퇴 성공!" : "회원 탈퇴 실패!";
+		String msg = result == 1 ? I18n.msg(request, "msg.exitOk") : I18n.msg(request, "msg.exitFail");
 		request.getSession().invalidate();
 		request.setAttribute("t_msg", msg);
 		request.setAttribute("t_url", "ParkingStatus");

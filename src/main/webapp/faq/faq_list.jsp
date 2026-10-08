@@ -1,16 +1,17 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%--
  FAQ 목록. Faq 서블릿이 dtos / category / isAdmin 을 request 에 담아 forward 한다.
  (이 JSP 를 직접 열면 빈 목록이 나온다. 반드시 /Faq 로 들어올 것)
 --%>
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="${empty sessionScope.lang ? 'ko' : sessionScope.lang}">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>자주 묻는 질문 | 인천공항 주차예약</title>
+<title><fmt:message key="faq.001"/></title>
 <link href="${pageContext.request.contextPath}/css/index1.css" rel="stylesheet">
 <link href="${pageContext.request.contextPath}/css/faq.css" rel="stylesheet">
 <script src="${pageContext.request.contextPath}/js/faq.js"></script>
@@ -35,26 +36,26 @@
 
 			<div class="section_head">
 				<div>
-					<h2>자주 묻는 질문</h2>
-					<p>예약부터 출차까지, 자주 들어오는 문의를 모았습니다.</p>
+					<h2><fmt:message key="faq.002"/></h2>
+					<p><fmt:message key="faq.003"/></p>
 				</div>
 				<c:if test="${isAdmin}">
-					<a href="${pageContext.request.contextPath}/Faq?t_gubun=writeForm" class="faq_btn faq_btn_primary">글쓰기</a>
+					<a href="${pageContext.request.contextPath}/Faq?t_gubun=writeForm" class="faq_btn faq_btn_primary"><fmt:message key="ntc.012"/></a>
 				</c:if>
 			</div>
 
 			<div class="faq_cate">
-				<a href="${pageContext.request.contextPath}/Faq"                     class="${empty category        ? 'on' : ''}">전체</a>
-				<a href="${pageContext.request.contextPath}/Faq?t_category=예약"      class="${category == '예약'      ? 'on' : ''}">예약</a>
-				<a href="${pageContext.request.contextPath}/Faq?t_category=요금·결제" class="${category == '요금·결제' ? 'on' : ''}">요금·결제</a>
-				<a href="${pageContext.request.contextPath}/Faq?t_category=입·출차"   class="${category == '입·출차'   ? 'on' : ''}">입·출차</a>
-				<a href="${pageContext.request.contextPath}/Faq?t_category=항공편"    class="${category == '항공편'    ? 'on' : ''}">항공편</a>
+				<a href="${pageContext.request.contextPath}/Faq"                     class="${empty category        ? 'on' : ''}"><fmt:message key="faq.004"/></a>
+				<a href="${pageContext.request.contextPath}/Faq?t_category=예약"      class="${category == '예약'      ? 'on' : ''}"><fmt:message key="faq.005"/></a>
+				<a href="${pageContext.request.contextPath}/Faq?t_category=요금·결제" class="${category == '요금·결제' ? 'on' : ''}"><fmt:message key="faq.006"/></a>
+				<a href="${pageContext.request.contextPath}/Faq?t_category=입·출차"   class="${category == '입·출차'   ? 'on' : ''}"><fmt:message key="faq.007"/></a>
+				<a href="${pageContext.request.contextPath}/Faq?t_category=항공편"    class="${category == '항공편'    ? 'on' : ''}"><fmt:message key="myresv.009"/></a>
 			</div>
 
 			<div class="faq_list">
 
 			<c:if test="${empty dtos}">
-				<p class="faq_empty">등록된 질문이 없습니다.</p>
+				<p class="faq_empty"><fmt:message key="faq.008"/></p>
 			</c:if>
 
 			<c:forEach var="dto" items="${dtos}" varStatus="status">
@@ -63,7 +64,7 @@
 						<span class="faq_q">Q</span>
 						${dto.question}
 						<c:if test="${dto.use_yn == 'N'}">
-							<span class="faq_badge_hidden">숨김</span>
+							<span class="faq_badge_hidden"><fmt:message key="faq.009"/></span>
 						</c:if>
 						<span class="faq_tag">${dto.category}</span>
 					</summary>
@@ -73,9 +74,9 @@
 					</div>
 					<c:if test="${isAdmin}">
 					<div class="faq_admin">
-						<span class="faq_meta">${dto.reg_id} · ${dto.reg_date} · 정렬 ${dto.sort_no}</span>
-						<a href="javascript:goUpdateForm('${dto.faq_id}')" class="faq_btn faq_btn_sm">수정</a>
-						<a href="javascript:goDelete('${dto.faq_id}')" class="faq_btn faq_btn_sm faq_btn_danger">삭제</a>
+						<span class="faq_meta"><fmt:message key="faq.010"><fmt:param value="${dto.reg_id}"/><fmt:param value="${dto.reg_date}"/><fmt:param value="${dto.sort_no}"/></fmt:message></span>
+						<a href="javascript:goUpdateForm('${dto.faq_id}')" class="faq_btn faq_btn_sm"><fmt:message key="ntcv.011"/></a>
+						<a href="javascript:goDelete('${dto.faq_id}')" class="faq_btn faq_btn_sm faq_btn_danger"><fmt:message key="ntcv.012"/></a>
 					</div>
 					</c:if>
 				</details>

@@ -1,9 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 
-<html lang="ko">
+<html lang="${empty sessionScope.lang ? 'ko' : sessionScope.lang}">
 
 <head>
 
@@ -11,7 +12,7 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>MY INFO | 인천공항 주차예약</title>
+<title><fmt:message key="myinfo.001"/></title>
 
 <script type="text/javascript"
 	src="${pageContext.request.contextPath}/js/jquery-1.8.1.min.js"></script>
@@ -63,9 +64,9 @@
 
 							<span class="page_eyebrow"> MEMBER MYINFO </span>
 
-							<h1>마이페이지</h1>
+							<h1><fmt:message key="myinfo.002"/></h1>
 
-							<p>회원정보를 확인하고 수정할 수 있습니다.</p>
+							<p><fmt:message key="myinfo.003"/></p>
 
 						</div>
 
@@ -77,9 +78,9 @@
 							<!-- CARD HEADER -->
 							<div class="join_card_head">
 
-								<h2>회원정보</h2>
+								<h2><fmt:message key="myinfo.004"/></h2>
 
-								<span> <em>*</em> 필수 입력사항
+								<span> <em>*</em> <fmt:message key="join.005"/>
 								</span>
 
 							</div>
@@ -93,13 +94,13 @@
 								<!-- 아이디 -->
 								<div class="form_row">
 
-									<label for="member_id"> 아이디 </label>
+									<label for="member_id"> <fmt:message key="login.005"/> </label>
 
 									<div class="input_area">
 
 										<input type="text" id="member_id" name="t_id"
 											value="${dto.getMember_id()}" disabled> <span
-											class="form_hint"> 아이디는 변경할 수 없습니다. </span>
+											class="form_hint"> <fmt:message key="myinfo.005"/> </span>
 
 									</div>
 
@@ -110,7 +111,7 @@
 								<!-- 이름 -->
 								<div class="form_row">
 
-									<label for="name"> 이름 <em>*</em>
+									<label for="name"> <fmt:message key="join.011"/> <em>*</em>
 									</label>
 
 									<div class="input_area">
@@ -126,7 +127,7 @@
 								<!-- 전화번호 -->
 								<div class="form_row">
 
-									<label for="phone_number"> 휴대전화 <em>*</em>
+									<label for="phone_number"> <fmt:message key="join.012"/> <em>*</em>
 									</label>
 
 									<div class="input_area">
@@ -142,7 +143,7 @@
 								<!-- 이메일 -->
 								<div class="form_row">
 
-									<label for="email"> 이메일 <em>*</em>
+									<label for="email"> <fmt:message key="join.013"/> <em>*</em>
 									</label>
 
 									<div class="input_area email_verify">
@@ -150,20 +151,18 @@
 										<div class="verify_input_row">
 											<input type="email" id="email" name="t_email" maxlength="100"
 												value="${dto.getEmail()}"> <input type="button" id="sendEmailBtn"
-												value="인증번호 발송" onclick="sendEmailCode()">
+												value="<fmt:message key='join.030'/>" onclick="sendEmailCode()">
 										</div>
 
 										<div class="verify_code_row">
 											<input type="text" id="email_code" name="t_email_code"
-												maxlength="6" placeholder="인증번호 6자리 입력"> <input
-												type="button" id="emailCheckBtn" value="인증 확인" onclick="checkEmailCode()">
+												maxlength="6" placeholder="<fmt:message key='join.027'/>"> <input
+												type="button" id="emailCheckBtn" value="<fmt:message key='join.031'/>" onclick="checkEmailCode()">
 										</div>
 
-										<div id="emailVerifyResult" class="verify_result">이메일을
-											변경하면 인증이 필요합니다.</div>
+										<div id="emailVerifyResult" class="verify_result"><fmt:message key="myinfo.006"/></div>
 
-										<span class="form_hint">기존 이메일과 다르게 변경하는 경우에만 인증이
-											필요합니다. 인증번호는 5분 동안 유효하며, 재발송은 30초 후 가능합니다.</span>
+										<span class="form_hint"><fmt:message key="myinfo.007"/></span>
 									</div>
 
 								</div>
@@ -172,7 +171,7 @@
 								<!-- 차량번호 -->
 								<div class="form_row">
 
-									<label for="vehicle_number"> 차량번호 <em>*</em>
+									<label for="vehicle_number"> <fmt:message key="join.016"/> <em>*</em>
 									</label>
 
 									<div class="input_area">
@@ -188,7 +187,7 @@
 								<!-- 차량 종류 -->
 								<div class="form_row">
 
-									<label> 차량 종류 <em>*</em>
+									<label> <fmt:message key="join.018"/> <em>*</em>
 									</label>
 
 									<div class="input_area vehicle_type">
@@ -196,17 +195,17 @@
 										<label class="radio_label"> <input type="radio"
 											name="t_vehicle_type" value="N"
 											${dto.getVehicle_type() eq 'N' ? 'checked' : ''}> <span>
-												일반 차량 </span>
+												<fmt:message key="join.019"/> </span>
 
 										</label> <label class="radio_label"> <input type="radio"
 											name="t_vehicle_type" value="E"
 											${dto.getVehicle_type() eq 'E' ? 'checked' : ''}> <span>
-												전기차 </span>
+												<fmt:message key="join.020"/> </span>
 
 										</label> <label class="radio_label"> <input type="radio"
 											name="t_vehicle_type" value="D"
 											${dto.getVehicle_type() eq 'D' ? 'checked' : ''}> <span>
-												장애인 차량 </span>
+												<fmt:message key="join.021"/> </span>
 
 										</label>
 
@@ -218,14 +217,13 @@
 								<!-- BUTTON -->
 								<div class="form_buttons">
 
-									<button type="button" class="withdraw_btn" onclick="exitId()">회원
-										탈퇴</button>
+									<button type="button" class="withdraw_btn" onclick="exitId()"><fmt:message key="myinfo.008"/></button>
 
 									<button type="button" class="withdraw_btn"
-										onclick="movePage('Member','passwordUpdateForm')">비밀번호 변경</button>
+										onclick="movePage('Member','passwordUpdateForm')"><fmt:message key="myinfo.009"/></button>
 
 									<button type="button" class="join_btn" onclick="goUpdate()">
-										정보 수정</button>
+										<fmt:message key="myinfo.010"/></button>
 
 								</div>
 
@@ -255,14 +253,14 @@
 
 					<div class="footer_logo">
 
-						인천공항 주차예약 <small> INCHEON AIRPORT PARKING </small>
+						<fmt:message key="hdr.001"/> <small> INCHEON AIRPORT PARKING </small>
 
 					</div>
 
 
 					<div class="footer_links">
 
-						<a href="#">이용약관</a> <a href="#">개인정보처리방침</a> <a href="#">사이트맵</a>
+						<a href="#"><fmt:message key="ftr.001"/></a> <a href="#"><fmt:message key="ftr.002"/></a> <a href="#"><fmt:message key="ftr.003"/></a>
 
 					</div>
 
@@ -271,9 +269,9 @@
 
 				<div class="footer_info">
 
-					<p>제1여객터미널 주차예약 서비스 · 본 사이트는 팀프로젝트 목적으로 제작되었습니다.</p>
+					<p><fmt:message key="ftr.004"/></p>
 
-					<p>문의 : 제1여객터미널 주차상황실</p>
+					<p><fmt:message key="ftr.005"/></p>
 
 					<p class="copyright">Copyright © Parking Reservation Project.
 						All rights reserved.</p>

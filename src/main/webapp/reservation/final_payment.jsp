@@ -1,13 +1,14 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="${empty sessionScope.lang ? 'ko' : sessionScope.lang}">
 
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>인천공항 주차예약 - 결제</title>
+<title><fmt:message key="pay.001"/></title>
 
 
 <!-- 1. jQuery 및 포트원 v1 SDK 로드 -->
@@ -313,48 +314,48 @@ function handleResponse(rsp) {
 			<input type="hidden" name="t_reservation_id" value="${dto.getReservation_id()}">
 			
 			<div class="pay_card">
-				<h1 id="paymentSeatTitle" class="pay_title">P1 구역 - ${dto.getSeat_no()}</h1>
-				<p id="paymentLotInfo" class="pay_sub_info">장기주차장 · 시간당 4,500원</p>
+				<h1 id="paymentSeatTitle" class="pay_title"><fmt:message key="pay.002"><fmt:param value="${dto.getSeat_no()}"/></fmt:message></h1>
+				<p id="paymentLotInfo" class="pay_sub_info"><fmt:message key="pay.003"/></p>
 
 				<!-- 예약 데이터 히든 파라미터 -->
 				<input type="hidden" id="reservationPlan" name="t_reservation_plan" value="2">
 				<input type="hidden" id="reservationSeat" name="t_reservation_seat" value="${dto.getSeat_no()}">
 
 				<div class="formRow">
-					<label>주차 일자</label>
+					<label><fmt:message key="pay.004"/></label>
 					<input type="text" id="startDateInput" name="t_reservation_parking_start_time" value="${dto.getReservation_start_time()}" readonly>
 				</div>
 				<div class="formRow">
-					<label>출차 일자</label>
+					<label><fmt:message key="pay.005"/></label>
 					<input type="text" id="endDateInput" name="t_reservation_out_time" value="${paymentTime}" readonly>
 				</div>
 
 				<!-- 결제 수단 선택 (세로형 추가 및 변경) -->
-				<span class="pay_method_title">결제 수단 선택</span>
+				<span class="pay_method_title"><fmt:message key="pay.006"/></span>
 				<div id="payMethodArea">
 					<label class="payOption">
-						<input type="radio" name="t_reservation_pay_method" value="kakaoPay"> 카카오페이
+						<input type="radio" name="t_reservation_pay_method" value="kakaoPay"> <fmt:message key="map.040"/>
 					</label>
 					<label class="payOption">
-						<input type="radio" name="t_reservation_pay_method" value="naverPay"> 네이버페이
+						<input type="radio" name="t_reservation_pay_method" value="naverPay"> <fmt:message key="map.041"/>
 					</label>
 					<label class="payOption">
-						<input type="radio" name="t_reservation_pay_method" value="creditCard"> 신용카드
+						<input type="radio" name="t_reservation_pay_method" value="creditCard"> <fmt:message key="pay.007"/>
 					</label>
 					<label class="payOption">
-						<input type="radio" name="t_reservation_pay_method" value="bankTransfer"> 계좌이체
+						<input type="radio" name="t_reservation_pay_method" value="bankTransfer"> <fmt:message key="map.043"/>
 					</label>
 				</div>
 
 				<div id="paymentFooter">
 					<div id="payBarPrice" style="font-size: 15px; text-align: right;">
-						<span>결제액:</span> <strong id="payBarAmount" style="font-size: 20px; color: #e53935;">${totalPrice}</strong> 원
+						<span><fmt:message key="pay.008"/></span> <strong id="payBarAmount" style="font-size: 20px; color: #e53935;">${totalPrice}</strong> <fmt:message key="myresv.012"/>
 					</div>
 					<input type="hidden" name="t_final_amount" id="finalAmountInput" value="${totalPrice}">
 					<input type="hidden" name="t_imp_uid" id="impUidInput">
 					<input type="hidden" name="t_merchant_uid" id="merchantUidInput">
 					
-					<button id="payBtn" type="button" onclick="goPayment()">결제하기</button>
+					<button id="payBtn" type="button" onclick="goPayment()"><fmt:message key="map.045"/></button>
 				</div>
 			</div>
 		</form>
@@ -364,7 +365,7 @@ function handleResponse(rsp) {
 	<footer class="footer">
 		<div class="footer_inner">
 			<div class="footer_info">
-				<p>제1여객터미널 주차예약 서비스</p>
+				<p><fmt:message key="pay.009"/></p>
 				<p class="copyright">Copyright © Parking Reservation Project. All rights reserved.</p>
 			</div>
 		</div>

@@ -1,5 +1,7 @@
 package command.index;
 
+import common.I18n;
+
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -22,7 +24,7 @@ public class indexReservation implements CommonExecute {
 		 String paymentTime = CommonUtil.getTodayTime();
 	        
 	        if (dto == null || dto.getReservation_start_time() == null) {
-	            request.setAttribute("t_msg", "예약 정보 또는 입차 기록을 찾을 수 없습니다.");
+	            request.setAttribute("t_msg", I18n.msg(request, "msg.resvNotFound"));
 	            request.setAttribute("t_url", "ParkingStatus");
 	            return;
 	        }
@@ -42,7 +44,7 @@ public class indexReservation implements CommonExecute {
 
 	            // 4. 음수 체크: 결제 시간이 입차 시간보다 이전인 경우 막기
 	            if (diffSeconds < 0) {
-	                request.setAttribute("t_msg", "결제 시간이 입차 시간보다 빠릅니다. 시스템 시간을 확인해주세요.");
+	                request.setAttribute("t_msg", I18n.msg(request, "msg.timeBeforeIn"));
 	                request.setAttribute("t_url", "ParkingStatus");
 	                return; 
 	            }

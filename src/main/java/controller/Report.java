@@ -1,5 +1,7 @@
 package controller;
 
+import common.I18n;
+
 import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -33,7 +35,7 @@ public class Report extends HttpServlet {
 		request.setCharacterEncoding("UTF-8");
 
 		if (request.getSession().getAttribute("sessionId") == null) {
-			request.setAttribute("t_msg", "로그인 후 문의할 수 있습니다.");
+			request.setAttribute("t_msg", I18n.msg(request, "msg.reportLoginRequired"));
 			request.setAttribute("t_url", "Member");
 			forward(request, response, "common_alert.jsp");
 			return;

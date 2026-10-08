@@ -1,5 +1,7 @@
 package controller;
 
+import common.I18n;
+
 import java.io.IOException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
@@ -84,7 +86,7 @@ public class Member extends HttpServlet {
 		} else if (gubun.equals("myinfo")) {
 			String id = (String) request.getSession().getAttribute("sessionId");
 			if (id == null) {
-				String msg = "로그인 정보가 만료되었습니다.";
+				String msg = I18n.msg(request, "msg.sessionExpired");
 				request.setAttribute("t_msg", msg);
 				request.setAttribute("t_url", "Member");
 				viewPage = "common_alert.jsp";
@@ -96,7 +98,7 @@ public class Member extends HttpServlet {
 		} else if (gubun.equals("memberUpdateForm")) {
 			String id = (String) request.getSession().getAttribute("sessionId");
 			if (id == null) {
-				String msg = "로그인 정보가 만료되었습니다.";
+				String msg = I18n.msg(request, "msg.sessionExpired");
 				request.setAttribute("t_msg", msg);
 				request.setAttribute("t_url", "Member");
 				viewPage = "common_alert.jsp";
@@ -108,7 +110,7 @@ public class Member extends HttpServlet {
 		} else if (gubun.equals("memberUpdate")) {
 			String id = (String) request.getSession().getAttribute("sessionId");
 			if (id == null) {
-				request.setAttribute("t_msg", "로그인 정보가 만료되었습니다.");
+				request.setAttribute("t_msg", I18n.msg(request, "msg.sessionExpired"));
 				request.setAttribute("t_url", "Member");
 				viewPage = "common_alert.jsp";
 			} else {
@@ -119,7 +121,7 @@ public class Member extends HttpServlet {
 		} else if (gubun.equals("passwordUpdateForm")) {
 			String id = (String) request.getSession().getAttribute("sessionId");
 			if (id == null) {
-				request.setAttribute("t_msg", "로그인 정보가 만료되었습니다.");
+				request.setAttribute("t_msg", I18n.msg(request, "msg.sessionExpired"));
 				request.setAttribute("t_url", "Member");
 				viewPage = "common_alert.jsp";
 			} else {
@@ -142,7 +144,7 @@ public class Member extends HttpServlet {
 		} else if (gubun.equals("myreservation")) {
 			String id = (String) request.getSession().getAttribute("sessionId");
 			if (id == null) {
-				request.setAttribute("t_msg", "로그인 정보가 만료되었습니다.");
+				request.setAttribute("t_msg", I18n.msg(request, "msg.sessionExpired"));
 				request.setAttribute("t_url", "Member");
 				viewPage = "common_alert.jsp";
 			} else {
@@ -153,7 +155,7 @@ public class Member extends HttpServlet {
 		} else if (gubun.equals("reservationCancel")) {
 			String id = (String) request.getSession().getAttribute("sessionId");
 			if (id == null) {
-				request.setAttribute("t_msg", "로그인 정보가 만료되었습니다.");
+				request.setAttribute("t_msg", I18n.msg(request, "msg.sessionExpired"));
 				request.setAttribute("t_url", "Member");
 			} else {
 				MemberReservationCancel mem = new MemberReservationCancel();

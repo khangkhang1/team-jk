@@ -1,5 +1,7 @@
 package command.member;
 
+import common.I18n;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -11,8 +13,8 @@ public class MemberLogout implements CommonExecute {
 	public void execute(HttpServletRequest request) {
 		HttpSession session = request.getSession();
 		String name = (String)session.getAttribute("sessionName");
-		String msg=name+"님 로그아웃 되었습니다.";
-		if(name==null)msg="로그아웃되었습니다.";
+		String msg=I18n.msg(request, "msg.logoutName", name);
+		if(name==null)msg=I18n.msg(request, "msg.logout");
 		
 		session.invalidate();
 		request.setAttribute("t_msg", msg);

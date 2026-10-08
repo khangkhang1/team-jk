@@ -1,5 +1,7 @@
 package command.member;
 
+import common.I18n;
+
 import javax.servlet.http.HttpServletRequest;
 
 import common.CommonExecute;
@@ -85,7 +87,7 @@ public class MemberUpdate implements CommonExecute {
 			request.getSession().removeAttribute("verifiedEmail");
 		}
 
-		request.setAttribute("t_msg", result == 1 ? "회원정보가 수정되었습니다." : "회원정보 수정에 실패했습니다.");
+		request.setAttribute("t_msg", result == 1 ? I18n.msg(request, "msg.infoUpdated") : I18n.msg(request, "msg.infoUpdateFail"));
 		request.setAttribute("t_url", "Member?t_gubun=myinfo");
 	}
 

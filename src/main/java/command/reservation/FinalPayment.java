@@ -1,5 +1,7 @@
 package command.reservation;
 
+import common.I18n;
+
 import javax.servlet.http.HttpServletRequest;
 
 import common.CommonExecute;
@@ -31,7 +33,7 @@ public class FinalPayment implements CommonExecute {
             }
         } catch (NumberFormatException e) {
             e.printStackTrace();
-            request.setAttribute("t_msg", "결제 금액 형식이 올바르지 않습니다.");
+            request.setAttribute("t_msg", I18n.msg(request, "msg.amountFormat"));
             request.setAttribute("t_url", "ParkingStatus");
             return;
         }
@@ -48,10 +50,9 @@ public class FinalPayment implements CommonExecute {
         int result = resultR + resultP;
 
         // 5. 결과 메시지 및 이동 URL 설정
-        String msg = "결제 처리에 실패하였습니다.";
+        String msg = I18n.msg(request, "msg.finalPayFail");
         if (result == 2) {
-            msg = "결제가 완료되었습니다.\r\n"
-                + "결제액: " + String.format("%,d", totalPrice) + "원"; // 천단위 콤마 표기
+            msg = I18n.msg(request, "msg.finalPayDone", String.format("%,d", totalPrice));
         }
 
         request.setAttribute("t_msg", msg);

@@ -1,5 +1,7 @@
 package command.member;
 
+import common.I18n;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -16,7 +18,7 @@ public class MemberLogin implements CommonExecute {
 		String password = request.getParameter("t_password");
 		if (id == null || id.trim().isEmpty() || id.length() > 20
 				|| password == null || password.isEmpty() || password.length() > 70) {
-			request.setAttribute("t_msg", "ID나 비밀번호가 일치하지 않습니다.");
+			request.setAttribute("t_msg", I18n.msg(request, "msg.loginFail"));
 			request.setAttribute("t_url", "Member");
 			return;
 		}
@@ -29,7 +31,7 @@ public class MemberLogin implements CommonExecute {
 
 		String msg="",url="";
 		if(!name.equals("")) {
-			msg=name+"님 환영합니다.";
+			msg=I18n.msg(request, "msg.welcome", name);
 			url="ParkingStatus";
 			HttpSession session = request.getSession();
 			session.setAttribute("sessionId", id);
@@ -40,7 +42,7 @@ public class MemberLogin implements CommonExecute {
 			session.setMaxInactiveInterval(60*60*4);
 			request.setAttribute("loginSuccess", true);
 		}else {
-			msg="ID나 비밀번호가 일치하지 않습니다.";
+			msg=I18n.msg(request, "msg.loginFail");
 			url="Member";
 		}
 		request.setAttribute("t_msg", msg);

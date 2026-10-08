@@ -1,13 +1,14 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="${empty sessionScope.lang ? 'ko' : sessionScope.lang}">
 
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>회원가입 | 인천공항 주차예약</title>
+<title><fmt:message key="join.001"/></title>
 
 <script type="text/javascript"
 	src="${pageContext.request.contextPath}/js/jquery-1.8.1.min.js"></script>
@@ -46,10 +47,10 @@
 
 						<span class="page_eyebrow"> MEMBER JOIN </span>
 
-						<h1>회원가입</h1>
+						<h1><fmt:message key="hdr.018"/></h1>
 
 						<p>
-							인천공항 주차예약 서비스를 이용하기 위해<br> 회원정보를 입력해주세요.
+							<fmt:message key="join.002"/><br> <fmt:message key="join.003"/>
 						</p>
 
 					</div>
@@ -60,9 +61,9 @@
 
 						<div class="join_card_head">
 
-							<h2>회원정보 입력</h2>
+							<h2><fmt:message key="join.004"/></h2>
 
-							<span> <em>*</em> 필수 입력사항
+							<span> <em>*</em> <fmt:message key="join.005"/>
 							</span>
 
 						</div>
@@ -74,24 +75,22 @@
 
 							<!-- 아이디 -->
 							<div class="form_row">
-								<label for="member_id"> 아이디 <em>*</em>
+								<label for="member_id"> <fmt:message key="login.005"/> <em>*</em>
 								</label>
 
 								<div class="input_area">
 									<div class="input_button">
 										<input type="text" id="member_id" name="t_id" maxlength="20"
-											placeholder="아이디를 입력해주세요" oninput="setEmpty()"> <input
+											placeholder="<fmt:message key='login.015'/>" oninput="setEmpty()"> <input
 											type="button" onclick="checkId()" id="idCheckBtn"
-											value="중복확인">
+											value="<fmt:message key='join.029'/>">
 
 									</div>
 
 									<!-- 중복확인 결과 -->
-									<div id="idCheckResult" class="verify_result">아이디 중복확인이
-										필요합니다.</div>
+									<div id="idCheckResult" class="verify_result"><fmt:message key="join.006"/></div>
 
-									<span class="form_hint"> 영문 소문자를 최소 1자 이상 포함하여 4~20자로
-										입력해주세요.<br> 특수문자는 !@#$%^&*_-만 가능합니다.
+									<span class="form_hint"> <fmt:message key="join.007"/><br> <fmt:message key="join.008"/>
 									</span>
 
 									<!-- 서버/JS에서 상태 저장용 -->
@@ -103,15 +102,14 @@
 							<!-- 비밀번호 -->
 							<div class="form_row">
 
-								<label for="password"> 비밀번호 <em>*</em>
+								<label for="password"> <fmt:message key="login.006"/> <em>*</em>
 								</label>
 
 								<div class="input_area">
 
 									<input type="password" id="password" name="t_password"
-										maxlength="70" placeholder="비밀번호를 입력해주세요"> <span
-										class="form_hint">영문 소문자를 최소 1자 이상 포함하여 6~16자로 입력해주세요.특수문자는 !@#$%^&*_+?.-만
-										사용할 수 있습니다.</span>
+										maxlength="70" placeholder="<fmt:message key='login.016'/>"> <span
+										class="form_hint"><fmt:message key="join.009"/></span>
 
 								</div>
 
@@ -121,14 +119,14 @@
 							<!-- 비밀번호 확인 -->
 							<div class="form_row">
 
-								<label for="password_check"> 비밀번호 확인 <em>*</em>
+								<label for="password_check"> <fmt:message key="join.010"/> <em>*</em>
 								</label>
 
 								<div class="input_area">
 
 									<input type="password" id="password_check"
 										name="t_password_confirm" maxlength="70"
-										placeholder="비밀번호를 다시 입력해주세요">
+										placeholder="<fmt:message key='join.024'/>">
 
 								</div>
 
@@ -138,13 +136,13 @@
 							<!-- 이름 -->
 							<div class="form_row">
 
-								<label for="name"> 이름 <em>*</em>
+								<label for="name"> <fmt:message key="join.011"/> <em>*</em>
 								</label>
 
 								<div class="input_area">
 
 									<input type="text" id="name" name="t_name" maxlength="20"
-										placeholder="이름을 입력해주세요">
+										placeholder="<fmt:message key='join.025'/>">
 
 								</div>
 
@@ -154,7 +152,7 @@
 							<!-- 전화번호 -->
 							<div class="form_row">
 
-								<label for="phone_number"> 휴대전화 <em>*</em>
+								<label for="phone_number"> <fmt:message key="join.012"/> <em>*</em>
 								</label>
 
 								<div class="input_area">
@@ -169,7 +167,7 @@
 
 							<!-- 이메일 -->
 							<div class="form_row">
-								<label for="email"> 이메일 <em>*</em>
+								<label for="email"> <fmt:message key="join.013"/> <em>*</em>
 								</label>
 
 								<div class="input_area email_verify">
@@ -177,23 +175,22 @@
 									<!-- 이메일 입력 -->
 									<div class="verify_input_row">
 										<input type="email" id="email" name="t_email" maxlength="100"
-											placeholder="이메일을 입력해주세요"> <input type="button"
-											id="sendEmailBtn" onclick="sendEmailCode()" value="인증번호 발송">
+											placeholder="<fmt:message key='join.026'/>"> <input type="button"
+											id="sendEmailBtn" onclick="sendEmailCode()" value="<fmt:message key='join.030'/>">
 									</div>
 
 									<!-- 인증번호 입력 -->
 									<div class="verify_code_row">
 										<input type="text" name="t_email_code" id="email_code"
-											maxlength="6" placeholder="인증번호 6자리 입력"> <input
+											maxlength="6" placeholder="<fmt:message key='join.027'/>"> <input
 											type="button" id="emailCheckBtn" onclick="checkEmailCode()"
-											value="인증 확인">
+											value="<fmt:message key='join.031'/>">
 									</div>
 
 									<!-- 인증 상태 -->
-									<div id="emailVerifyResult" class="verify_result">이메일 인증이
-										필요합니다.</div>
+									<div id="emailVerifyResult" class="verify_result"><fmt:message key="join.014"/></div>
 
-									<span class="form_hint">이메일 인증을 완료해야 회원가입이 가능합니다. 인증번호는 5분 동안 유효하며, 재발송은 30초 후 가능합니다.</span>
+									<span class="form_hint"><fmt:message key="join.015"/></span>
 
 								</div>
 							</div>
@@ -202,14 +199,14 @@
 							<!-- 차량번호 -->
 							<div class="form_row">
 
-								<label for="vehicle_number"> 차량번호 <em>*</em>
+								<label for="vehicle_number"> <fmt:message key="join.016"/> <em>*</em>
 								</label>
 
 								<div class="input_area">
 
 									<input type="text" id="vehicle_number" name="t_vehicle_number"
-										maxlength="20" placeholder="차량번호를 입력해주세요"> <span
-										class="form_hint"> 예) 12가 3456 </span>
+										maxlength="20" placeholder="<fmt:message key='join.028'/>"> <span
+										class="form_hint"> <fmt:message key="join.017"/> </span>
 
 								</div>
 
@@ -219,17 +216,17 @@
 							<!-- 차량 종류 -->
 							<div class="form_row">
 
-								<label> 차량 종류 <em>*</em>
+								<label> <fmt:message key="join.018"/> <em>*</em>
 								</label>
 
 								<div class="input_area vehicle_type">
 
 									<label class="radio_label"> <input type="radio"
-										name="t_vehicle_type" value="N"> <span>일반 차량</span>
+										name="t_vehicle_type" value="N"> <span><fmt:message key="join.019"/></span>
 									</label> <label class="radio_label"> <input type="radio"
-										name="t_vehicle_type" value="E"> <span>전기차</span>
+										name="t_vehicle_type" value="E"> <span><fmt:message key="join.020"/></span>
 									</label> <label class="radio_label"> <input type="radio"
-										name="t_vehicle_type" value="D"> <span>장애인 차량</span>
+										name="t_vehicle_type" value="D"> <span><fmt:message key="join.021"/></span>
 									</label>
 
 								</div>
@@ -279,9 +276,9 @@
 							<div class="form_buttons">
 
 								<button type="button" class="cancel_btn" id="cancelBtn">
-									취소</button>
+									<fmt:message key="join.022"/></button>
 
-								<input type="button" onclick="goSave()" value="회원가입"
+								<input type="button" onclick="goSave()" value="<fmt:message key='hdr.018'/>"
 									class="join_btn">
 								</button>
 
@@ -295,8 +292,8 @@
 					<!-- LOGIN LINK -->
 					<div class="login_link">
 
-						이미 회원이신가요? <a href="javascript:movePage('Member','login')">
-							로그인 </a>
+						<fmt:message key="join.023"/> <a href="javascript:movePage('Member','login')">
+							<fmt:message key="hdr.017"/> </a>
 
 					</div>
 
@@ -317,14 +314,14 @@
 
 					<div class="footer_logo">
 
-						인천공항 주차예약 <small> INCHEON AIRPORT PARKING </small>
+						<fmt:message key="hdr.001"/> <small> INCHEON AIRPORT PARKING </small>
 
 					</div>
 
 
 					<div class="footer_links">
 
-						<a href="#">이용약관</a> <a href="#">개인정보처리방침</a> <a href="#">사이트맵</a>
+						<a href="#"><fmt:message key="ftr.001"/></a> <a href="#"><fmt:message key="ftr.002"/></a> <a href="#"><fmt:message key="ftr.003"/></a>
 
 					</div>
 
@@ -333,9 +330,9 @@
 
 				<div class="footer_info">
 
-					<p>제1여객터미널 주차예약 서비스 · 본 사이트는 팀프로젝트 목적으로 제작되었습니다.</p>
+					<p><fmt:message key="ftr.004"/></p>
 
-					<p>문의 : 제1여객터미널 주차상황실</p>
+					<p><fmt:message key="ftr.005"/></p>
 
 					<p class="copyright">Copyright © Parking Reservation Project.
 						All rights reserved.</p>

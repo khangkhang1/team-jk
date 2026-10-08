@@ -1,12 +1,13 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="${empty sessionScope.lang ? 'ko' : sessionScope.lang}">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>문의하기 | 인천공항 주차예약</title>
+<title><fmt:message key="rpt.001"/></title>
 <link href="${pageContext.request.contextPath}/css/index1.css" rel="stylesheet">
 <link href="${pageContext.request.contextPath}/css/report.css?v=20260922" rel="stylesheet">
 <script src="${pageContext.request.contextPath}/js/report.js?v=20260922"></script>
@@ -25,8 +26,8 @@
 
 			<div class="section_head">
 				<div>
-					<h2>문의하기</h2>
-					<p>문의 종류를 고르고 내용을 적어 주세요. 좌석이나 예약과 관련된 문의라면 번호를 같이 적어 주시면 더 빨리 확인할 수 있습니다.</p>
+					<h2><fmt:message key="hdr.013"/></h2>
+					<p><fmt:message key="rpt.002"/></p>
 				</div>
 			</div>
 
@@ -35,46 +36,46 @@
 
 				<table class="rp_form">
 					<tr>
-						<th>문의 종류 <em>*</em></th>
+						<th><fmt:message key="rpt.003"/> <em>*</em></th>
 						<td>
 							<select name="t_report_type" class="rp_select">
-								<option value="">문의 종류를 선택하세요</option>
+								<option value=""><fmt:message key="rpt.004"/></option>
 								<c:forEach var="t" items="${types}">
-									<option value="${t.key}" ${type == t.key ? 'selected' : ''}>${t.value}</option>
+									<option value="${t.key}" ${type == t.key ? 'selected' : ''}><fmt:message key="rpt.type.${t.key}"/></option>
 								</c:forEach>
 							</select>
 						</td>
 					</tr>
 					<tr>
-						<th>제목 <em>*</em></th>
-						<td><input type="text" name="t_title" maxlength="60" placeholder="예) 예약한 자리에 다른 차가 주차되어 있습니다"></td>
+						<th><fmt:message key="ntc.005"/> <em>*</em></th>
+						<td><input type="text" name="t_title" maxlength="60" placeholder="<fmt:message key='rpt.010'/>"></td>
 					</tr>
 					<tr>
-						<th>좌석 번호</th>
+						<th><fmt:message key="rpt.005"/></th>
 						<td>
-							<input type="text" name="t_seat_no" maxlength="20" class="rp_short" placeholder="예) P1-07">
-							<span class="rp_help">선택</span>
+							<input type="text" name="t_seat_no" maxlength="20" class="rp_short" placeholder="<fmt:message key='rpt.011'/>">
+							<span class="rp_help"><fmt:message key="rpt.006"/></span>
 						</td>
 					</tr>
 					<tr>
-						<th>예약 번호</th>
+						<th><fmt:message key="rpt.007"/></th>
 						<td>
-							<input type="text" name="t_reservation_id" maxlength="30" class="rp_short" placeholder="예) R26-09-0010">
-							<span class="rp_help">선택</span>
+							<input type="text" name="t_reservation_id" maxlength="30" class="rp_short" placeholder="<fmt:message key='rpt.012'/>">
+							<span class="rp_help"><fmt:message key="rpt.006"/></span>
 						</td>
 					</tr>
 					<tr>
-						<th>내용 <em>*</em></th>
+						<th><fmt:message key="ntc.006"/> <em>*</em></th>
 						<td>
-							<textarea name="t_content" maxlength="600" placeholder="언제, 어디서, 어떤 일이 있었는지 적어 주세요."></textarea>
-							<p class="rp_help rp_count"><span id="rpCount">0</span> / 600자</p>
+							<textarea name="t_content" maxlength="600" placeholder="<fmt:message key='rpt.013'/>"></textarea>
+							<p class="rp_help rp_count"><span id="rpCount">0</span> <fmt:message key="rpt.008"/></p>
 						</td>
 					</tr>
 				</table>
 
 				<div class="rp_btns">
-					<button type="submit" class="rp_btn rp_btn_primary">문의 접수</button>
-					<a href="${pageContext.request.contextPath}/ParkingStatus" class="rp_btn">취소</a>
+					<button type="submit" class="rp_btn rp_btn_primary"><fmt:message key="rpt.009"/></button>
+					<a href="${pageContext.request.contextPath}/ParkingStatus" class="rp_btn"><fmt:message key="join.022"/></a>
 				</div>
 			</form>
 

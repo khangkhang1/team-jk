@@ -1,14 +1,15 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="${empty sessionScope.lang ? 'ko' : sessionScope.lang}">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>공지사항 상세보기 | 인천공항 주차예약</title>
+    <title><fmt:message key="ntcv.001"/></title>
 
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/notice/notice_view.css">
     
@@ -62,10 +63,10 @@
         <!-- 제목 영역 -->
         <div class="noticeTitle">
 
-            <h1>공지사항</h1>
+            <h1><fmt:message key="idx.057"/></h1>
 
             <p>
-                인천공항 주차예약의 새로운 소식을 확인하세요.
+                <fmt:message key="ntcv.002"/>
             </p>
 
         </div>
@@ -79,7 +80,7 @@
                 <div class="titleArea">
                 
                 	<c:if test="${dto.getImportant() eq 'Y'}">
-                    	<span class="importantBadge">중요공지</span>
+                    	<span class="importantBadge"><fmt:message key="ntcv.003"/></span>
 					</c:if>
                     <h2>
                         ${dto.getTitle()}
@@ -91,15 +92,15 @@
                 <div class="viewInfo">
 
                     <span>
-                        작성자 : ${dto.getReg_id()}
+                        <fmt:message key="ntcv.004"><fmt:param value="${dto.getReg_id()}"/></fmt:message>
                     </span>
 
                     <span>
-                        작성일 : ${dto.getReg_date()}
+                        <fmt:message key="ntcv.005"><fmt:param value="${dto.getReg_date()}"/></fmt:message>
                     </span>
 
                     <span>
-                        조회수 : ${dto.getHit()}
+                        <fmt:message key="ntcv.006"><fmt:param value="${dto.getHit()}"/></fmt:message>
                     </span>
 
                 </div>
@@ -110,7 +111,7 @@
             <div class="fileArea">
 
                 <span class="fileLabel">
-                    첨부파일
+                    <fmt:message key="ntcv.007"/>
                 </span>
 
                 <a href="FileDownServlet?t_fileDir=notice&t_fileName=${dto.getAttach()}" class="fileName">
@@ -156,7 +157,7 @@
             <div class="navRow">
 			<c:if test="${not empty preDto.getNo()}">
                 <span class="navLabel">
-                    다음글
+                    <fmt:message key="ntcv.008"/>
                 </span>
 
                 <a href="javascript:goView('${preDto.getNo()}')" class="navTitle">
@@ -175,7 +176,7 @@
             <div class="navRow">
 			<c:if test="${not empty nextDto.getNo()}">
                 <span class="navLabel">
-                    이전글
+                    <fmt:message key="ntcv.009"/>
                 </span>
 
                 <a href="javascript:goView('${nextDto.getNo()}')" class="navTitle">
@@ -197,14 +198,14 @@
         <div class="viewBtn">
 
             <a href="Notice" class="listBtn">
-                목록
+                <fmt:message key="ntcv.010"/>
             </a>
 			<c:if  test="${sessionLevel eq 'top'}">
 	            <a href="javascript:goUpdateForm('noticeUpdateForm')" class="editBtn">
-	                수정
+	                <fmt:message key="ntcv.011"/>
 	            </a>
 	            <a href="javascript:goDelete('noticeDelete')" class="deleteBtn">
-	                삭제
+	                <fmt:message key="ntcv.012"/>
 	            </a>
 			</c:if>
         </div>

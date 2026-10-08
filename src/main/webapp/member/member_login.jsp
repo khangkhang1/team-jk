@@ -1,12 +1,13 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="${empty sessionScope.lang ? 'ko' : sessionScope.lang}">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>인천공항 주차예약 - 로그인</title>
+<title><fmt:message key="login.001"/></title>
 
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery-1.8.1.min.js"></script>
 <script src="${pageContext.request.contextPath}/js/member.js"></script>
@@ -43,10 +44,10 @@
 
 				<span class="title_eng">MEMBER LOGIN</span>
 
-				<h1>로그인</h1>
+				<h1><fmt:message key="hdr.017"/></h1>
 
 				<p>
-					인천공항 주차예약 서비스를 이용하시려면<br> 로그인해주세요.
+					<fmt:message key="login.002"/><br> <fmt:message key="login.003"/>
 				</p>
 
 			</div>
@@ -55,7 +56,7 @@
 			<!-- LOGIN CARD -->
 			<section class="login_card">
 
-				<h2>회원 로그인</h2>
+				<h2><fmt:message key="login.004"/></h2>
 
 				<form id="loginForm" name="mem">
 					<input type="hidden" name="t_gubun">
@@ -63,10 +64,10 @@
 					<!-- ID -->
 					<div class="input_group">
 
-						<label for="member_id"> 아이디 </label> <input type="text"
+						<label for="member_id"> <fmt:message key="login.005"/> </label> <input type="text"
 							id="member_id" name="t_id" maxlength="20" onkeypress="checkEnter()"
 							value="<c:out value='${rememberedId}'/>"
-							placeholder="아이디를 입력해주세요" autocomplete="username" autofocus>
+							placeholder="<fmt:message key='login.015'/>" autocomplete="username" autofocus>
 
 						<p class="error_message" id="idError"></p>
 
@@ -76,9 +77,9 @@
 					<!-- PASSWORD -->
 					<div class="input_group">
 
-						<label for="password"> 비밀번호 </label> <input type="password"
+						<label for="password"> <fmt:message key="login.006"/> </label> <input type="password"
 							id="password" name="t_password" maxlength="70" onkeypress="checkEnterPassword()"
-							placeholder="비밀번호를 입력해주세요" autocomplete="current-password">
+							placeholder="<fmt:message key='login.016'/>" autocomplete="current-password">
 
 						<p class="error_message" id="passwordError"></p>
 
@@ -91,22 +92,22 @@
 							<input type="checkbox" id="rememberId" name="t_rememberId" value="Y"
 								aria-describedby="rememberIdHint"
 								<c:if test="${not empty rememberedId}">checked</c:if>>
-							<span>아이디 저장</span>
+							<span><fmt:message key="login.007"/></span>
 						</label>
-						<p class="remember_id_hint" id="rememberIdHint">이 브라우저에 아이디를 30일 동안 저장합니다.</p>
+						<p class="remember_id_hint" id="rememberIdHint"><fmt:message key="login.008"/></p>
 					</div>
 
 					<!-- LOGIN BUTTON -->
 					<input type="button" onclick="memberLogin()" class="login_btn"
-						value="로그인">
+						value="<fmt:message key='hdr.017'/>">
 
 
 					<!-- LOGIN MENU -->
 					<div class="login_menu">
 
-						<a href="${pageContext.request.contextPath}/Member?t_gubun=findId">아이디 찾기</a> <span>|</span> <a href="${pageContext.request.contextPath}/Member?t_gubun=findPassword">비밀번호 찾기</a> <span>|</span>
+						<a href="${pageContext.request.contextPath}/Member?t_gubun=findId"><fmt:message key="login.009"/></a> <span>|</span> <a href="${pageContext.request.contextPath}/Member?t_gubun=findPassword"><fmt:message key="login.010"/></a> <span>|</span>
 
-						<a href="javascript:movePage('Member','join')">회원가입</a>
+						<a href="javascript:movePage('Member','join')"><fmt:message key="hdr.018"/></a>
 
 					</div>
 
@@ -121,9 +122,9 @@
 				<div class="info_icon">!</div>
 
 				<div class="info_text">
-					<strong>안내</strong>
+					<strong><fmt:message key="login.011"/></strong>
 					<p>
-						주차 예약 및 예약 조회 서비스는<br> 로그인 후 이용하실 수 있습니다.
+						<fmt:message key="login.012"/><br> <fmt:message key="login.013"/>
 					</p>
 				</div>
 
@@ -141,13 +142,13 @@
 		<div class="footer_inner">
 
 			<div class="footer_logo">
-				<span class="logo_main">인천공항 주차예약</span> <span class="logo_sub">INCHEON
+				<span class="logo_main"><fmt:message key="hdr.001"/></span> <span class="logo_sub">INCHEON
 					AIRPORT PARKING</span>
 			</div>
 
 			<div class="footer_info">
 
-				<p>인천국제공항 주차예약 서비스</p>
+				<p><fmt:message key="login.014"/></p>
 
 				<p class="copyright">© INCHEON AIRPORT PARKING. All Rights
 					Reserved.</p>

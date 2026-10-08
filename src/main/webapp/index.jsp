@@ -10,7 +10,7 @@
 
 
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="${empty sessionScope.lang ? 'ko' : sessionScope.lang}">
 <link rel="stylesheet" href="css/index1.css">
 
 <head>
@@ -18,7 +18,7 @@
 <meta charset="UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>인천공항 주차예약</title>
+<title><fmt:message key="hdr.001"/></title>
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery-1.8.1.min.js"></script>
 <script src="${pageContext.request.contextPath}/js/common.js"></script>
 <script>
@@ -79,7 +79,7 @@
     <div class="header_inner">
 
         <a href="ParkingStatus" class="logo">
-            인천공항 주차예약
+            <fmt:message key="hdr.001"/>
             <small>INCHEON AIRPORT PARKING</small>
         </a>
 
@@ -87,35 +87,35 @@
 
             <!-- 교통 · 주차 -->
             <li>
-                <a href="#parking">교통 · 주차</a>
+                <a href="#parking"><fmt:message key="hdr.002"/></a>
 
                 <div class="header_dropdown">
-                    <a href="#guide">주차장 이용 안내</a>
-                    <a href="#parking">주차 요금</a>
-                    <a href="#parking">주차장 혼잡도</a>
+                    <a href="#guide"><fmt:message key="hdr.003"/></a>
+                    <a href="#parking"><fmt:message key="hdr.004"/></a>
+                    <a href="#parking"><fmt:message key="hdr.005"/></a>
                 </div>
             </li>
 
             <!-- 주차 예약 조회 -->
             <li>
-                <a href="#reserve">주차 예약 조회</a>
+                <a href="#reserve"><fmt:message key="hdr.006"/></a>
 
                 <div class="header_dropdown">
-                    <a href="#reserve">예약 내역</a>
-                    <a href="#reserve">예약 확인</a>
-                    <a href="#reserve">예약 취소</a>
-                    <a href="#reserve">이용 내역</a>
+                    <a href="#reserve"><fmt:message key="hdr.007"/></a>
+                    <a href="#reserve"><fmt:message key="hdr.008"/></a>
+                    <a href="#reserve"><fmt:message key="hdr.009"/></a>
+                    <a href="#reserve"><fmt:message key="hdr.010"/></a>
                 </div>
             </li>
 
             <!-- 공지 사항 -->
             <li>
-                <a href="Notice">공지 사항</a>
+                <a href="Notice"><fmt:message key="hdr.011"/></a>
 
                 <div class="header_dropdown">
-                    <a href="Notice">공지 사항</a>
-                    <a href="${pageContext.request.contextPath}/Faq">자주 하는 질문</a>
-                    <a href="${pageContext.request.contextPath}/Report">문의하기</a>
+                    <a href="Notice"><fmt:message key="hdr.011"/></a>
+                    <a href="${pageContext.request.contextPath}/Faq"><fmt:message key="hdr.012"/></a>
+                    <a href="${pageContext.request.contextPath}/Report"><fmt:message key="hdr.013"/></a>
                 </div>
             </li>
 
@@ -126,26 +126,32 @@
 
 		
         <div class="header_right">
+			<%-- 언어 전환 (기본 한국어). 선택하면 /Lang 이 세션에 저장하고 보던 화면으로 돌아온다 --%>
+			<select class="lang_select" aria-label="Language" onchange="location.href='${pageContext.request.contextPath}/Lang?t_lang=' + this.value + '&t_back=' + encodeURIComponent(location.pathname + location.search)">
+				<option value="ko" ${sessionScope.lang ne 'ja' ? 'selected' : ''}>한국어</option>
+				<option value="ja" ${sessionScope.lang eq 'ja' ? 'selected' : ''}>日本語</option>
+			</select>
+
 			<%-- [임시] 관리자(sessionLevel = top)로 로그인했을 때만 보이는 관리자 콘솔 버튼 (common_header.jsp 와 동일) --%>
 			<c:if test="${sessionLevel eq 'top'}">
-				<a href="${pageContext.request.contextPath}/Manager" class="header_admin">관리자 콘솔</a>
+				<a href="${pageContext.request.contextPath}/Manager" class="header_admin"><fmt:message key="hdr.014"/></a>
 			</c:if>
 
 			<c:if test="${not empty sessionName}">
-				<a>${sessionName}님.</a>
+				<a><fmt:message key="hdr.015"><fmt:param value="${sessionName}"/></fmt:message></a>
 				<a href="javascript:movePage('Member','myinfo')">Myinfo</a>
-				<a href="javascript:movePage('Member','logout')">로그아웃</a>
+				<a href="javascript:movePage('Member','logout')"><fmt:message key="hdr.016"/></a>
 			</c:if>
 		
 		
 			<c:if test="${empty sessionName}">
-	            <a href="Member">로그인</a>
+	            <a href="Member"><fmt:message key="hdr.017"/></a>
 	            <span>|</span>
-	            <a href="javascript:movePage('Member','join')">회원가입</a>
+	            <a href="javascript:movePage('Member','join')"><fmt:message key="hdr.018"/></a>
 	        </c:if>
         </div>
 
-        <button class="menu_btn" aria-label="메뉴">☰</button>
+        <button class="menu_btn" aria-label="<fmt:message key='hdr.019'/>">☰</button>
 
     </div>
 
@@ -169,7 +175,7 @@
 		<div class="reservationSummaryHeader dragHandle">
 		    <div class="reservationSummaryTitle">
 		        <i class="fa-solid fa-car"></i>
-		        <span>이용 중인 예약</span>
+		        <span><fmt:message key="idx.001"/></span>
 		    </div>
 		    <!-- 주차 경과 시간 -->
 		    <div class="parkingElapsed">
@@ -179,7 +185,7 @@
 		       <!-- </c:if>-->
 		    </div>
 		    
-		    <span class="reservationStatus">이용 중</span>
+		    <span class="reservationStatus"><fmt:message key="idx.002"/></span>
 		</div>
 
         <div class="reservationSummaryBody">
@@ -202,35 +208,35 @@
 
             <div class="reservationInfo">
                 <i class="fa-regular fa-user"></i>
-                <span>${sessionName}님</span>
+                <span><fmt:message key="idx.003"><fmt:param value="${sessionName}"/></fmt:message></span>
             </div>
 
         </div>
 
         <div class="reservationSummaryFooter">
             <div class="reservationPayment">
-                <span class="paymentLabel">최종 결제 예정 금액</span>
+                <span class="paymentLabel"><fmt:message key="idx.004"/></span>
                 <!-- 단기 -->
                 <c:if test="${r_dto.getReservation_type() eq '1'}">
-               	 <strong>0원</strong>
+               	 <strong><fmt:message key="idx.005"/></strong>
                 </c:if>
                 
                 <!-- 장기 -->
                 <c:if test="${r_dto.getReservation_type() eq '2'}">
-              	  <strong>${totalPrice}원</strong>
+              	  <strong><fmt:message key="idx.006"><fmt:param value="${totalPrice}"/></fmt:message></strong>
                 </c:if>
                 
             </div>
             
 			<c:if test="${r_dto.getReservation_type() eq '1'}">
 				<button type="button" onclick="goReservation('${r_dto.getReservation_id()}')" class="reservationPaymentBtn">
-					출차하기 <i class="fa-solid fa-angle-right"></i>
+					<fmt:message key="idx.007"/> <i class="fa-solid fa-angle-right"></i>
 				</button>
 			</c:if>
 
 			<c:if test="${r_dto.getReservation_type() eq '2'}">
 				<button type="button" onclick="goReservation('${r_dto.getReservation_id()}')" class="reservationPaymentBtn">
-					최종 결제하기 <i class="fa-solid fa-angle-right"></i>
+					<fmt:message key="idx.008"/> <i class="fa-solid fa-angle-right"></i>
 				</button>
 			</c:if>
 			</div>
@@ -350,19 +356,19 @@ INCHEON AIRPORT PARKING SERVICE
 </div>
 
 <h1>
-편리한 여행의 시작,
+<fmt:message key="idx.009"/>
 <br>
-주차부터 간편하게
+<fmt:message key="idx.010"/>
 </h1>
 
 <p>
-인천공항 주차장의 실시간 현황을 확인하고
+<fmt:message key="idx.011"/>
 <br>
-원하는 날짜와 시간에 주차 공간을 미리 예약하세요.
+<fmt:message key="idx.012"/>
 </p>
 
 <span class="hero_badge">
-실시간 주차 현황 제공 · 간편 예약 서비스
+<fmt:message key="idx.013"/>
 </span>
 
 </div>
@@ -383,9 +389,9 @@ INCHEON AIRPORT PARKING SERVICE
 
 <div class="quick_text">
 
-<strong>주차 예약</strong>
+<strong><fmt:message key="idx.014"/></strong>
 
-<span>원하는 날짜와 시간으로 예약</span>
+<span><fmt:message key="idx.015"/></span>
 
 </div>
 
@@ -398,9 +404,9 @@ INCHEON AIRPORT PARKING SERVICE
 
 <div class="quick_text">
 
-<strong>예약 조회</strong>
+<strong><fmt:message key="idx.016"/></strong>
 
-<span>예약 내역을 간편하게 확인</span>
+<span><fmt:message key="idx.017"/></span>
 
 </div>
 
@@ -413,9 +419,9 @@ INCHEON AIRPORT PARKING SERVICE
 
 <div class="quick_text">
 
-<strong>주차장 현황</strong>
+<strong><fmt:message key="idx.018"/></strong>
 
-<span>실시간 주차 가능 공간 확인</span>
+<span><fmt:message key="idx.019"/></span>
 
 </div>
 
@@ -428,9 +434,9 @@ INCHEON AIRPORT PARKING SERVICE
 
 <div class="quick_text">
 
-<strong>이용 안내</strong>
+<strong><fmt:message key="idx.020"/></strong>
 
-<span>주차장 이용 방법 안내</span>
+<span><fmt:message key="idx.021"/></span>
 
 </div>
 
@@ -453,10 +459,10 @@ INCHEON AIRPORT PARKING SERVICE
 
 <div>
 
-<h2>주차 예약 · 실시간 주차맵</h2>
+<h2><fmt:message key="idx.022"/></h2>
 
 <p>
-입차 시간을 선택하고 조회하면 해당 시간대의 주차 현황을 주차맵에 표시합니다.
+<fmt:message key="idx.023"/>
 </p>
 
 </div>
@@ -473,11 +479,11 @@ INCHEON AIRPORT PARKING SERVICE
 <div class="reserve_tabs">
 
 <button class="active" type="button">
-제1여객터미널
+<fmt:message key="idx.024"/>
 </button>
 
 <button type="button">
-제2여객터미널
+<fmt:message key="idx.025"/>
 </button>
 
 </div>
@@ -488,12 +494,12 @@ INCHEON AIRPORT PARKING SERVICE
 
 <div class="field">
 
-<label>주차장</label>
+<label><fmt:message key="idx.026"/></label>
 
 <select id="parkingTerminal">
 
-<option>제1여객터미널 주차장</option>
-<option>제2여객터미널 주차장</option>
+<option><fmt:message key="idx.027"/></option>
+<option><fmt:message key="idx.028"/></option>
 
 </select>
 
@@ -502,7 +508,7 @@ INCHEON AIRPORT PARKING SERVICE
 
 <div class="field">
 
-<label>입차일</label>
+<label><fmt:message key="idx.029"/></label>
 
 <input type="date" id="startDate">
 
@@ -511,7 +517,7 @@ INCHEON AIRPORT PARKING SERVICE
 
 <div class="field">
 
-<label>입차 시간</label>
+<label><fmt:message key="idx.030"/></label>
 
 <input type="time" id="entryTime" value="09:00">
 
@@ -520,7 +526,7 @@ INCHEON AIRPORT PARKING SERVICE
 
 <div class="field">
 
-<label>출차일</label>
+<label><fmt:message key="idx.031"/></label>
 
 <input type="date" id="endDate">
 
@@ -530,10 +536,10 @@ INCHEON AIRPORT PARKING SERVICE
 <div class="search_button_wrap">
 
         <button type="button" class="realtime_btn" onclick="returnToRealtime()">
-            실시간 주차 현황 조회
+            <fmt:message key="idx.032"/>
         </button>
         <button type="button" class="search_btn" onclick="updateParkingByTime()">
-            주차 현황 조회
+            <fmt:message key="idx.033"/>
         </button>
 
 
@@ -545,14 +551,14 @@ INCHEON AIRPORT PARKING SERVICE
 
 <div class="selected_time">
 
-<span>조회 기준</span>
+<span><fmt:message key="idx.034"/></span>
 
 <strong id="selectedTime">
-오늘 09:00 기준
+<fmt:message key="idx.035"/>
 </strong>
 
 <small>
-선택한 시간대에 맞는 주차 현황을 조회합니다.
+<fmt:message key="idx.036"/>
 </small>
 
 </div>
@@ -567,10 +573,10 @@ INCHEON AIRPORT PARKING SERVICE
 
 <div>
 
-<h3>제1여객터미널 전체 주차맵</h3>
+<h3><fmt:message key="idx.037"/></h3>
 
 <p>
-구역별 색상으로 주차 가능 상태를 확인할 수 있습니다.
+<fmt:message key="idx.038"/>
 </p>
 
 </div>
@@ -580,17 +586,17 @@ INCHEON AIRPORT PARKING SERVICE
 
 <span>
 <i class="legend available"></i>
-여유
+<fmt:message key="idx.039"/>
 </span>
 
 <span>
 <i class="legend normal"></i>
-보통
+<fmt:message key="idx.040"/>
 </span>
 
 <span>
 <i class="legend busy"></i>
-혼잡
+<fmt:message key="idx.041"/>
 </span>
 
 </div>
@@ -604,7 +610,7 @@ INCHEON AIRPORT PARKING SERVICE
     <!-- 주차장 실제 이미지 -->
     <img
         src="images/parking_map.png"
-        alt="인천공항 제1여객터미널 주차장"
+        alt="<fmt:message key='idx.069'/>"
         class="parking_map_image"
     >
 
@@ -918,7 +924,7 @@ INCHEON AIRPORT PARKING SERVICE
                 class="parking_info_type"
                 x="20"
                 y="64">
-                단기주차장
+                <fmt:message key="idx.042"/>
             </text>
 
 
@@ -936,7 +942,7 @@ INCHEON AIRPORT PARKING SERVICE
                 class="parking_info_status"
                 x="45"
                 y="100">
-                여유
+                <fmt:message key="idx.039"/>
             </text>
 
 
@@ -945,7 +951,7 @@ INCHEON AIRPORT PARKING SERVICE
                 class="parking_info_count_label"
                 x="20"
                 y="132">
-                현재 주차 가능
+                <fmt:message key="idx.043"/>
             </text>
 
             <text
@@ -953,7 +959,7 @@ INCHEON AIRPORT PARKING SERVICE
                 class="parking_info_count"
                 x="20"
                 y="160">
-                600대
+                <fmt:message key="idx.044"/>
             </text>
 
 
@@ -974,7 +980,7 @@ INCHEON AIRPORT PARKING SERVICE
                     x="130"
                     y="198"
                     text-anchor="middle">
-                    예약하기
+                    <fmt:message key="idx.045"/>
                 </text>
 
             </g>
@@ -1009,7 +1015,7 @@ INCHEON AIRPORT PARKING SERVICE
                 class="parking_selected_type"
                 id="parkingSelectedType"
             >
-                장기주차장
+                <fmt:message key="idx.046"/>
             </div>
         </div>
 
@@ -1021,11 +1027,11 @@ INCHEON AIRPORT PARKING SERVICE
         <div class="parking_selected_item">
 
             <span>
-                현재 주차 가능
+                <fmt:message key="idx.043"/>
             </span>
 
             <strong id="parkingSelectedCount">
-                2,700대
+                <fmt:message key="idx.047"/>
             </strong>
 
         </div>
@@ -1034,14 +1040,14 @@ INCHEON AIRPORT PARKING SERVICE
         <div class="parking_selected_item">
 
             <span>
-                주차 상태
+                <fmt:message key="idx.048"/>
             </span>
 
             <strong
                 id="parkingSelectedStatus"
                 class="parking_status_available"
             >
-                여유
+                <fmt:message key="idx.039"/>
             </strong>
 
         </div>
@@ -1060,16 +1066,16 @@ INCHEON AIRPORT PARKING SERVICE
 <span class="pin_icon">⌖</span>
 
 <span id="mapSelectedText">
-주차 구역을 클릭하면 상세 현황을 확인할 수 있습니다.
+<fmt:message key="idx.049"/>
 </span>
 
 </div>
 
 
 <div class="map_total">
-    전체 가능
+    <fmt:message key="idx.050"/>
     <strong id="totalParking">0</strong>
-    <b>대</b>
+    <b><fmt:message key="idx.051"/></b>
 </div>
 
 
@@ -1080,7 +1086,7 @@ onclick="refreshParking()">
 
 <span class="refresh_icon">↻</span>
 
-새로고침
+<fmt:message key="idx.052"/>
 
 </button>
 
@@ -1094,9 +1100,9 @@ onclick="refreshParking()">
 
     <div class="parking_congestion_head">
         <div>
-            <h3>주차장별 실시간 혼잡도</h3>
+            <h3><fmt:message key="idx.053"/></h3>
             <p id="parkingCongestionTime">
-                현재 실시간 기준
+                <fmt:message key="idx.054"/>
             </p>
         </div>
     </div>
@@ -1108,7 +1114,7 @@ onclick="refreshParking()">
             <div class="congestion_card_top">
                 <div>
                     <span class="congestion_zone">P1</span>
-                    <strong class="congestion_type">장기주차장</strong>
+                    <strong class="congestion_type"><fmt:message key="idx.046"/></strong>
                 </div>
                 <span class="congestion_status" id="congestionStatusP1">
                     -
@@ -1117,7 +1123,7 @@ onclick="refreshParking()">
 
             <div class="congestion_count">
                 <strong id="congestionCountP1">-</strong>
-                <span>대 가능</span>
+                <span><fmt:message key="idx.055"/></span>
             </div>
 
             <div class="congestion_bar">
@@ -1125,7 +1131,7 @@ onclick="refreshParking()">
             </div>
 
             <div class="congestion_percent">
-                <span>주차면</span>
+                <span><fmt:message key="idx.056"/></span>
                 <strong id="congestionPercentP1">-</strong>
             </div>
         </div>
@@ -1136,7 +1142,7 @@ onclick="refreshParking()">
             <div class="congestion_card_top">
                 <div>
                     <span class="congestion_zone">P2</span>
-                    <strong class="congestion_type">장기주차장</strong>
+                    <strong class="congestion_type"><fmt:message key="idx.046"/></strong>
                 </div>
                 <span class="congestion_status" id="congestionStatusP2">
                     -
@@ -1145,7 +1151,7 @@ onclick="refreshParking()">
 
             <div class="congestion_count">
                 <strong id="congestionCountP2">-</strong>
-                <span>대 가능</span>
+                <span><fmt:message key="idx.055"/></span>
             </div>
 
             <div class="congestion_bar">
@@ -1153,7 +1159,7 @@ onclick="refreshParking()">
             </div>
 
             <div class="congestion_percent">
-                <span>주차면</span>
+                <span><fmt:message key="idx.056"/></span>
                 <strong id="congestionPercentP2">-</strong>
             </div>
         </div>
@@ -1164,7 +1170,7 @@ onclick="refreshParking()">
             <div class="congestion_card_top">
                 <div>
                     <span class="congestion_zone">P3</span>
-                    <strong class="congestion_type">장기주차장</strong>
+                    <strong class="congestion_type"><fmt:message key="idx.046"/></strong>
                 </div>
                 <span class="congestion_status" id="congestionStatusP3">
                     -
@@ -1173,7 +1179,7 @@ onclick="refreshParking()">
 
             <div class="congestion_count">
                 <strong id="congestionCountP3">-</strong>
-                <span>대 가능</span>
+                <span><fmt:message key="idx.055"/></span>
             </div>
 
             <div class="congestion_bar">
@@ -1181,7 +1187,7 @@ onclick="refreshParking()">
             </div>
 
             <div class="congestion_percent">
-                <span>주차면</span>
+                <span><fmt:message key="idx.056"/></span>
                 <strong id="congestionPercentP3">-</strong>
             </div>
         </div>
@@ -1192,7 +1198,7 @@ onclick="refreshParking()">
             <div class="congestion_card_top">
                 <div>
                     <span class="congestion_zone">P4</span>
-                    <strong class="congestion_type">장기주차장</strong>
+                    <strong class="congestion_type"><fmt:message key="idx.046"/></strong>
                 </div>
                 <span class="congestion_status" id="congestionStatusP4">
                     -
@@ -1201,7 +1207,7 @@ onclick="refreshParking()">
 
             <div class="congestion_count">
                 <strong id="congestionCountP4">-</strong>
-                <span>대 가능</span>
+                <span><fmt:message key="idx.055"/></span>
             </div>
 
             <div class="congestion_bar">
@@ -1209,7 +1215,7 @@ onclick="refreshParking()">
             </div>
 
             <div class="congestion_percent">
-                <span>주차면</span>
+                <span><fmt:message key="idx.056"/></span>
                 <strong id="congestionPercentP4">-</strong>
             </div>
         </div>
@@ -1220,7 +1226,7 @@ onclick="refreshParking()">
             <div class="congestion_card_top">
                 <div>
                     <span class="congestion_zone">P5</span>
-                    <strong class="congestion_type">장기주차장</strong>
+                    <strong class="congestion_type"><fmt:message key="idx.046"/></strong>
                 </div>
                 <span class="congestion_status" id="congestionStatusP5">
                     -
@@ -1229,7 +1235,7 @@ onclick="refreshParking()">
 
             <div class="congestion_count">
                 <strong id="congestionCountP5">-</strong>
-                <span>대 가능</span>
+                <span><fmt:message key="idx.055"/></span>
             </div>
 
             <div class="congestion_bar">
@@ -1237,7 +1243,7 @@ onclick="refreshParking()">
             </div>
 
             <div class="congestion_percent">
-                <span>주차면</span>
+                <span><fmt:message key="idx.056"/></span>
                 <strong id="congestionPercentP5">-</strong>
             </div>
         </div>
@@ -1248,7 +1254,7 @@ onclick="refreshParking()">
             <div class="congestion_card_top">
                 <div>
                     <span class="congestion_zone">P6</span>
-                    <strong class="congestion_type">단기주차장</strong>
+                    <strong class="congestion_type"><fmt:message key="idx.042"/></strong>
                 </div>
                 <span class="congestion_status" id="congestionStatusP6">
                     -
@@ -1257,7 +1263,7 @@ onclick="refreshParking()">
 
             <div class="congestion_count">
                 <strong id="congestionCountP6">-</strong>
-                <span>대 가능</span>
+                <span><fmt:message key="idx.055"/></span>
             </div>
 
             <div class="congestion_bar">
@@ -1265,7 +1271,7 @@ onclick="refreshParking()">
             </div>
 
             <div class="congestion_percent">
-                <span>주차면</span>
+                <span><fmt:message key="idx.056"/></span>
                 <strong id="congestionPercentP6">-</strong>
             </div>
         </div>
@@ -1276,7 +1282,7 @@ onclick="refreshParking()">
             <div class="congestion_card_top">
                 <div>
                     <span class="congestion_zone">P7</span>
-                    <strong class="congestion_type">단기주차장</strong>
+                    <strong class="congestion_type"><fmt:message key="idx.042"/></strong>
                 </div>
                 <span class="congestion_status" id="congestionStatusP7">
                     -
@@ -1285,7 +1291,7 @@ onclick="refreshParking()">
 
             <div class="congestion_count">
                 <strong id="congestionCountP7">-</strong>
-                <span>대 가능</span>
+                <span><fmt:message key="idx.055"/></span>
             </div>
 
             <div class="congestion_bar">
@@ -1293,7 +1299,7 @@ onclick="refreshParking()">
             </div>
 
             <div class="congestion_percent">
-                <span>주차면</span>
+                <span><fmt:message key="idx.056"/></span>
                 <strong id="congestionPercentP7">-</strong>
             </div>
         </div>
@@ -1304,7 +1310,7 @@ onclick="refreshParking()">
             <div class="congestion_card_top">
                 <div>
                     <span class="congestion_zone">P8</span>
-                    <strong class="congestion_type">단기주차장</strong>
+                    <strong class="congestion_type"><fmt:message key="idx.042"/></strong>
                 </div>
                 <span class="congestion_status" id="congestionStatusP8">
                     -
@@ -1313,7 +1319,7 @@ onclick="refreshParking()">
 
             <div class="congestion_count">
                 <strong id="congestionCountP8">-</strong>
-                <span>대 가능</span>
+                <span><fmt:message key="idx.055"/></span>
             </div>
 
             <div class="congestion_bar">
@@ -1321,7 +1327,7 @@ onclick="refreshParking()">
             </div>
 
             <div class="congestion_percent">
-                <span>주차면</span>
+                <span><fmt:message key="idx.056"/></span>
                 <strong id="congestionPercentP8">-</strong>
             </div>
         </div>
@@ -1332,7 +1338,7 @@ onclick="refreshParking()">
             <div class="congestion_card_top">
                 <div>
                     <span class="congestion_zone">P9</span>
-                    <strong class="congestion_type">단기주차장</strong>
+                    <strong class="congestion_type"><fmt:message key="idx.042"/></strong>
                 </div>
                 <span class="congestion_status" id="congestionStatusP9">
                     -
@@ -1341,7 +1347,7 @@ onclick="refreshParking()">
 
             <div class="congestion_count">
                 <strong id="congestionCountP9">-</strong>
-                <span>대 가능</span>
+                <span><fmt:message key="idx.055"/></span>
             </div>
 
             <div class="congestion_bar">
@@ -1349,7 +1355,7 @@ onclick="refreshParking()">
             </div>
 
             <div class="congestion_percent">
-                <span>주차면</span>
+                <span><fmt:message key="idx.056"/></span>
                 <strong id="congestionPercentP9">-</strong>
             </div>
         </div>
@@ -1383,16 +1389,16 @@ onclick="refreshParking()">
 
 <div>
 
-<h2>공지사항</h2>
+<h2><fmt:message key="idx.057"/></h2>
 
 <p>
-주차 서비스의 새로운 소식을 알려드립니다.
+<fmt:message key="idx.058"/>
 </p>
 
 </div>
 
 <a href="Notice" class="more">
-더보기 →
+<fmt:message key="idx.059"/>
 </a>
 
 </div>
@@ -1405,7 +1411,7 @@ onclick="refreshParking()">
 <li>
 
 <span class="notice_tag">
-공지
+<fmt:message key="idx.060"/>
 </span>
 <a href="javascript:goView('${dto.getNo()}')">
 <strong>
@@ -1485,10 +1491,10 @@ ${dto.getReg_date()}
 
 <div>
 
-<h2>이용 안내</h2>
+<h2><fmt:message key="idx.020"/></h2>
 
 <p>
-처음 이용하셔도 쉽게 예약할 수 있습니다.
+<fmt:message key="idx.061"/>
 </p>
 
 </div>
@@ -1506,11 +1512,11 @@ ${dto.getReg_date()}
 </span>
 
 <strong>
-주차장 선택
+<fmt:message key="idx.062"/>
 </strong>
 
 <span>
-원하는 터미널과 주차구역을 선택하세요.
+<fmt:message key="idx.063"/>
 </span>
 
 </div>
@@ -1523,11 +1529,11 @@ ${dto.getReg_date()}
 </span>
 
 <strong>
-예약 정보 입력
+<fmt:message key="idx.064"/>
 </strong>
 
 <span>
-입·출차 날짜와 시간을 입력하세요.
+<fmt:message key="idx.065"/>
 </span>
 
 </div>
@@ -1540,11 +1546,11 @@ ${dto.getReg_date()}
 </span>
 
 <strong>
-예약 확인
+<fmt:message key="hdr.008"/>
 </strong>
 
 <span>
-예약 가능 여부를 확인하고 신청하세요.
+<fmt:message key="idx.066"/>
 </span>
 
 </div>
@@ -1557,11 +1563,11 @@ ${dto.getReg_date()}
 </span>
 
 <strong>
-주차 이용
+<fmt:message key="idx.067"/>
 </strong>
 
 <span>
-예약 시간에 맞춰 편리하게 이용하세요.
+<fmt:message key="idx.068"/>
 </span>
 
 </div>
@@ -1595,7 +1601,7 @@ ${dto.getReg_date()}
 
 <div class="footer_logo">
 
-인천공항 주차예약
+<fmt:message key="hdr.001"/>
 
 <small>
 INCHEON AIRPORT PARKING
@@ -1607,15 +1613,15 @@ INCHEON AIRPORT PARKING
 <div class="footer_links">
 
 <a href="#">
-이용약관
+<fmt:message key="ftr.001"/>
 </a>
 
 <a href="#">
-개인정보처리방침
+<fmt:message key="ftr.002"/>
 </a>
 
 <a href="#">
-사이트맵
+<fmt:message key="ftr.003"/>
 </a>
 
 </div>
@@ -1627,11 +1633,11 @@ INCHEON AIRPORT PARKING
 <div class="footer_info">
 
 <p>
-제1여객터미널 주차예약 서비스 · 본 사이트는 팀프로젝트 목적으로 제작되었습니다.
+<fmt:message key="ftr.004"/>
 </p>
 
 <p>
-문의 : 제1여객터미널 주차상황실
+<fmt:message key="ftr.005"/>
 </p>
 
 <p class="copyright">
