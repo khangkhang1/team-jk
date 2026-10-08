@@ -36,7 +36,9 @@
 		
 	}
 	
-	function goPageList(pageNum){
+	// CommonUtil.getPageSetting() 이 만드는 페이지 링크는 goListPage() 를 부른다 (팀 공통 규약).
+	// 이름이 goPageList 로 돼 있어서 번호를 눌러도 "goListPage is not defined" 로 아무 반응이 없었다. (2026-10-08)
+	function goListPage(pageNum){
 		search.t_nowPage.value = pageNum;
 		search.method="post";
 		search.action="Notice";
