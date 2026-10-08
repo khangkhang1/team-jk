@@ -390,9 +390,9 @@ function makeSeats(zone, count){
 			// ★ [수정] P1~P5 구역은 절대 '결항 재배정중' 상태가 될 수 없도록 원천 차단
 			var isTargetZone = (zone.id === "P6" || zone.id === "P7" || zone.id === "P8" || zone.id === "P9");
 			
-			if (dbSeat.status === "결항 재배정중" && isTargetZone) {
+			if (dbSeat.status === "결항" && isTargetZone) {
 				state = "cancelled"; // P6~P9 구역일 때만 결항 상태 허용
-			} else if (dbSeat.status === "예약중" || dbSeat.status === "결항 재배정중") {
+			} else if (dbSeat.status === "예약중" || dbSeat.status === "결항") {
 				state = "taken";     // P1~P5 구역에서 결항 데이터가 넘어와도 무조건 일반 예약(taken)으로 처리!
 			}
 
