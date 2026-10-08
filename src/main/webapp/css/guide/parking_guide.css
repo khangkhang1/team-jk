@@ -1,0 +1,639 @@
+@charset "UTF-8";
+
+/* 전체 페이지 */
+.guidePage{
+    width:100%;
+    color:#263449;
+    font-family:"Noto Sans KR",sans-serif;
+    padding-top:66px;
+}
+
+.guidePage *{
+    box-sizing:border-box;
+}
+
+.guidePage a{
+    text-decoration:none;
+    color:inherit;
+}
+
+/* 상단 안내 배너 */
+.guideHero{
+    position:relative;
+    overflow:hidden;
+    background:linear-gradient(120deg,#edf5ff 0%,#dceaff 55%,#c8dcfb 100%);
+    padding:75px max(calc((100% - 1180px) / 2),5%) 80px;
+    min-height:340px;
+}
+
+.guideHeroInner{
+    position:relative;
+    z-index:2;
+    max-width:700px;
+}
+
+.guideLabel{
+    display:inline-block;
+    color:#3578cf;
+    font-size:13px;
+    font-weight:800;
+    letter-spacing:2px;
+    margin-bottom:18px;
+}
+
+.guideHero h1{
+    margin:0 0 20px;
+    color:#1e3a5f;
+    font-size:42px;
+    font-weight:800;
+    letter-spacing:-1.5px;
+}
+
+.guideHero p{
+    margin:0;
+    color:#526783;
+    font-size:16px;
+    line-height:1.9;
+}
+
+.guideHeroButtons{
+    margin-top:28px;
+}
+
+.guideBtn{
+    display:inline-block;
+    padding:14px 22px;
+    border-radius:9px;
+    font-size:14px;
+    font-weight:700;
+    transition:background .2s,transform .2s;
+}
+
+.guideBtn:hover{
+    transform:translateY(-2px);
+}
+
+.guideBtnPrimary{
+    background:#3478d4;
+    color:#fff!important;
+    margin-right:8px;
+}
+
+.guideBtnPrimary:hover{
+    background:#245eaf;
+}
+
+.guideBtnOutline{
+    border:1px solid #a9c5e8;
+    background:rgba(255,255,255,.65);
+    color:#31577f!important;
+}
+
+.guideBtnOutline:hover{
+    background:#fff;
+}
+
+.guideBtn span{
+    margin-left:12px;
+}
+
+.guideHeroIcon{
+    position:absolute;
+    top:50%;
+    right:max(calc((100% - 1120px) / 2),8%);
+    width:260px;
+    height:230px;
+    transform:translateY(-50%);
+}
+
+.heroCircle{
+    position:absolute;
+    top:10px;
+    right:10px;
+    width:205px;
+    height:205px;
+    border-radius:50%;
+    background:rgba(255,255,255,.65);
+    border:1px solid rgba(255,255,255,.9);
+    text-align:center;
+}
+
+.heroP{
+    display:block;
+    padding-top:32px;
+    color:#3478d4;
+    font-size:82px;
+    font-weight:900;
+}
+
+.heroCar{
+    position:absolute;
+    right:25px;
+    bottom:13px;
+    font-size:55px;
+}
+
+.heroSmallCircle{
+    position:absolute;
+    left:0;
+    bottom:10px;
+    width:66px;
+    height:66px;
+    border-radius:50%;
+    background:#3478d4;
+    color:#fff;
+    font-size:27px;
+    font-weight:800;
+    line-height:66px;
+    text-align:center;
+    box-shadow:0 8px 20px rgba(52,120,212,.2);
+}
+
+/* 브레드크럼 */
+.guideBreadcrumb{
+    max-width:1180px;
+    margin:0 auto;
+    padding:22px 0;
+    border-bottom:1px solid #edf0f4;
+    color:#8793a3;
+    font-size:13px;
+}
+
+.guideBreadcrumb span{
+    margin:0 9px;
+}
+
+.guideBreadcrumb a:hover{
+    color:#3478d4;
+}
+
+.guideBreadcrumb strong{
+    color:#34445a;
+}
+
+/* 공통 섹션 */
+.guideSection{
+    max-width:1180px;
+    margin:0 auto;
+    padding:75px 0;
+}
+
+.sectionHeading{
+    margin-bottom:35px;
+}
+
+.sectionEyebrow{
+    display:block;
+    margin-bottom:12px;
+    color:#3478d4;
+    font-size:12px;
+    font-weight:800;
+    letter-spacing:1.8px;
+}
+
+.sectionHeading h2,
+.guideBottom h2{
+    margin:0 0 12px;
+    color:#23364f;
+    font-size:29px;
+    font-weight:800;
+    letter-spacing:-1px;
+}
+
+.sectionHeading p,
+.guideBottom p{
+    margin:0;
+    color:#7b8798;
+    font-size:14px;
+    line-height:1.8;
+}
+
+/* 주차장 종류 카드 */
+.parkingTypeGrid{
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:22px;
+}
+
+.parkingTypeCard{
+    position:relative;
+    min-width:0;
+    padding:30px 26px;
+    border:1px solid #e5eaf1;
+    border-radius:15px;
+    background:#fff;
+    transition:transform .2s,box-shadow .2s;
+}
+
+.parkingTypeCard:hover{
+    transform:translateY(-4px);
+    box-shadow:0 12px 30px rgba(35,64,103,.08);
+}
+
+.typeTop{
+    margin-bottom:25px;
+    overflow:hidden;
+}
+
+.typeIcon{
+    display:inline-block;
+    width:43px;
+    height:43px;
+    border-radius:12px;
+    background:#edf4ff;
+    color:#3478d4;
+    font-size:27px;
+    font-weight:700;
+    line-height:43px;
+    text-align:center;
+    vertical-align:middle;
+}
+
+.typeBadge{
+    float:right;
+    margin-top:9px;
+    padding:6px 10px;
+    border-radius:20px;
+    background:#f0f5fc;
+    color:#53739b;
+    font-size:11px;
+    font-weight:700;
+}
+
+.longParking .typeIcon{
+    background:#eaf7f1;
+    color:#26966b;
+}
+
+.longParking .typeBadge{
+    background:#eaf7f1;
+    color:#27825f;
+}
+
+.reserveParking{
+    border-color:#b9d3fa;
+    background:linear-gradient(160deg,#fff 60%,#f3f7ff);
+}
+
+.reserveParking .typeIcon{
+    background:#fff0e5;
+    color:#e78a3b;
+}
+
+.reserveParking .typeBadge{
+    background:#fff0e5;
+    color:#c77730;
+}
+
+.parkingTypeCard h3{
+    margin:0 0 13px;
+    color:#273b55;
+    font-size:23px;
+    font-weight:800;
+}
+
+.typeDescription{
+    min-height:54px;
+    margin:0 0 25px;
+    color:#78869a;
+    font-size:13px;
+    line-height:1.9;
+}
+
+.typeInfo{
+    padding-top:20px;
+    border-top:1px solid #edf0f5;
+}
+
+.typeInfo>div{
+    margin-bottom:14px;
+}
+
+.typeInfo>div:last-child{
+    margin-bottom:0;
+}
+
+.infoLabel{
+    display:block;
+    margin-bottom:6px;
+    color:#99a3b1;
+    font-size:11px;
+}
+
+.typeInfo strong{
+    color:#4b5b70;
+    font-size:13px;
+    font-weight:600;
+}
+
+.typeLink{
+    display:block;
+    margin-top:22px;
+    padding-top:16px;
+    border-top:1px solid #e4ebf7;
+    color:#3478d4!important;
+    font-size:13px;
+    font-weight:800;
+}
+
+.typeLink span{
+    float:right;
+}
+
+/* 이용 절차 */
+.guideProcessSection{
+    padding:75px max(calc((100% - 1180px) / 2),5%);
+    background:#f6f8fb;
+}
+
+.processGrid{
+    display:grid;
+    grid-template-columns:1fr 24px 1fr 24px 1fr 24px 1fr;
+    align-items:center;
+    gap:12px;
+}
+
+.processCard{
+    position:relative;
+    min-width:0;
+    min-height:225px;
+    padding:27px 18px;
+    border:1px solid #e8edf4;
+    border-radius:13px;
+    background:#fff;
+    text-align:center;
+}
+
+.processNumber{
+    position:absolute;
+    top:15px;
+    left:16px;
+    color:#b3c9e6;
+    font-size:12px;
+    font-weight:800;
+}
+
+.processIcon{
+    width:55px;
+    height:55px;
+    margin:10px auto 20px;
+    border-radius:50%;
+    background:#edf4ff;
+    color:#3478d4;
+    font-size:26px;
+    font-weight:700;
+    line-height:55px;
+}
+
+.processCard h3{
+    margin:0 0 12px;
+    color:#30435b;
+    font-size:16px;
+    font-weight:800;
+}
+
+.processCard p{
+    margin:0;
+    color:#7e8a9b;
+    font-size:12px;
+    line-height:1.9;
+}
+
+.processArrow{
+    color:#9db8dd;
+    font-size:20px;
+    text-align:center;
+}
+
+/* 확인 사항 */
+.noticeGrid{
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:18px;
+}
+
+.noticeCard{
+    display:table;
+    width:100%;
+    padding:25px;
+    border:1px solid #e8edf4;
+    border-radius:12px;
+    background:#fff;
+}
+
+.noticeIcon{
+    display:table-cell;
+    width:48px;
+    height:48px;
+    color:#3478d4;
+    font-size:17px;
+    font-weight:800;
+    vertical-align:top;
+}
+
+.noticeCard h3{
+    margin:0 0 9px;
+    color:#34465d;
+    font-size:16px;
+    font-weight:800;
+}
+
+.noticeCard p{
+    margin:0;
+    color:#7d8999;
+    font-size:13px;
+    line-height:1.9;
+}
+
+/* 하단 CTA */
+.guideBottom{
+    max-width:1180px;
+    margin:0 auto 80px;
+    padding:40px 45px;
+    overflow:hidden;
+    border-radius:17px;
+    background:linear-gradient(120deg,#eaf3ff,#d9e8fc);
+}
+
+.guideBottomButtons{
+    margin-top:25px;
+}
+
+.guideBtnLight{
+    margin-right:8px;
+    background:#fff;
+    color:#31577f!important;
+}
+
+.guideBtnDark{
+    background:#3478d4;
+    color:#fff!important;
+}
+
+.guideBtnDark:hover{
+    background:#245eaf;
+}
+
+/* 반응형 */
+@media(max-width:1240px){
+    .guideBreadcrumb,
+    .guideSection,
+    .guideBottom{
+        width:90%;
+    }
+
+    .guideHeroIcon{
+        right:5%;
+    }
+
+    .guideProcessSection{
+        padding-right:5%;
+        padding-left:5%;
+    }
+}
+
+@media(max-width:900px){
+    .guideHero{
+        padding:65px 6%;
+    }
+
+    .guideHero h1{
+        font-size:35px;
+    }
+
+    .guideHeroIcon{
+        right:-35px;
+        opacity:.22;
+    }
+
+    .guideHeroInner{
+        max-width:100%;
+    }
+
+    .parkingTypeGrid{
+        grid-template-columns:repeat(2,minmax(0,1fr));
+    }
+
+    .processGrid{
+        grid-template-columns:repeat(2,minmax(0,1fr));
+        gap:16px;
+    }
+
+    .processArrow{
+        display:none;
+    }
+
+    .processCard{
+        min-height:210px;
+    }
+}
+
+@media(max-width:560px){
+    .guidePage{
+        padding-top:60px;
+    }
+
+    .guideHero{
+        min-height:320px;
+        padding:50px 6%;
+    }
+
+    .guideHero h1{
+        font-size:29px;
+        letter-spacing:-1px;
+    }
+
+    .guideHero p{
+        font-size:14px;
+    }
+
+    .guideHeroIcon{
+        right:-90px;
+        opacity:.13;
+    }
+
+    .guideBtn{
+        padding:12px 14px;
+        font-size:12px;
+    }
+
+    .guideBreadcrumb{
+        padding:18px 0;
+        font-size:11px;
+    }
+
+    .guideBreadcrumb span{
+        margin:0 4px;
+    }
+
+    .guideSection{
+        padding:50px 0;
+    }
+
+    .sectionHeading h2,
+    .guideBottom h2{
+        font-size:23px;
+    }
+
+    .sectionHeading p{
+        font-size:12px;
+    }
+
+    .parkingTypeGrid{
+        grid-template-columns:1fr;
+        gap:15px;
+    }
+
+
+    .parkingTypeCard{
+        padding:25px 22px;
+    }
+
+    .typeDescription{
+        min-height:0;
+    }
+
+    .guideProcessSection{
+        padding:50px 5%;
+    }
+
+    .processGrid{
+        grid-template-columns:1fr;
+        gap:13px;
+    }
+
+    .processCard{
+        min-height:0;
+        padding:22px 15px;
+    }
+
+    .processIcon{
+        margin-top:5px;
+    }
+
+    .noticeGrid{
+        grid-template-columns:1fr;
+        gap:12px;
+    }
+
+    .noticeCard{
+        padding:20px 17px;
+    }
+
+    .noticeCard h3{
+        font-size:14px;
+    }
+
+    .noticeCard p{
+        font-size:12px;
+    }
+
+    .guideBottom{
+        margin-bottom:50px;
+        padding:30px 22px;
+    }
+
+    .guideBottomButtons .guideBtn{
+        margin-bottom:8px;
+    }
+}

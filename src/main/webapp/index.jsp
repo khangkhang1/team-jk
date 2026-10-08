@@ -88,11 +88,11 @@
 
             <!-- 교통 · 주차 -->
             <li>
-                <a href="#parking"><fmt:message key="hdr.002"/></a>
+                <a href="${pageContext.request.contextPath}/Guide"><fmt:message key="hdr.002"/></a>
 
                 <div class="header_dropdown">
-                    <a href="#guide"><fmt:message key="hdr.003"/></a>
-                    <a href="#parking"><fmt:message key="hdr.004"/></a>
+                    <a href="${pageContext.request.contextPath}/Guide"><fmt:message key="hdr.003"/></a>
+                    <a href="javascript:movePage('Guide','fee')"><fmt:message key="hdr.004"/></a>
                     <a href="#parking"><fmt:message key="hdr.005"/></a>
                 </div>
             </li>
@@ -114,7 +114,7 @@
                 <a href="Notice"><fmt:message key="hdr.011"/></a>
 
                 <div class="header_dropdown">
-                    <a href="Notice"><fmt:message key="hdr.011"/></a>
+                    <a href="${pageContext.request.contextPath}/Notice"><fmt:message key="hdr.011"/></a>
                     <a href="${pageContext.request.contextPath}/Faq"><fmt:message key="hdr.012"/></a>
                     <a href="${pageContext.request.contextPath}/Report"><fmt:message key="hdr.013"/></a>
                 </div>

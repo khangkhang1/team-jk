@@ -25,11 +25,11 @@
 
 			<!-- 교통 · 주차 -->
 			<li>
-				<a href="${pageContext.request.contextPath}/index2.html#parking"><fmt:message key="hdr.002"/></a>
+				<a href="${pageContext.request.contextPath}/Guide"><fmt:message key="hdr.002"/></a>
 
 				<div class="header_dropdown">
-					<a href="${pageContext.request.contextPath}/index2.html#guide"><fmt:message key="hdr.003"/></a>
-					<a href="${pageContext.request.contextPath}/index2.html#parking"><fmt:message key="hdr.004"/></a>
+					<a href="${pageContext.request.contextPath}/Guide"><fmt:message key="hdr.003"/></a>
+					<a href="javascript:movePage('Guide','fee')"><fmt:message key="hdr.004"/></a>
 					<a href="${pageContext.request.contextPath}/index2.html#parking"><fmt:message key="hdr.005"/></a>
 				</div>
 			</li>

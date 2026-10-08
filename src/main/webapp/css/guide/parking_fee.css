@@ -1,0 +1,898 @@
+@charset "UTF-8";
+
+/* 전체 페이지 */
+.feePage{
+    width:100%;
+    padding-top:66px;
+    color:#263449;
+    font-family:"Noto Sans KR",sans-serif;
+}
+
+.feePage *{
+    box-sizing:border-box;
+}
+
+.feePage a{
+    color:inherit;
+    text-decoration:none;
+}
+
+/* 상단 배너 */
+.feeHero{
+    position:relative;
+    overflow:hidden;
+    min-height:340px;
+    padding:75px max(calc((100% - 1180px) / 2),5%) 80px;
+    background:linear-gradient(120deg,#edf5ff 0%,#dceaff 55%,#c8dcfb 100%);
+}
+
+.feeHeroInner{
+    position:relative;
+    z-index:2;
+    max-width:700px;
+}
+
+.feeLabel{
+    display:inline-block;
+    margin-bottom:18px;
+    color:#3578cf;
+    font-size:13px;
+    font-weight:800;
+    letter-spacing:2px;
+}
+
+.feeHero h1{
+    margin:0 0 20px;
+    color:#1e3a5f;
+    font-size:42px;
+    font-weight:800;
+    letter-spacing:-1.5px;
+}
+
+.feeHero p{
+    margin:0;
+    color:#526783;
+    font-size:16px;
+    line-height:1.9;
+}
+
+.feeHeroButtons{
+    margin-top:28px;
+}
+
+.feeBtn{
+    display:inline-block;
+    padding:14px 22px;
+    border-radius:9px;
+    font-size:14px;
+    font-weight:700;
+    transition:background .2s,transform .2s;
+}
+
+.feeBtn:hover{
+    transform:translateY(-2px);
+}
+
+.feeBtnPrimary{
+    margin-right:8px;
+    background:#3478d4;
+    color:#fff!important;
+}
+
+.feeBtnPrimary:hover{
+    background:#245eaf;
+}
+
+.feeBtnOutline{
+    border:1px solid #a9c5e8;
+    background:rgba(255,255,255,.65);
+    color:#31577f!important;
+}
+
+.feeBtnOutline:hover{
+    background:#fff;
+}
+
+.feeBtn span{
+    margin-left:12px;
+}
+
+/* 배너 장식 */
+.feeHeroVisual{
+    position:absolute;
+    top:50%;
+    right:max(calc((100% - 1120px) / 2),8%);
+    width:260px;
+    height:230px;
+    transform:translateY(-50%);
+}
+
+.feeVisualCircle{
+    position:absolute;
+    top:10px;
+    right:10px;
+    width:205px;
+    height:205px;
+    border:1px solid rgba(255,255,255,.9);
+    border-radius:50%;
+    background:rgba(255,255,255,.65);
+    text-align:center;
+}
+
+.feeVisualWon{
+    display:block;
+    padding-top:20px;
+    color:#3478d4;
+    font-size:105px;
+    font-weight:900;
+}
+
+.feeVisualCar{
+    position:absolute;
+    right:25px;
+    bottom:13px;
+    font-size:48px;
+}
+
+.feeVisualBadge{
+    position:absolute;
+    bottom:10px;
+    left:0;
+    width:66px;
+    height:66px;
+    border-radius:50%;
+    background:#3478d4;
+    color:#fff;
+    font-size:17px;
+    font-weight:800;
+    line-height:66px;
+    text-align:center;
+    box-shadow:0 8px 20px rgba(52,120,212,.2);
+}
+
+/* 브레드크럼 */
+.feeBreadcrumb{
+    max-width:1180px;
+    margin:0 auto;
+    padding:22px 0;
+    border-bottom:1px solid #edf0f4;
+    color:#8793a3;
+    font-size:13px;
+}
+
+.feeBreadcrumb span{
+    margin:0 9px;
+}
+
+.feeBreadcrumb a:hover{
+    color:#3478d4;
+}
+
+.feeBreadcrumb strong{
+    color:#34445a;
+}
+
+/* 공통 섹션 */
+.feeSection,
+.feeTableSection,
+.feeCalculatorSection{
+    max-width:1180px;
+    margin:0 auto;
+    padding:75px 0;
+}
+
+.feeSectionHeading{
+    margin-bottom:35px;
+}
+
+.feeEyebrow{
+    display:block;
+    margin-bottom:12px;
+    color:#3478d4;
+    font-size:12px;
+    font-weight:800;
+    letter-spacing:1.8px;
+}
+
+.feeSectionHeading h2,
+.feeBottom h2{
+    margin:0 0 12px;
+    color:#23364f;
+    font-size:29px;
+    font-weight:800;
+    letter-spacing:-1px;
+}
+
+.feeSectionHeading p,
+.feeBottom p{
+    margin:0;
+    color:#7b8798;
+    font-size:14px;
+    line-height:1.8;
+}
+
+/* 주차장별 요금 카드 */
+.feeSummaryGrid{
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:22px;
+}
+
+.feeSummaryCard{
+    min-width:0;
+    padding:30px;
+    border:1px solid #e5eaf1;
+    border-radius:15px;
+    background:#fff;
+    transition:transform .2s,box-shadow .2s;
+}
+
+.feeSummaryCard:hover{
+    transform:translateY(-4px);
+    box-shadow:0 12px 30px rgba(35,64,103,.08);
+}
+
+.shortFeeCard{
+    border-top:4px solid #3478d4;
+}
+
+.longFeeCard{
+    border-top:4px solid #26966b;
+}
+
+.feeCardTop{
+    margin-bottom:23px;
+    overflow:hidden;
+}
+
+.feeCardIcon{
+    display:inline-block;
+    width:43px;
+    height:43px;
+    border-radius:12px;
+    background:#edf4ff;
+    color:#3478d4;
+    font-size:27px;
+    font-weight:700;
+    line-height:43px;
+    text-align:center;
+    vertical-align:middle;
+}
+
+.longFeeCard .feeCardIcon{
+    background:#eaf7f1;
+    color:#26966b;
+}
+
+.feeCardBadge{
+    float:right;
+    margin-top:9px;
+    padding:6px 10px;
+    border-radius:20px;
+    background:#f0f5fc;
+    color:#53739b;
+    font-size:11px;
+    font-weight:700;
+}
+
+.longFeeCard .feeCardBadge{
+    background:#eaf7f1;
+    color:#27825f;
+}
+
+.feeSummaryCard h3{
+    margin:0 0 12px;
+    color:#273b55;
+    font-size:23px;
+    font-weight:800;
+}
+
+.feeCardDescription{
+    min-height:25px;
+    margin:0 0 25px;
+    color:#78869a;
+    font-size:13px;
+    line-height:1.9;
+}
+
+.feeMainPrice{
+    margin-bottom:25px;
+    padding-bottom:25px;
+    border-bottom:1px solid #edf0f5;
+}
+
+.feeMainPrice strong{
+    color:#3478d4;
+    font-size:34px;
+    font-weight:900;
+    letter-spacing:-1px;
+}
+
+.longFeeCard .feeMainPrice strong{
+    color:#26966b;
+}
+
+.feeMainPrice span{
+    margin-left:5px;
+    color:#8995a5;
+    font-size:13px;
+}
+
+.feeCardDetail>div{
+    margin-bottom:17px;
+    overflow:hidden;
+}
+
+.feeCardDetail>div:last-child{
+    margin-bottom:0;
+}
+
+.feeCardDetail span{
+    float:left;
+    color:#8995a5;
+    font-size:13px;
+}
+
+.feeCardDetail strong{
+    float:right;
+    color:#40526a;
+    font-size:13px;
+    font-weight:700;
+}
+
+/* 요금 안내 주의사항 */
+.feeNotice{
+    display:table;
+    width:100%;
+    margin-top:22px;
+    padding:22px 25px;
+    border:1px solid #dce9fb;
+    border-radius:12px;
+    background:#f5f9ff;
+}
+
+.feeNoticeIcon{
+    display:table-cell;
+    width:35px;
+    color:#3478d4;
+    font-size:21px;
+    font-weight:900;
+    vertical-align:top;
+}
+
+.feeNotice p{
+    display:table-cell;
+    margin:0;
+    color:#64758c;
+    font-size:13px;
+    line-height:1.9;
+}
+
+.feeNotice strong{
+    display:block;
+    margin-bottom:4px;
+    color:#344c6b;
+}
+
+/* 상세 요금표 */
+.feeTableSection{
+    padding-top:70px;
+    padding-bottom:75px;
+    border-top:1px solid #edf0f4;
+}
+
+.feeTableWrap{
+    overflow-x:auto;
+    border:1px solid #e5eaf1;
+    border-radius:13px;
+}
+
+.feeTable{
+    width:100%;
+    border-collapse:collapse;
+    text-align:center;
+}
+
+.feeTable th,
+.feeTable td{
+    padding:21px 16px;
+    border-bottom:1px solid #edf0f5;
+    font-size:14px;
+}
+
+.feeTable thead th{
+    background:#edf4ff;
+    color:#31577f;
+    font-weight:800;
+}
+
+.feeTable tbody th{
+    width:25%;
+    background:#fafbfd;
+    color:#52637a;
+    font-weight:700;
+}
+
+.feeTable tbody td{
+    color:#53647b;
+}
+
+.feeTable tbody tr:last-child th,
+.feeTable tbody tr:last-child td{
+    border-bottom:none;
+}
+
+.feeTableHighlight td{
+    color:#3478d4!important;
+    font-weight:800;
+}
+
+.feeTableCaption{
+    margin:15px 0 0;
+    color:#929dac;
+    font-size:12px;
+    line-height:1.8;
+}
+
+.officialFeeLink{
+    display:inline-block;
+    margin-top:20px;
+    padding:13px 18px;
+    border:1px solid #d7e4f5;
+    border-radius:8px;
+    color:#3478d4!important;
+    font-size:13px;
+    font-weight:700;
+    transition:background .2s;
+}
+
+.officialFeeLink:hover{
+    background:#edf4ff;
+}
+
+.officialFeeLink span+span{
+    margin-left:12px;
+}
+
+/* 계산기 */
+.feeCalculatorSection{
+    max-width:none;
+    padding:75px max(calc((100% - 1180px) / 2),5%);
+    background:#f6f8fb;
+}
+
+.feeCalculatorBox{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:30px;
+    padding:32px;
+    border:1px solid #e7ecf3;
+    border-radius:16px;
+    background:#fff;
+    box-shadow:0 8px 25px rgba(35,64,103,.04);
+}
+
+.feeCalculatorForm{
+    padding:8px 0;
+}
+
+.feeFormGroup{
+    margin-bottom:25px;
+}
+
+.feeFormGroup label{
+    display:block;
+    margin-bottom:11px;
+    color:#34465d;
+    font-size:14px;
+    font-weight:800;
+}
+
+.feeFormGroup select{
+    width:100%;
+    height:49px;
+    padding:0 14px;
+    border:1px solid #dce3ed;
+    border-radius:8px;
+    background:#fff;
+    color:#40526a;
+    font-size:14px;
+    outline:none;
+}
+
+.feeFormGroup select:focus,
+.feeTimeInputs input:focus{
+    border-color:#3478d4;
+    box-shadow:0 0 0 3px rgba(52,120,212,.1);
+}
+
+.feeTimeInputs{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:12px;
+}
+
+.feeTimeInputs>div{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    min-width:0;
+    padding:0 12px;
+    border:1px solid #dce3ed;
+    border-radius:8px;
+}
+
+.feeTimeInputs input{
+    width:100%;
+    min-width:0;
+    height:47px;
+    border:none;
+    background:transparent;
+    color:#34465d;
+    font-size:15px;
+    outline:none;
+}
+
+.feeTimeInputs span{
+    flex-shrink:0;
+    color:#8995a5;
+    font-size:13px;
+}
+
+.feeCalculateBtn{
+    width:100%;
+    height:51px;
+    border:none;
+    border-radius:8px;
+    background:#3478d4;
+    color:#fff;
+    font-size:14px;
+    font-weight:800;
+    cursor:pointer;
+    transition:background .2s;
+}
+
+.feeCalculateBtn:hover{
+    background:#245eaf;
+}
+
+.feeCalculateBtn span{
+    margin-left:12px;
+}
+
+.feeCalculatorHelp{
+    margin:14px 0 0;
+    color:#98a2b0;
+    font-size:11px;
+    line-height:1.8;
+}
+
+/* 계산 결과 */
+.feeCalculatorResult{
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    min-width:0;
+    padding:30px;
+    border-radius:12px;
+    background:linear-gradient(145deg,#edf5ff,#e2edfc);
+}
+
+.feeResultLabel{
+    color:#5882b7;
+    font-size:11px;
+    font-weight:800;
+    letter-spacing:1.4px;
+}
+
+.feeResultTitle{
+    margin:18px 0 8px;
+    color:#344c6b;
+    font-size:15px;
+    font-weight:700;
+}
+
+.feeResultPrice{
+    display:flex;
+    align-items:baseline;
+    gap:6px;
+    min-width:0;
+    color:#245eaf;
+}
+
+.feeResultPrice strong{
+    overflow-wrap:anywhere;
+    font-size:clamp(30px,3vw,43px);
+    font-weight:900;
+    letter-spacing:-1.5px;
+}
+
+.feeResultPrice span{
+    font-size:17px;
+    font-weight:700;
+}
+
+.feeResultDivider{
+    height:1px;
+    margin:25px 0;
+    background:#ccddf2;
+}
+
+.feeResultRow{
+    display:flex;
+    justify-content:space-between;
+    gap:12px;
+    margin-bottom:15px;
+    font-size:13px;
+}
+
+.feeResultRow span{
+    color:#70849e;
+}
+
+.feeResultRow strong{
+    color:#344c6b;
+    text-align:right;
+}
+
+.feeResultMessage{
+    margin:10px 0 0;
+    color:#7186a0;
+    font-size:11px;
+    line-height:1.8;
+}
+
+/* 정산 안내 */
+.feeExtraSection{
+    padding-top:75px;
+    padding-bottom:75px;
+}
+
+.feeExtraGrid{
+    display:grid;
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:20px;
+}
+
+.feeExtraCard{
+    padding:27px 24px;
+    border:1px solid #e6ebf2;
+    border-radius:13px;
+    background:#fff;
+    transition:transform .2s,box-shadow .2s;
+}
+
+.feeExtraCard:hover{
+    transform:translateY(-3px);
+    box-shadow:0 10px 25px rgba(35,64,103,.06);
+}
+
+.feeExtraNumber{
+    margin-bottom:20px;
+    color:#3478d4;
+    font-size:13px;
+    font-weight:900;
+}
+
+.feeExtraCard h3{
+    margin:0 0 13px;
+    color:#34465d;
+    font-size:17px;
+    font-weight:800;
+}
+
+.feeExtraCard p{
+    margin:0;
+    color:#7d8999;
+    font-size:13px;
+    line-height:1.9;
+}
+
+/* 하단 바로가기 */
+.feeBottom{
+    max-width:1180px;
+    margin:0 auto 80px;
+    padding:40px 45px;
+    overflow:hidden;
+    border-radius:17px;
+    background:linear-gradient(120deg,#eaf3ff,#d9e8fc);
+}
+
+.feeBottomButtons{
+    margin-top:25px;
+}
+
+.feeBtnLight{
+    margin-right:8px;
+    background:#fff;
+    color:#31577f!important;
+}
+
+.feeBtnDark{
+    background:#3478d4;
+    color:#fff!important;
+}
+
+.feeBtnDark:hover{
+    background:#245eaf;
+}
+
+/* 반응형 */
+@media(max-width:1240px){
+    .feeBreadcrumb,
+    .feeSection,
+    .feeTableSection,
+    .feeBottom{
+        width:90%;
+    }
+
+    .feeHeroVisual{
+        right:5%;
+    }
+
+    .feeCalculatorSection{
+        padding-right:5%;
+        padding-left:5%;
+    }
+}
+
+@media(max-width:900px){
+    .feeHero{
+        padding:65px 6%;
+    }
+
+    .feeHero h1{
+        font-size:35px;
+    }
+
+    .feeHeroVisual{
+        right:-35px;
+        opacity:.22;
+    }
+
+    .feeHeroInner{
+        max-width:100%;
+    }
+
+    .feeCalculatorBox{
+        grid-template-columns:1fr;
+        gap:25px;
+    }
+
+    .feeExtraGrid{
+        grid-template-columns:repeat(2,minmax(0,1fr));
+    }
+
+    .feeExtraCard:last-child{
+        grid-column:1/-1;
+    }
+}
+
+@media(max-width:560px){
+    .feePage{
+        padding-top:60px;
+    }
+
+    .feeHero{
+        min-height:320px;
+        padding:50px 6%;
+    }
+
+    .feeHero h1{
+        font-size:29px;
+        letter-spacing:-1px;
+    }
+
+    .feeHero p{
+        font-size:14px;
+    }
+
+    .feeHeroVisual{
+        right:-90px;
+        opacity:.13;
+    }
+
+    .feeBtn{
+        padding:12px 14px;
+        font-size:12px;
+    }
+
+    .feeBreadcrumb{
+        padding:18px 0;
+        font-size:11px;
+    }
+
+    .feeBreadcrumb span{
+        margin:0 4px;
+    }
+
+    .feeSection,
+    .feeTableSection,
+    .feeExtraSection{
+        padding-top:50px;
+        padding-bottom:50px;
+    }
+
+    .feeSectionHeading h2,
+    .feeBottom h2{
+        font-size:23px;
+    }
+
+    .feeSectionHeading p,
+    .feeBottom p{
+        font-size:12px;
+    }
+
+    .feeSummaryGrid{
+        grid-template-columns:1fr;
+        gap:15px;
+    }
+
+    .feeSummaryCard{
+        padding:25px 22px;
+    }
+
+    .feeSummaryCard h3{
+        font-size:21px;
+    }
+
+    .feeMainPrice strong{
+        font-size:30px;
+    }
+
+    .feeNotice{
+        padding:18px;
+    }
+
+    .feeNotice p{
+        font-size:12px;
+    }
+
+    .feeTable{
+        min-width:480px;
+    }
+
+    .feeTable th,
+    .feeTable td{
+        padding:17px 10px;
+        font-size:12px;
+    }
+
+    .feeCalculatorSection{
+        padding:50px 5%;
+    }
+
+    .feeCalculatorBox{
+        padding:20px;
+    }
+
+    .feeCalculatorResult{
+        padding:24px 20px;
+    }
+
+    .feeResultPrice strong{
+        font-size:34px;
+    }
+
+    .feeExtraGrid{
+        grid-template-columns:1fr;
+        gap:13px;
+    }
+
+    .feeExtraCard:last-child{
+        grid-column:auto;
+    }
+
+    .feeExtraCard{
+        padding:23px 20px;
+    }
+
+    .feeBottom{
+        margin-bottom:50px;
+        padding:30px 22px;
+    }
+
+    .feeBottomButtons .feeBtn{
+        margin-bottom:8px;
+    }
+}
