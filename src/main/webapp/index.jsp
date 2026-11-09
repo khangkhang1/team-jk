@@ -39,6 +39,14 @@
 		res.submit();
 	}
 	
+	function goReservationShort(id){
+		res.t_gubun.value = "finalPayment";
+		res.reservation_id.value = id;
+        res.method = "post";
+        res.action = "Reservation";
+        res.submit();
+    } 
+	
 </script>
 
 
@@ -169,8 +177,8 @@
 
 <section class="hero">
 
-<!-- 최종 결제 안내 박스 -->
-<c:if test="${not empty sessionName and empty r_dto.getReservation_out_time() and reservationStarted}">
+<!-- 최종 결제 안내 박스 reservationStarted는 안 쓰는 걸로-->
+<c:if test="${not empty sessionName and empty r_dto.getReservation_out_time() and r_dto.getReservation_status() eq '2'}">
     <div class="reservationSummary">
 
 		<div class="reservationSummaryHeader dragHandle">
@@ -230,7 +238,7 @@
             </div>
             
 			<c:if test="${r_dto.getReservation_type() eq '1'}">
-				<button type="button" onclick="goReservation('${r_dto.getReservation_id()}')" class="reservationPaymentBtn">
+				<button type="button" onclick="goReservationShort('${r_dto.getReservation_id()}')" class="reservationPaymentBtn">
 					<fmt:message key="idx.007"/> <i class="fa-solid fa-angle-right"></i>
 				</button>
 			</c:if>
