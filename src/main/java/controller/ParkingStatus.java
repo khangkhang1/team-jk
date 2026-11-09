@@ -19,217 +19,146 @@ import service.ParkingService;
 @WebServlet("/ParkingStatus")
 public class ParkingStatus extends HttpServlet {
 
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    private ParkingService parkingService =
-            new ParkingService();
+	private ParkingService parkingService = new ParkingService();
 
+	@Override
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 
-    @Override
-    protected void doGet(
-            HttpServletRequest request,
-            HttpServletResponse response)
-            throws ServletException, IOException {
+		// ================================
+		// 실시간 주차 현황 조회
+		// ================================
 
+		List<LongTermParkingDto> longTermList = parkingService.getLongTermParkingStatus();
 
-        // ================================
-        // 실시간 주차 현황 조회
-        // ================================
+		List<ShortTermParkingDto> shortTermList = parkingService.getShortTermParkingStatus();
 
-        List<LongTermParkingDto> longTermList =
-                parkingService.getLongTermParkingStatus();
+		// ================================
+		// 새로고침 요청인지 확인
+		// ================================
 
-        List<ShortTermParkingDto> shortTermList =
-                parkingService.getShortTermParkingStatus();
+		String refresh = request.getParameter("refresh");
 
+		if ("true".equals(refresh)) {
 
-        // ================================
-        // 새로고침 요청인지 확인
-        // ================================
+			// ================================
+			// JSON 응답
+			// ================================
 
-        String refresh =
-                request.getParameter("refresh");
+			response.setContentType("application/json; charset=UTF-8");
 
+			response.setCharacterEncoding("UTF-8");
 
-        if ("true".equals(refresh)) {
+			StringBuilder json = new StringBuilder();
 
-            // ================================
-            // JSON 응답
-            // ================================
+			json.append("{");
 
-            response.setContentType(
-                    "application/json; charset=UTF-8"
-            );
+			json.append("\"longTerm\":[");
 
-            response.setCharacterEncoding("UTF-8");
+			// ================================
+			// 장기주차장 데이터
+			// ================================
 
+			for (int i = 0; i < longTermList.size(); i++) {
 
-            StringBuilder json =
-                    new StringBuilder();
+				LongTermParkingDto dto = longTermList.get(i);
 
-            json.append("{");
+				if (i > 0) {
+					json.append(",");
+				}
 
-            json.append("\"longTerm\":[");
+				json.append("{");
 
+				json.append("\"parkLotNo\":\"").append(dto.getParkLotNo()).append("\",");
 
-            // ================================
-            // 장기주차장 데이터
-            // ================================
+				json.append("\"totalCount\":").append(dto.getTotalCount()).append(",");
 
-            for (int i = 0;
-                 i < longTermList.size();
-                 i++) {
+				json.append("\"occupiedCount\":").append(dto.getOccupiedCount()).append(",");
 
-                LongTermParkingDto dto =
-                        longTermList.get(i);
+				json.append("\"availableCount\":").append(dto.getAvailableCount()).append(",");
 
-                if (i > 0) {
-                    json.append(",");
-                }
+				json.append("\"occupancyRate\":").append(dto.getOccupancyRate()).append(",");
 
-                json.append("{");
+				json.append("\"congestion\":\"").append(dto.getCongestion()).append("\"");
 
-                json.append("\"parkLotNo\":\"")
-                    .append(dto.getParkLotNo())
-                    .append("\",");
+				json.append("}");
+			}
 
-                json.append("\"totalCount\":")
-                    .append(dto.getTotalCount())
-                    .append(",");
+			json.append("],");
 
-                json.append("\"occupiedCount\":")
-                    .append(dto.getOccupiedCount())
-                    .append(",");
+			// ================================
+			// 단기주차장 데이터
+			// ================================
 
-                json.append("\"availableCount\":")
-                    .append(dto.getAvailableCount())
-                    .append(",");
+			json.append("\"shortTerm\":[");
 
-                json.append("\"occupancyRate\":")
-                    .append(dto.getOccupancyRate())
-                    .append(",");
+			for (int i = 0; i < shortTermList.size(); i++) {
 
-                json.append("\"congestion\":\"")
-                    .append(dto.getCongestion())
-                    .append("\"");
+				ShortTermParkingDto dto = shortTermList.get(i);
 
-                json.append("}");
-            }
+				if (i > 0) {
+					json.append(",");
+				}
 
+				json.append("{");
 
-            json.append("],");
+				json.append("\"parkZoneNo\":\"").append(dto.getParkZoneNo()).append("\",");
 
+				json.append("\"totalCount\":").append(dto.getTotalCount()).append(",");
 
-            // ================================
-            // 단기주차장 데이터
-            // ================================
+				json.append("\"occupiedCount\":").append(dto.getOccupiedCount()).append(",");
 
-            json.append("\"shortTerm\":[");
+				json.append("\"availableCount\":").append(dto.getAvailableCount()).append(",");
 
+				json.append("\"occupancyRate\":").append(dto.getOccupancyRate()).append(",");
 
-            for (int i = 0;
-                 i < shortTermList.size();
-                 i++) {
+				json.append("\"congestion\":\"").append(dto.getCongestion()).append("\"");
 
-                ShortTermParkingDto dto =
-                        shortTermList.get(i);
+				json.append("}");
+			}
 
-                if (i > 0) {
-                    json.append(",");
-                }
+			json.append("]");
 
-                json.append("{");
+			json.append("}");
 
-                json.append("\"parkZoneNo\":\"")
-                    .append(dto.getParkZoneNo())
-                    .append("\",");
+			// ================================
+			// JSON 전송
+			// ================================
 
-                json.append("\"totalCount\":")
-                    .append(dto.getTotalCount())
-                    .append(",");
+			response.getWriter().write(json.toString());
 
-                json.append("\"occupiedCount\":")
-                    .append(dto.getOccupiedCount())
-                    .append(",");
+			return;
+		}
 
-                json.append("\"availableCount\":")
-                    .append(dto.getAvailableCount())
-                    .append(",");
+		// ================================
+		// 일반 접속
+		// ================================
 
-                json.append("\"occupancyRate\":")
-                    .append(dto.getOccupancyRate())
-                    .append(",");
+		request.setAttribute("longTermList", longTermList);
 
-                json.append("\"congestion\":\"")
-                    .append(dto.getCongestion())
-                    .append("\"");
+		request.setAttribute("shortTermList", shortTermList);
 
-                json.append("}");
-            }
+		// 인덱스 공지사항 리스트 출력 서블릿 파일 새로 만들어서 해볼 것
+		CommonExecute mem = new indexNotice();
+		mem.execute(request);
 
+		CommonExecute res = new indexReservation();
+		res.execute(request);
 
-            json.append("]");
+		// ================================
+		// 메인 화면으로 이동
+		// ================================
 
-            json.append("}");
+		request.getRequestDispatcher("/index.jsp").forward(request, response);
 
+	}
 
-            // ================================
-            // JSON 전송
-            // ================================
+	@Override
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 
-            response.getWriter()
-                    .write(json.toString());
-
-            return;
-        }
-
-
-        // ================================
-        // 일반 접속
-        // ================================
-
-        request.setAttribute(
-                "longTermList",
-                longTermList
-        );
-
-        request.setAttribute(
-                "shortTermList",
-                shortTermList
-        );
-
-        
-        //인덱스 공지사항 리스트 출력 서블릿 파일 새로 만들어서 해볼 것
-        CommonExecute mem = new indexNotice();
-        mem.execute(request);
-        
-        CommonExecute res = new indexReservation();
-        res.execute(request);
-
-        // ================================
-        // 메인 화면으로 이동
-        // ================================
-
-        request.getRequestDispatcher(
-                "/index.jsp"
-        ).forward(
-                request,
-                response
-        );
-        
-        
-		
-        
-        
-    }
-
-
-    @Override
-    protected void doPost(
-            HttpServletRequest request,
-            HttpServletResponse response)
-            throws ServletException, IOException {
-
-        doGet(request, response);
-    }
+		doGet(request, response);
+	}
 }
