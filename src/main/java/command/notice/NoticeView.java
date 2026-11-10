@@ -30,7 +30,9 @@ public class NoticeView implements CommonExecute {
 		     
 	      }
 	      NoticeDto dto = dao.noticeView(no);
-	      if (dto != null) {   // 일본어 번역이 있으면 제목·내용 교체 (content_ja.properties)
+	      // 일본어 번역이 있으면 제목·내용 교체 (content_ja.properties).
+	      // 수정폼(noticeUpdateForm)은 DB 원문을 그대로 보여준다 - 번역문이 폼에 들어가면 저장할 때 원문을 덮어쓴다.
+	      if (dto != null && gubun.equals("noticeView")) {
 	    	  dto.setTitle(I18n.content(request, "notice." + no + ".title", dto.getTitle()));
 	    	  dto.setContent(I18n.content(request, "notice." + no + ".content", dto.getContent()));
 	      }
