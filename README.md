@@ -1,182 +1,206 @@
-# 仁川国際空港 駐車場予約・管理システム(TEAM JK)
+<div align="center">
 
-[한국어](README.ko.md) | **日本語**
+# 仁川空港 駐車予約 · INCHEON AIRPORT PARKING
 
-仁川国際空港 第1旅客ターミナルの駐車場を対象にした、予約・決済・運営管理のWebシステムです。
-公共データポータル(data.go.kr)で公開されている仁川国際空港公社のオープンAPIと連携し、
-駐車場の混雑状況とフライトの運航状況を実データで扱います。
+### 快適な旅のはじまりは、駐車の予約から。
 
-| 項目 | 内容 |
-|---|---|
-| 開発期間 | 2026年8月 〜 2026年10月 |
-| チーム | TEAM JK(5名) |
-| 位置づけ | IT研修課程のチームプロジェクト |
-| 構成 | JSP / Servlet / JDBC / Oracle(フレームワーク不使用) |
+仁川国際空港 第1旅客ターミナルの駐車場を、実際の混雑状況・運航状況と連携して予約・管理するWebサービス
 
-<!-- TODO: 画面キャプチャを docs/images/ に置いてここに貼る
-     (トップページ / 駐車マップ予約 / 決済 / マイページ / 管理者ダッシュボード) -->
+`Java 21` · `JSP / Servlet` · `JDBC` · `Oracle XE` · `Tomcat 9.0`
+
+**日本語** · [한국어](README.ko.md)
+
+</div>
+
+![仁川空港 駐車予約のメイン画面](docs/images/main.jpg)
+
+## プロジェクト紹介
+
+「仁川空港 駐車予約」は、空港の駐車場を出発前に予約し、出庫時に精算できるようにすることを目的として開発しました。
+
+公共データポータルで公開されている仁川国際空港公社のオープンAPIと連携し、駐車場の混雑状況とフライトの運航状況を実データで扱います。利用者は予約時に搭乗する便を登録でき、その便が欠航になった場合は、システムが長期駐車への切り替えと区画の再割当を自動で行います。運営側は、管理者コンソールで予約・会員・売上・お問い合わせを確認できます。
+
+## チーム構成・担当
+
+| メンバー | 担当領域 | 主な担当機能 |
+| --- | --- | --- |
+| カン・ソング (`kkang`) | 管理者コンソール・FAQ・お問い合わせ | 管理者コンソール(ダッシュボード、予約・会員管理、売上統計)、FAQ、お問い合わせ・通報、フライトAPI連携、多言語対応 |
+| アン・ビョンチャン (`anbyoungchan123`) | 駐車マップ | SVGの駐車マップ、区画データ、欠航時の自動再割当 |
+| オ・ユンソプ (`OhYunseop`) | 予約・決済 | 予約登録、予約金の決済、出庫時の最終精算、フライト検索の連携 |
+| イム・ジョンギュ (`임정규`) | メイン画面・お知らせ | メイン画面、リアルタイム混雑状況API、共通ヘッダー、お知らせ、利用案内・料金案内 |
+| ファン・ヒウォン (`HuiwonHwang`) | 会員 | 会員登録、ログイン、メール認証、ID・パスワードの再設定、マイページ、予約履歴・キャンセル |
+
+> ( )内は、Gitコミット履歴に記録されている作成者名です。
 
 ## 主な機能
 
-### 利用者向け
-
-| 機能 | 内容 |
-|---|---|
-| リアルタイム混雑状況 | エリア(P1〜P9)ごとの空き台数と混雑度をトップページに表示します(空港公社API)。 |
-| 駐車マップ予約 | エリア図からエリアを選び、SVGの駐車マップ上で区画を指定して予約します。会員の車両タイプ(一般・電気自動車・障がい者用)に合う区画だけを選べます。 |
-| フライト連携 | 予約時に、実在する便を検索して登録します(運航状況API)。 |
-| 欠航対応 | 登録した便が欠航になった場合、長期駐車へ自動で切り替えます。その区画に入っていた後続の予約は、空いている区画へ自動で再割当します。 |
-| 決済 | PortOne(旧 iamport)のテスト決済を使います。予約時に予約金を支払い、出庫時に利用時間に応じて最終精算します。 |
-| 会員 | 会員登録(メール認証)、ログイン、ID・パスワードの再設定、マイページ、予約履歴の確認とキャンセル。 |
-| お知らせ・FAQ・お問い合わせ | お知らせ(添付ファイル対応)、FAQ(カテゴリ絞り込み)、お問い合わせ・通報の登録、利用案内・料金案内。 |
-| 多言語 | 画面の言語を韓国語 / 日本語で切り替えられます。 |
-
-### 管理者コンソール
-
-| 機能 | 内容 |
-|---|---|
-| ダッシュボード | 主要指標、日別の推移、エリア別の利用率を確認します。 |
-| 予約管理・会員管理 | 予約と会員の一覧・詳細を確認します。 |
-| 区画・エリア状況 | 駐車マップ上で区画ごとの予約状況を確認します。 |
-| お問い合わせ対応 | 未処理件数を表示し、回答を登録します。 |
-| 売上統計 | 期間別・エリア別に集計し、CSVで出力します。 |
-| コンテンツ管理 | FAQとお知らせを登録・修正・削除します。 |
-
-## 技術スタック
-
-| 区分 | 技術 |
-|---|---|
-| 言語・実行環境 | Java 21 / Apache Tomcat 9.0(Servlet 4.0) |
-| 画面 | JSP, JSTL, EL, jQuery 1.8.1, SVG |
-| データベース | Oracle Database XE / JDBC(ojdbc8) |
-| 外部API | 仁川国際空港公社 オープンAPI(駐車場状況・旅客便運航状況) |
-| 決済 | PortOne(テストモード) |
-| その他 | cos.jar(ファイルアップロード)、JavaMail(メール送信)、JDK標準の HttpClient・XMLパーサ |
-| 開発ツール | Eclipse, Git / GitHub, Notion |
-
-研修課程の段階に合わせ、フレームワークを使わずに Servlet・JSP・JDBC だけで実装しています。
-
-## アーキテクチャ
-
-フロントコントローラパターンとコマンドパターンを組み合わせています。
-機能を追加するときは、コマンドクラスを1つ追加してコントローラに分岐を1つ足します。
-
-```
-ブラウザ
-  │  リクエスト(t_gubun で処理を指定)
-  ▼
-controller/*.java     フロントコントローラ(@WebServlet)
-  │  new XxxCommand().execute(request)
-  ▼
-command/**/*.java     業務処理(CommonExecute を実装)
-  │
-  ▼
-dao/*Dao.java ─────► Oracle
-dao/*ApiDao.java ──► 公共データAPI
-  │
-  ▼
-JSP(JSTL / EL)へ forward
-```
-
-### チーム共通の規約
-
-- リクエストパラメータは `t_` で始めます。処理の分岐は `t_gubun` で指定します。
-- 処理結果のメッセージは `common_alert.jsp` に forward して表示します。
-- テーブル名は `icn_` で始めます。
-- ブランチは各自の作業ブランチから `test` に統合し、確認後に `main` へ反映します。
-
-### ディレクトリ構成
-
-```
-src/main/java
-├─ controller/    フロントコントローラ(Servlet)
-├─ command/       業務処理(機能ごとのパッケージ)
-├─ dao/           DBアクセス、外部API呼び出し
-├─ dto/           データ受け渡し用クラス
-├─ service/       駐車状況の集計
-├─ common/        共通処理(DB接続・料金計算・多言語・設定読み込み)
-├─ mail/          メール送信
-└─ messages_*.properties   画面文言(韓国語・日本語)
-
-src/main/webapp
-├─ index.jsp, common_header.jsp, common_footer.jsp
-├─ reservation/ member/ notice/ faq/ report/ guide/ flight/
-├─ manager/       管理者コンソール
-└─ css/ js/ images/
-
-sql/              一部テーブルのDDL
-```
+| 分類 | 機能 |
+| --- | --- |
+| 混雑状況 | エリア(P1〜P9)ごとの空き台数・混雑度のリアルタイム表示 |
+| 予約 | エリア図からの区画選択、SVG駐車マップでの区画指定、車両タイプ(一般・電気自動車・障がい者用)に応じた区画の制限 |
+| フライト | 実在する便の検索・登録、欠航時の長期駐車への自動切り替え、後続予約の自動再割当 |
+| 決済 | 予約金の決済、出庫時の利用時間に応じた最終精算、予約キャンセル |
+| 会員 | 会員登録、メール認証、ログイン・ログアウト、ID・パスワードの再設定、マイページ、予約履歴 |
+| お知らせ・FAQ | お知らせの一覧・詳細・添付ファイル、FAQのカテゴリ絞り込み、利用案内・料金案内 |
+| お問い合わせ | お問い合わせ・通報の登録、管理者による回答 |
+| 管理者 | ダッシュボード、予約・会員管理、区画・エリア状況、売上統計(CSV出力)、FAQ・お知らせ管理 |
+| 多言語 | 韓国語 / 日本語の切り替え |
 
 ## 設計のポイント
 
-1. **区画の「予約状態」をテーブルに持たない**
-   区画テーブルに状態の列を置くと、「いま利用中の車」と「明日の予約」を区別できません。
-   予約テーブルの開始〜終了時刻と照会する時間帯が重なるかどうかを、照会のたびに計算します。
-2. **状態の切り替えをスケジューラなしで行う**
-   ナンバープレート認識などの機器がないため、予約開始時刻を入庫時刻とみなします。
-   状態を表示する画面の照会直前に UPDATE を実行し、「予約済み」から「駐車中」へ切り替えます。
-3. **欠航への自動対応**
-   便の運航状況をAPIで確認し、欠航が確定した予約を長期駐車へ切り替えます。
-   影響を受ける後続の予約は、空いている区画へ再割当します。
-4. **便の主キーは便名ではなく採番ID**
-   同じ便名の便が毎日運航するため、便名は主キーにできません。
-   便のレコードは、利用者が予約時に便を検索した時点で作成します。
-5. **予約と決済を1つのトランザクションで更新する**
-   出庫時の精算と予約キャンセルでは、予約の更新と決済の更新をまとめて行います。
-   片方だけが成功した状態を残さないためです。
-6. **機密情報をソースコードに書かない**
-   DBアカウント・APIのサービスキー・メール送信用の認証情報は `secret.properties` から読み込みます。
-   このファイルはリポジトリに含めず、雛形の `secret.properties.example` だけを管理します。
-7. **多言語対応**
-   画面文言は JSTL fmt のリソースバンドルで管理し、選んだ言語はセッションに保持します。
-   DBに保存されたお知らせとFAQは、翻訳ファイルに訳がある場合だけ日本語に差し替えます。
+- **区画の「予約状態」をテーブルに持ちません。** 予約の開始〜終了時刻と照会する時間帯が重なるかどうかを、照会のたびに計算します。「いま利用中の車」と「明日の予約」を区別するためです。
+- **状態の切り替えにスケジューラを使いません。** 予約開始時刻を入庫時刻とみなし、画面を照会する直前のUPDATEで「予約済み」から「駐車中」へ切り替えます。
+- **予約と決済を1つのトランザクションで更新します。** 出庫時の精算と予約キャンセルで、片方だけが成功した状態を残さないためです。
+- **機密情報をソースコードに書きません。** DBアカウントやAPIキーは `secret.properties` から読み込み、このファイルはリポジトリに含めません。
 
-ゲート制御・ナンバープレート認識・駐車センサーなどのハードウェア連携は対象外としました。
+## 技術スタック
 
-## 役割分担
+| 分類 | 技術 |
+| --- | --- |
+| Frontend | JSP, JSTL, EL, HTML5, CSS3, JavaScript, jQuery 1.8.1, SVG |
+| Backend | Java 21, Servlet 4.0 |
+| Database | Oracle Database XE, JDBC (ojdbc8) |
+| Server | Apache Tomcat 9.0 |
+| External API | 公共データポータル(data.go.kr) 仁川国際空港公社オープンAPI(駐車場状況・旅客便運航状況) |
+| Payment | PortOne(テストモード) |
+| Library | cos.jar(ファイルアップロード), JavaMail(メール送信) |
+| Tools | Eclipse, Git / GitHub, Notion |
 
-| メンバー | 担当 |
-|---|---|
-| カン・ソング(강선구) | 管理者コンソール、FAQ、お問い合わせ・通報、フライトAPI連携、多言語対応 |
-| アン・ビョンチャン(안병찬) | 駐車マップ(SVG)、区画データ、欠航時の自動再割当 |
-| オ・ユンソプ(오윤섭) | 予約・決済、最終精算、フライト検索の連携 |
-| イム・ジョンギュ(임정규) | トップページ、リアルタイム混雑状況API、共通ヘッダー、お知らせ、利用案内・料金案内 |
-| ファン・ヒウォン(황희원) | 会員登録・ログイン、メール認証、ID・パスワード再設定、マイページ、予約履歴・キャンセル |
+> フレームワークは使わず、フロントコントローラパターンとコマンドパターンで構成しています。リクエストは `controller` のServletが受け取り、`t_gubun` パラメータの値に応じて `command` のクラスへ処理を渡します。
 
-## セットアップ
+## データベース設計
 
-### 必要なもの
+主なテーブルとリレーションは次のとおりです。テーブル名は `icn_` で始めています。
 
-- JDK 21
+```mermaid
+erDiagram
+    ICN_MEMBER ||--o{ ICN_RESERVATION : "予約する"
+    ICN_SEAT ||--o{ ICN_RESERVATION : "区画を割り当てる"
+    ICN_FLIGHT ||--o{ ICN_RESERVATION : "便を登録する"
+    ICN_RESERVATION ||--o{ ICN_PAYMENT : "決済する"
+    ICN_MEMBER ||--o{ ICN_REPORT : "問い合わせる"
+
+    ICN_MEMBER {
+        string member_id PK
+        string vehicle_type "車両タイプ"
+    }
+    ICN_SEAT {
+        string seat_no PK
+        string lot_id "エリア(P1〜P9)"
+        string seat_type "区画タイプ"
+    }
+    ICN_FLIGHT {
+        number flight_id PK
+        string flight_no "便名"
+        string remark "運航状況"
+    }
+    ICN_RESERVATION {
+        string reservation_id PK
+        string member_id FK
+        string seat_no FK
+        string flight_no "便名"
+        string reservation_status "状態"
+    }
+    ICN_PAYMENT {
+        string payment_id PK
+        string reservation_id FK
+        string payment_type "決済区分"
+    }
+    ICN_REPORT {
+        number report_id PK
+        string member_id FK
+        string report_status "処理状態"
+    }
+```
+
+このほかに、お知らせ(`icn_notice`)とFAQ(`icn_faq`)のテーブルがあります。
+
+## プロジェクト構成
+
+```text
+src/main
+├── java
+│   ├── controller    # フロントコントローラ(Servlet)
+│   ├── command       # 業務処理(機能ごとのパッケージ)
+│   ├── dao           # DBアクセス、外部API呼び出し
+│   ├── dto           # データ受け渡し用クラス
+│   ├── service       # 駐車状況の集計
+│   ├── common        # DB接続、料金計算、多言語、設定読み込み
+│   ├── mail          # メール送信
+│   ├── messages_ko.properties / messages_ja.properties   # 画面文言
+│   └── secret.properties.example                         # 設定ファイルの雛形
+└── webapp
+    ├── index.jsp, common_header.jsp, common_footer.jsp
+    ├── reservation   # 駐車マップ、予約、決済
+    ├── member        # 会員、マイページ
+    ├── notice / faq / report / guide / flight
+    ├── manager       # 管理者コンソール
+    └── css / js / images
+sql                   # 一部テーブルのDDL
+```
+
+## 実行方法
+
+### 必要な環境
+
+- Java 21
 - Apache Tomcat 9.0
 - Oracle Database XE
 - Eclipse IDE for Enterprise Java and Web Developers
 - 公共データポータル(data.go.kr)で発行した仁川国際空港公社APIのサービスキー
 
-### 手順
+### 1. リポジトリをクローン
 
-1. リポジトリを取得し、Eclipse に既存プロジェクトとしてインポートします。
-2. `src/main/java/secret.properties.example` を同じフォルダに `secret.properties` という名前でコピーし、値を入力します。
+```bash
+git clone https://github.com/khangkhang1/team-jk.git
+cd team-jk
+```
 
-   | キー | 内容 |
-   |---|---|
-   | `db.user` / `db.password` | Oracle のアカウント |
-   | `api.serviceKey` | 公共データポータルのサービスキー(Encoding キーをそのまま貼り付け) |
-   | `mail.from` / `mail.appPassword` | メール送信に使う Gmail アドレスとアプリパスワード |
+### 2. 設定ファイルを作成
 
-3. DBサーバーのアドレスを変える場合は、`db_local.properties.example` を `db_local.properties` という名前でコピーし、`db.host` を入力します。
-4. Oracle にテーブルを作成します。`sql/` には一部のテーブル(FAQ・お問い合わせなど)のDDLだけを収録しています。
-5. プロジェクトを Tomcat 9.0 に追加して起動し、`http://localhost:8080/<プロジェクト名>/ParkingStatus` を開きます。
+```bash
+cp src/main/java/secret.properties.example src/main/java/secret.properties
+```
 
-`secret.properties` と `db_local.properties` は `.gitignore` の対象です。コミットしないでください。
+作成された `secret.properties` に、自分の接続情報を入力します。
 
-## 制限事項
+```properties
+db.user=your-oracle-user
+db.password=your-password
+api.serviceKey=your-service-key
+mail.from=your-address@gmail.com
+mail.appPassword=your-app-password
+```
+
+DBサーバーのアドレスを変える場合は、同じ方法で `db_local.properties.example` から `db_local.properties` を作成し、`db.host` を入力します。
+
+> `secret.properties` と `db_local.properties` にはパスワードなどが含まれるため、Gitにコミットしないでください。
+
+### 3. データベースを準備
+
+Oracle にテーブルを作成します。`sql` フォルダには、一部のテーブル(FAQ・お問い合わせなど)のDDLだけを収録しています。
+
+### 4. アプリケーションを起動
+
+Eclipse に既存プロジェクトとしてインポートし、Tomcat 9.0 に追加して起動します。
+
+ブラウザで `http://localhost:8080/<プロジェクト名>/ParkingStatus` にアクセスすると、メイン画面が表示されます。
+
+## 開発状況
+
+2026年8月から10月にかけて、5名のチームプロジェクトとして開発しました。現在の実装には、次の制限があります。
 
 - 決済はテストモードです。実際の請求・返金は行いません。
 - リアルタイムAPIは現在の値だけを返すため、未来の時間帯の空き台数は仮の値です。
-- 区画の数は実際の駐車場より少なくしています。
+- 区画の数は、実際の駐車場より少なくしています。
 - 管理者コンソールは韓国語のみです。
 
-## データの出典
+READMEの説明とスクリーンショットは、チームで内容を確認しながら更新していきます。
 
-- 公共データポータル(https://www.data.go.kr) 仁川国際空港公社 オープンAPI
+---
+
+<div align="center">
+
+**仁川空港 駐車予約 — 快適な旅のはじまりは、駐車の予約から。**
+
+</div>
